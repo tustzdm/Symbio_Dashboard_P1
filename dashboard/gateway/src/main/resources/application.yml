@@ -1,0 +1,17 @@
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/test
+    username: root
+    password: Root123456
+    testWhileIdle:  true
+    timeBetweenEvictionRunsMillis:  3600000
+    validationQuery:  SELECT 1
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: true
+
+  file:
+      root: ${home}/dashboard
