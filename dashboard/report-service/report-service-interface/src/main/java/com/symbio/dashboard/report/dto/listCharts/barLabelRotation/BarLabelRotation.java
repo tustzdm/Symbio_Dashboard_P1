@@ -1,4 +1,4 @@
-package com.symbio.dashboard.report.dto.barLabelRotation;
+package com.symbio.dashboard.report.dto.listCharts.barLabelRotation;
 
 import lombok.Data;
 

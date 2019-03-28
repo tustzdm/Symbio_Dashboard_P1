@@ -1,8 +1,9 @@
 package com.symbio.dashboard.report;
 
 
-import com.symbio.dashboard.report.dto.barLabelRotation.BarLabelRotation;
-import com.symbio.dashboard.report.dto.stackedLineChart.StackedLineChart;
+import com.symbio.dashboard.report.dto.listCharts.barLabelRotation.BarLabelRotation;
+import com.symbio.dashboard.report.dto.listCharts.stackedLineChart.StackedLineChart;
+import com.symbio.dashboard.report.dto.listRowCharts.MixLineBar;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,11 @@ public class QualityOverviewController {
     private BarLabelRotation barLabelRotation;
 
     /**
+     * 成员对象用于封装返回到前端的mixLineBar具体信息
+     */
+    private MixLineBar mixLineBar;
+
+    /**
      * 为了测试接口，此构造函数用于初始化需要返回的对象
      */
     public QualityOverviewController(){
@@ -38,6 +44,7 @@ public class QualityOverviewController {
 
         stackedLineChart = new StackedLineChart();
         barLabelRotation = new BarLabelRotation();
+        mixLineBar = new MixLineBar();
     }
 
     /**
@@ -64,6 +71,19 @@ public class QualityOverviewController {
     @RequestMapping("/getQualityOverview/getBarLabelRotation")
     public BarLabelRotation getBarLabelRotation(){
         return barLabelRotation;
+    }
+
+    /**
+     * 此方法用于调用返回MixLineBar类型的数据
+     *
+     * 测试接口：
+     *  localhost:8080/menu/getQualityOverview/getMixLineBar
+     *
+     * @return 返回给前端MixLineBar类型对象json串
+     */
+    @RequestMapping("/getQualityOverview/getMixLineBar")
+    public MixLineBar getMixLineBar(){
+        return mixLineBar;
     }
 
 

@@ -1,4 +1,4 @@
-package com.symbio.dashboard.report.dto.stackedLineChart;
+package com.symbio.dashboard.report.dto.listCharts.stackedLineChart;
 
 import lombok.Data;
 
