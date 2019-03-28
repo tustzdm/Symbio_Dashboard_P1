@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 本类用于对ListCharts接口的一个控制
+ * 本类用于对QualityOverview的一个控制，用于控制返回的内容信息
  *
  * @author daizongheng
  */
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j //用于添加日志信息
 @Data
 @RestController //相当于@ResponseBody+@Controller
-@RequestMapping("/api/listCharts")
-public class ListChartsController {
+@RequestMapping("/menu")
+public class QualityOverviewController {
     /**
      * 成员对象用于封装返回到前端的stackedLineChart具体信息
      */
@@ -33,7 +33,7 @@ public class ListChartsController {
     /**
      * 为了测试接口，此构造函数用于初始化需要返回的对象
      */
-    public ListChartsController(){
+    public QualityOverviewController(){
         super();
 
         stackedLineChart = new StackedLineChart();
@@ -44,11 +44,11 @@ public class ListChartsController {
      * 此方法用于调用返回StackedLineChart类型的数据
      *
      * 测试接口：
-     *  localhost:8080/api/listCharts/getStackedLineChart
+     *  localhost:8080/menu/getQualityOverview/getStackedLineChart
      *
-     * @return 返回前端StackedLineChart类型的对象
+     * @return 返回给前端StackedLineChart类型的对象json串
      */
-    @RequestMapping("/getStackedLineChart")
+    @RequestMapping("/getQualityOverview/getStackedLineChart")
     public StackedLineChart getStackedLineChart(){
         return stackedLineChart;
     }
@@ -57,11 +57,11 @@ public class ListChartsController {
      * 此方法用于调用返回BarLabelRotation类型的数据
      *
      * 测试接口：
-     *  localhost:8080/api/listCharts/getBarLabelRotation
+     *  localhost:8080/menu/getQualityOverview/getBarLabelRotation
      *
-     * @return 返回前端BarLabelRotation类型的对象
+     * @return 返回给前端BarLabelRotation类型的对象json串
      */
-    @RequestMapping("/getBarLabelRotation")
+    @RequestMapping("/getQualityOverview/getBarLabelRotation")
     public BarLabelRotation getBarLabelRotation(){
         return barLabelRotation;
     }
