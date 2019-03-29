@@ -3,6 +3,8 @@ package com.symbio.dashboard.report;
 
 import com.symbio.dashboard.report.dto.listCharts.barLabelRotation.BarLabelRotation;
 import com.symbio.dashboard.report.dto.listCharts.stackedLineChart.StackedLineChart;
+import com.symbio.dashboard.report.dto.listList.ListProductStatistics;
+import com.symbio.dashboard.report.dto.listList.ListProductStatisticsDataInData;
 import com.symbio.dashboard.report.dto.listRowCharts.MixLineBar;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,13 @@ public class QualityOverviewController {
     private MixLineBar mixLineBar;
 
     /**
+     * 成员对象用于封装返回到前端的ListProductStatistics具体信息
+     */
+    private ListProductStatistics listProductStatistics;
+
+
+
+    /**
      * 为了测试接口，此构造函数用于初始化需要返回的对象
      */
     public QualityOverviewController(){
@@ -45,6 +54,7 @@ public class QualityOverviewController {
         stackedLineChart = new StackedLineChart();
         barLabelRotation = new BarLabelRotation();
         mixLineBar = new MixLineBar();
+        listProductStatistics = new ListProductStatistics();
     }
 
     /**
@@ -87,4 +97,29 @@ public class QualityOverviewController {
     }
 
 
+    /**
+     * 此方法用于测试ListProductStatisticsData中的data按照field的json返回顺序
+     *
+     * 测试接口：
+     *  localhost:8080/menu/getQualityOverview/getListProductStatisticsDataInData
+     *
+     * @return 返回json串给前台
+     */
+    @RequestMapping("/getQualityOverview/getListProductStatisticsDataInData")
+    public ListProductStatisticsDataInData get(){
+        return new ListProductStatisticsDataInData();
+    }
+
+    /**
+     * 此方法用于调用返回ListProductStatistics类型的数据
+     *
+     * 测试接口：
+     *  localhost:8080/menu/getQualityOverview/getListProductStatistics
+     *
+     * @return 返回给前端的ListProductStatistics类型对象的json串
+     */
+    @RequestMapping("/getQualityOverview/getListProductStatistics")
+    public ListProductStatistics getListProductStatistics(){
+        return listProductStatistics;
+    }
 }
