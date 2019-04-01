@@ -4,6 +4,7 @@ package com.symbio.dashboard.report;
 import com.symbio.dashboard.report.dto.listCharts.barLabelRotation.BarLabelRotation;
 import com.symbio.dashboard.report.dto.listCharts.barLabelRotation.BarSimple;
 import com.symbio.dashboard.report.dto.listCharts.stackedLineChart.StackedLineChart;
+import com.symbio.dashboard.report.dto.listCombox.PieScrollLegend;
 import com.symbio.dashboard.report.dto.listList.ListProductStatistics;
 import com.symbio.dashboard.report.dto.listList.ListProductStatisticsDataInData;
 import com.symbio.dashboard.report.dto.listRowCharts.MixLineBar;
@@ -50,6 +51,11 @@ public class QualityOverviewController {
     private BarSimple barSimple;
 
     /**
+     * 成员对象用于封装返回到前端的PieScrollLegend具体信息
+     */
+    private PieScrollLegend pieScrollLegend;
+
+    /**
      * 为了测试接口，此构造函数用于初始化需要返回的对象
      */
     public QualityOverviewController(){
@@ -60,6 +66,7 @@ public class QualityOverviewController {
         mixLineBar = new MixLineBar();
         listProductStatistics = new ListProductStatistics();
         barSimple = new BarSimple();
+        pieScrollLegend = new PieScrollLegend();
     }
 
     /**
@@ -139,5 +146,18 @@ public class QualityOverviewController {
     @RequestMapping("/getQualityOverview/getBarSimple")
     public BarSimple getBarSimple(){
         return barSimple;
+    }
+
+    /**
+     * 此方法用于调用要返回的PieScrollLegend类型的数据
+     *
+     * 测试接口：
+     *  localhost:8080/menu/getQualityOverview/getPieScrollLegend
+     *
+     * @return 返回给前端的PieScrollLegend类型对象的json串
+     */
+    @RequestMapping("/getQualityOverview/getPieScrollLegend")
+    public PieScrollLegend getPieScrollLegend(){
+        return pieScrollLegend;
     }
 }
