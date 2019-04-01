@@ -24,7 +24,7 @@ public class StackedLineChart {
     /**
      * data 是返回给前端对象的所有内容
      */
-    private ChartsData data;
+    private StackedLineChartData data;
 
     /**
      * 此构造函数暂时用于初始化对象数据
@@ -36,6 +36,6 @@ public class StackedLineChart {
 
         this.setPos("[0,1]");
         this.setKey("StackedLine");
-        this.setData(new ChartsData());
+        this.setData(new StackedLineChartData());
     }
 }

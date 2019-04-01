@@ -16,7 +16,7 @@ import java.util.Map;
  */
 
 @Data
-public class ChartsData {
+public class StackedLineChartData {
     /**
      * legend用于表示图例，暂定用list接收后台数据库的legend信息
      *
@@ -60,7 +60,7 @@ public class ChartsData {
      *
      * 为了测试json串暂定将返回的数据写死
      */
-    public ChartsData(){
+    public StackedLineChartData(){
         super();
 
         //legend具体内容以后从数据库中获取

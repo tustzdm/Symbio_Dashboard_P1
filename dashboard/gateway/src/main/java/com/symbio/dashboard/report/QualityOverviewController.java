@@ -2,6 +2,7 @@ package com.symbio.dashboard.report;
 
 
 import com.symbio.dashboard.report.dto.listCharts.barLabelRotation.BarLabelRotation;
+import com.symbio.dashboard.report.dto.listCharts.barLabelRotation.BarSimple;
 import com.symbio.dashboard.report.dto.listCharts.stackedLineChart.StackedLineChart;
 import com.symbio.dashboard.report.dto.listList.ListProductStatistics;
 import com.symbio.dashboard.report.dto.listList.ListProductStatisticsDataInData;
@@ -43,7 +44,10 @@ public class QualityOverviewController {
      */
     private ListProductStatistics listProductStatistics;
 
-
+    /**
+     * 成员对象用于封装返回到前端的BarSimple具体信息
+     */
+    private BarSimple barSimple;
 
     /**
      * 为了测试接口，此构造函数用于初始化需要返回的对象
@@ -55,6 +59,7 @@ public class QualityOverviewController {
         barLabelRotation = new BarLabelRotation();
         mixLineBar = new MixLineBar();
         listProductStatistics = new ListProductStatistics();
+        barSimple = new BarSimple();
     }
 
     /**
@@ -121,5 +126,18 @@ public class QualityOverviewController {
     @RequestMapping("/getQualityOverview/getListProductStatistics")
     public ListProductStatistics getListProductStatistics(){
         return listProductStatistics;
+    }
+
+    /**
+     * 此方法用于调用返回BarSimple类型的数据
+     *
+     * 测试接口：
+     *  localhost:8080/menu/getQualityOverview/getBarSimple
+     *
+     * @return 返回给前端的BarSimple类型对象的json串
+     */
+    @RequestMapping("/getQualityOverview/getBarSimple")
+    public BarSimple getBarSimple(){
+        return barSimple;
     }
 }
