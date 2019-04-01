@@ -1,6 +1,7 @@
 package com.symbio.dashboard.report;
 
 
+import com.symbio.dashboard.report.dto.QualityOverview.QualityOverview;
 import com.symbio.dashboard.report.dto.listCharts.barLabelRotation.BarLabelRotation;
 import com.symbio.dashboard.report.dto.listCharts.barLabelRotation.BarSimple;
 import com.symbio.dashboard.report.dto.listCharts.stackedLineChart.StackedLineChart;
@@ -56,6 +57,11 @@ public class QualityOverviewController {
     private PieScrollLegend pieScrollLegend;
 
     /**
+     * 成员对象用于封装返回所有的json串内容，测试最终的getQualityOverview接口
+     */
+    private QualityOverview qualityOverview;
+
+    /**
      * 为了测试接口，此构造函数用于初始化需要返回的对象
      */
     public QualityOverviewController(){
@@ -67,6 +73,7 @@ public class QualityOverviewController {
         listProductStatistics = new ListProductStatistics();
         barSimple = new BarSimple();
         pieScrollLegend = new PieScrollLegend();
+        qualityOverview = new QualityOverview();
     }
 
     /**
@@ -160,4 +167,19 @@ public class QualityOverviewController {
     public PieScrollLegend getPieScrollLegend(){
         return pieScrollLegend;
     }
+
+    /**
+     * 此方法用于调用返回总的QualityOverview类型数据，测试最终的json串
+     *
+     * 测试接口：
+     *  localhost:8080/menu/getQualityOverview
+     *
+     * @return 返回给前端最终的QualityOverview类型对象的json串
+     */
+    @RequestMapping("/getQualityOverview")
+    public QualityOverview getQualityOverview(){
+        return qualityOverview;
+    }
+
+
 }
