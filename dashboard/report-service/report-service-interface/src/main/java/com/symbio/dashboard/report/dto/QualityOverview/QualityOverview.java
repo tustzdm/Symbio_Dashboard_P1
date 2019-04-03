@@ -10,8 +10,14 @@ import lombok.Data;
 @Data
 public class QualityOverview {
 
+    /**
+     * 错误码，返回"0"表示正常
+     */
     private String ec;
 
+    /**
+     * 错误信息
+     */
     private String em;
 
     /**

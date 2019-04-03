@@ -56,7 +56,7 @@ public class QualityOverviewCd {
      */
     public QualityOverviewCd(){
         token = "123";
-        locale = "es_EN";
+        locale = "en_US";
 
         listCombox = new ArrayList();
         listCombox.add(new PieScrollLegend());

@@ -9,10 +9,12 @@ import com.symbio.dashboard.report.dto.listCombox.PieScrollLegend;
 import com.symbio.dashboard.report.dto.listList.ListProductStatistics;
 import com.symbio.dashboard.report.dto.listList.ListProductStatisticsDataInData;
 import com.symbio.dashboard.report.dto.listRowCharts.MixLineBar;
+import com.symbio.dashboard.report.dto.pieWithScrollableLegend.PieWithScrollableLegend;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * 本类用于对QualityOverview的一个控制，用于控制返回的内容信息
@@ -57,9 +59,16 @@ public class QualityOverviewController {
     private PieScrollLegend pieScrollLegend;
 
     /**
+     * 成员对象用于封装返回到前端的PieWithScrollableLegend具体信息
+     */
+    private PieWithScrollableLegend pieWithScrollableLegend;
+
+    /**
      * 成员对象用于封装返回所有的json串内容，测试最终的getQualityOverview接口
      */
     private QualityOverview qualityOverview;
+
+
 
     /**
      * 为了测试接口，此构造函数用于初始化需要返回的对象
@@ -73,6 +82,7 @@ public class QualityOverviewController {
         listProductStatistics = new ListProductStatistics();
         barSimple = new BarSimple();
         pieScrollLegend = new PieScrollLegend();
+        pieWithScrollableLegend = new PieWithScrollableLegend();
         qualityOverview = new QualityOverview();
     }
 
@@ -168,6 +178,21 @@ public class QualityOverviewController {
         return pieScrollLegend;
     }
 
+
+    /**
+     * 此方法用于调用要返回的PieWithScrollableLegend类型的数据
+     *
+     * 测试接口：
+     *  localhost:8080/menu/getQualityOverview/getPieWithScrollableLegend
+     *
+     * @return 返回给前端的PieWithScrollableLegend类型对象的json串
+     */
+    @RequestMapping("/getQualityOverview/getPieWithScrollableLegend")
+    public PieWithScrollableLegend getPieWithScrollableLegend(){
+        return pieWithScrollableLegend;
+    }
+
+
     /**
      * 此方法用于调用返回总的QualityOverview类型数据，测试最终的json串
      *
@@ -180,6 +205,7 @@ public class QualityOverviewController {
     public QualityOverview getQualityOverview(){
         return qualityOverview;
     }
+
 
 
 }
