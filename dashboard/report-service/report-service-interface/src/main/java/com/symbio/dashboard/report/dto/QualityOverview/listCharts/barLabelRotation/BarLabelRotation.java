@@ -1,15 +1,15 @@
-package com.symbio.dashboard.report.dto.listCharts.stackedLineChart;
+package com.symbio.dashboard.report.dto.QualityOverview.listCharts.barLabelRotation;
 
 import lombok.Data;
 
 /**
- * 本类是用于返回一个StackedLineChart对象给前端的类
+ * 此类是用于返回BarLabelRotation对象给前端的类
  *
  * @author daizongheng
  */
 
 @Data
-public class StackedLineChart {
+public class BarLabelRotation {
 
     /**
      * pos的json串是个数组坐标类型，这里暂时写死为字符串类型
@@ -24,18 +24,16 @@ public class StackedLineChart {
     /**
      * data 是返回给前端对象的所有内容
      */
-    private StackedLineChartData data;
+    private BarLabelRotationData data;
 
     /**
      * 此构造函数暂时用于初始化对象数据
      *
      * 暂定将数据对象写死
      */
-    public StackedLineChart(){
-        super();
-
-        this.setPos("[0,1]");
-        this.setKey("StackedLine");
-        this.setData(new StackedLineChartData());
+    public BarLabelRotation(){
+        this.setPos("[1，0]");
+        this.setKey("BarLabRotation");
+        this.setData(new BarLabelRotationData());
     }
 }

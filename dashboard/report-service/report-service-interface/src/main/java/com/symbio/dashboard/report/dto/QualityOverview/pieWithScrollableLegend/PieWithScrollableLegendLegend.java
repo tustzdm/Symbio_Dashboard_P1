@@ -1,4 +1,4 @@
-package com.symbio.dashboard.report.dto.pieWithScrollableLegend;
+package com.symbio.dashboard.report.dto.QualityOverview.pieWithScrollableLegend;
 
 import lombok.Data;
 

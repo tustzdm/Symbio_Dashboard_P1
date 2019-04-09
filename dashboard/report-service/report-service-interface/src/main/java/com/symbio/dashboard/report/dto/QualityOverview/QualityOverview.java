@@ -31,6 +31,6 @@ public class QualityOverview {
     public QualityOverview(){
         ec = "0";
         em = "";
-        cd = new QualityOverviewCd();
+//        cd = new QualityOverviewCd();
     }
 }

@@ -1,4 +1,4 @@
-package com.symbio.dashboard.report.dto.listList;
+package com.symbio.dashboard.report.dto.QualityOverview.listList;
 
 
 import com.alibaba.fastjson.annotation.JSONField;

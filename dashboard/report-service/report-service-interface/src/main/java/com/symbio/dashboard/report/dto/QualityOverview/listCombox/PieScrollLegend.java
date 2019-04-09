@@ -1,4 +1,4 @@
-package com.symbio.dashboard.report.dto.listCombox;
+package com.symbio.dashboard.report.dto.QualityOverview.listCombox;
 
 import lombok.Data;
 

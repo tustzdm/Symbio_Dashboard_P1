@@ -1,9 +1,8 @@
-package com.symbio.dashboard.report.dto.listList;
+package com.symbio.dashboard.report.dto.QualityOverview.listList;
 
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

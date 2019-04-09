@@ -2,19 +2,22 @@ package com.symbio.dashboard.report;
 
 
 import com.symbio.dashboard.report.dto.QualityOverview.QualityOverview;
-import com.symbio.dashboard.report.dto.listCharts.barLabelRotation.BarLabelRotation;
-import com.symbio.dashboard.report.dto.listCharts.barLabelRotation.BarSimple;
-import com.symbio.dashboard.report.dto.listCharts.stackedLineChart.StackedLineChart;
-import com.symbio.dashboard.report.dto.listCombox.PieScrollLegend;
-import com.symbio.dashboard.report.dto.listList.ListProductStatistics;
-import com.symbio.dashboard.report.dto.listList.ListProductStatisticsDataInData;
-import com.symbio.dashboard.report.dto.listRowCharts.MixLineBar;
-import com.symbio.dashboard.report.dto.pieWithScrollableLegend.PieWithScrollableLegend;
+import com.symbio.dashboard.report.dto.QualityOverview.QualityOverviewCd;
+import com.symbio.dashboard.report.dto.QualityViewLeyout.QualityViewLayout;
+import com.symbio.dashboard.report.dto.QualityOverview.listCharts.barLabelRotation.BarLabelRotation;
+import com.symbio.dashboard.report.dto.QualityOverview.listCharts.barLabelRotation.BarSimple;
+import com.symbio.dashboard.report.dto.QualityOverview.listCharts.stackedLineChart.StackedLineChart;
+import com.symbio.dashboard.report.dto.QualityOverview.listCombox.PieScrollLegend;
+import com.symbio.dashboard.report.dto.QualityOverview.listList.ListProductStatistics;
+import com.symbio.dashboard.report.dto.QualityOverview.listList.ListProductStatisticsDataInData;
+import com.symbio.dashboard.report.dto.QualityOverview.listRowCharts.MixLineBar;
+import com.symbio.dashboard.report.dto.QualityOverview.pieWithScrollableLegend.PieWithScrollableLegend;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 本类用于对QualityOverview的一个控制，用于控制返回的内容信息
@@ -69,6 +72,12 @@ public class QualityOverviewController {
     private QualityOverview qualityOverview;
 
 
+    /**
+     * 成员对象用于封装返回给前端的最终页面布局json串，测试最终getQualityViewLayout接口
+     */
+    private QualityViewLayout qualityViewLayout;
+
+
 
     /**
      * 为了测试接口，此构造函数用于初始化需要返回的对象
@@ -84,6 +93,8 @@ public class QualityOverviewController {
         pieScrollLegend = new PieScrollLegend();
         pieWithScrollableLegend = new PieWithScrollableLegend();
         qualityOverview = new QualityOverview();
+
+        qualityViewLayout = new QualityViewLayout();
     }
 
     /**
@@ -201,9 +212,64 @@ public class QualityOverviewController {
      *
      * @return 返回给前端最终的QualityOverview类型对象的json串
      */
-    @RequestMapping("/getQualityOverview")
-    public QualityOverview getQualityOverview(){
-        return qualityOverview;
+
+    @RequestMapping("/getQualityOverview/{key}")
+    public QualityOverview getQualityOverview(@PathVariable String key){
+//        String key = "StackedLine";
+
+        QualityOverviewCd qc = new QualityOverviewCd();
+        if ("StackedLine".equals(key)){
+            List listCharts = new ArrayList();
+            listCharts.add(new StackedLineChart());
+            qc.setListCharts(listCharts);
+
+            qualityOverview.setCd(qc);
+        }
+
+
+        if ("BarLabRotation".equals(key)){
+            List listCharts = new ArrayList();
+            listCharts.add(new BarLabelRotation());
+            qc.setListCharts(listCharts);
+            qualityOverview.setCd(qc);
+        }
+
+        if ("listProductStatistics".equals(key)){
+            List listList = new ArrayList();
+            listList.add(new ListProductStatistics());
+            qc.setListCharts(listList);
+            qualityOverview.setCd(qc);
+        }
+
+        if ("MixLineBar".equals(key)){
+            List listRowCharts = new ArrayList();
+            listRowCharts.add(new MixLineBar());
+            qc.setListRowCharts(listRowCharts);
+            qualityOverview.setCd(qc);
+        }
+
+        if ("PieWithScrollLegend".equals(key)) {
+            List list = new ArrayList();
+            list.add(new PieWithScrollableLegend());
+            qc.setListCombox(list);
+            qualityOverview.setCd(qc);
+        }
+
+    return qualityOverview;
+    }
+
+
+    /**
+     * 此方法用于调用返回总的QualityViewLayout类型数据，测试最终的json串
+     *
+     * 测试接口：
+     *  localhost:8080/menu/getQualityViewLayout
+     *
+     * @return 返回给前端最终的QualityViewLayout类型对象的json串
+     */
+    @RequestMapping("/getQualityViewLayout")
+    public QualityViewLayout getQualityViewLayout(){
+        return qualityViewLayout;
     }
 
 

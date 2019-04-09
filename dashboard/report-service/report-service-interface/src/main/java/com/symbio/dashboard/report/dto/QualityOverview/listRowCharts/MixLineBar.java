@@ -1,4 +1,4 @@
-package com.symbio.dashboard.report.dto.listRowCharts;
+package com.symbio.dashboard.report.dto.QualityOverview.listRowCharts;
 
 import lombok.Data;
 
