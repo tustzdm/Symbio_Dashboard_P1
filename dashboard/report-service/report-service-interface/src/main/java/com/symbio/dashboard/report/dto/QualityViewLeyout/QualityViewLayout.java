@@ -1,6 +1,8 @@
 package com.symbio.dashboard.report.dto.QualityViewLeyout;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 本类主要根据得到的页面上送信息返回相应的页面布局信息的dto类
@@ -9,6 +11,8 @@ import lombok.Data;
  */
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class QualityViewLayout {
 
     /**
@@ -25,6 +29,6 @@ public class QualityViewLayout {
     /**
      * qv布局信息
      */
-    private QualityViewLayoutCD cd = new QualityViewLayoutCD();
+    private QualityViewLayoutCD cd;
 
 }

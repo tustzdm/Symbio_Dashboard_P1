@@ -12,7 +12,10 @@ import com.symbio.dashboard.report.dto.QualityOverview.listList.ListProductStati
 import com.symbio.dashboard.report.dto.QualityOverview.listList.ListProductStatisticsDataInData;
 import com.symbio.dashboard.report.dto.QualityOverview.listRowCharts.MixLineBar;
 import com.symbio.dashboard.report.dto.QualityOverview.pieWithScrollableLegend.PieWithScrollableLegend;
+import com.symbio.dashboard.report.service.QualityViewLayoutService;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +30,7 @@ import java.util.List;
 
 
 @Slf4j //用于添加日志信息
-@Data
+@RequiredArgsConstructor
 @RestController //相当于@ResponseBody+@Controller
 @RequestMapping("/menu")
 public class QualityOverviewController {
@@ -75,27 +78,8 @@ public class QualityOverviewController {
     /**
      * 成员对象用于封装返回给前端的最终页面布局json串，测试最终getQualityViewLayout接口
      */
-    private QualityViewLayout qualityViewLayout;
+    private final QualityViewLayoutService qualityViewLayout;
 
-
-
-    /**
-     * 为了测试接口，此构造函数用于初始化需要返回的对象
-     */
-    public QualityOverviewController(){
-        super();
-
-        stackedLineChart = new StackedLineChart();
-        barLabelRotation = new BarLabelRotation();
-        mixLineBar = new MixLineBar();
-        listProductStatistics = new ListProductStatistics();
-        barSimple = new BarSimple();
-        pieScrollLegend = new PieScrollLegend();
-        pieWithScrollableLegend = new PieWithScrollableLegend();
-        qualityOverview = new QualityOverview();
-
-        qualityViewLayout = new QualityViewLayout();
-    }
 
     /**
      * 此方法用于调用返回StackedLineChart类型的数据
@@ -265,12 +249,18 @@ public class QualityOverviewController {
      * 测试接口：
      *  localhost:8080/menu/getQualityViewLayout
      *
+     *  为了测试语种信息，url中暂时带一个String类型的local（语种信息）
+     *
+     *
      * @return 返回给前端最终的QualityViewLayout类型对象的json串
      */
-    @RequestMapping("/getQualityViewLayout")
-    public QualityViewLayout getQualityViewLayout(){
-        return qualityViewLayout;
+    @RequestMapping("/getQualityViewLayout/{locale}")
+    public QualityViewLayout getQualityViewLayout(@PathVariable String locale){
+        return qualityViewLayout.findAll(locale);
     }
+
+
+
 
 
 

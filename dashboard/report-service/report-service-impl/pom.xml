@@ -11,5 +11,14 @@
 
   <artifactId>report-service-impl</artifactId>
 
+  <dependencies>
+    <dependency>
+      <groupId>com.symbio</groupId>
+      <artifactId>report-service-interface</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+
+  </dependencies>
 
 </project>
