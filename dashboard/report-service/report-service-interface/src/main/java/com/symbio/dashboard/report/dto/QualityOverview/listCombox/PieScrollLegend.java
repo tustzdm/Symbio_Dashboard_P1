@@ -30,18 +30,5 @@ public class PieScrollLegend {
      */
     private List<PieScrollLegendCondition> condition;
 
-    /**
-     * 此构造方法用于初始化对象内容
-     *
-     * 为了测试json串暂定将返回的数据写死
-     */
-    public PieScrollLegend(){
-        key = "PieScrollLegend";
-        name = "Pie with Scrollable Legend";
 
-        condition = new ArrayList<>();
-        condition.add(new PieScrollLegendCondition());
-        condition.add(new PieScrollLegendCondition());
-        condition.add(new PieScrollLegendCondition());
-    }
 }

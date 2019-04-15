@@ -3,7 +3,7 @@ package com.symbio.dashboard.report;
 
 import com.symbio.dashboard.report.dto.QualityOverview.QualityOverview;
 import com.symbio.dashboard.report.dto.QualityOverview.QualityOverviewCd;
-import com.symbio.dashboard.report.dto.QualityViewLeyout.QualityViewLayout;
+import com.symbio.dashboard.report.dto.qualityViewLeyout.QualityViewLayout;
 import com.symbio.dashboard.report.dto.QualityOverview.listCharts.barLabelRotation.BarLabelRotation;
 import com.symbio.dashboard.report.dto.QualityOverview.listCharts.barLabelRotation.BarSimple;
 import com.symbio.dashboard.report.dto.QualityOverview.listCharts.stackedLineChart.StackedLineChart;
@@ -12,9 +12,8 @@ import com.symbio.dashboard.report.dto.QualityOverview.listList.ListProductStati
 import com.symbio.dashboard.report.dto.QualityOverview.listList.ListProductStatisticsDataInData;
 import com.symbio.dashboard.report.dto.QualityOverview.listRowCharts.MixLineBar;
 import com.symbio.dashboard.report.dto.QualityOverview.pieWithScrollableLegend.PieWithScrollableLegend;
+import com.symbio.dashboard.report.dto.saveQualityViewLeyout.SaveQualityViewLeyout;
 import com.symbio.dashboard.report.service.QualityViewLayoutService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -79,6 +78,11 @@ public class QualityOverviewController {
      * 成员对象用于封装返回给前端的最终页面布局json串，测试最终getQualityViewLayout接口
      */
     private final QualityViewLayoutService qualityViewLayout;
+
+    /**
+     * 成员对象用于在前端页面布局保存时，将布局信息保存到数据库中之后，返回给前端信息
+     */
+    private SaveQualityViewLeyout saveQualityViewLeyout = new SaveQualityViewLeyout();
 
 
     /**
@@ -247,7 +251,7 @@ public class QualityOverviewController {
      * 此方法用于调用返回总的QualityViewLayout类型数据，测试最终的json串
      *
      * 测试接口：
-     *  localhost:8080/menu/getQualityViewLayout
+     *  localhost:8080/menu/getQualityViewLayout/zh_cn
      *
      *  为了测试语种信息，url中暂时带一个String类型的local（语种信息）
      *
@@ -256,7 +260,20 @@ public class QualityOverviewController {
      */
     @RequestMapping("/getQualityViewLayout/{locale}")
     public QualityViewLayout getQualityViewLayout(@PathVariable String locale){
-        return qualityViewLayout.findAll(locale);
+        return qualityViewLayout.getQualityViewLayout(locale);
+    }
+
+
+
+    @RequestMapping("/saveQualityViewLeyout")
+    public SaveQualityViewLeyout saveQualityViewLeyout(@RequestParam(value = "token") String token,
+                                                       @RequestParam(value = "locale") String locale,
+                                                       @RequestParam(value = "listChartCommon",required = false) List listChartCommon,
+                                                       @RequestParam(value = "listChartOther",required = false) List listChartOther,
+                                                       @RequestParam(value = "listRowChart",required = false) List listRowChart,
+                                                       @RequestParam(value = "listList",required = false) List listList){
+
+        return saveQualityViewLeyout;
     }
 
 

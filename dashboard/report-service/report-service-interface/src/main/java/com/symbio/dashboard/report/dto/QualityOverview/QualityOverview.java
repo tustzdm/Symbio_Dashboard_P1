@@ -25,12 +25,5 @@ public class QualityOverview {
      */
     private QualityOverviewCd cd;
 
-    /**
-     * 为了测试json串，定义构造方法写死成员变量，以后成员变量的具体内容从数据库或前台中获取
-     */
-    public QualityOverview(){
-        ec = "0";
-        em = "";
-//        cd = new QualityOverviewCd();
-    }
+
 }

@@ -1,4 +1,4 @@
-package com.symbio.dashboard.report.dto.QualityViewLeyout;
+package com.symbio.dashboard.report.dto.qualityViewLeyout;
 
 import lombok.Data;
 
@@ -42,21 +42,6 @@ public class QualityViewLayoutCD {
 
     private List listListUsed = new ArrayList();
 
-
-    /**
-     * 测试构造函数，写死集合对象
-     */
-    public QualityViewLayoutCD(){
-//        listSupport.add(new QualityViewLayoutInformation());
-//        listSupport.add(new QualityViewLayoutInformation());
-//        listChartCommon.add(new QualityViewLayoutInformation());
-//        listChartCommon.add(new QualityViewLayoutInformation());
-//        listChartOther.add(new QualityViewLayoutInformation());
-//        listRowChartUsed.add(new QualityViewLayoutInformation());
-//        listListUsed.add(new QualityViewLayoutInformation());
-//        listListUsed.add(new QualityViewLayoutInformation());
-//        listListUsed.add(new QualityViewLayoutInformation());
-    }
 
 
 

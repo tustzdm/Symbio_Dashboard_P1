@@ -1,7 +1,6 @@
 package com.symbio.dashboard.report.dto.QualityOverview.listList;
 
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import lombok.Data;
 
@@ -21,45 +20,37 @@ public class ListProductStatisticsDataInData {
     /**
      * id号
      */
-    @JSONField(ordinal = 2)
     private Integer id = 5;
 
     /**
      * 类型名称
      */
-    @JSONField(ordinal = 3)
     private String name = "uality Overview report";
 
     /**
      * 查看测试接口，暂时定义Interger
      */
-    @JSONField(ordinal = 1)
     private Integer auto = 1;
 
     /**
      * 查看测试接口，暂时定义Interger
      */
-    @JSONField(ordinal = 5)
     private Integer qa = 100;
 
     /**
      * 查看测试接口，暂时定义Double
      */
-    @JSONField(ordinal = 4)
     private Double progress = 3.11;
 
     /**
      * 其实是一个engineer类，暂时没有具体实例，先用string写死
      */
-    @JSONField(ordinal = 6)
     private String engineer = "User";
 
     /**
      * 查看测试接口，暂时定义Double
      */
-    @JSONField(ordinal = 7)
     private Double comment = 9.88;
-
 
 
 

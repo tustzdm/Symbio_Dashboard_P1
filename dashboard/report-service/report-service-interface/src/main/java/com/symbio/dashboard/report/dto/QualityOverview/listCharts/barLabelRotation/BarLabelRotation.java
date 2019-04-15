@@ -26,14 +26,4 @@ public class BarLabelRotation {
      */
     private BarLabelRotationData data;
 
-    /**
-     * 此构造函数暂时用于初始化对象数据
-     *
-     * 暂定将数据对象写死
-     */
-    public BarLabelRotation(){
-        this.setPos("[1，0]");
-        this.setKey("BarLabRotation");
-        this.setData(new BarLabelRotationData());
-    }
 }

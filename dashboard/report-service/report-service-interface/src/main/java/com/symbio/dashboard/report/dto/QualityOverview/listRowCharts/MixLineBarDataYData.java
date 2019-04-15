@@ -33,11 +33,5 @@ public class MixLineBarDataYData {
      */
     private Integer interval;
 
-    /**
-     * 为了测试json串，定义构造方法写死成员变量，以后成员变量的具体内容从数据库中获取
-     */
-    public MixLineBarDataYData(){
-        this.setName("水量");
-        this.setFormatter("300"+"ml");
-    }
+
 }

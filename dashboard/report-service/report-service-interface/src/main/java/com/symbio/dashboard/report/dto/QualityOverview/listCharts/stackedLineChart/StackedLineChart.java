@@ -26,16 +26,5 @@ public class StackedLineChart {
      */
     private StackedLineChartData data;
 
-    /**
-     * 此构造函数暂时用于初始化对象数据
-     *
-     * 暂定将数据对象写死
-     */
-    public StackedLineChart(){
-        super();
 
-        this.setPos("[0,1]");
-        this.setKey("StackedLine");
-        this.setData(new StackedLineChartData());
-    }
 }

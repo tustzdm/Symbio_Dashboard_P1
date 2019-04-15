@@ -43,35 +43,5 @@ public class ListProductStatisticsData {
      */
     private List<ListProductStatisticsDataInData> data;
 
-    /**
-     * 为了测试json串，定义构造方法写死成员变量，以后成员变量的具体内容从数据库或前台中获取
-     */
-    public ListProductStatisticsData(){
-        this.setPageIndex(0);
-        this.setPageSize(5);
-        this.setTotalRecord(10);
 
-
-        columns = new ArrayList<>();
-        columns.add(new ListProductStatisticsDataColumns());
-        columns.add(new ListProductStatisticsDataColumns());
-        columns.add(new ListProductStatisticsDataColumns());
-
-        fields = new ArrayList();
-        fields.add("id");
-        fields.add("name");
-        fields.add("auto");
-        fields.add("qa");
-        fields.add("progress");
-        fields.add("engineer");
-        fields.add("comment");
-
-
-        data = new ArrayList<>();
-        data.add(new ListProductStatisticsDataInData());
-        data.add(new ListProductStatisticsDataInData());
-        data.add(new ListProductStatisticsDataInData());
-        data.add(new ListProductStatisticsDataInData());
-
-    }
 }

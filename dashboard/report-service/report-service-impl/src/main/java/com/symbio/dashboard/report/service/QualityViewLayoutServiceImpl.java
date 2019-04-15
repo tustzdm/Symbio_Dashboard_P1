@@ -1,11 +1,10 @@
 package com.symbio.dashboard.report.service;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import com.symbio.dashboard.report.dto.QualityViewLeyout.QualityViewLayout;
-import com.symbio.dashboard.report.dto.QualityViewLeyout.QualityViewLayoutCD;
-import com.symbio.dashboard.report.dto.QualityViewLeyout.QualityViewLayoutInformation;
+import com.symbio.dashboard.report.dto.qualityViewLeyout.QualityViewLayout;
+import com.symbio.dashboard.report.dto.qualityViewLeyout.QualityViewLayoutCD;
+import com.symbio.dashboard.report.dto.qualityViewLeyout.QualityViewLayoutInformation;
 import com.symbio.dashboard.report.modle.ReportChart;
 import com.symbio.dashboard.report.repository.ReportChartRepository;
 import lombok.Data;
@@ -15,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 本类用于实现QualityViewLayoutService接口，将layout页面布局发送给前端
+ *
+ */
 
 @Service
 @Data
@@ -24,7 +27,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
 
 
     @Override
-    public QualityViewLayout findAll(String locale) {
+    public QualityViewLayout getQualityViewLayout(String locale) {
         return setQualityViewLayout(locale);
     }
 

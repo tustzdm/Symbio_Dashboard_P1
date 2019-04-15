@@ -34,19 +34,5 @@ public class PieScrollLegendCondition {
      */
     private List<PieScrollLegendConditionData> data;
 
-    /**
-     * 此构造函数暂时用于初始化对象数据
-     *
-     * 暂定将数据对象写死
-     */
-    public PieScrollLegendCondition(){
-        name = "product";
-        type = "list";
-        value = "all";
 
-        data = new ArrayList<>();
-        data.add(new PieScrollLegendConditionData());
-        data.add(new PieScrollLegendConditionData());
-        data.add(new PieScrollLegendConditionData());
-    }
 }

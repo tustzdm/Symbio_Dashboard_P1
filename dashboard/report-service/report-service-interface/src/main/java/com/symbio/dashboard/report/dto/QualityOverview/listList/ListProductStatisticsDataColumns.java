@@ -44,14 +44,5 @@ public class ListProductStatisticsDataColumns {
      */
     private String formatter;
 
-    /**
-     * 为了测试json串，定义构造方法写死成员变量，以后成员变量的具体内容从数据库或前台中获取
-     */
-    public ListProductStatisticsDataColumns(){
-        this.setKey("ProductIDLink");
-        this.setLable("Test Lable");
-        this.setType("text");
-        this.setField("auto");
-        this.setFormatter(null);
-    }
+
 }

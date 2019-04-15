@@ -39,14 +39,6 @@ public class StackedLineChartData {
     private Integer groupby;
 
 
-
-    /**
-     * data是内容对象中的表信息的数据具体内容
-     */
-//    private FormDataInformation data;
-
-
-
     /**
      * key为表格属性，value为该属性下的具体内容
      *
@@ -55,47 +47,7 @@ public class StackedLineChartData {
     private Map data = new HashMap();
 
 
-    /**
-     * 此构造方法用于初始化对象内容
-     *
-     * 为了测试json串暂定将返回的数据写死
-     */
-    public StackedLineChartData(){
-        super();
 
-        //legend具体内容以后从数据库中获取
-        legend = new ArrayList();
-        legend.add("Pass");
-        legend.add("Fail");
-        legend.add("Skip");
-        legend.add("Success");
-
-        //name具体内容以后从数据库中获取
-        name = new ArrayList();
-        name.add("TestSet1");
-        name.add("TestSet2");
-        name.add("TestSet3");
-
-        //groupby以后从前端获取到
-        groupby = 1;
-
-
-        List list = new ArrayList();
-        list.add(1);
-        list.add(3);
-        list.add(6);
-        list.add(7);
-        if(groupby == 0){
-            for (int i = 0; i < name.size(); i++) {
-                data.put(name.get(i),list);
-            }
-        }else if (groupby == 1){
-            for (int i = 0; i < legend.size(); i++) {
-                data.put(legend.get(i),list);
-            }
-        }
-
-    }
 
 
 }

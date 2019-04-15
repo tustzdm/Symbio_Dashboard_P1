@@ -29,24 +29,4 @@ public class BarSimple {
      */
     private List seriesData;
 
-    /**
-     * 此构造函数暂时用于初始化对象数据
-     *
-     * 暂定将数据对象写死
-     */
-    public BarSimple(){
-        super();
-
-        color = "#003666";
-
-        xData = new ArrayList();
-        xData.add("Mon");
-        xData.add("Tue");
-
-        seriesData = new ArrayList();
-        seriesData.add(120);
-        seriesData.add(200);
-
-
-    }
 }

@@ -1,4 +1,4 @@
-package com.symbio.dashboard.report.dto.QualityViewLeyout;
+package com.symbio.dashboard.report.dto.qualityViewLeyout;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -24,18 +24,4 @@ public class MixLineBarDataSeriesData {
      */
     private List data;
 
-    /**
-     * 为了测试json串，定义构造方法写死基本数据，以后从数据库中获取
-     */
-    public MixLineBarDataSeriesData(){
-        super();
-
-        this.setName("降水量");
-
-        data = new ArrayList();
-        data.add(1.6);
-        data.add(3.8);
-        data.add(8.5);
-
-    }
 }

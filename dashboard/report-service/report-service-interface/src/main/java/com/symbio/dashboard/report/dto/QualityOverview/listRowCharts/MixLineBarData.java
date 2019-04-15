@@ -39,27 +39,6 @@ public class MixLineBarData {
      */
     private List<MixLineBarDataSeriesData> seriesData;
 
-    /**
-     * 为了测试json串，定义构造方法写死成员变量，以后成员变量的具体内容从数据库或前台中获取
-     */
-    public MixLineBarData(){
-        super();
 
-        legend = new ArrayList();
-        legend.add("降水量");
-        legend.add("蒸发量");
-        legend.add("平均温度");
-
-        xData = new ArrayList();
-        xData.add("1月");
-        xData.add("2月");
-        xData.add("3月");
-
-        yData = new ArrayList<>();
-        yData.add(new MixLineBarDataYData());
-        yData.add(new MixLineBarDataYData());
-        yData.add(new MixLineBarDataYData());
-
-    }
 
 }

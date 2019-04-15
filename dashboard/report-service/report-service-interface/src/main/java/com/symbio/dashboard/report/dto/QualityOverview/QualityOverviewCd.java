@@ -45,20 +45,5 @@ public class QualityOverviewCd {
      */
     private List listRowCharts = new ArrayList();
 
-    /**
-     * 为了测试json串，定义构造方法写死成员变量，以后成员变量的具体内容从数据库或前台中获取
-     */
-    public QualityOverviewCd(){
-        token = "123";
-        locale = "en_US";
 
-  /*      listCombox.add(new PieScrollLegend());
-
-        listCharts.add(new StackedLineChart());
-        listCharts.add(new BarLabelRotation());
-
-        listList.add(new ListProductStatistics());
-
-        listRowCharts.add(new MixLineBar());*/
-    }
 }
