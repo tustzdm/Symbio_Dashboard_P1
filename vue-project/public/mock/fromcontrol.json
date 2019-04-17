@@ -1,0 +1,66 @@
+{
+    "code": 200,
+    "data": {
+        "reportPool": [
+            {
+              "name": "chart1",
+              "order": 1,
+              "bAddcomm": true,
+              "bRowChart": 1,
+              "pos": []              
+            },
+            {
+              "name": "chart2",
+              "order": 2,
+              "bAddcomm": true,
+              "bRowChart": 0,
+              "pos": []              
+            },
+            {
+              "name": "chart3",
+              "order": 3,
+              "bAddcomm": true,
+              "bRowChart": 1,
+              "pos": []
+            },
+            {
+              "name": "chart4",
+              "order": 4,
+              "bAddcomm": true,
+              "bRowChart": 0,
+              "pos": []
+            },
+            {
+              "name": "chart5",
+              "order": 5,
+              "bAddcomm": false,
+              "bRowChart": 0,
+              "pos": []
+            },
+            {
+              "name": "chart6",
+              "order": 6,
+              "bAddcomm": true,
+              "bRowChart": 0,
+              "pos": []
+            },
+            {
+              "name": "chart7",
+              "order": 7,
+              "bAddcomm": false,
+              "bRowChart": 0,
+              "pos": []
+            },
+            {
+              "name": "chart8",
+              "order": 8,
+              "bAddcomm": false,
+              "bRowChart": 1,
+              "pos": []
+            }
+          ],
+          "reportList": [],
+          "commomReports": []
+    },
+    "message": "success"
+}

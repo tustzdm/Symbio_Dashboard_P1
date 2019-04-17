@@ -1,0 +1,5 @@
+http://127.0.0.1:8100/menu/getQualityViewLayout
+
+http://127.0.0.1:8100/menu/getQualityView
+http://127.0.0.1:8100/menu/getQualityView2
+

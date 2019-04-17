@@ -1,0 +1,207 @@
+{
+    "code": 200,
+    "data": {
+        "project": [
+            {
+                "id": 1,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "pro-field-1": "daedae",
+                "pro-field-2": "daedae",
+                "pro-field-3": 3,
+                "pro-field-4": 4,
+                "pro-field-5": 5,
+                "pro-field-6": 6,
+                "pro-field-7": 7,
+                "editFlag": false
+            },
+            {
+                "id": 2,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "pro-field-1": "nnmnmmmmmmmmmmmm",
+                "pro-field-2": "ddddddddddddddddddddddd",
+                "pro-field-3": 3,
+                "pro-field-4": 4,
+                "pro-field-5": 5,
+                "pro-field-6": 6,
+                "pro-field-7": 7,
+                "editFlag": false
+            },
+            {
+                "id": 3,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "pro-field-1": 1,
+                "pro-field-2": 2,
+                "pro-field-3": 3,
+                "pro-field-4": 4,
+                "pro-field-5": 5,
+                "pro-field-6": 6,
+                "pro-field-7": 7,
+                "editFlag": false
+            },
+            {
+                "id": 4,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "pro-field-1": 1,
+                "pro-field-2": 2,
+                "pro-field-3": 3,
+                "pro-field-4": 4,
+                "pro-field-5": 5,
+                "pro-field-6": 6,
+                "pro-field-7": 7,
+                "editFlag": false
+            },
+            {
+                "id": 5,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "pro-field-1": 1,
+                "pro-field-2": 2,
+                "pro-field-3": 3,
+                "pro-field-4": 4,
+                "pro-field-5": 5,
+                "pro-field-6": 6,
+                "pro-field-7": 7,
+                "editFlag": false
+            }
+        ],
+        "release": [
+            {
+                "id": 1,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "rel-field-1": 1,
+                "rel-field-2": 2,
+                "rel-field-3": 3,
+                "rel-field-4": 4,
+                "rel-field-5": 5,
+                "rel-field-6": 6,
+                "rel-field-7": 7,
+                "editFlag": false
+            },
+            {
+                "id": 2,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "rel-field-1": 1,
+                "rel-field-2": 2,
+                "rel-field-3": 3,
+                "rel-field-4": 4,
+                "rel-field-5": 5,
+                "rel-field-6": 6,
+                "rel-field-7": 7,
+                "editFlag": false
+            },
+            {
+                "id": 3,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "rel-field-1": 1,
+                "rel-field-2": 2,
+                "rel-field-3": 3,
+                "rel-field-4": 4,
+                "rel-field-5": 5,
+                "rel-field-6": 6,
+                "rel-field-7": 7,
+                "editFlag": false
+            },
+            {
+                "id": 4,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "rel-field-1": 1,
+                "rel-field-2": 2,
+                "rel-field-3": 3,
+                "rel-field-4": 4,
+                "rel-field-5": 5,
+                "rel-field-6": 6,
+                "rel-field-7": 7,
+                "editFlag": false
+            },
+            {
+                "id": 5,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "rel-field-1": 1,
+                "rel-field-2": 2,
+                "rel-field-3": 3,
+                "rel-field-4": 4,
+                "rel-field-5": 5,
+                "rel-field-6": 6,
+                "rel-field-7": 7,
+                "editFlag": false
+            }
+        ],
+        "testSet": [
+            {
+                "id": 1,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "bug-field-1": 1,
+                "bug-field-2": 2,
+                "bug-field-3": 3,
+                "bug-field-4": 4,
+                "bug-field-5": 5,
+                "bug-field-6": 6,
+                "bug-field-7": 7,
+                "editFlag": false
+            },
+            {
+                "id": 2,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "bug-field-1": 1,
+                "bug-field-2": 2,
+                "bug-field-3": 3,
+                "bug-field-4": 4,
+                "bug-field-5": 5,
+                "bug-field-6": 6,
+                "bug-field-7": 7,
+                "editFlag": false
+            },
+            {
+                "id": 3,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "bug-field-1": 1,
+                "bug-field-2": 2,
+                "bug-field-3": 3,
+                "bug-field-4": 4,
+                "bug-field-5": 5,
+                "bug-field-6": 6,
+                "bug-field-7": 7,
+                "editFlag": false
+            },
+            {
+                "id": 4,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "bug-field-1": 1,
+                "bug-field-2": 2,
+                "bug-field-3": 3,
+                "bug-field-4": 4,
+                "bug-field-5": 5,
+                "bug-field-6": 6,
+                "bug-field-7": 7,
+                "editFlag": false
+            },
+            {
+                "id": 5,
+                "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+                "bug-field-1": 1,
+                "bug-field-2": 2,
+                "bug-field-3": 3,
+                "bug-field-4": 4,
+                "bug-field-5": 5,
+                "bug-field-6": 6,
+                "bug-field-7": 7,
+                "editFlag": false
+            }
+        ]
+    },
+    "message": "success"
+}

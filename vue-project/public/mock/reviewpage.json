@@ -1,0 +1,16 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "id": 1,
+            "sourceScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+            "targetScreen": "http://n.sinaimg.cn/front/240/w640h400/20181231/Q87I-hqwsyta0821720.jpg",
+            "sid": "jgjhgjh",
+            "lqacomments": "hkfa hjkf hu i h hih hih",
+            "ls": "kjhjkfifiawejoifoi",
+            "status": "Not Run",
+            "jiraticket": "kkda-af-fe"
+        }
+    ],
+    "message": "success"
+}
