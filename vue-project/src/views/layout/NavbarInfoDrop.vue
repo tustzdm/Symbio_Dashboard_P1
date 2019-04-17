@@ -60,12 +60,10 @@ export default {
   vertical-align middle
 
 .info-area
-
   &__dropdown
     @extend .inline-block-box
     cursor pointer
     color #ff8400
-    margin-top: 20px
   &__avatar
     @extend .inline-block-box
     padding-left 10px

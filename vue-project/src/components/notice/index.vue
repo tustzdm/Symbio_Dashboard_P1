@@ -18,7 +18,7 @@ export default {
   height: 34px;
   cursor: pointer;
   padding: 0 10px;
-  margin-top 15px;
+  margin-top 5px;
   transition: color 0.28s;
 }
 
