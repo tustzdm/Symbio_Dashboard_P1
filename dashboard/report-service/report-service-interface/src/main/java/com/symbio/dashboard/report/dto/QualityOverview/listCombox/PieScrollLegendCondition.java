@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * 本类主要为PieScrollLegend中的Condition集合中的对象
  *
- * @author daizongheng
  */
 
 @Data

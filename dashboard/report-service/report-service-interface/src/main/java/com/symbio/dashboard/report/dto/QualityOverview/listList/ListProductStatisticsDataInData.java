@@ -11,7 +11,6 @@ import java.util.List;
  *
  * 根据ListProductStatisticsData中的fields列表返回相应的数据信息
  *
- * @author daizongheng
  */
 @Data
 @JSONType(orders = {"name","id","auto","qa","engineer","comment","progress"})

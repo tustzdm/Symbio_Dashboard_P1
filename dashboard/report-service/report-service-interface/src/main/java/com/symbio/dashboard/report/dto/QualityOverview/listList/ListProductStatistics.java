@@ -4,8 +4,6 @@ import lombok.Data;
 
 /**
  * 本类用于返回给前端页面的ListProductStatistics对象信息
- *
- * @author daizongheng
  */
 @Data
 public class ListProductStatistics {

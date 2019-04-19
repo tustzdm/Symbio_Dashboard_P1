@@ -3,6 +3,7 @@ package com.symbio.dashboard.report.modle;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.GenerationType;
  */
 @Setter
 @Getter
+@ToString
 @Entity //实体类
 @NoArgsConstructor //无参构造方法
 @Table(name = "report_chart" , schema = "test")

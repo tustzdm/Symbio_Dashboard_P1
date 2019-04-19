@@ -5,8 +5,6 @@ import lombok.Data;
 
 /**
  * 本类用于封装ListProductStatisticsData对象中的columns信息内容，返回给ListProductStatisticsData对象
- *
- * @author daizongheng
  */
 @Data
 public class ListProductStatisticsDataColumns {

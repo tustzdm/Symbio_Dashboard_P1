@@ -7,8 +7,6 @@ import java.util.List;
 
 /**
  * 本类用于封装ListProductStatistics对象的图标信息内容，返回给ListProductStatistics对象
- *
- * @author daizongheng
  */
 @Data
 public class ListProductStatisticsData {

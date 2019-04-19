@@ -5,7 +5,6 @@ import lombok.Data;
 /**
  * 此类的作用是返回一个key-value形式的对象给PieScrollLegendCondition去
  *
- * @author daizongheng
  */
 @Data
 public class PieScrollLegendConditionData {

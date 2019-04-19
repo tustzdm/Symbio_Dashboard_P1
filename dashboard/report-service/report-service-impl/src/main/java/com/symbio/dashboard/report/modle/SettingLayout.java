@@ -26,8 +26,12 @@ public class SettingLayout {
     @Column(name = "page" , nullable = false)
     private String page;
 
+    /**
+     * 0: System support 1: Admin Setting
+     * 默认为1
+     */
     @Column(name = "type" , nullable = false)
-    private Integer type;
+    private Integer type = 1;
 
     @Column(name = "locale" , nullable = false)
     private String locale;

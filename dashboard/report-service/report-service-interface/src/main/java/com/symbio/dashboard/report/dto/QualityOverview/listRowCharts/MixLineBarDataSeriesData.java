@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * 此类是用于对系列详细数据或者简单数据做出的一个封装，返回给MixLineBarData类中
  *
- * @author daizongheng
  */
 @Data
 public class MixLineBarDataSeriesData {

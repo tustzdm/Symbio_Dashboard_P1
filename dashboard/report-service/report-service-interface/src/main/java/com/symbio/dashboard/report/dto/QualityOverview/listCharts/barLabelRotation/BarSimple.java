@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * 此类表示的是BarSimple类型格式，json测试格式没有定义的前提下，暂时归属此包下，待确定之后可在换
  *
- * @author daizongheng
  */
 
 @Data

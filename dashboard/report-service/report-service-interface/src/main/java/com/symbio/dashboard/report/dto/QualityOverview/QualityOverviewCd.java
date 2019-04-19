@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * 本类用于一个QualityOverview对象中的cd变量的一个封装
  *
- * @author daizongheng
  */
 @Data
 public class QualityOverviewCd {

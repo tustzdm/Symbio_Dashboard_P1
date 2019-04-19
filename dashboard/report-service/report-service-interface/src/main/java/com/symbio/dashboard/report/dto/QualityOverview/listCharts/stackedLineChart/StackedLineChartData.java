@@ -12,7 +12,6 @@ import java.util.Map;
 /**
  * 本类为返回给前端的StackedLineChart对象的具体数据内容
  *
- * @author daizongheng
  */
 
 @Data

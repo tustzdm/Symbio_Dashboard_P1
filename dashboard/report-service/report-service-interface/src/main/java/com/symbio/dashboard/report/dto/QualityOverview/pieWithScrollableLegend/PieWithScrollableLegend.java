@@ -5,7 +5,6 @@ import lombok.Data;
 /**
  * 本类用于返回PieWithScrollableLegend的图信息给前台
  *
- * @author daizongheng
  */
 @Data
 public class PieWithScrollableLegend {

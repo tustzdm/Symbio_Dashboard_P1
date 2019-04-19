@@ -1,6 +1,10 @@
 package com.symbio.dashboard.report;
 
 
+import com.symbio.dashboard.report.dro.saveUploadInformation.ListChartCommon;
+import com.symbio.dashboard.report.dro.saveUploadInformation.ListChartOther;
+import com.symbio.dashboard.report.dro.saveUploadInformation.ListList;
+import com.symbio.dashboard.report.dro.saveUploadInformation.ListRowChart;
 import com.symbio.dashboard.report.dto.QualityOverview.QualityOverview;
 import com.symbio.dashboard.report.dto.QualityOverview.QualityOverviewCd;
 import com.symbio.dashboard.report.dto.qualityViewLeyout.QualityViewLayout;
@@ -14,11 +18,13 @@ import com.symbio.dashboard.report.dto.QualityOverview.listRowCharts.MixLineBar;
 import com.symbio.dashboard.report.dto.QualityOverview.pieWithScrollableLegend.PieWithScrollableLegend;
 import com.symbio.dashboard.report.dto.saveQualityViewLeyout.SaveQualityViewLeyout;
 import com.symbio.dashboard.report.service.QualityViewLayoutService;
+import com.symbio.dashboard.report.service.SaveQualityViewLeyoutService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -82,7 +88,7 @@ public class QualityOverviewController {
     /**
      * 成员对象用于在前端页面布局保存时，将布局信息保存到数据库中之后，返回给前端信息
      */
-    private SaveQualityViewLeyout saveQualityViewLeyout = new SaveQualityViewLeyout();
+    private final SaveQualityViewLeyoutService saveQualityViewLeyout;
 
 
     /**
@@ -264,20 +270,50 @@ public class QualityOverviewController {
     }
 
 
-
+    /**
+     * 本方法用于前端布局页面确定后调用接口，将页面布局信息存放到数据库中
+     *
+     * 测试接口：
+     *  localhost:8080/menu/saveQualityViewLeyout
+     *
+     * @param token 用户token值 前台必须传
+     * @param locale 语种 前台必须传
+     * @param listChartCommons listChartCommon块布局
+     * @param listChartOthers listChartOther块布局
+     * @param listRowCharts listRowChart块布局
+     * @param listLists listList块布局
+     *
+     * @return 返回给前端存储布局信息后的反馈信息
+     */
     @RequestMapping("/saveQualityViewLeyout")
     public SaveQualityViewLeyout saveQualityViewLeyout(@RequestParam(value = "token") String token,
                                                        @RequestParam(value = "locale") String locale,
-                                                       @RequestParam(value = "listChartCommon",required = false) List listChartCommon,
-                                                       @RequestParam(value = "listChartOther",required = false) List listChartOther,
-                                                       @RequestParam(value = "listRowChart",required = false) List listRowChart,
-                                                       @RequestParam(value = "listList",required = false) List listList){
+                                                       @RequestParam(value = "listChartCommon",required = false) List<ListChartCommon> listChartCommons,
+                                                       @RequestParam(value = "listChartOther",required = false) List<ListChartOther> listChartOthers,
+                                                       @RequestParam(value = "listRowChart",required = false) List<ListRowChart> listRowCharts,
+                                                       @RequestParam(value = "listList",required = false) List<ListList> listLists){
 
-        return saveQualityViewLeyout;
+        //test
+        Integer a[] = {1,2};
+        List list = new LinkedList();
+        ListChartCommon listChartCommon = new ListChartCommon();
+        listChartCommon.setKey("StackedLine");
+        listChartCommon.setPos(a);
+        ListChartCommon listChartCommon1 = new ListChartCommon();
+        listChartCommon1.setKey("BarLabRotation");
+        listChartCommon1.setPos(a);
+        list.add(listChartCommon);
+        list.add(listChartCommon1);
+
+        List list2 = new LinkedList();
+        List list3 = new LinkedList();
+        List list4 = new LinkedList();
+
+
+
+
+        return saveQualityViewLeyout.getSaveFeedback(locale,list,list2,list3,list4);
     }
-
-
-
 
 
 

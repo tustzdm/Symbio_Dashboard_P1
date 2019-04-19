@@ -5,7 +5,6 @@ import lombok.Data;
 /**
  * 本类用于对QualityOverview进行一个整合，将所有的QualityOverview内部的对象进行一个封装，返回一个总的json串
  *
- * @author daizongheng
  */
 @Data
 public class QualityOverview {

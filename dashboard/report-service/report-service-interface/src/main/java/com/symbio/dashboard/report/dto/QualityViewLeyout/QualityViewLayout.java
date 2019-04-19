@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 /**
  * 本类主要根据得到的页面上送信息返回相应的页面布局信息的dto类
  *
- * @author daizongheng
  */
 
 @Data

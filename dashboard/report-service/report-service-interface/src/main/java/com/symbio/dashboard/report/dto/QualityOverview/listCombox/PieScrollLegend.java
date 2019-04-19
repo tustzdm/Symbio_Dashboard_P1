@@ -9,7 +9,6 @@ import java.util.List;
  * 本类用于返回给前端页面的PieScrollLegend具体信息
  *  暂时以json测试串为主
  *
- * @author daizongheng
  */
 
 @Data

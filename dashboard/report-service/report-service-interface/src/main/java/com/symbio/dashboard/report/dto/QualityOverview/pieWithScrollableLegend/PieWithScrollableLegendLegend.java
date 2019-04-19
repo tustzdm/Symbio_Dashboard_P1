@@ -7,7 +7,6 @@ import java.util.List;
 /**
  * 用于封装PieWithScrollableLegend中的图例对象
  *
- * @author daizongheng
  */
 
 @Data

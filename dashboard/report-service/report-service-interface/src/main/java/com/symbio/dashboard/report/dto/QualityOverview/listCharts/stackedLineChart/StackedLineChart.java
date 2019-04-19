@@ -5,16 +5,15 @@ import lombok.Data;
 /**
  * 本类是用于返回一个StackedLineChart对象给前端的类
  *
- * @author daizongheng
  */
 
 @Data
 public class StackedLineChart {
 
     /**
-     * pos的json串是个数组坐标类型，这里暂时写死为字符串类型
+     * pos是个数组坐标类型
      */
-    private String pos;
+    private Integer pos[][];
 
     /**
      * key为图表类型

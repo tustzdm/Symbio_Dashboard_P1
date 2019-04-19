@@ -4,24 +4,20 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 /**
- * 返回的是qv布局信息集合中的详细信息,如果为null则不返回
- *
+ * 本类用于返回qv布局信息中的 listList 集合中的对象
  */
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class QualityViewLayoutInformation {
+public class QualityViewLayoutCDList {
 
     /**
-     * 页面具体位置,从数据库中获取
-     *  因为pos表示坐标，有可能为Array,有可能为Integer
-     *
-     *  有的需要，有的不需要，所以默认为null
+     * 坐标
      */
-    private Object pos = null;
+    private Integer pos;
 
     /**
-     * 显示顺序
+     * 顺序
      */
     private Integer idx;
 
@@ -31,7 +27,7 @@ public class QualityViewLayoutInformation {
     private String key;
 
     /**
-     * 名称
+     * key对应的名字
      */
     private String name;
 
@@ -42,5 +38,6 @@ public class QualityViewLayoutInformation {
      *  3.list
      *  4.行控件
      */
-    private Integer type = 1;
+    private Integer type;
+
 }

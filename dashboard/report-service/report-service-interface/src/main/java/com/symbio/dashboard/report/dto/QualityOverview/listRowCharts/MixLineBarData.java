@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * 本类用于封装MixLineBar对象的图标信息内容，返回给MixLineBar对象
  *
- * @author daizongheng
  */
 @Data
 public class MixLineBarData {
