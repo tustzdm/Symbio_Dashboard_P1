@@ -25,13 +25,6 @@
              <el-select v-model="chartGroup" placeholder="请选择" @change="changeHandle">
                 <el-option v-for="item in listCombox" :key="item.key" :label="item.name" :value="item.key"></el-option>
             </el-select>
-
-            <!-- <el-select v-model="chartGroup" placeholder="请选择" @change="changeHandle">
-                <el-option label="common" value="common"></el-option>
-                <el-option label="echart4" value="echart4"></el-option>
-                <el-option label="echart5" value="echart5"></el-option>
-                <el-option label="echart6" value="echart6"></el-option>
-            </el-select> -->
         </el-card>
         <template v-if="chartGroup=='common'">
             <h5>图形统计</h5>
@@ -61,34 +54,6 @@
             <el-card class="echart-wapper" shadow="hover" :body-style="{'display': 'flex'}">
                 <v-chart :options="item" auto-resize class="echarts-bar" v-for="item in listRowCharts" :key="item.index"></v-chart>
             </el-card>
-
-
-             <!-- <el-card shadow="hover">
-                <el-table :data="dataList" max-height="350" border style="width: 100%;background-color:rgb(240,240,240)" :stripe="true">
-                    <el-table-column prop="name"  label="所有省" ></el-table-column>
-                    <el-table-column prop="value" label="省-1" ></el-table-column>
-                    <el-table-column prop="name" label="省-2" ></el-table-column>
-                    <el-table-column prop="value" label="省-3" ></el-table-column>
-                    <el-table-column prop="value" label="省-4" ></el-table-column>
-                    <el-table-column prop="value" label="省-5" ></el-table-column>
-                    <el-table-column prop="value" label="省-6" ></el-table-column>
-                    <el-table-column prop="value" label="省-7" ></el-table-column>
-                </el-table>
-                <el-pagination background layout="total, sizes, prev, pager, next, jumper" 
-                    :total="dataList.length" 
-                    :page-sizes="[10, 20, 30, 40, 50]"
-                    :page-size="pageSize"
-                    style="text-align:center;margin: 10px 0"
-                    @current-change="currentChange"
-                    @size-change="sizeChange"></el-pagination> 
-            </el-card>
-
-            <h5>图形统计2</h5>
-            <el-card class="echart-wapper" shadow="hover" :body-style="{'display': 'flex'}">
-                <v-chart :options="item" auto-resize class="echarts-bar" v-for="item in listRowCharts" :key="item.index"></v-chart>
-            </el-card> -->
-
-
         </template>
        
        
@@ -180,25 +145,6 @@ export default {
                   }
                 }
             }
-            
-            // switch (this.chartGroup) {
-            //     case 'echart4':
-            //         this.echartLineOpt = echartLineOpt(this.echartTitle, this.xAxisData, Object.values(res.data).splice(0, this.xAxisData.length));
-            //         this.echartRadarOpt = echartRadarOpt(this.echartTitle, this.xAxisData, Object.values(res.data).splice(0, this.xAxisData.length));
-            //         break;
-            //     case 'echart5':
-            //         this.echartBarOpt = echartBarOpt(this.echartTitle, this.xAxisData, Object.values(res.data).splice(0, this.xAxisData.length));
-            //         this.echartGaugeOpt = echartGaugeOpt(this.echartTitle, Object.values(res.data).splice(0, this.xAxisData.length)[0]);
-            //         break;
-            //     case 'echart6':
-            //         this.echartBarOpt = echartBarOpt(this.echartTitle, this.xAxisData, Object.values(res.data).splice(0, this.xAxisData.length));
-            //         this.echartGaugeOpt = echartGaugeOpt(this.echartTitle, Object.values(res.data).splice(0, this.xAxisData.length)[0]);
-            //         break;
-            //     default:
-            //         this.echartBarOpt = echartBarOpt(this.echartTitle, this.xAxisData, Object.values(res.data).splice(0, this.xAxisData.length));
-            //         this.echartPieOpt = echartPieOpt(this.echartTitle, data);
-            //         break;
-            // }
         });
       },
       currentChange(currentPage) {
@@ -214,14 +160,7 @@ export default {
           this.searchByFilter();
       },
       initProjet() {
-          getProjectInfo().then(res => {
-            //   this.projectInfo = res.cd.listCombox[1].condition[0].data;
-            //   this.proTitle = res.cd.listCombox[1].condition[0].name;
-            //   this.versionInfo = res.cd.listCombox[1].condition[1].data;
-            //   this.verTitle = res.cd.listCombox[1].condition[1].name;
-            //   this.caseInfo = res.cd.listCombox[1].condition[2].data;
-            //   this.caseTitle = res.cd.listCombox[1].condition[2].name;
-              //下拉控件
+          getProjectInfo().then(res => {//下拉控件
               console.log("下拉控件");
               console.log(res.cd.listCombox);
                this.listCombox = res.cd.listCombox;
@@ -258,20 +197,6 @@ export default {
             this.$router.push({path: data, query: {type: 'add'}});
             return;
         }
-        // if (type == 'p') {
-        //     this.versionInfo = data.children;
-        //     storage.set("curProject", data);
-        //     this.proTitle = data.name;
-        // }
-        // if (type == 'v') {
-        //     this.caseInfo = data.children;
-        //     storage.set("curVersion", data);
-        //     this.verTitle = data.name;
-        // }
-        // if (type == 'c') {
-        //     this.caseTitle = data.name;
-        //     storage.set("curCase", data);
-        // }
       },
       handleItem(type, path, data) {
           if (path == '/addproject') {

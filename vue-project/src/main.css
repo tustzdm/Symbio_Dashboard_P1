@@ -1,0 +1,36 @@
+@import url(https://fonts.googleapis.com/css?family=Poppins);
+
+.panel {
+  background-color: #fff;
+  border: none;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+  margin: 20px 15px 30px 15px;
+}
+.section-title {
+  padding: 15px 0 5px 10px;
+  font-family: 'Poppins';
+  border-bottom: 2px solid #17c671;
+  margin: 10px;
+}
+
+.section-content {
+  font-family: 'Poppins';
+  padding: 10px;
+  display: inline-block;
+  margin: 8px;
+  width: 48px;
+}
+
+.select-style{    
+  padding: 5px;
+  font-size: 0.85rem;
+  line-height: 1.125rem;
+  color: #495057;
+  border: 1px solid #becad6;
+  font-weight: 300;
+  border-radius: 0.375rem;
+  display: inline-block;
+  margin: 10px;
+  font-family: 'Poppins';
+}

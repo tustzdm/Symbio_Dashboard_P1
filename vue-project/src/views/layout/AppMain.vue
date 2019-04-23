@@ -21,7 +21,6 @@ export default {
 
 <style lang="stylus" scoped>
 .main
-  height 'calc(%s - %s)' % (100% 50px)
   padding 15px
   overflow auto
   box-sizing border-box

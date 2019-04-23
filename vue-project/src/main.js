@@ -9,11 +9,12 @@ import { router } from "@/router";
 import { asyncRouterMap } from "@/router/meunsRouterMap";
 import store from "@/store";
 import i18n from "@/lang";
+import "./main.css";
 Vue.component("icon", Icon);
 Vue.use(scroll);
 Vue.use(Element, {
-  size: "small",
-  i18n: (key, value) => i18n.t(key, value)
+    size: "small",
+    i18n: (key, value) => i18n.t(key, value)
 });
 Vue.config.productionTip = false;
 asyncRouterMap.then(res => {
