@@ -60,12 +60,6 @@ import appCustomCharts from './customCharts'
 import { postMethod } from './postMethod.js'
 
 export default {
-  components: {
-    appBottomChart,
-    appTable,
-    appRegularCharts,
-    appCustomCharts
-  },
   data() {
     return {
       previewValidation: false,
@@ -162,13 +156,45 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
 .panel {
+  background-color: #fff;
+  border: none;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+  margin: 20px 15px 30px 15px;
   width: 550px;
 }
 
-.preCharts,
-.customCharts {
+.section-title {
+  padding: 15px 0 5px 10px;
+  font-family: 'Poppins';
+  border-bottom: 2px solid #17c671;
+  margin: 10px;
+}
+
+.section-content {
+  font-family: 'Poppins';
+  padding: 10px;
+  display: inline-block;
+  margin: 8px;
+  width: 48px;
+}
+
+select {
+  padding: 5px;
+  font-size: 0.85rem;
+  line-height: 1.125rem;
+  color: #495057;
+  border: 1px solid #becad6;
+  font-weight: 300;
+  border-radius: 0.375rem;
+  display: inline-block;
+  margin: 10px;
+  font-family: 'Poppins';
+}
+
+.preCharts, .customCharts {
   display: inline-block;
   vertical-align: top;
   text-align: left;
@@ -184,21 +210,21 @@ button {
   width: 100px;
   height: 40px;
   text-align: center;
-  box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1),
-    0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1),
-    0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12),
-    0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+  box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
 }
+
 .submit {
   position: absolute;
   right: 150px;
 }
+
 .reset {
   position: absolute;
   right: 20px;
   background-color: #ff7400;
   border-color: #ff7400;
 }
+
 .preview {
   margin: 0 30px;
   display: inline-block;
@@ -206,11 +232,66 @@ button {
   position: relative;
   width: 1140px;
 }
+
 img {
   margin-top: 10px;
   width: 80%;
   height: 80%;
   max-width: 100%;
   max-height: 100%;
+}
+
+ul {
+  border-radius: 0.625rem;
+  margin: 20px 30px 8px 30px;
+  border: 1px solid #becad6;
+  min-height: 90px;
+}
+
+li.customChart, li.supportChart {
+  padding: 15px 15px 15px 30px;
+}
+
+.supportChartActive {
+  background-color: #adedc5;
+  border-radius: 0.625rem;
+}
+
+.supportChart:hover {
+  border: 2px solid #adedc5;
+  border-radius: 0.625rem;
+}
+
+.customChartActive {
+  background-color: #ffc7ab;
+  border-radius: 0.625rem;
+}
+
+.customChart:hover {
+  border: 2px solid #ffc7ab;
+  border-radius: 0.625rem;
+}
+
+button {
+  background-color: #17c671;
+  border-color: #17c671;
+  box-shadow: none;
+  color: #fff;
+  border-radius: 50px;
+  margin: 25px 100px 10px;
+  width: 64px;
+  height: 31px;
+  text-align: center;
+  box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+}
+
+.removeButton {
+  background-color: #ff7400;
+  border-color: #ff7400;
+}
+
+.disabled {
+  cursor: not-allowed;
+  background-color: #ff7400;
 }
 </style>
