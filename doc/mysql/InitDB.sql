@@ -21,7 +21,7 @@ CREATE TABLE `base_code` (
 
 DROP TABLE IF EXISTS `report_chart`;
 CREATE TABLE `report_chart` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `page` VARCHAR(45) NOT NULL COMMENT 'QualityOverview, BugReport',
   `key` VARCHAR(45) NOT NULL,
   `name` VARCHAR(60) NOT NULL DEFAULT '{"zh_cn": "","en_us":""}',
@@ -40,7 +40,7 @@ INSERT INTO `report_chart` VALUES (5, 'QualityOverview', 'MixLineBar', '{\"zh_cn
 
 DROP TABLE IF EXISTS `setting_layout`;
 CREATE TABLE `setting_layout` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `page` VARCHAR(45) NOT NULL COMMENT 'QualityOverview, BugReport',
   `type` INT NOT NULL COMMENT '0: System support 1: Admin Setting' DEFAULT 1,
   `locale` VARCHAR(45) NOT NULL COMMENT 'zh_CN, en_US',
@@ -52,7 +52,7 @@ CREATE TABLE `setting_layout` (
 
 DROP TABLE IF EXISTS `language_ui`;
 CREATE TABLE `language_ui` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `page` VARCHAR(30) NOT NULL COMMENT 'QualityOverviewLayout',
   `key` VARCHAR(30) NOT NULL,
   `type` VARCHAR(45) NOT NULL COMMENT 'text, number, bool, checkbox, list' DEFAULT 'text',
