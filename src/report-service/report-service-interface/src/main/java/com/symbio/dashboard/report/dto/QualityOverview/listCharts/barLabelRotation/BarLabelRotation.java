@@ -13,7 +13,7 @@ public class BarLabelRotation {
     /**
      * pos是个数组坐标类型
      */
-    private Integer pos[][];
+    private Integer pos[];
 
     /**
      * key为图表类型

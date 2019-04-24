@@ -3,6 +3,8 @@ package com.symbio.dashboard.report.modle;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,6 +16,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@DynamicInsert
 @NoArgsConstructor
 @Table(name = "setting_layout")
 public class SettingLayout {

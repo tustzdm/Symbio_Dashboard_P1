@@ -7,7 +7,7 @@ import lombok.Data;
  *
  */
 @Data
-public class PieScrollLegendConditionData {
+public class ListComboxConditionData {
 
     /**
      * 默认为all

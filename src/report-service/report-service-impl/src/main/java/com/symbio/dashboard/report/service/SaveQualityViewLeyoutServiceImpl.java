@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -101,12 +103,14 @@ public class SaveQualityViewLeyoutServiceImpl implements SaveQualityViewLeyoutSe
         for (String page : list){
             Integer id = settingLayoutRepository.getIdByPageAndTypeAndLocale(page,1,locale);
             String layout = saveLayoutJson(listChartCommon, listChartOther, listRowChart, listList);
+            //settingLayoutRepository.saveAndFlush(createSettingLayout(id,page,1,locale,layout));
+
             if (id != null){
                 System.out.println(id+"----------");
-                settingLayoutRepository.save(createSettingLayout(id,page,1,locale,layout));
+                settingLayoutRepository.saveAndFlush(createSettingLayout(id,page,1,locale,layout));
                 continue;
             }else if (id == null){
-                settingLayoutRepository.save(createSettingLayout(page,1,locale,layout));
+                settingLayoutRepository.saveAndFlush(createSettingLayout(page,1,locale,layout));
                 flag = 1;//表示存放了数据到数据库中
                 continue;
             }
@@ -159,6 +163,17 @@ public class SaveQualityViewLeyoutServiceImpl implements SaveQualityViewLeyoutSe
         settingLayout.setLocale(locale);
         settingLayout.setLayout(layout);
 
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String nowtime = simpleDateFormat.format(date);
+        try {
+            Date time = simpleDateFormat.parse(nowtime);
+            settingLayout.setCreateTime(time);
+            settingLayout.setUpdateTime(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return settingLayout;
     }
 
@@ -178,7 +193,14 @@ public class SaveQualityViewLeyoutServiceImpl implements SaveQualityViewLeyoutSe
         SettingLayout settingLayout = new SettingLayout();
 
         Date date = new Date();
-        Timestamp timestamp = new Timestamp(date.getTime());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String nowTime = simpleDateFormat.format(date);
+        try {
+            Date time = simpleDateFormat.parse(nowTime);
+            settingLayout.setUpdateTime(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         settingLayout.setId(id);
         settingLayout.setPage(page);
@@ -186,7 +208,6 @@ public class SaveQualityViewLeyoutServiceImpl implements SaveQualityViewLeyoutSe
         settingLayout.setLocale(locale);
         settingLayout.setLayout(layout);
 
-        settingLayout.setCreateTime(timestamp);
 
         return settingLayout;
     }
@@ -304,6 +325,13 @@ public class SaveQualityViewLeyoutServiceImpl implements SaveQualityViewLeyoutSe
         return list;
     }
 
+
+    public static void main(String[] args) {
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String nowTime = simpleDateFormat.format(date);
+        System.out.println(nowTime);
+    }
 
 
 }

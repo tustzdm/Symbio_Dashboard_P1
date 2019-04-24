@@ -11,10 +11,14 @@ import com.symbio.dashboard.report.dto.qualityViewLeyout.*;
 import com.symbio.dashboard.report.modle.ReportChart;
 import com.symbio.dashboard.report.repository.ReportChartRepository;
 import com.symbio.dashboard.report.repository.SettingLayoutRepository;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,10 +31,12 @@ import java.util.Map;
 
 @Service
 @Data
+@Component
 public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
 
     @Autowired
     private ReportChartRepository reportChartRepository;
+
     @Autowired
     private SettingLayoutRepository settingLayoutRepository;
 
@@ -108,28 +114,28 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
         if (list == null){
             return null;
         }else {
-            qualityViewLayoutCD.setListChartCommon(list);
+            qualityViewLayoutCD.setListCharts(list);
         }
 
         list = setListChartOther(locale,JSON.parseArray(JSON.parseObject(jsonMap).getString("listChartOther"), ListChartOther.class));
         if (list == null){
             return null;
         }else {
-            qualityViewLayoutCD.setListChartOther(list);
+            qualityViewLayoutCD.setOtherReport(list);
         }
 
         list = setListRowChart(locale, JSON.parseArray(JSON.parseObject(jsonMap).getString("listRowChart"), ListRowChart.class));
         if (list == null){
             return null;
         }else {
-            qualityViewLayoutCD.setListRowChartUsed(list);
+            qualityViewLayoutCD.setListRowChart(list);
         }
 
         list = setListList(locale,JSON.parseArray(JSON.parseObject(jsonMap).getString("listList"), ListList.class));
         if (list == null){
             return null;
         }else {
-            qualityViewLayoutCD.setListListUsed(list);
+            qualityViewLayoutCD.setListList(list);
         }
 
         qualityViewLayoutCD.setListSupport(setListSupport(locale));

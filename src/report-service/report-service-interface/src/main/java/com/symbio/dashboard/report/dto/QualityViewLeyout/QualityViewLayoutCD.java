@@ -30,16 +30,16 @@ public class QualityViewLayoutCD {
     /**
      * common chart
      */
-    private List listChartCommon = new LinkedList();
+    private List listCharts = new LinkedList();
 
     /**
      * 非 common chart
      */
-    private List listChartOther = new LinkedList();
+    private List OtherReport = new LinkedList();
 
-    private List listRowChartUsed = new LinkedList();
+    private List listRowChart = new LinkedList();
 
-    private List listListUsed = new LinkedList();
+    private List listList = new LinkedList();
 
 
 

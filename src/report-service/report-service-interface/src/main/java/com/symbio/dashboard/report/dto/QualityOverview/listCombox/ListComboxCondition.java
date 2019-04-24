@@ -2,7 +2,6 @@ package com.symbio.dashboard.report.dto.QualityOverview.listCombox;
 
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,7 +10,7 @@ import java.util.List;
  */
 
 @Data
-public class PieScrollLegendCondition {
+public class ListComboxCondition {
 
     /**
      * 名字
@@ -31,7 +30,7 @@ public class PieScrollLegendCondition {
     /**
      *data集合中每一项都是一个key-value的对象
      */
-    private List<PieScrollLegendConditionData> data;
+    private List<ListComboxConditionData> data;
 
 
 }
