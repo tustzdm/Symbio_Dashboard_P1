@@ -1,0 +1,41 @@
+布局控制页面。
+
+目的： Admin后台设计Quality Overview界面效果，登录用户将显示统一的画面及控件。
+
+要求：
+   1. 支持语种： en_US, zh_CN
+   2. 完成控件布局设置功能
+	1）第一排控件为一行两列显示，最多支持三行。无设置时，Quality Overview不显示任何内容。
+	2）第二排元素为列表，一行一个，最多支持三行。无设置时，Quality Overview不显示列表内容。
+	3）第二排元素为行控件显示，一行一个，最多支持三行。无设置时，Quality Overview不显示控件。
+   3. 控件的Label也应该来自接口数据。例如： EN：Common，ZH：通用控件
+
+控件术语说明：
+  通用控件：可用于第一排显示的控件，控件数据的查询条件必须是导航条条件，非自定义条件。
+  Other控件：Quality Overview在Report List选择其中之后，只显示其自定义的查询条件和该控件。 该自定义查询条件是任意的，由该控件决定，可以是导航条条件，也可以是自定义查询条件。
+  列表：数据来源于导航条查询条件。有TestCase List，Bug List 等。
+  行控件：数据来源于导航条查询条件。
+
+画面元素（EN）：
+  1. Preview(预览效果): 用于实时显示Quality Overview中Report的显示效果。
+  2. Common Report（通用控件）: 设置第一排元素区。已设定的通用控件。
+  3. Report Dropdown List（Other控件）: 已设定的Other控件列表。
+  4. List (的列表设置区)： 已设定列表
+  5. RowChart Report (行控件设置区)： 已设定的行控件
+  6. Support Reports (系统未设定的的元素): 当前未设定的通用控件、Other控件、列表控件、行控件。
+  7. 每个设置区除第一行外，最右边有Add，Clear按钮。 Add用于增加下一行，Clear清空本行设定元素。
+
+说明：
+  1. Preview(预览效果)： 第一项为Common, 其他子项为：未设定的通用控件、未设定的Other控件。并按控件的类型，控件顺序(来源接口)显示。
+  2. 设置区设定的控件不合理时，保存时提示信息。画面所有的提示信息，按接口中的locale区分。
+	如： 第二行没有设定内容，第三行有设定内容，不予保存。 
+
+接口对应：
+  1. Common Report： listChartCommon
+  2. Report Dropdown List: listChartOther
+  3. List : listListUsed
+  4. RowChart Report: listRowChartUsed
+  5. Support Reports: listSupport
+
+
+
