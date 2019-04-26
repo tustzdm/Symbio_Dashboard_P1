@@ -1,7 +1,7 @@
 package com.symbio.dashboard.report.service;
 
+import com.symbio.dashboard.Result;
 import com.symbio.dashboard.report.dro.getQualityOverview.Search;
-import com.symbio.dashboard.report.dto.QualityOverview.QualityOverview;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -16,7 +16,7 @@ public interface QualityViewService {
      * @param search
      * @return
      */
-    QualityOverview getQualityOverview(Map<String,Integer> role, String locale, Search search);
+    Result getQualityOverview(Map<String,Integer> role, String locale, Search search);
 
 
 }

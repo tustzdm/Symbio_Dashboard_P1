@@ -30,9 +30,6 @@ public class ReportChart {
     @Column(name = "id",nullable = false)
     private Integer id;
 
-    /**
-     * QualityOverview
-     */
     @Column(name = "page",nullable = false)
     private String page;
 

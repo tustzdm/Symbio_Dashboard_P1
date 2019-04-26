@@ -1,14 +1,14 @@
-package com.symbio.dashboard.auth.service;
+package com.symbio.dashboard.service.auth;
 
-import com.symbio.dashboard.auth.dto.UserDto;
-import com.symbio.dashboard.auth.model.User;
-import com.symbio.dashboard.auth.repository.UserRepository;
+import com.symbio.dashboard.dto.auth.UserDto;
+import com.symbio.dashboard.model.auth.User;
+import com.symbio.dashboard.repository.auth.UserRepository;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
 @Service
 @Data
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
 

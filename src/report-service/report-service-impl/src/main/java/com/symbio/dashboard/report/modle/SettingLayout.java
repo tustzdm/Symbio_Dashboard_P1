@@ -42,10 +42,10 @@ public class SettingLayout {
     @Column(name = "layout")
     private String layout;
 
-    @Column(name = "updateTime")
+    @Column(name = "update_time")
     private Date updateTime;
 
-    @Column(name = "createTime")
+    @Column(name = "create_time")
     private Date createTime;
 
 

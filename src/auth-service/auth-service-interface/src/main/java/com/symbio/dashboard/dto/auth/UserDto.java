@@ -1,4 +1,4 @@
-package com.symbio.dashboard.auth.dto;
+package com.symbio.dashboard.dto.auth;
 
 
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.symbio.dashboard.auth.model;
+package com.symbio.dashboard.model.auth;
 
 
 import javax.persistence.Column;

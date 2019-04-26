@@ -1,22 +1,26 @@
 package com.symbio.dashboard.report;
 
 
+import com.symbio.dashboard.Result;
 import com.symbio.dashboard.report.dro.getQualityOverview.Search;
 import com.symbio.dashboard.report.dro.getQualityOverview.SearchCommon;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListChartCommon;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListChartOther;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListList;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListRowChart;
-import com.symbio.dashboard.report.dto.QualityOverview.QualityOverview;
-import com.symbio.dashboard.report.dto.qualityViewLeyout.QualityViewLayout;
-import com.symbio.dashboard.report.dto.saveQualityViewLeyout.SaveQualityViewLeyout;
 import com.symbio.dashboard.report.service.QualityViewLayoutService;
 import com.symbio.dashboard.report.service.QualityViewService;
-import com.symbio.dashboard.report.service.QualityViewServiceImpl;
 import com.symbio.dashboard.report.service.SaveQualityViewLeyoutService;
+import com.symbio.dashboard.service.report.getQualityView.GetOverviewAuth;
+import com.symbio.dashboard.service.report.getQualityView.GetOverviewAuthImpl;
+import com.symbio.dashboard.service.report.getQualityViewLayout.GetOverviewLayoutAuth;
+import com.symbio.dashboard.service.report.getQualityViewLayout.GetOverviewLayoutAuthImpl;
+import com.symbio.dashboard.service.report.saveQualityViewLayout.SaveLayoutAuth;
+import com.symbio.dashboard.service.report.saveQualityViewLayout.SaveLayoutAuthImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -65,42 +69,23 @@ public class QualityOverviewController {
      */
 
     @RequestMapping("/getQualityOverview")
-    public QualityOverview getQualityOverview(@RequestParam(value = "token",required = false) String token,
+    public Result getQualityOverview(@RequestParam(value = "token",required = false) String token,
                                               @RequestParam(value = "locale",required = false) String locale,
                                               @RequestParam(value = "search",required = false) Search search){
 
-        //TODO 暂时将前台传递过来的token，locale，search忽略
-   /*     retAuth = getUAuthGetUserID(token); // token -> userID
-        {
-            ec:
-            em:
-            cd:
+        //根据token获得role权限
+        GetOverviewAuth auth = new GetOverviewAuthImpl();
+        Result result = auth.getOverview(token);
+        if (result.hasError()) {
+            return result;
         }
+        Map<String,Integer> role = (Map<String, Integer>) result.getCd();
 
-        if (retAuth.isError())
-
-
-        retRole = GetRole(retAuth.getCD(), page);
-        {
-            ec:
-            em:
-            cd: {"product": 7, "release":7}
-        }
-*/
-
-
-
-        //根据token获得role权限。暂时默认一个权限
-        Map<String,Integer> role = new HashMap<>();
-        role.put("product",7);
-        role.put("release",7);
-        role.put("testset", 7);
 
         String locale1 = "zh_cn";
         String locale2 = "en_us";
 
         Search search1 = new Search(0,new SearchCommon("","",""),null);
-
 
         return qualityViewService.getQualityOverview(role,locale1,search1);
     }
@@ -117,8 +102,19 @@ public class QualityOverviewController {
      *
      * @return 返回给前端最终的QualityViewLayout类型对象的json串
      */
-    @RequestMapping("/getQualityViewLayout/{locale}")
-    public QualityViewLayout getQualityViewLayout(@PathVariable String locale){
+    @RequestMapping("/getQualityViewLayout")
+    public Result getQualityViewLayout(@RequestParam String token,
+                                       @RequestParam(value = "locale",required = false) String locale){
+
+        GetOverviewLayoutAuth auth = new GetOverviewLayoutAuthImpl();
+        Result result = auth.getLayoutAuth(token);
+        if (result.hasError()) {
+            return result;
+        }
+
+        if (locale == null){
+            locale = "en_us";
+        }
         return qualityViewLayout.getQualityViewLayout(locale);
     }
 
@@ -127,7 +123,7 @@ public class QualityOverviewController {
      * 本方法用于前端布局页面确定后调用接口，将页面布局信息存放到数据库中
      *
      * 测试接口：
-     *  localhost:8080/menu/saveQualityViewLeyout
+     *  localhost:8080/menu/saveQualityViewLayout?token=aaa&locale=zh_cn
      *
      * @param token 用户token值 前台必须传
      * @param locale 语种 前台必须传
@@ -136,25 +132,35 @@ public class QualityOverviewController {
      * @param listRowCharts listRowChart块布局
      * @param listLists listList块布局
      *
-     * @return 返回给前端存储布局信息后的反馈信息
+     * @return cd中存的是 返回给前端存储布局信息后的反馈信息
      */
-    @RequestMapping("/saveQualityViewLeyout")
-    public SaveQualityViewLeyout saveQualityViewLeyout(@RequestParam(value = "token") String token,
-                                                       @RequestParam(value = "locale") String locale,
-                                                       @RequestParam(value = "listChartCommon",required = false) List<ListChartCommon> listChartCommons,
-                                                       @RequestParam(value = "listChartOther",required = false) List<ListChartOther> listChartOthers,
-                                                       @RequestParam(value = "listRowChart",required = false) List<ListRowChart> listRowCharts,
-                                                       @RequestParam(value = "listList",required = false) List<ListList> listLists){
+    @RequestMapping("/saveQualityViewLayout")
+    public Result saveQualityViewLayout(@RequestParam(value = "token") String token,
+                                        @RequestParam(value = "locale") String locale,
+                                        @RequestParam(value = "listChartCommon",required = false) List<ListChartCommon> listChartCommons,
+                                        @RequestParam(value = "listChartOther",required = false) List<ListChartOther> listChartOthers,
+                                        @RequestParam(value = "listRowChart",required = false) List<ListRowChart> listRowCharts,
+                                        @RequestParam(value = "listList",required = false) List<ListList> listLists){
+
+        //权限认证
+        SaveLayoutAuth auth = new SaveLayoutAuthImpl();
+        Result result = auth.getRoleSaveLayout(token);
+        if (result.hasError()) {
+            return result;
+        }
+
 
         //test
         Integer a[] = {1,2};
+        Integer b[] = {1,2};
         List list = new LinkedList();
         ListChartCommon listChartCommon = new ListChartCommon();
         listChartCommon.setKey("StackedLine");
         listChartCommon.setPos(a);
         ListChartCommon listChartCommon1 = new ListChartCommon();
         listChartCommon1.setKey("BarLabRotation");
-        listChartCommon1.setPos(a);
+//        listChartCommon1.setKey("aaa");
+        listChartCommon1.setPos(b);
         list.add(listChartCommon);
         list.add(listChartCommon1);
 

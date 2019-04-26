@@ -11,6 +11,14 @@
   <packaging>pom</packaging>
   <name>report-service</name>
 
+  <dependencies>
+    <dependency>
+      <groupId>com.symbio</groupId>
+      <artifactId>common-service</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+  </dependencies>
 
   <modules>
     <module>report-service-interface</module>
