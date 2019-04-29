@@ -16,7 +16,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@DynamicInsert
+@DynamicUpdate
 @NoArgsConstructor
 @Table(name = "setting_layout")
 public class SettingLayout {
@@ -43,10 +43,10 @@ public class SettingLayout {
     private String layout;
 
     @Column(name = "update_time")
-    private Date updateTime;
+    private Date update_time;
 
     @Column(name = "create_time")
-    private Date createTime;
+    private Date create_time;
 
 
 }

@@ -4,12 +4,15 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.ec.report.GetLayoutErrorCode;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListChartCommon;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListChartOther;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListList;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListRowChart;
 import com.symbio.dashboard.report.dto.qualityViewLeyout.*;
+import com.symbio.dashboard.report.modle.LanguageUI;
 import com.symbio.dashboard.report.modle.ReportChart;
+import com.symbio.dashboard.report.repository.LanguageUIRepository;
 import com.symbio.dashboard.report.repository.ReportChartRepository;
 import com.symbio.dashboard.report.repository.SettingLayoutRepository;
 import lombok.AllArgsConstructor;
@@ -40,6 +43,9 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
 
     @Autowired
     private SettingLayoutRepository settingLayoutRepository;
+
+    @Autowired
+    private LanguageUIRepository languageUIRepository;
 
 
     /**
@@ -90,43 +96,59 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
         //根据语种获得settinglayout中的layout
         Map<String, List> map = getSettingLayoutLayout(locale);
         if (map == null){
-            result.setEc("N000009");
+            result.setEc(GetLayoutErrorCode.N000005.toString());
             result.setEm("没有这类语言的layout");
             return result;
         }
 
+
+
+
         String jsonMap = JSON.toJSONString(map, true);
 
+        List<ReportChart> reportChartList = getReportChartEntityByPage();
+        List<LanguageUI> languageUIList = getLanguageUIEntityByPage();
+
+
+
         Result list;
-//        list = setListChartCommon(locale,map.get("listChartCommon"));
-        list = setListChartCommon(locale, JSON.parseArray(JSON.parseObject(jsonMap).getString("listChartCommon"), ListChartCommon.class));
-        System.out.println(list);
+
+        list = setListLabel(locale, languageUIList);
+        if (list.hasError()) {
+            return list;
+        }else {
+            qualityViewLayoutCD.setListLabel((List) list.getCd());
+        }
+
+
+        list = setListChartCommon(locale, JSON.parseArray(JSON.parseObject(jsonMap).getString("listChartCommon"), ListChartCommon.class),reportChartList);
         if (list.hasError()){
             return list;
         }else {
             qualityViewLayoutCD.setListCharts((List) list.getCd());
         }
 
-        list = setListChartOther(locale,JSON.parseArray(JSON.parseObject(jsonMap).getString("listChartOther"), ListChartOther.class));
+        list = setListChartOther(locale,JSON.parseArray(JSON.parseObject(jsonMap).getString("listChartOther"), ListChartOther.class),reportChartList);
         if (list.hasError()){
             return list;
         }else {
             qualityViewLayoutCD.setOtherReport((List) list.getCd());
         }
 
-        list = setListRowChart(locale, JSON.parseArray(JSON.parseObject(jsonMap).getString("listRowChart"), ListRowChart.class));
+        list = setListRowChart(locale, JSON.parseArray(JSON.parseObject(jsonMap).getString("listRowChart"), ListRowChart.class),reportChartList);
         if (list.hasError()){
             return list;
         }else {
             qualityViewLayoutCD.setListRowChart((List) list.getCd());
         }
 
-        list = setListList(locale,JSON.parseArray(JSON.parseObject(jsonMap).getString("listList"), ListList.class));
+        list = setListList(locale,JSON.parseArray(JSON.parseObject(jsonMap).getString("listList"), ListList.class),reportChartList);
         if (list.hasError()){
             return list;
         }else {
             qualityViewLayoutCD.setListList((List) list.getCd());
         }
+
 
         qualityViewLayoutCD.setListSupport(setListSupport(locale));
 
@@ -161,7 +183,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
      *
      * @return cd里面的对象是一个List<QualityViewLayoutCDChartCommon> 返回一个可以返回到前台的布局信息中的ListChartCommon集合
      */
-    private Result setListChartCommon(String locale,List<ListChartCommon> listChartCommons){
+    private Result setListChartCommon(String locale,List<ListChartCommon> listChartCommons,List<ReportChart> reportChartList){
         Result result = new Result();
         List<QualityViewLayoutCDChartCommon> list = new LinkedList<>();
 
@@ -170,9 +192,15 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             Integer pos[] = listChartCommon.getPos();
             String key = listChartCommon.getKey();
 
-            ReportChart reportChart = reportChartRepository.getByKey(key);
+            ReportChart reportChart = null;
+            for (ReportChart r : reportChartList) {
+                if (r.getKey().equals(key)) {
+                    reportChart = r;
+                }
+            }
+
             if (reportChart == null){
-                result.setEc("N00008");
+                result.setEc(GetLayoutErrorCode.N000006.toString());
                 result.setEm("ListChartCommon 根据key找不到相应的reportChart对象");
                 return result;
             }
@@ -202,16 +230,22 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
      *
      * @return cd里面的对象是一个List<QualityViewLayoutCDChartOther> 返回一个可以返回到前台的布局信息中的 listChartOther 集合
      */
-    private Result setListChartOther(String locale, List<ListChartOther> listChartOthers){
+    private Result setListChartOther(String locale, List<ListChartOther> listChartOthers,List<ReportChart> reportChartList){
         Result result = new Result();
         List<QualityViewLayoutCDChartOther> list = new LinkedList<>();
 
         for (ListChartOther listChartOther : listChartOthers){
             String key = listChartOther.getKey();
 
-            ReportChart reportChart = reportChartRepository.getByKey(key);
+            ReportChart reportChart = null;
+            for (ReportChart r : reportChartList) {
+                if (r.getKey().equals(key)) {
+                    reportChart = r;
+                }
+            }
+
             if (reportChart == null){
-                result.setEc("N00007");
+                result.setEc(GetLayoutErrorCode.N000007.toString());
                 result.setEm("listChartOther 根据key找不到相应的reportChart对象");
                 return result;
             }
@@ -241,7 +275,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
      *
      * @return cd里面的对象是一个List<QualityViewLayoutCDRowChart> 返回一个可以返回到前台的布局信息中的 listRowChart 集合
      */
-    private Result setListRowChart(String locale, List<ListRowChart> listRowCharts){
+    private Result setListRowChart(String locale, List<ListRowChart> listRowCharts,List<ReportChart> reportChartList){
         Result result = new Result();
         List<QualityViewLayoutCDRowChart> list = new LinkedList<>();
 
@@ -249,9 +283,15 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             Integer pos = listRowChart.getPos();
             String key = listRowChart.getKey();
 
-            ReportChart reportChart = reportChartRepository.getByKey(key);
+            ReportChart reportChart = null;
+            for (ReportChart r : reportChartList) {
+                if (r.getKey().equals(key)) {
+                    reportChart = r;
+                }
+            }
+
             if (reportChart == null){
-                result.setEc("N00006");
+                result.setEc(GetLayoutErrorCode.N000008.toString());
                 result.setEm("listRowChart 根据key找不到相应的reportChart对象");
                 return result;
             }
@@ -282,7 +322,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
      *
      * @return cd里面的对象是一个List<QualityViewLayoutCDList>  返回一个可以返回到前台的布局信息中的 listList 集合
      */
-    private Result setListList(String locale, List<ListList> listLists){
+    private Result setListList(String locale, List<ListList> listLists,List<ReportChart> reportChartList){
         Result result = new Result();
         List<QualityViewLayoutCDList> list = new LinkedList<>();
 
@@ -290,9 +330,15 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             Integer pos = listList.getPos();
             String key = listList.getKey();
 
-            ReportChart reportChart = reportChartRepository.getByKey(key);
+            ReportChart reportChart = null;
+            for (ReportChart r : reportChartList) {
+                if (r.getKey().equals(key)) {
+                    reportChart = r;
+                }
+            }
+
             if (reportChart == null){
-                result.setEc("N00005");
+                result.setEc(GetLayoutErrorCode.N000009.toString());
                 result.setEm("listList 根据key找不到相应的reportChart对象");
                 return result;
             }
@@ -312,15 +358,40 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
     }
 
 
+    /**
+     * 本方法用于根据语种和language_ui中的信息，组装一个listLabel列表
+     *
+     * @param locale 语种
+     * @param languageUIS language_ui所有有用的对象
+     *
+     * @return 返回一个listLabel列表对象
+     */
+    private Result setListLabel(String locale,List<LanguageUI> languageUIS){
+        Result result = new Result();
 
+        List list = new LinkedList();
 
+        for (LanguageUI l : languageUIS) {
+            String key = l.getKey();
+            QualityViewLayoutCDLabel qualityViewLayoutCDLabel = new QualityViewLayoutCDLabel();
+            qualityViewLayoutCDLabel.setKey(key);
 
+            String label = l.getLabel();
+            JSONObject jsonObject = JSONObject.parseObject(label);
+            Map<String,String> map = (Map<String, String>) JSONObject.toJSON(jsonObject);
 
+            System.out.println(key+"-----"+label);
+            System.out.println(map);
 
+            qualityViewLayoutCDLabel.setLabel(map.get(locale));
 
+            list.add(qualityViewLayoutCDLabel);
 
+        }
 
-
+        result.setCdAndRightEcAndEm(list);
+        return result;
+    }
 
     /**
      * 方法用于建立listSupport集合
@@ -372,6 +443,25 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
         return map.get(locale);
     }
 
+
+    /**
+     * 在getLayout接口中，页面定死为QualityOverview，通过page返回reportchart的集合
+     * @return 返回page为QualityOverview的所有实体类
+     */
+    private List<ReportChart> getReportChartEntityByPage() {
+        List<ReportChart> list = reportChartRepository.getByPageAndValidation("QualityOverview",1);
+        return list;
+    }
+
+
+    /**
+     * 在数据库language_ui中，通过page和validation获得LanguageUI集合
+     * @return 返回page为 QualityOverviewLayout 中的所有实体类
+     */
+    private List<LanguageUI> getLanguageUIEntityByPage() {
+        List<LanguageUI> list = languageUIRepository.getByPageAndValidation("QualityOverviewLayout", 1);
+        return list;
+    }
 
 
 }

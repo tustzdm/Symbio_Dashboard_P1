@@ -20,7 +20,6 @@ import com.symbio.dashboard.service.report.saveQualityViewLayout.SaveLayoutAuthI
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -95,7 +94,7 @@ public class QualityOverviewController {
      * 此方法用于调用返回总的QualityViewLayout类型数据，测试最终的json串
      *
      * 测试接口：
-     *  localhost:8080/menu/getQualityViewLayout/zh_cn
+     *  localhost:8080/menu/getQualityViewLayout?token=aaa&locale=en_us
      *
      *  为了测试语种信息，url中暂时带一个String类型的local（语种信息）
      *
@@ -152,7 +151,7 @@ public class QualityOverviewController {
 
         //test
         Integer a[] = {1,2};
-        Integer b[] = {1,2};
+        Integer b[] = {1,3};
         List list = new LinkedList();
         ListChartCommon listChartCommon = new ListChartCommon();
         listChartCommon.setKey("StackedLine");
@@ -171,7 +170,6 @@ public class QualityOverviewController {
 
         return saveQualityViewLeyout.getSaveFeedback(locale,list,list2,list3,list4);
     }
-
 
 
 }

@@ -23,6 +23,11 @@ public class QualityViewLayoutCD {
     private Integer role;
 
     /**
+     * listLabel
+     */
+    private List listLabel = new LinkedList();
+
+    /**
      *未设定的界面元素
      */
     private List listSupport = new LinkedList();
