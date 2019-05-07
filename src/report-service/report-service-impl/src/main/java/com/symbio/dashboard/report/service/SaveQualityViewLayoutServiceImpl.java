@@ -16,7 +16,6 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -252,7 +251,7 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
 
         for (ListChartCommon listChartCommon : listChartCommons){
             Integer[] pos = listChartCommon.getPos();
-            if (!posListAdd(posList, pos)) {
+            if (!posListAddCommon(posList, pos)) {
                 result.setEc(SaveErrorCode.N10001.toString());
                 result.setEm("坐标不合法");
                 return result;
@@ -303,7 +302,18 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
      */
     private Result judgeListRowChartKey(List<ListRowChart> listRowCharts,List<String> keyList){
         Result result = new Result();
+
+        List<Integer> posList = new LinkedList<>();
+
         for (ListRowChart listRowChart : listRowCharts){
+            Integer pos = listRowChart.getPos();
+            //TODO
+            if (isIllegalPosRowChart(posList, pos)) {
+                result.setEc(SaveErrorCode.N10002.toString());
+                result.setEm("ListRowChart的坐标不合法");
+            }
+
+
             String key = listRowChart.getKey();
 
             if (!keyList.contains(key)){
@@ -325,7 +335,16 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
      */
     private Result judgeListListKey(List<ListList> listLists,List<String> keyList){
         Result result = new Result();
+
+        List<Integer> posList = new LinkedList<>();
+
         for (ListList listList : listLists){
+            Integer pos = listList.getPos();
+            if (isIllegalPosList(posList, pos)) {
+                result.setEc(SaveErrorCode.N10003.toString());
+                result.setEm("ListList的坐标不合法");
+            }
+
             String key = listList.getKey();
             if (!keyList.contains(key)){
                 result.setEc(SaveErrorCode.N00004.toString());
@@ -344,7 +363,7 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
      * @param pos2 第二个pos
      * @return 返回true表示违法，返回false表示合法
      */
-    private boolean isIllegalPos(Integer pos1[], Integer pos2[]) {
+    private boolean isIllegalPosCommon(Integer pos1[], Integer pos2[]) {
         if (pos1.length != 2 || pos2.length != 2) {
             return true;
         }
@@ -362,14 +381,54 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
      * @param pos 要插入的坐标
      * @return 返回false则表示插入失败，不合法或者冲突，返回true则表示成功
      */
-    private boolean posListAdd(List<Integer[]> list,Integer pos[]) {
+    private boolean posListAddCommon(List<Integer[]> list,Integer pos[]) {
         for (Integer[] a : list) {
-            if (isIllegalPos(a, pos)) {
+            if (isIllegalPosCommon(a, pos)) {
                 return false;
             }
         }
         list.add(pos);
         return true;
+    }
+
+
+    /**
+     * 此方法用于判断ListRowChart列表中的pos是否合法，大于三不合法，posList存在不合法
+     *
+     * @param posList 已存在的pos集合
+     * @param pos 新的pos
+     *
+     * @return 返回true表示违法，返回false表示合法
+     */
+    private boolean isIllegalPosRowChart(List<Integer> posList, Integer pos) {
+        if (pos > 3) {
+            return true;
+        }
+        if (posList.contains(pos)) {
+            return true;
+        }
+        posList.add(pos);
+        return false;
+    }
+
+
+    /**
+     * 此方法用于判断ListList列表中的pos是否合法，大于三不合法，posList存在不合法
+     *
+     * @param posList 已存在的pos集合
+     * @param pos 新的pos
+     *
+     * @return 返回true表示违法，返回false表示合法
+     */
+    private boolean isIllegalPosList(List<Integer> posList, Integer pos) {
+        if (pos > 3) {
+            return true;
+        }
+        if (posList.contains(pos)) {
+            return true;
+        }
+        posList.add(pos);
+        return false;
     }
 
 }

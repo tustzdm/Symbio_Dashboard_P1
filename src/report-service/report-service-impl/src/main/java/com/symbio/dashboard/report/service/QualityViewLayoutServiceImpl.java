@@ -101,15 +101,10 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             return result;
         }
 
-
-
-
         String jsonMap = JSON.toJSONString(map, true);
 
         List<ReportChart> reportChartList = getReportChartEntityByPage();
         List<LanguageUI> languageUIList = getLanguageUIEntityByPage();
-
-
 
         Result list;
 
@@ -379,9 +374,6 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             String label = l.getLabel();
             JSONObject jsonObject = JSONObject.parseObject(label);
             Map<String,String> map = (Map<String, String>) JSONObject.toJSON(jsonObject);
-
-            System.out.println(key+"-----"+label);
-            System.out.println(map);
 
             qualityViewLayoutCDLabel.setLabel(map.get(locale));
 

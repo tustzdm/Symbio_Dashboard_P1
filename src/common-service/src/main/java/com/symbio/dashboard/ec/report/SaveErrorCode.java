@@ -8,6 +8,9 @@ public enum  SaveErrorCode {
     N00005,
     N00006,
     N10001,
+    N10002,
+    N10003,
+
 
 
 }
