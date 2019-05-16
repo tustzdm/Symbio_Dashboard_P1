@@ -10,18 +10,19 @@
 
 <script>
 export default {
-  name: "AppMain",
+  name: 'AppMain',
   computed: {
     cachedViews() {
-      return this.$store.state.tagsView.cachedViews;
+      return this.$store.state.tagsView.cachedViews
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
-.main
-  padding 15px
-  overflow auto
-  box-sizing border-box
+.main {
+  padding: 15px;
+  overflow: auto;
+  box-sizing: border-box;
+}
 </style>
