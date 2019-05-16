@@ -7,42 +7,45 @@
         v-for="(listOther,index) in customChart"
         @click="setRemoveID(index),removeSelected = index"
         :class="{customChartActive:index == removeSelected}"
-        :key="listOther"
-      >{{listOther}}</li>
+        :key="listOther.name"
+      >{{listOther.name}}</li>
     </ul>
     <button class="addButton" @click="addCharts(addID)">&#9650</button>
     <button class="removeButton" @click="removeCharts(removeID)">&#9660</button>
-    <h3 class="section-title" style="width:180px">Supported Charts :</h3>
+    <h3 class="section-title" style="width:270px">Unused Supported Charts :</h3>
     <ul>
       <li
         class="supportChart"
         v-for="(listSuppotted,index) in supportChart"
         @click="setAddID(index),addSelected = index"
         :class="{supportChartActive:index == addSelected}"
-        :key="listSuppotted"
-      >{{listSuppotted}}</li>
+        :key="listSuppotted.name"
+        v-show="!allSelects.includes(listSuppotted.name)"
+      >{{listSuppotted.name}}</li>
     </ul>
-    <p>&nbsp;</p>
   </div>
 </template>
 <script>
 export default {
-  props: { supportChart: Array },
+  props: { supportChart: Array, allSelects: Array },
   data() {
     return {
       customChart: [],
       removeID: 0,
-      addID: 0,
+      addID: undefined,
       addSelected: undefined,
       removeSelected: undefined
     }
   },
   methods: {
     addCharts: function(addID) {
+      if (addID == undefined) {
+        alert('Please select an item.')
+      }
       if (this.supportChart.length > 0 && addID < this.supportChart.length) {
         let x = this.supportChart.splice(addID, 1)
         this.customChart.push(x[0])
-        this.addID = 0
+        this.addID = undefined
         this.addSelected = undefined
       }
     },
@@ -67,17 +70,28 @@ export default {
   },
   watch: {
     customChart() {
-      this.$emit('customChartsOutput', this.customChart)
+      let result = []
+      for (let i in this.customChart) {
+        result.push(this.customChart[i].name)
+      }
+      this.$emit('customChartsOutput', result)
     }
   }
 }
 </script>
-<style>
+<style scoped>
+.otherCharts {
+  height: 740px !important;
+  padding-bottom: 0;
+}
 ul {
   border-radius: 0.625rem;
   margin: 20px 30px 8px 30px;
   border: 1px solid #becad6;
   min-height: 90px;
+  max-height: 410px;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 
 li.customChart,

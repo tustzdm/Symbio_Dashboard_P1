@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar-wrap">
-    <img src="../../assets/images/logo.png" alt="" class="logo">
+    <img src="../../assets/images/logo.png" alt class="logo">
     <global-search class="globalSearch"></global-search>
     <notice class="bell"/>
     <infodrop class="userInfo"/>
@@ -8,18 +8,16 @@
 </template>
 
 <script>
-
 import notice from '@/components/notice'
 import infodrop from './NavbarInfoDrop'
 import globalSearch from '@/components/globalSearch'
-
 
 export default {
   name: 'Sidebar',
   components: {
     globalSearch,
     notice,
-    infodrop,
+    infodrop
   },
   mounted() {
     if (!this.$store.getters.sidebar.sliderState) {
@@ -41,24 +39,23 @@ export default {
 </script>
 
 <style >
-.logo{
-    padding:13px;
-    height:30px;    
+.logo {
+  height: 60px;
 }
-.bell{
-    display: inline-block;
-    position: absolute;
-    right: 80px;
+.bell {
+  display: inline-block;
+  position: absolute;
+  right: 80px;
 }
-.userInfo{
-    display: inline-block;
-    position: absolute;
-    right: 15px;
+.userInfo {
+  display: inline-block;
+  position: absolute;
+  right: 15px;
 }
-.globalSearch{
-    display: inline-block;
-    position: absolute;
-    right: 150px;
-    top: 16px;
+.globalSearch {
+  display: inline-block;
+  position: absolute;
+  right: 150px;
+  top: 16px;
 }
 </style>
