@@ -26,6 +26,7 @@ CREATE TABLE `dictionary` (
   `type` varchar(50) DEFAULT NULL COMMENT 'team type',
   `code` varchar(64) NOT NULL COMMENT 'key',
   `value` varchar(512) DEFAULT NULL COMMENT 'value',
+  `zh_cn` varchar(255) DEFAULT NULL COMMENT 'Label for zh_cn'
   `validation` smallint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1-true, 0-false',
   `description` varchar(255) DEFAULT '' COMMENT 'description',
   PRIMARY KEY (`id`),
@@ -86,19 +87,28 @@ CREATE TABLE `language_ui` (
   `key` VARCHAR(30) NOT NULL,
   `type` VARCHAR(45) NOT NULL COMMENT 'text, number, bool, checkbox, list' DEFAULT 'text',
   `data` VARCHAR(512) NULL COMMENT 'For List, Using JSON format.',
-  `label` VARCHAR(128) NOT NULL DEFAULT '{"zh_cn": "","en_us": ""}',
+  `en_us` varchar(128) DEFAULT NULL COMMENT 'Label for en_US',
+  `zh_cn` varchar(128) DEFAULT NULL COMMENT 'Label for zh_cn',
+  `label` varchar(128) NOT NULL DEFAULT '{"":""}' COMMENT 'For local extend',
   `default_value` VARCHAR(45) NULL COMMENT 'default content for the element',
-  `idx` INT NOT NULL,
+  `idx` INT NOT NULL DEFAULT 99,
   `version` VARCHAR(45) NULL,
   `validation` INT NOT NULL COMMENT '0: false, 1: true' DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-INSERT INTO `language_ui` VALUES (1, 'QualityOverviewLayout', 'lblCommChart', 'text', NULL, '{\"zh_cn\": \"通用控件\",\"en_us\":\"Common Chart\"}', NULL, 1, NULL, 1);
-INSERT INTO `language_ui` VALUES (2, 'QualityOverviewLayout', 'lblOtherChart', 'text', NULL, '{\"zh_cn\": \"其他报表控件\",\"en_us\":\"Other Chart\"}', NULL, 2, NULL, 1);
-INSERT INTO `language_ui` VALUES (3, 'QualityOverviewLayout', 'lblListList', 'text', NULL, '{\"zh_cn\": \"列表设置：\",\"en_us\":\"List\"}', NULL, 3, NULL, 1);
-INSERT INTO `language_ui` VALUES (4, 'QualityOverviewLayout', 'lblRowChart', 'text', NULL, '{\"zh_cn\": \"行控件设置：\",\"en_us\":\"Row Chart:\"}', NULL, 4, NULL, 1);
-INSERT INTO `language_ui` VALUES (5, 'QualityOverviewLayout', 'lblPreview', 'text', NULL, '{\"zh_cn\": \"下拉框预览：\",\"en_us\":\"Preview\"}', NULL, 5, NULL, 1);
+INSERT INTO `language_ui` VALUES (1, 'QualityOverviewLayout', 'lblCommChart', 'text', NULL, 'Regular Charts', '通用控件', '{\"zh_cn\": \"通用控件\",\"en_us\":\"Common Chart\"}', NULL, 1, NULL, 1);
+INSERT INTO `language_ui` VALUES (2, 'QualityOverviewLayout', 'lblOtherChart', 'text', NULL, 'Other Charts', '其他报表控件', '{\"zh_cn\": \"其他报表控件\",\"en_us\":\"Other Chart\"}', NULL, 2, NULL, 1);
+INSERT INTO `language_ui` VALUES (3, 'QualityOverviewLayout', 'lblListList', 'text', NULL, 'Tables', '列表设置', '{\"zh_cn\": \"列表设置：\",\"en_us\":\"List\"}', NULL, 3, NULL, 1);
+INSERT INTO `language_ui` VALUES (4, 'QualityOverviewLayout', 'lblRowChart', 'text', NULL, 'Bottom Charts', '行控件设置', '{\"zh_cn\": \"行控件设置：\",\"en_us\":\"Row Chart:\"}', NULL, 4, NULL, 1);
+INSERT INTO `language_ui` VALUES (5, 'QualityOverviewLayout', 'lblPreview', 'text', NULL, 'Preview', '下拉框预览', '{\"zh_cn\": \"下拉框预览：\",\"en_us\":\"Preview\"}', NULL, 5, NULL, 1);
+INSERT INTO `language_ui` VALUES ('6', 'QualityOverview', 'lblReportList', 'text', null, NULL, NULL,  '{}', null, '1', null, '1');
+INSERT INTO `language_ui` VALUES ('7', 'TestMgmrProductNew', 'lblProductName', 'text', null,NULL, NULL,  '{}', null, '1', null, '1');
+INSERT INTO `language_ui` VALUES ('8', 'TestMgmrProductNew', 'lblProductOwner', 'text', null,NULL, NULL,  '{}', null, '2', null, '1');
+INSERT INTO `language_ui` VALUES ('9', 'TestMgmrProductNew', 'lblProductManager', 'text', null,NULL, NULL,  '{}', null, '3', null, '1');
+INSERT INTO `language_ui` VALUES ('10', 'TestMgmrProductNew', 'lblQALead', 'text', null,NULL, NULL,  '{}', null, '4', null, '1');
+INSERT INTO `language_ui` VALUES ('11', 'TestMgmrProductNew', 'lblDevLead', 'text', null,NULL, NULL,  '{}', null, '5', null, '1');
+INSERT INTO `language_ui` VALUES ('12', 'TestMgmrProductNew', 'lblDescription', 'text', null,NULL, NULL,  '{}', null, '6', null, '1');
 
 Drop Table IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -149,12 +159,19 @@ Drop Table IF EXISTS `release`;
 CREATE TABLE `release` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'key',
   `product_id` int unsigned NOT NULL COMMENT 'Project Id',
-  `name` varchar(32) NOT NULL COMMENT 'Release name',
+  `name` varchar(64) NOT NULL COMMENT 'Release name',
   `status` int unsigned NOT NULL DEFAULT '0' COMMENT 'Status：0-pending, 1-In Progress，2-Blocked, 3-completed with issue, 4-atrisk, 5-signoff',
   `start_time` datetime DEFAULT NULL COMMENT 'Start time. YYYY-MM-DD 00:00:00',
   `end_time` datetime DEFAULT NULL COMMENT 'End time. YYYY-MM-DD 23:59:59',
   `display` int unsigned NOT NULL DEFAULT '1' COMMENT 'Display or not. 0-hide, 1-show',
   `remark` varchar(255) DEFAULT NULL COMMENT 'remark',
+
+  `create_time` datetime DEFAULT NULL COMMENT 'create time',
+  `create_user` int(10) unsigned NOT NULL COMMENT 'user id for creation',
+  `create_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
+  `update_user` int(10) unsigned DEFAULT NULL COMMENT 'user id updated',
+  `update_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   PRIMARY KEY (`id`),
   UNIQUE KEY `release_productid_name` (`product_id`,`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -162,24 +179,39 @@ CREATE TABLE `release` (
 Drop Table IF EXISTS `test_set`;
 CREATE TABLE `test_set` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'key',
-  `product_id` int unsigned NOT NULL COMMENT 'Project Id',
   `release_id` int unsigned NOT NULL COMMENT 'Release Id',
   `name` varchar(32) NOT NULL COMMENT 'Test set name',
   `type` int unsigned NOT NULL DEFAULT '0' COMMENT '1-Automation,2-Manual Test,4-API Test,8-Performance Test',
   `status` int unsigned NOT NULL DEFAULT '0' COMMENT 'Status：0-open,1-completed',
   `start_time` datetime DEFAULT NULL COMMENT 'Start time. YYYY-MM-DD 00:00:00',
   `end_time` datetime DEFAULT NULL COMMENT 'End time. YYYY-MM-DD 23:59:59',
-  `qa_lead` int(10) unsigned NULL COMMENT 'QA leader',
+  `test_owner` int(10) unsigned NULL COMMENT 'Test Owner',
   `jira_project` varchar(32) DEFAULT NULL COMMENT 'JIRA project for the bug',
   `bug_assignee` int(10) unsigned NULL COMMENT 'User ID of bug assignee',
   `description` varchar(255) DEFAULT NULL COMMENT 'Description',
-  `locales` varchar(255) DEFAULT NULL COMMENT 'locales for the test set',
+  `locales` varchar(255) DEFAULT NULL COMMENT 'locales for the test set',  
+
+  `testset_field_bool1` smallint(5) DEFAULT NULL COMMENT 'TestSet field bool. 1-true,0-false',
+  `testset_field_bool2` smallint(5) DEFAULT NULL COMMENT 'TestSet field bool. 1-true,0-false',
+  `testset_field_int1` int(10) DEFAULT NULL COMMENT 'TestSet field int',
+  `testset_field_int2` int(10) DEFAULT NULL COMMENT 'TestSet field int',
+  `testset_field_int3` int(10) DEFAULT NULL COMMENT 'TestSet field int',
+  `testset_field_int4` int(10) DEFAULT NULL COMMENT 'TestSet field int',
+  `testset_field_int5` int(10) DEFAULT NULL COMMENT 'TestSet field int',
+  `testset_field_str1` varchar(255) DEFAULT NULL COMMENT 'TestSet field string',
+  `testset_field_str2` varchar(255) DEFAULT NULL COMMENT 'TestSet field string',
+  `testset_field_str3` varchar(255) DEFAULT NULL COMMENT 'TestSet field string',
+  `testset_field_str4` varchar(255) DEFAULT NULL COMMENT 'TestSet field string',
+  `testset_field_str5` varchar(255) DEFAULT NULL COMMENT 'TestSet field string',
+
   `create_time` datetime DEFAULT NULL COMMENT 'create time',
   `create_user` int(10) unsigned NOT NULL COMMENT 'user id for creation',
+  `create_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
   `update_user` int(10) unsigned DEFAULT NULL COMMENT 'user id updated',
+  `update_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `testset_product_release_name` (`product_id`,`release_id`, `name`)
+  UNIQUE KEY `testset_release_name` (`release_id`, `name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 Drop Table IF EXISTS `test_case`;
@@ -203,17 +235,19 @@ CREATE TABLE `test_case` (
   `case_owner` varchar(32) DEFAULT NULL COMMENT 'TestCase owner',
   `description` varchar(255) DEFAULT NULL COMMENT 'Description',
   
-  `customer_field_bool1` smallint(5) DEFAULT NULL COMMENT 'Customer field bool. 1-true,0-false',
-  `customer_field_bool2` smallint(5) DEFAULT NULL COMMENT 'Customer field bool. 1-true,0-false',
-  `customer_field_bool3` smallint(5) DEFAULT NULL COMMENT 'Customer field bool. 1-true,0-false',
-  `customer_field_int1` int(10) DEFAULT NULL COMMENT 'Customer field int',
-  `customer_field_int2` int(10) DEFAULT NULL COMMENT 'Customer field int',
-  `customer_field_int3` int(10) DEFAULT NULL COMMENT 'Customer field int',
-  `customer_field_str1` varchar(255) DEFAULT NULL COMMENT 'Customer field string',
-  `customer_field_str2` varchar(255) DEFAULT NULL COMMENT 'Customer field string',
-  `customer_field_str3` varchar(255) DEFAULT NULL COMMENT 'Customer field string',
-  `customer_field_str4` varchar(255) DEFAULT NULL COMMENT 'Customer field string',
-  `customer_field_str5` varchar(255) DEFAULT NULL COMMENT 'Customer field string',
+  `testcase_field_bool1` smallint(5) DEFAULT NULL COMMENT 'TestCase field bool. 1-true,0-false',
+  `testcase_field_bool2` smallint(5) DEFAULT NULL COMMENT 'TestCase field bool. 1-true,0-false',
+  `testcase_field_bool3` smallint(5) DEFAULT NULL COMMENT 'TestCase field bool. 1-true,0-false',
+  `testcase_field_int1` int(10) DEFAULT NULL COMMENT 'TestCase field int',
+  `testcase_field_int2` int(10) DEFAULT NULL COMMENT 'TestCase field int',
+  `testcase_field_int3` int(10) DEFAULT NULL COMMENT 'TestCase field int',
+  `testcase_field_str1` varchar(255) DEFAULT NULL COMMENT 'TestCase field string',
+  `testcase_field_str2` varchar(255) DEFAULT NULL COMMENT 'TestCase field string',
+  `testcase_field_str3` varchar(255) DEFAULT NULL COMMENT 'TestCase field string',
+  `testcase_field_str4` varchar(255) DEFAULT NULL COMMENT 'TestCase field string',
+  `testcase_field_str5` varchar(255) DEFAULT NULL COMMENT 'TestCase field string',
+  
+  `validation` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT '0-invalid,1-valid,4-delete,8-archived',
   
   `create_time` datetime DEFAULT NULL,
   `create_user_id` int(10) unsigned DEFAULT NULL COMMENT 'user id',
@@ -223,39 +257,69 @@ CREATE TABLE `test_case` (
   `update_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   `record_update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Record update time',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_testcase_product_caseid_status` (`product_id`,`case_id`, `case_status`),
+  UNIQUE KEY `unique_testcase_product_caseid_status` (`product_id`,`case_id`, `case_status`, `validation`),
   KEY `idx_test_case_productId_caseId` (`product_id`,`case_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+-- Test RUN
 DROP TABLE IF EXISTS `test_run`;
 CREATE TABLE `test_run` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Key id',
   `testset_id` int(10) unsigned NOT NULL COMMENT 'FK: [test_set].id',
   `testcase_id` int(10) unsigned NOT NULL COMMENT 'FK: [test_case].id',
-  `locale` varchar(8) DEFAULT NULL COMMENT '语种。EN-US',
-
-  `result_flag` int(10) unsigned DEFAULT '0' COMMENT 'record flag：0-normal, 4-delete',
+  `locale` varchar(8) DEFAULT NULL COMMENT 'Locale. ex: en_US',
   `display` int(10) unsigned DEFAULT '1' COMMENT 'Display or not.0-no,1-yes',
   `description` varchar(255) DEFAULT NULL COMMENT 'Description',
-  `create_time` datetime DEFAULT NULL,
-  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
+ 
+  `run_model` int unsigned DEFAULT NULL COMMENT 'TestRun case type. 10-Automation, 11-Automated web, 12-Automated ios, 13-Automated android, 20-Manual, 30-Performance, 40-Unit',
+  `app_path` varchar(1024) DEFAULT NULL,
+  `run_engineer_id` int(10) unsigned NOT NULL COMMENT 'user id',
+  `run_qa_id` int(10) unsigned NOT NULL COMMENT 'user id',
+  `run_tep_id` int(10) unsigned NOT NULL COMMENT 'TEP id',
 
-  `actrualTesterName` varchar(32) DEFAULT NULL COMMENT 'LQA user Name',
+  `testrun_field_bool1` smallint(5) DEFAULT NULL COMMENT 'TestRun field bool. 1-true,0-false',
+  `testrun_field_bool2` smallint(5) DEFAULT NULL COMMENT 'TestRun field bool. 1-true,0-false',
+  `testrun_field_bool3` smallint(5) DEFAULT NULL COMMENT 'TestRun field bool. 1-true,0-false',
+  `testrun_field_int1` int(10) DEFAULT NULL COMMENT 'TestRun field int',
+  `testrun_field_int2` int(10) DEFAULT NULL COMMENT 'TestRun field int',
+  `testrun_field_int3` int(10) DEFAULT NULL COMMENT 'TestRun field int',
+  `testrun_field_int4` int(10) DEFAULT NULL COMMENT 'TestRun field int',
+  `testrun_field_int5` int(10) DEFAULT NULL COMMENT 'TestRun field int',
+  `testrun_field_str1` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
+  `testrun_field_str2` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
+  `testrun_field_str3` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
+  `testrun_field_str4` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
+  `testrun_field_str5` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
+  `testrun_field_str6` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
+  `testrun_field_str7` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
+  `testrun_field_str8` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
+  `testrun_field_str9` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
+  `testrun_field_str10` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
   
-  `appPath` varchar(3000) DEFAULT NULL,
+  `validation` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT '0-invalid,1-valid,4-delete,8-archived',
+  
+  `create_time` datetime DEFAULT NULL COMMENT 'create time',
+  `create_user` int(10) unsigned NOT NULL COMMENT 'user id for creation',
+  `create_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
+  `update_user` int(10) unsigned DEFAULT NULL COMMENT 'user id updated',
+  `update_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   
   PRIMARY KEY (`id`),
-  KEY `idx_test_run_testset_id` (`testset_id`)
+--  KEY `idx_test_run_testset_id` (`testset_id`),
+  UNIQUE KEY `unique_testrun_testset_case_locale` (`testset_id`,`testcase_id`, `locale`, `validation`),
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+-- Test Result
 DROP TABLE IF EXISTS `test_result`;
 CREATE TABLE `test_result` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Key id',
+  
+  `testset_id` int(10) unsigned NOT NULL COMMENT 'FK: [test_set].id',
   `test_run_id` int(10) unsigned NOT NULL COMMENT 'FK: [test_run].id',
-  `testcase_id` int(10) unsigned NOT NULL COMMENT 'FK: [test_case].id',
 
   `auto_run_status` int(10) unsigned DEFAULT NULL COMMENT 'Auomation Status：0-Not RUN, 1-AUTOMATION SUCCESS,2-Automation FAILURE,3-Automation SKIP,4-Automation SUCCESS WITHIN PERCENTAGE,16-Automation STARTED, 101-TestNotRequired',
-  `job_weather` int(10) unsigned DEFAULT '0' COMMENT 'job status：0-sunny,1-cloud,2-dull,3-fog,4-rainy',
+  `job_weather` int(10) unsigned DEFAULT '0' COMMENT 'job status：0-unkown,1-sunny,2-cloud,3-dull,4-fog,5-rainy',
 
   `startTime` datetime DEFAULT NULL COMMENT 'start Locale time',
   `endTime` datetime DEFAULT NULL COMMENT 'end Locale Time',
@@ -267,42 +331,48 @@ CREATE TABLE `test_result` (
   `exception` text,
   `stacktrace` text,
 
-
-
-
-
-  
-  
-  `qaStatus` varchar(32) DEFAULT '0' COMMENT 'Reference to dict_table.code. 0-(blank),1-pass,2-conditional pass,4-fail,5-Testing Not Required',
-  `buildInfo` varchar(32) DEFAULT NULL COMMENT '1607.912',
-  `environment` int(10) unsigned DEFAULT '0' COMMENT '类型：0-QA，1-E2E',
-  `clusterName` varchar(16) DEFAULT NULL COMMENT 'C8',
-  `browsers` int(10) unsigned DEFAULT '0' COMMENT '0-firefox,1-chrome',
+  `qa_status` varchar(32) DEFAULT '0' COMMENT 'Reference to dictionary.code. 0-(blank),1-pass,2-conditional pass,4-fail,5-Testing Not Required',
+  `browser` int(10) unsigned DEFAULT 0 COMMENT '0-firefox,1-chrome',
   `browsersVesion` varchar(16) DEFAULT '' COMMENT 'version of browser',
-  `skus` int(10) unsigned DEFAULT '0' COMMENT '0-blank,1-Simple,2-Essential,3-Plus',
-  `locales` varchar(16) DEFAULT '' COMMENT 'local of the TR',
-  `region` varchar(32) DEFAULT '',
-  `method` int(10) unsigned DEFAULT '0' COMMENT '0-Automated,1-Manual',
-  `testingNotes` varchar(255) DEFAULT '' COMMENT 'testingNotes',
   `notes` varchar(255) DEFAULT '' COMMENT 'notes',
-  `bugReport` varchar(255) DEFAULT '' COMMENT 'JIRA link of bug',
-  `requestId` varchar(255) DEFAULT '' COMMENT 'id of request',
-  `qbApiStatus` int(10) unsigned DEFAULT '0' COMMENT '是否invoke success. 0-unkown，1-Yes, 4-Fail',
-  `issueCategoryId` int(10) unsigned DEFAULT NULL COMMENT 'category id',
-  `category` varchar(64) DEFAULT NULL COMMENT 'category space',
-  `issueReasonId` int(10) unsigned DEFAULT NULL COMMENT 'reason id',
-  `reason` varchar(64) DEFAULT NULL COMMENT 'reason space',
-  `actualTesterUserId` int(10) unsigned DEFAULT NULL COMMENT 'Tester',
-  `actualTesterUserName` varchar(32) DEFAULT NULL COMMENT 'Tester Name',
-  `testTime` datetime DEFAULT NULL COMMENT 'Test date',
-  `isReviewed` int(10) unsigned DEFAULT '0' COMMENT '是否reviewed.0-unReviewed，1-reviewed',
-  `createTime` datetime DEFAULT NULL COMMENT '创建时间',
-  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `updateUserId` int(10) unsigned DEFAULT NULL COMMENT '更新人',
-  `updateUserName` varchar(32) DEFAULT NULL COMMENT '更新人Name',
-  `mobileDevice` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `idx_test_result_testrun` (`testCaseId`,`testRunId`)
+
+  `bug_report_id` int(10) unsigned DEFAULT NULL COMMENT 'bug id',
+  `bug_report_content` varchar(1024) DEFAULT '' COMMENT 'JIRA link of bug',
+  `bug_report_title` varchar(255) DEFAULT '' COMMENT 'bug title',
+  `issue_category_id` int(10) unsigned DEFAULT NULL COMMENT 'category id',
+  `issue_reason_id` int(10) unsigned DEFAULT NULL COMMENT 'reason id',
+  `mobile_device` varchar(255) DEFAULT NULL,
+
+  `testresult_field_bool1` smallint(5) DEFAULT NULL COMMENT 'TestResult field bool. 1-true,0-false',
+  `testresult_field_bool2` smallint(5) DEFAULT NULL COMMENT 'TestResult field bool. 1-true,0-false',
+  `testresult_field_bool3` smallint(5) DEFAULT NULL COMMENT 'TestResult field bool. 1-true,0-false',
+  `testresult_field_int1` int(10) DEFAULT NULL COMMENT 'TestResult field int',
+  `testresult_field_int2` int(10) DEFAULT NULL COMMENT 'TestResult field int',
+  `testresult_field_int3` int(10) DEFAULT NULL COMMENT 'TestResult field int',
+  `testresult_field_int4` int(10) DEFAULT NULL COMMENT 'TestResult field int',
+  `testresult_field_int5` int(10) DEFAULT NULL COMMENT 'TestResult field int',
+  `testresult_field_str1` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `testresult_field_str2` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `testresult_field_str3` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `testresult_field_str4` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `testresult_field_str5` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `testresult_field_str6` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `testresult_field_str7` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `testresult_field_str8` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `testresult_field_str9` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `testresult_field_str10` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  
+  `last_run_time` datetime DEFAULT NULL COMMENT 'last run time',
+  `display` int(10) unsigned DEFAULT '1' COMMENT 'Display or not.0-no,1-yes',
+  `validation` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT '0-invalid,1-valid,4-delete,8-archived',
+  
+  `create_time` datetime DEFAULT NULL COMMENT 'create time',
+  `create_user` int(10) unsigned NOT NULL COMMENT 'user id for creation',
+  `create_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
+  `update_user` int(10) unsigned DEFAULT NULL COMMENT 'user id updated',
+  `update_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 Drop Table IF EXISTS `attribute_template`;
@@ -358,4 +428,12 @@ CREATE TABLE `attribute_listitem` (
   UNIQUE KEY `uniqe_attr_listitem_code` (`list_id`, `code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-
+DROP TABLE IF EXISTS `project_config`;
+CREATE TABLE `project_config` (
+  `id` int(8) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Key',
+  `configName` varchar(64) NOT NULL COMMENT 'Config name',
+  `configValue` varchar(255) NOT NULL COMMENT 'Config item',
+  `Description` varchar(255) DEFAULT NULL COMMENT 'Config description',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_project_config_name` (`configName`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

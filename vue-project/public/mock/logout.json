@@ -1,0 +1,7 @@
+{
+    "code": 200,
+    "data": {
+      "state": 1
+    },
+    "message": "Logout success"
+  }

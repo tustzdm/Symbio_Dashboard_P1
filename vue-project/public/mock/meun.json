@@ -1,0 +1,34 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "path": "/index",
+            "redirect": "/index/index",
+            "name": "index",
+            "component": "index/index",
+            "icon": "car"
+        },
+        {
+            "path": "/buy",
+            "redirect": "/buy/index",
+            "name": "buy",
+            "component": "buy/index",
+            "icon": "buy"
+        },
+        {
+            "path": "/searchvisit",
+            "redirect": "/searchvisit/index",
+            "name": "searchvisit",
+            "component": "searchvisit/index",
+            "icon": "searchvisit"
+        },
+        {
+            "path": "/prdvisit",
+            "redirect": "/prdvisit/index",
+            "name": "prdvisit",
+            "component": "prdvisit/index",
+            "icon": "bug"
+        }
+    ],
+    "message": "success"
+}

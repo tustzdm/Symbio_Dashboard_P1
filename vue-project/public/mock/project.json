@@ -1,0 +1,130 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "id": 0,
+            "name": "project1",
+            "manager": "aa",
+            "logo": "dadadadad",
+            "qaleader": "qaleader",
+            "qauser": "fffff",
+            "ebay": "fff",
+            "autoleader": "fff",
+            "autoengineer": "ff",
+            "ls": "fae",
+            "icm": "de",
+            "productuser": "rere",
+            "desc": "daaaaaaaaaaaaaaaaaaaaaa",
+            "children": [
+                {
+                    "id": 0,
+                    "name": "v1.0.0",
+                    "product": "project1",
+                    "releaseNum": "123131",
+                    "startData": "",
+                    "endData": "",
+                    "status": "",
+                    "desc": "",
+                    "children": [
+                        {
+                            "id": 0,
+                            "name": "case1",
+                            "release": "v.1.0.0"
+                        },
+                        {
+                            "id": 1,
+                            "name": "case2",
+                            "release": "v.1.0.0"
+                        }
+                    ]
+                },
+                {
+                    "id": 1,
+                    "name": "v1.0.1",
+                    "product": "project1",
+                    "releaseNum": "123131",
+                    "startData": "",
+                    "endData": "",
+                    "status": "",
+                    "desc": "",
+                    "children": [
+                        {
+                            "id": 0,
+                            "name": "case1",
+                            "release": "v.1.0.1"
+                        },
+                        {
+                            "id": 1,
+                            "name": "case2",
+                            "release": "v.1.0.1"
+                        }
+                    ]
+                }
+            ]
+
+        },
+        {
+            "id": 1,
+            "name": "project2",
+            "manager": "aa",
+            "logo": "dadadadad",
+            "qaleader": "qaleader",
+            "qauser": "fffff",
+            "ebay": "fff",
+            "autoleader": "fff",
+            "autoengineer": "ff",
+            "ls": "fae",
+            "icm": "de",
+            "productuser": "rere",
+            "desc": "daaaaaaaaaaaaaaaaaaaaaa",
+            "children": [
+                {
+                    "id": 0,
+                    "name": "v1.0.0",
+                    "product": "project2",
+                    "releaseNum": "123131",
+                    "startData": "",
+                    "endData": "",
+                    "status": "",
+                    "desc": "",
+                    "children": [
+                        {
+                            "id": 0,
+                            "name": "case1",
+                            "release": "v.1.0.0"
+                        },
+                        {
+                            "id": 1,
+                            "name": "case2",
+                            "release": "v.1.0.0"
+                        }
+                    ]
+                },
+                {
+                    "id": 1,
+                    "name": "v1.0.0",
+                    "product": "project2",
+                    "releaseNum": "123131",
+                    "startData": "",
+                    "endData": "",
+                    "status": "",
+                    "desc": "",
+                    "children": [
+                        {
+                            "id": 0,
+                            "name": "case1",
+                            "release": "v.1.0.1"
+                        },
+                        {
+                            "id": 1,
+                            "name": "case2",
+                            "release": "v.1.0.1"
+                        }
+                    ]
+                }
+            ]
+
+        }
+    ],
+    "message": "Login success, Welcome"
+}
