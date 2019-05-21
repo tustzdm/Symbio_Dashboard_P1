@@ -19,13 +19,13 @@
 		<java.version>1.8</java.version>
 	</properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.symbio</groupId>
-			<artifactId>common-service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
+	<!--<dependencies>-->
+		<!--<dependency>-->
+			<!--<groupId>com.symbio</groupId>-->
+			<!--<artifactId>common-service</artifactId>-->
+			<!--<version>0.0.1-SNAPSHOT</version>-->
+		<!--</dependency>-->
+	<!--</dependencies>-->
 
 	<modules>
 		<module>report-service</module>
