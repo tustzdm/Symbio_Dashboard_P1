@@ -1,14 +1,10 @@
 <template>
   <el-container>
-    <el-header>
+    <el-header style="height:80px">
       <nav-bar/>
     </el-header>
     <el-container>
-      <el-aside style="width:240px">
-        <side-bar class="sidebar-container"/>
-      </el-aside>
       <el-main>
-        <!-- <tags-view /> -->
         <app-main/>
       </el-main>
     </el-container>
@@ -39,7 +35,7 @@ export default {
 }
 
 .el-header {
-  background-color: #53565B;
+  background-color: #454545;
 }
 
 .el-aside {
