@@ -1,6 +1,5 @@
 <template>
   <div class="headerContainer">
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <img src="../../assets/images/logo.png" alt class="logo">
     <router-link class="headerQualityOverview headeritems" to="/index/index">
       <icon class="headerIcon" name="qualityOverview"></icon>
