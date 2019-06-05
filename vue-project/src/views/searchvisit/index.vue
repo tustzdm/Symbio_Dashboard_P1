@@ -1,329 +1,370 @@
 <template>
   <div class="buy-root">
-    <el-card shadow="hover" style="margin-bottom:10px" :body-style="{padding: '10px'}">
-        <el-dropdown @command="handleCommand" class="el-dropdown-custom" trigger="click">
-            <span class="el-dropdown-link">{{proTitle}}<i class="el-icon-arrow-down el-icon--right"></i></span>
-            <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="project in projectInfo" :command="['p', project]" :key="project.id">{{project.name}}</el-dropdown-item>
-                <el-dropdown-item :command="['add', '/addproject']" v-if="projectInfo.length>0">Add Project</el-dropdown-item>
-            </el-dropdown-menu>
+    <!-- 两个部分mabage-top和(表格、翻页)，两者之间都用flex布局-->
+
+    <!--manage-top start,后面单独把manage-top写成一个组件-->
+    <el-card class="manage-top" shadow="hover" style="height:40px">
+      <div class="SiteSelect select">
+        <el-dropdown trigger="click">
+          <span class="el-dropdown-link">
+            Site
+            <i class="el-icon-caret-bottom el-icon--right"></i>
+          </span>
+          <el-dropdown-menu>
+            <el-row class="demo-autocomplete">
+              <el-col :span="12">
+                <el-autocomplete
+                  class="inline-input"
+                  v-model="state2"
+                  :fetch-suggestions="querySearch"
+                  placeholder="Search here"
+                  :trigger-on-focus="false"
+                  @select="handleSelect"
+                  style="width:180px"
+                ></el-autocomplete>
+              </el-col>
+            </el-row>
+            <el-dropdown-item>
+              <div>
+                <i class="el-icon-plus"></i>
+                <span>
+                  <router-link to="/addproject/index">Add Product</router-link>
+                </span>
+              </div>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <i class="el-icon-edit"></i>Edit Product
+            </el-dropdown-item>
+            <el-dropdown-item style="text-align:center;">
+              <i class="el-icon-more-outline"></i>More
+            </el-dropdown-item>
+          </el-dropdown-menu>
         </el-dropdown>
-        <el-dropdown @command="handleCommand" class="el-dropdown-custom" trigger="click">
-            <span class="el-dropdown-link">{{verTitle}}<i class="el-icon-arrow-down el-icon--right"></i></span>
-            <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="version in versionInfo" :command="['v', version]" :key="version.id">{{version.name}}</el-dropdown-item>
-                <el-dropdown-item :command="['add', '/addversion']" v-if="versionInfo.length>0">Add Version</el-dropdown-item>
-            </el-dropdown-menu>
+        <span class="sperate-arrow">
+          <i class="el-icon-arrow-right"></i>
+        </span>
+      </div>
+      <div class="SiteSelect select">
+        <el-dropdown trigger="click">
+          <span class="el-dropdown-link">
+            OTP
+            <i class="el-icon-caret-bottom el-icon--right"></i>
+          </span>
+          <el-dropdown-menu>
+            <input class="select-search" type="text" placeholder="Search here">
+            <el-dropdown-item>
+              <i class="el-icon-plus"></i>Add Release
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <i class="el-icon-edit"></i>Edit Releases
+            </el-dropdown-item>
+            <el-dropdown-item style="text-align:center;">
+              <i class="el-icon-more-outline"></i>More
+            </el-dropdown-item>
+          </el-dropdown-menu>
         </el-dropdown>
-        <el-dropdown @command="handleCommand" class="el-dropdown-custom" trigger="click">
-            <span class="el-dropdown-link">{{caseTitle}}<i class="el-icon-arrow-down el-icon--right"></i></span>
-            <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="caseItem in caseInfo" :command="['c', caseItem]" :key="caseItem.id">{{caseItem.name}}</el-dropdown-item>
-                <el-dropdown-item :command="['add', '/addcase']" v-if="caseInfo.length>0">Add Case</el-dropdown-item>
-            </el-dropdown-menu>
+        <span class="sperate-arrow">
+          <i class="el-icon-arrow-right"></i>
+        </span>
+      </div>
+      <div class="product-select select">
+        <el-dropdown trigger="click">
+          <span class="el-dropdown-link">
+            LLT-19753 OTP-One time payment
+            <i class="el-icon-caret-bottom el-icon--right"></i>
+          </span>
+          <el-dropdown-menu>
+            <input class="select-search" type="text" placeholder="Search here">
+            <el-dropdown-item>
+              <i class="el-icon-plus"></i>Add Test Set
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <i class="el-icon-edit"></i>Edit Test Set
+            </el-dropdown-item>
+            <el-dropdown-item style="text-align:center;">
+              <i class="el-icon-more-outline"></i>More
+            </el-dropdown-item>
+          </el-dropdown-menu>
         </el-dropdown>
-        <el-input v-model="ticketname" placeholder="search by ticket name" style="width:20%">
-            <el-button slot="append" icon="el-icon-search"></el-button>
-        </el-input>
-    </el-card>
-    <el-card shadow="hover" style="margin-bottom:10px" :body-style="{padding: '10px'}">
-        <el-button type="danger" size="small" @click="handleBtn('failed')">
-            <i class="el-icon-filter el-icon--left"></i>
-            Failed
-        </el-button>
-        <el-button type="danger" size="small" @click="handleBtn('comments')">
-            <i class="el-icon-filter el-icon--left"></i>
-            Comments
-        </el-button>
-        <div class="filterbar">
-            <el-select v-model="select1" placeholder="Please Select" size="small" class="el-select-custom mg-l" @change="handleSelect">
-                <el-option label="Feedback" value="feedback"></el-option>
-            </el-select>
-            <el-button type="primary" size="small" icon="el-icon-view" class="mg-l" @click="handleBtn('info')">Info</el-button>
-            <el-button type="warning" size="small" icon="el-icon-plus" class="mg-l" @click="handleBtn('add')">Add New</el-button>
-            <el-button type="primary" size="small" icon="el-icon-upload2" class="mg-l" @click="handleBtn('upload')">Upload</el-button>
-            <el-button type="danger" size="small" icon="el-icon-delete" class="mg-l" @click="handleBtn('del')">Delete</el-button>
+      </div>
+      <div class="product-select select">
+        <el-dropdown trigger="click">
+          <span class="el-dropdown-link">
+            ADD
+            <i class="el-icon-plus"></i>
+          </span>
+          <el-dropdown-menu>
+            <el-dropdown-item>
+              <span>
+                <router-link to="/addproject/index">Add Product</router-link>
+              </span>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <span>
+                <router-link to="/addversion/index">Add Release</router-link>
+              </span>
+            </el-dropdown-item>
+            <el-dropdown-item>
+              <span>
+                <router-link to="/addcase/index">Add Testset</router-link>
+              </span>
+            </el-dropdown-item>
+            <el-dropdown-item style="text-align:center;">
+              <i class="el-icon-more-outline"></i>More
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+      <div class="manage-top-right">
+        <el-button type="primary" size="mini">Import</el-button>
+        <el-button type="success" size="mini">Run</el-button>
+        <el-button type="warning" size="mini">Refresh</el-button>
+        <div class="select" style="float:right; margin-right:30px">
+          <el-dropdown trigger="click">
+            <span class="el-dropdown-link">
+              Filter
+              <i class="el-icon-caret-bottom el-icon--right"></i>
+            </span>
+            <el-dropdown-menu>
+              <el-dropdown-item>Method</el-dropdown-item>
+              <el-dropdown-item>Ownner</el-dropdown-item>
+              <el-dropdown-item>Bug ID</el-dropdown-item>
+              <el-dropdown-item>Testing Notes</el-dropdown-item>
+              <el-dropdown-item>Notes</el-dropdown-item>
+              <el-dropdown-item>Issue Peason</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
+      </div>
     </el-card>
-    <el-card shadow="hover" style="margin-bottom:10px">
-        <el-table :data="dataList" height="300" border style="width: 100%;background-color:rgb(240,240,240)" :stripe="true" ref="multipleTable" tooltip-effect="dark" @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column type="index"  label="ID" ></el-table-column>
-            <el-table-column prop="sourceScreen" label="Source Screen" >
-                <template slot-scope="scope">
-                    <img :src="scope.row.sourceScreen" alt="" class="el-img-custom">
-                    <el-upload class="el-upload-custom" :action="uploadUrl">
-                        <el-button size="mini" type="primary" class="el-btn-update" v-if="scope.row.sourceScreen">Update</el-button>
-                        <el-button size="mini" type="primary" class="el-btn-update" v-else>Upload</el-button>
-                    </el-upload>
-                </template>
-            </el-table-column>
-            <el-table-column prop="targetScreen" label="Target Screen" >
-                <template slot-scope="scope">
-                    <img :src="scope.row.targetScreen" alt="" class="el-img-custom">
-                    <el-upload class="el-upload-custom" :action="uploadUrl">
-                        <el-button size="mini" type="primary" class="el-btn-update" v-if="scope.row.targetScreen">Update</el-button>
-                        <el-button size="mini" type="primary" class="el-btn-update" v-else>Upload</el-button>
-                    </el-upload>
-                </template>
-            </el-table-column>
-            <el-table-column prop="sid" label="SID/Steps" >
-                <template slot-scope="scope">
-                    <span v-if="!scope.row.editFlag">{{ scope.row.sid }}</span>
-                    <span v-if="scope.row.editFlag" class="cell-edit-input"><el-input v-model="record.sid" placeholder="SID/Steps"></el-input></span>
-                </template>
-            </el-table-column>
-            <el-table-column prop="lqacomments" label="LQA Comments" >
-                <template slot-scope="scope">
-                    <span v-if="!scope.row.editFlag">{{ scope.row.lqacomments }}</span>
-                    <span v-if="scope.row.editFlag" class="cell-edit-input"><el-input v-model="record.lqacomments" placeholder="LQA Comments"></el-input></span>
-                </template>
-            </el-table-column>
-            <el-table-column prop="ls" label="LS Review" >
-                <template slot-scope="scope">
-                    <span v-if="!scope.row.editFlag">{{ scope.row.ls }}</span>
-                    <span v-if="scope.row.editFlag" class="cell-edit-input"><el-input v-model="record.ls" placeholder="LS Review"></el-input></span>
-                </template>
-            </el-table-column>
-            <el-table-column prop="status" label="Status" >
-                <template slot-scope="scope">
-                    <span v-if="!scope.row.editFlag">{{ scope.row.status }}</span>
-                    <span v-if="scope.row.editFlag" class="cell-edit-input"><el-input v-model="record.status" placeholder="Status"></el-input></span>
-                </template>
-            </el-table-column>
-            <el-table-column prop="jiraticket" label="JIRA Ticket" >
-                 <template slot-scope="scope">
-                     <span v-if="!scope.row.editFlag">{{ scope.row.jiraticket }}</span>
-                    <span v-if="scope.row.editFlag" class="cell-edit-input"><el-input v-model="record.jiraticket" placeholder="JIRA Ticket"></el-input></span>
-                </template>
-            </el-table-column>
-            <el-table-column label="Operate">
-                <template slot-scope="scope">
-                    <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)" class="el-icon-view" v-if="!scope.row.editFlag"></el-button>
-                    <el-button size="mini" type="danger" @click="deleteRecords(scope.$index, scope.row)" class="el-icon-delete" v-if="!scope.row.editFlag"></el-button>
-                    <el-button size="mini" type="primary" @click="handleBtn('save')" class="el-icon-check" v-else></el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-        <el-pagination background layout="total, sizes, prev, pager, next, jumper" 
-            :total="dataList.length" 
-            :page-sizes="[10, 20, 30, 40, 50]"
-            :page-size="pageSize"
-            style="text-align:center;margin: 10px 0"
-            @current-change="currentChange"
-            @size-change="sizeChange"></el-pagination> 
+    <!-- manage-top end -->
+
+    <el-card class="caseTabel" shadow="hover">
+      <el-table
+        :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+        @selection-change="handleSelectionChange"
+        style="width: 100%;height: 100%;background-color:rgb(240,240,240); text-align:center"
+        :max-height="tableHeight"
+      >
+        <el-table-column type="selection" width="50px"></el-table-column>
+        <el-table-column prop="autoStatus" sortable label="Status">
+          <template slot-scope="scope">
+            <div>
+              <div
+                style="height:18px;width:18px;border-radius:9px;float:left;margin-left:30px"
+                :class="{auto_pass:scope.row.autoStatus=='Pass',auto_block:scope.row.autoStatus=='NotRun',auto_failed:scope.row.autoStatus=='Failed'}"
+              ></div>
+              {{scope.row.autoStatus}}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="generate" sortable label="Generate"></el-table-column>
+        <el-table-column prop="caseId" sortable label="Case ID"></el-table-column>
+        <el-table-column prop="featureArea" label="Feature Area"></el-table-column>
+        <el-table-column prop="qastatus" label="QA Status"></el-table-column>
+        <el-table-column prop="locale" label="Locale"></el-table-column>
+        <el-table-column prop="screenshot" label="ScreenShot">
+          <template slot-scope="scope">
+            <img :src="scope.row.screenshot" class="el-img-custom">
+          </template>
+        </el-table-column>
+      </el-table>
     </el-card>
+    <div class="fanye">
+      <el-pagination
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="dataList.length"
+        :page-sizes="[20, 30, 40, 50, 100, 500]"
+        :page-size="pageSize"
+        style="text-align:center;margin: 10px 0"
+        @current-change="currentChange"
+        @size-change="sizeChange"
+      ></el-pagination>
+    </div>
+    <!-- tabel和翻页要写到一个div里然后和manage-top flex布局 -->
   </div>
 </template>
 <script>
-import { getReviewPage, getProjectInfo, delRecords, saveRecords, uploadUrl } from '@/api/index'
-import storage from "@/utils/storage"
-let record = {"sourceScreen": "","targetScreen": "","sid": "","lqacomments": "","ls": "","status": "","jiraticket": "","editFlag": true};
+import { getTestManager, getProjectInfo } from '@/api/index'
+import storage from '@/utils/storage'
 export default {
-  name: "searchvisit",
   data() {
     return {
-      uploadUrl: uploadUrl,
-      projectInfo: [],
-      versionInfo: [],
-      caseInfo: [],
-      proTitle: "项目",
-      verTitle: "版本",
-      caseTitle: "情况",
-      ticketname: "",
-      select1: 'feedback',
-      filter: "",
+      addPartShow: false, //this value created in parent
+      tableHeight: '',
+      screenHeight: '',
       dataList: [],
-      pageSize: 10,
-      currentPage: 0,
-      multipleSelection: [],
-      record: record
+      pageSize: 20,
+      currentPage: 1
     }
   },
   components: {},
   mounted() {
-      this.initProjet();
-      this.getReviewPageInfo();
+    this.initProjet()
+    this.getTestManagerInfo()
+    window.onresize = () => {
+      return (() => {
+        this.screenHeight = document.body.clientHeight
+      })()
+    }
+    this.tableHeight =
+      document.getElementsByClassName('main')[0].offsetHeight - 30 - 92 + 'px'
+  },
+  watch: {
+    screenHeight() {
+      this.tableHeight = this.screenHeight - 80 - 30 - 40 - 52 + 'px'
+      console.log(`新的tabelHeight${this.tableHeight}`)
+    }
   },
   methods: {
-      initProjet() {
-          getProjectInfo().then(res => {
-              this.projectInfo = res.data;
-          });
-      },
-      getReviewPageInfo() {
-          let params = {
-                ticketname: this.ticketname,
-                qastatus: this.qastatus,
-                filter: this.filter,
-                select1: this.select1,
-                pageSize: this.pageSize,
-                currentPage: this.currentPage
-          };
-          getReviewPage(params).then(res => {
-              this.dataList = res.data;
-          });
-      },
-      handleBtn(type) {
-          switch (type) {
-              case 'add':
-                  this.addRecords();
-                  break;
-              case 'del':
-                  this.deleteRecords();
-                  break;
-              case 'save':
-                  this.saveRecords();
-                  break;
-              case 'failed':
-              case 'comments':
-                  this.filter = type;
-                  this.getReviewPageInfo();
-                  break;
-              default:
-                  break;
-          }
-      },
-      addRecords() {
-          this.dataList.push(this.record);
-      },
-      saveRecords() {
-          saveRecords(this.record).then(res => {
-              if (res.code == 200) {
-                  this.$message.success("保存成功！");
-                  this.record = record;
-              }
-          });
-          
-      },
-      deleteRecords(index, row) {
-          if (row) {
-              this.multipleSelection = [row.id];
-          }
-          if(this.multipleSelection.length <= 0) {
-              this.$message.error("请选择一行！");
-              return;
-          }
-          this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then(() => {
-                delRecords(this.multipleSelection).then(res => {
-                    if (res.code == 200) {
-                        this.$message.success("删除成功！");
-                    }
-                });
-            }).catch(() => {
-                this.$message({
-                    type: 'info',
-                    message: '已取消删除'
-                });          
-            });
-      },
-      handleSelect() {
-          this.getReviewPageInfo();
-      },
-      handleCommand(command) {
-        let [type, data] = command;
-        if (type == 'add') {
-            this.$router.push({path: data, query: {type: 'add'}});
-            return;
-        }
-        if (type == 'p') {
-            this.versionInfo = data.children;
-            storage.set("curProject", data);
-            this.proTitle = data.name;
-        }
-        if (type == 'v') {
-            this.caseInfo = data.children;
-            storage.set("curVersion", data);
-            this.verTitle = data.name;
-        }
-        if (type == 'c') {
-            this.caseTitle = data.name;
-            storage.set("curCase", data);
-        }
-      },
-      currentChange(currentPage) {
-          this.currentPage = currentPage;
-          this.getReviewPageInfo();
-      },
-      sizeChange(size) {
-          this.pageSize = size;
-          this.getReviewPageInfo();
-      },
-      handleEdit() {
-
-      },
-      handleSelectionChange(val) {
-          let seleted = [];
-          if(val && val.length > 0) {
-              val.map(item => {
-                  seleted.push(item.id);
-              });
-          } else {
-              this.multipleSelection = [];
-          }
-          this.multipleSelection = seleted;
+    initProjet() {
+      getProjectInfo().then(res => {
+        this.projectInfo = res.data
+      })
+    },
+    getTestManagerInfo() {
+      let params = {
+        autoStatus: this.autoStatus,
+        qastatus: this.qastatus,
+        columns: this.columns,
+        select1: this.select1,
+        select2: this.select2,
+        select3: this.select3,
+        pageSize: this.pageSize,
+        currentPage: this.currentPage
       }
-  },
+      getTestManager(params).then(res => {
+        this.dataList = res.data
+      })
+    },
+    handleBtn(type) {
+      if (type != 'refresh') {
+        this.autoStatus = type
+      }
+      this.getTestManagerInfo()
+    },
+    handleSelect() {
+      this.getTestManagerInfo()
+    },
+    handleCommand(command) {
+      let [type, data] = command
+      if (type == 'add') {
+        this.$router.push({ path: data, query: { type: 'add' } })
+        return
+      }
+      if (type == 'p') {
+        this.versionInfo = data.children
+        storage.set('curProject', data)
+        this.proTitle = data.name
+      }
+      if (type == 'v') {
+        this.caseInfo = data.children
+        storage.set('curVersion', data)
+        this.verTitle = data.name
+      }
+      if (type == 'c') {
+        this.caseTitle = data.name
+        storage.set('curCase', data)
+      }
+    },
+    currentChange(currentPage) {
+      this.currentPage = currentPage
+      this.getTestManagerInfo()
+    },
+    sizeChange(size) {
+      this.pageSize = size
+      this.getTestManagerInfo()
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
+    addShow() {
+      this.addPartShow = true
+    }
+  }
 }
 </script>
 
 <style lang="stylus" scoped>
-.el-dropdown-custom
-    height 32px
-    line-height 32px
-    min-width 80px
-    text-align center 
-    margin-right 50px
-    background #ff8400
-    position relative
-    color #ffffff
-    &:first-child
-        min-width 100px
-    &:after
-        position absolute
-        right -32px
-        top 0
-        content ""
-        width 0
-        height 0
-        border 16px solid transparent
-        border-left-color #ff8400
-    &:not(:first-child):before
-        position absolute
-        left -32px
-        top 0
-        content ""
-        width 0
-        height 0
-        border 16px solid #ff8400
-        border-left-color #ffffff 
-.el-dropdown-link 
-    cursor pointer
-.el-select-custom
-    max-width 150px
-.mg-l
-    margin-left 10px
-.el-img-custom
-    width 100px
-    height 80px
-.filterbar
-    float right
-.el-upload-custom
-    position relative
-    & > div.el-upload--picture
-        position absolute !important
-        bottom 0
-        right 0
-        z-index 1
-.el-icon-filter
-    width 12px
-    height 12px
-    background url('../../assets/images/filter.png') no-repeat
-.el-button--warning
-    background #ff8400
-    border-color #ff8400
+.buy-root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.buy-root .manage-top {
+  width: 100%;
+  height: 40px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.buy-root .caseTabel {
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: auto;
+}
+
+.buy-root .fanye {
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: 52px;
+}
+
+.el-dropdown-link {
+  cursor: pointer;
+}
+
+.select {
+  float: left;
+  height: 40px;
+  line-height: 40px;
+  margin-left: 20px;
+  font-family: Poppins;
+}
+
+.select-search {
+  margin: 3px 12px;
+  width: 150px;
+  font-famliy: Poppins;
+}
+
+.product-select {
+  width: 300px;
+}
+
+.sperate-arrow {
+  margin-left: 10px;
+}
+
+.manage-top-right {
+  width: 320px;
+  height: 40px;
+  line-height: 40px;
+  float: right;
+  margin-right: 20px;
+}
+
+/*
+   多行注释
+   只有在compress选项未启用的时候才会被输出
+*/
+.el-img-custom {
+  width: 20px;
+  height: 20px;
+}
+
+/* 控制不同状态case的颜色 */
+.auto_block {
+  background: orange;
+}
+
+.auto_pass {
+  background: green;
+}
+
+.auto_failed {
+  background: red;
+}
 </style>
