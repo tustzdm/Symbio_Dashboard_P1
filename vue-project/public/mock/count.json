@@ -1,0 +1,22 @@
+{
+    "code": 200,
+    "data": {
+        "index": {
+            "total": 20,
+            "now":12
+        },
+        "buy": {
+            "total": 50,
+            "now":15
+        },
+        "searchvisit": {
+            "total": 80,
+            "now":70
+        },
+        "prdvisit": {
+            "total": 30,
+            "now":12
+        }
+    },
+    "message": "success"
+}
