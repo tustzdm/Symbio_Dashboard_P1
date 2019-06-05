@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="hover" style="margin-bottom:10px">
+  <el-card shadow="hover" style="margin-bottom:100px">
     <el-form ref="form" :model="form" label-width="200px">
       <el-form-item label="Name" prop="name">
         <el-col :span="8">

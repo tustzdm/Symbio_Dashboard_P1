@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="hover" :rules="rules" ref="form" style="margin-bottom:10px">
+  <el-card shadow="hover" :rules="rules" ref="form" style="margin-bottom:100px">
     <el-form ref="form" :model="form" label-width="200px">
       <el-form-item label="Product">
         <el-input v-model="form.product" disabled></el-input>
@@ -99,5 +99,4 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-</style>
+<style lang="stylus" scoped></style>

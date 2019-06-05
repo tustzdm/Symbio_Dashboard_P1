@@ -35,3 +35,29 @@
   margin: 10px;
   font-family: 'Poppins';
 }
+
+/* testmanagement manage-top style reset */
+.manage-top .el-card__body{
+    padding: 0
+}
+/* testmanagement tabel style reset */
+
+
+
+/* testmanagement tabel style reset */
+.buy-root .caseTabel .el-card__body{
+    padding: 0;
+    height: 100%;
+}
+.buy-root .caseTabel .el-table__body-wrapper td{
+  padding: 7px 0;
+  background-color: white
+}
+.cell{
+    text-align: center
+}
+/* testmanagement tabel style reset */
+
+.main{
+    height: 100% !important;
+}
