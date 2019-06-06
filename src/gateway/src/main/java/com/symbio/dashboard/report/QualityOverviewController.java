@@ -11,12 +11,12 @@ import com.symbio.dashboard.report.dro.saveUploadInformation.ListRowChart;
 import com.symbio.dashboard.report.service.QualityViewLayoutService;
 import com.symbio.dashboard.report.service.QualityViewService;
 import com.symbio.dashboard.report.service.SaveQualityViewLeyoutService;
-import com.symbio.dashboard.service.report.getQualityView.GetOverviewAuth;
-import com.symbio.dashboard.service.report.getQualityView.GetOverviewAuthImpl;
-import com.symbio.dashboard.service.report.getQualityViewLayout.GetOverviewLayoutAuth;
-import com.symbio.dashboard.service.report.getQualityViewLayout.GetOverviewLayoutAuthImpl;
-import com.symbio.dashboard.service.report.saveQualityViewLayout.SaveLayoutAuth;
-import com.symbio.dashboard.service.report.saveQualityViewLayout.SaveLayoutAuthImpl;
+import com.symbio.dashboard.report.service.getQualityView.GetOverviewAuth;
+import com.symbio.dashboard.report.service.getQualityView.GetOverviewAuthImpl;
+import com.symbio.dashboard.report.service.getQualityViewLayout.GetOverviewLayoutAuth;
+import com.symbio.dashboard.report.service.getQualityViewLayout.GetOverviewLayoutAuthImpl;
+import com.symbio.dashboard.report.service.saveQualityViewLayout.SaveLayoutAuth;
+import com.symbio.dashboard.report.service.saveQualityViewLayout.SaveLayoutAuthImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +94,7 @@ public class QualityOverviewController {
      * 此方法用于调用返回总的QualityViewLayout类型数据，测试最终的json串
      *
      * 测试接口：
-     *  localhost:8080/menu/getQualityViewLayout?token=aaa&locale=en_us
+     *  localhost:8080/menu/getQualityViewLayout?token=aaa&locale=zh_cn
      *
      *  为了测试语种信息，url中暂时带一个String类型的local（语种信息）
      *

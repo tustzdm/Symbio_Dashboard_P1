@@ -1,7 +1,9 @@
 package com.symbio.dashboard.navigation;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.navigation.service.GetProductAuth;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,12 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class NavigationController {
 
+    @Autowired
+    private GetProductAuth getProductAuth;
+
     @RequestMapping("/getProductList")
     public Result getProductList(@RequestParam(value = "token") String token,
                                  @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale,
                                  @RequestParam(value = "total",required = false) Integer total) {
-        Result result = new Result();
-
+        Result result = getProductAuth.getProductAuth(token);
 
 
         return result;

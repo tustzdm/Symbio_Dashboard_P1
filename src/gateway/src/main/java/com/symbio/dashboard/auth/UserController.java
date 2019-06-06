@@ -1,7 +1,7 @@
 package com.symbio.dashboard.auth;
 
-import com.symbio.dashboard.dto.auth.UserDto;
-import com.symbio.dashboard.service.auth.UserService;
+import com.symbio.dashboard.auth.dto.UserDto;
+import com.symbio.dashboard.auth.service.UserService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
