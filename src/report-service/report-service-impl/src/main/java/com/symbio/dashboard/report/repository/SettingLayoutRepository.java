@@ -1,10 +1,11 @@
 package com.symbio.dashboard.report.repository;
 
-import com.symbio.dashboard.annotation.JPAUpdate;
 import com.symbio.dashboard.report.modle.SettingLayout;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface SettingLayoutRepository extends JpaRepository<SettingLayout,Integer> {
 
     @Query(value = "select s.id from setting_layout s where s.page=?1 and s.type=?2 and s.locale=?3",nativeQuery = true)

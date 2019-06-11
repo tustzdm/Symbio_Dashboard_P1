@@ -2,6 +2,8 @@ package com.symbio.dashboard.navigation.dto.download;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 导航条release的返回信息
  */
@@ -31,5 +33,5 @@ public class ReleaseMessage {
     /**
      * release信息列表
      */
-    private ReleaseData data;
+    private List<ReleaseData> data;
 }

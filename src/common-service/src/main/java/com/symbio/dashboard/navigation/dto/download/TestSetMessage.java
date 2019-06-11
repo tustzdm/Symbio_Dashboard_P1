@@ -2,6 +2,8 @@ package com.symbio.dashboard.navigation.dto.download;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 导航条testset的返回信息
  */
@@ -37,6 +39,6 @@ public class TestSetMessage {
     /**
      * TestSet 的列表信息
      */
-    private TestSetData data;
+    private List<TestSetData> data;
 
 }

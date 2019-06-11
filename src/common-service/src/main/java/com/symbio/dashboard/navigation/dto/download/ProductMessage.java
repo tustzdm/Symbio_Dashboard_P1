@@ -2,6 +2,8 @@ package com.symbio.dashboard.navigation.dto.download;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 导航条product的返回信息
  */
@@ -27,5 +29,5 @@ public class ProductMessage {
     /**
      * product信息列表
      */
-    private ProductData data;
+    private List<ProductData> data;
 }
