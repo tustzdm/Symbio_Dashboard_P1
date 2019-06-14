@@ -1,6 +1,6 @@
 package com.symbio.dashboard.report.repository;
 
-import com.symbio.dashboard.report.modle.SettingLayout;
+import com.symbio.dashboard.model.SettingLayout;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

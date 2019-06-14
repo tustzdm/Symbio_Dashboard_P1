@@ -1,12 +1,11 @@
 package com.symbio.dashboard.navigation.service.impl;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.ec.navigation.ProductMessageErrorCode;
 import com.symbio.dashboard.navigation.dto.download.ProductData;
 import com.symbio.dashboard.navigation.dto.download.ProductMessage;
 import com.symbio.dashboard.navigation.dto.upload.ProductUpload;
-import com.symbio.dashboard.navigation.model.Product;
-import com.symbio.dashboard.navigation.repository.ProductRepository;
+import com.symbio.dashboard.model.Product;
+import com.symbio.dashboard.repository.ProductRepository;
 import com.symbio.dashboard.navigation.service.GetProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 

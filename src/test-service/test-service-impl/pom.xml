@@ -11,5 +11,13 @@
 
   <artifactId>test-service-impl</artifactId>
 
+  <dependencies>
+    <dependency>
+      <groupId>com.symbio</groupId>
+      <artifactId>test-service-interface</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
 
 </project>

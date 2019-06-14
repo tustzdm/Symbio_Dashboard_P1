@@ -1,7 +1,6 @@
 package com.symbio.dashboard.navigation;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.ec.auth.NavigationErrorCode;
 import com.symbio.dashboard.navigation.dto.upload.ProductUpload;
 import com.symbio.dashboard.navigation.dto.upload.ReleaseUpload;
 import com.symbio.dashboard.navigation.dto.upload.TestSetUpload;
@@ -18,19 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class NavigationController {
 
     @Autowired
-    private GetProductAuth getProductAuth;
+    private GetProductAuthService getProductAuth;
 
     @Autowired
     private GetProductService getProductService;
 
     @Autowired
-    private GetReleaseAuth getReleaseAuth;
+    private GetReleaseAuthService getReleaseAuth;
 
     @Autowired
     private GetReleaseService getReleaseService;
 
     @Autowired
-    private GetTestSetAuth getTestSetAuth;
+    private GetTestSetAuthService getTestSetAuth;
 
     @Autowired
     private GetTestSetService getTestSetService;

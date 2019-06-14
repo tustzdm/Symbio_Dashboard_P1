@@ -17,4 +17,14 @@
   </modules>
 
 
+  <dependencies>
+    <dependency>
+      <groupId>com.symbio</groupId>
+      <artifactId>common-service</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
+  </dependencies>
+
+
 </project>

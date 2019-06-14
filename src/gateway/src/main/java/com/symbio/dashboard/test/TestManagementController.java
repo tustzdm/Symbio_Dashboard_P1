@@ -1,4 +1,328 @@
 package com.symbio.dashboard.test;
 
+import com.symbio.dashboard.Result;
+import com.symbio.dashboard.dto.upload.SaveProductUpload;
+import com.symbio.dashboard.dto.upload.SaveReleaseUpload;
+import com.symbio.dashboard.dto.upload.SaveTestSetUpload;
+import com.symbio.dashboard.model.TestSet;
+import com.symbio.dashboard.navigation.dto.upload.ReleaseUpload;
+import com.symbio.dashboard.service.SaveProductService;
+import com.symbio.dashboard.service.SaveReleaseService;
+import com.symbio.dashboard.service.SaveTestSetService;
+import com.symbio.dashboard.test.service.SaveProductAuthService;
+import com.symbio.dashboard.test.service.SaveReleaseAuthService;
+import com.symbio.dashboard.test.service.SaveTestSetAuthService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RequestMapping("/testmgmr")
+@RestController
+@Slf4j
 public class TestManagementController {
+
+    @Autowired
+    private SaveProductAuthService saveProductAuthService;
+
+    @Autowired
+    private SaveProductService saveProductService;
+
+
+    @Autowired
+    private SaveReleaseAuthService saveReleaseAuthService;
+
+    @Autowired
+    private SaveReleaseService saveReleaseService;
+
+
+    @Autowired
+    private SaveTestSetAuthService saveTestSetAuthService;
+
+    @Autowired
+    private SaveTestSetService saveTestSetService;
+
+
+
+    //5.1
+    @RequestMapping("/getProductList")
+    public Result getProductList(@RequestParam(value = "token") String token) {
+        Result result = new Result();
+
+        return result;
+    }
+
+    //5.2
+    @RequestMapping("/getProductInfo")
+    public Result getProductInfo(@RequestParam(value = "token") String token) {
+        Result result = new Result();
+
+        return result;
+    }
+
+    //5.3
+
+    /**
+     * 此方法用于testManagement模块中的add或者edit product模块
+     *
+     * 测试接口：
+     *  localhost:8080/testmgmr/saveProduct?token=111&owner=1&manager=1&qaleader=1&devleader=1&description=aaaaa&name=ggg&productId=
+     *
+     * @param token 用户
+     * @param locale 语种
+     * @param productId product id
+     * @param name 项目名称
+     * @param owner 项目归属者
+     * @param manager 项目管理
+     * @param qaleader qa
+     * @param devleader 开发者
+     * @param description 描述
+     *
+     * @return 存储或者修改成功返回success 否则返回相应的报错信息
+     */
+    @RequestMapping("/saveProduct")
+    public Result saveProduct(@RequestParam(value = "token") String token,
+                              @RequestParam(value = "locale",defaultValue = "en_US",required = false) String locale,
+                              @RequestParam(value = "productId") Integer productId,
+                              @RequestParam(value = "name") String name,
+                              @RequestParam(value = "owner") Integer owner,
+                              @RequestParam(value = "manager") Integer manager,
+                              @RequestParam(value = "qaleader") Integer qaleader,
+                              @RequestParam(value = "devleader") Integer devleader,
+                              @RequestParam(value = "description") String description) {
+        Result result = saveProductAuthService.saveProduct(token);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
+
+        SaveProductUpload saveProductUpload = new SaveProductUpload();
+        //写死
+//        token = "111";
+//        locale = "en_US";
+//        productId = null;
+//        name = "bbb";
+//        owner = 1;
+//        manager = 1;
+//        qaleader = 1;
+//        devleader = 1;
+//        description = "描述";
+
+        saveProductUpload.setToken(token);
+        saveProductUpload.setLocale(locale);
+        saveProductUpload.setProductId(productId);
+        saveProductUpload.setName(name);
+        saveProductUpload.setOwner(owner);
+        saveProductUpload.setManager(manager);
+        saveProductUpload.setQaleader(qaleader);
+        saveProductUpload.setDevleader(devleader);
+        saveProductUpload.setDescription(description);
+
+        result = saveProductService.saveProduct(saveProductUpload);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
+
+
+        return result;
+    }
+
+    //5.4
+    @RequestMapping("/getReleaseList")
+    public Result getReleaseList(@RequestParam(value = "token") String token) {
+        Result result = new Result();
+
+        return result;
+    }
+
+    //5.5
+    @RequestMapping("/getReleaseInfo")
+    public Result getReleaseInfo(@RequestParam(value = "token") String token) {
+        Result result = new Result();
+
+        return result;
+    }
+
+    //5.6
+
+    /**
+     * 此方法用于testManagement模块中的add或者edit release模块
+     *
+     * 测试接口：
+     *  localhost:8080/testmgmr/saveRelease?token=111&locale=en_US&name=aa&productId=1&releaseId=
+     *
+     * @param token 用户
+     * @param locale 语种
+     * @param productId product id
+     * @param releaseId release id
+     * @param name release name
+     * @param status 状态
+     * @param start 开始时间
+     * @param end 结束时间
+     * @param description 描述
+     *
+     * @return 返回一个是否存储成功的信息给前台
+     */
+    @RequestMapping("/saveRelease")
+    public Result saveRelease(@RequestParam(value = "token") String token,
+                              @RequestParam(value = "locale") String locale,
+                              @RequestParam(value = "productId") Integer productId,
+                              @RequestParam(value = "releaseId") Integer releaseId,
+                              @RequestParam(value = "name") String name,
+                              @RequestParam(value = "status",defaultValue = "1",required = false) Integer status,
+                              @RequestParam(value = "start",required = false) String start,
+                              @RequestParam(value = "end",required = false) String end,
+                              @RequestParam(value = "description",required = false) String description) {
+        Result result = saveReleaseAuthService.saveReleaseAuth(token);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
+
+        SaveReleaseUpload saveReleaseUpload = new SaveReleaseUpload();
+
+//        start = "2018-12-31";
+//        end = "2019-03-25";
+
+        saveReleaseUpload.setToken(token);
+        saveReleaseUpload.setLocale(locale);
+        saveReleaseUpload.setProductId(productId);
+        saveReleaseUpload.setReleaseId(releaseId);
+        saveReleaseUpload.setName(name);
+        saveReleaseUpload.setStatus(status);
+        saveReleaseUpload.setStart(start);
+        saveReleaseUpload.setEnd(end);
+        saveReleaseUpload.setDescription(description);
+
+        result = saveReleaseService.saveRelease(saveReleaseUpload);
+
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
+
+
+        return result;
+    }
+
+    //5.7
+    @RequestMapping("/getTestSetList")
+    public Result getTestSetList(@RequestParam(value = "token") String token) {
+        Result result = new Result();
+
+        return result;
+    }
+
+    //5.8
+    @RequestMapping("/getTestSetInfo")
+    public Result getTestSetInfo(@RequestParam(value = "token") String token) {
+        Result result = new Result();
+
+        return result;
+    }
+
+    //5.9
+
+    /**
+     * 此方法用于testManagement模块中的add或者edit testSet模块
+     *
+     * 测试接口：
+     *  localhost:8080/testmgmr/saveTestSet?token=111&locale=en_US&type=0&status=1&name=aa&releaseId=1&testSetId=
+     *
+     * @param token
+     * @param locale
+     * @param releaseId
+     * @param testSetId
+     * @param name
+     * @param type
+     * @param status
+     * @param startDate
+     * @param endDate
+     * @param testOwner
+     * @param jiraProduct
+     * @param bugAssignee
+     * @param description
+     * @param extend
+     * @return
+     */
+    @RequestMapping("/saveTestSet")
+    public Result saveTestSet(@RequestParam(value = "token") String token,
+                              @RequestParam(value = "locale",defaultValue = "en_US") String locale,
+                              @RequestParam(value = "releaseId") Integer releaseId,
+                              @RequestParam(value = "testSetId") Integer testSetId,
+                              @RequestParam(value = "name") String name,
+                              @RequestParam(value = "type",defaultValue = "0") Integer type,
+                              @RequestParam(value = "status",defaultValue = "0") Integer status,
+                              @RequestParam(value = "startDate",required = false) String startDate,
+                              @RequestParam(value = "endDate",required = false) String endDate,
+                              @RequestParam(value = "testOwner",required = false) Integer testOwner,
+                              @RequestParam(value = "jiraProduct",required = false) String jiraProduct,
+                              @RequestParam(value = "bugAssignee",required = false) Integer bugAssignee,
+                              @RequestParam(value = "description",required = false) String description ,
+                              @RequestParam(value = "extend",required = false) String extend) {
+        Result result;
+        result = saveTestSetAuthService.saveTestSetAuth(token);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
+
+        SaveTestSetUpload saveTestSetUpload = new SaveTestSetUpload();
+        saveTestSetUpload.setToken(token);
+        saveTestSetUpload.setLocale(locale);
+        saveTestSetUpload.setReleaseId(releaseId);
+        saveTestSetUpload.setTestSetId(testSetId);
+        saveTestSetUpload.setName(name);
+        saveTestSetUpload.setType(type);
+        saveTestSetUpload.setStatus(status);
+        saveTestSetUpload.setStartDate(startDate);
+        saveTestSetUpload.setEndDate(endDate);
+        saveTestSetUpload.setTestOwner(testOwner);
+        saveTestSetUpload.setJiraProduct(jiraProduct);
+        saveTestSetUpload.setButAssignee(bugAssignee);
+        saveTestSetUpload.setDescription(description);
+        saveTestSetUpload.setExtend(extend);
+
+        result = saveTestSetService.saveTestSet(saveTestSetUpload);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
+
+        return result;
+    }
+
+
+
+
+    //5.13
+    @RequestMapping("/getTestResultList")
+    public Result getTestResultList(@RequestParam(value = "token") String token) {
+        Result result = new Result();
+
+        return result;
+    }
+
+    //5.14
+    @RequestMapping("/getTRFilterList")
+    public Result getTRFilterList(@RequestParam(value = "token") String token) {
+        Result result = new Result();
+
+        return result;
+    }
+
+
+    //5.15
+    @RequestMapping("/getJiraJobInfo")
+    public Result getJiraJobInfo(@RequestParam(value = "token") String token) {
+        Result result = new Result();
+
+        return result;
+    }
+
+
+    //5.16
+    @RequestMapping("/getJiraJobSetting")
+    public Result getJiraJobSetting(@RequestParam(value = "token") String token) {
+        Result result = new Result();
+
+        return result;
+    }
 }
+

@@ -52,6 +52,23 @@
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
 
+    <!--test-->
+    <dependency>
+      <groupId>com.symbio</groupId>
+      <artifactId>test-service</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.symbio</groupId>
+      <artifactId>test-service-interface</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>com.symbio</groupId>
+      <artifactId>test-service-impl</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+
 
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
     <dependency>
