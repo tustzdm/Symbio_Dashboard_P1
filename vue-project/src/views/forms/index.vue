@@ -152,6 +152,12 @@ export default {
         this.previewValidation = false
       }
     }
+  },
+  components:{
+    appBottomChart,
+    appTable,
+    appRegularCharts,
+    appCustomCharts
   }
 }
 </script>

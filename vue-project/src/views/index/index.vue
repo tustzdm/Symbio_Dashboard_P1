@@ -59,9 +59,9 @@ import 'echarts/lib/component/visualMap'
 import 'echarts/map/js/world'
 
 import map from './map'
-import pie from './pie'
+import getPie from './pie'
 import stackedArea from './stackedArea'
-import bar from './bar'
+import getBar from './bar'
 import polar from './polar'
 // Map of China
 import chinaMap from './china.json'
@@ -70,9 +70,9 @@ ECharts.registerMap('china', chinaMap)
 export default {
   data() {
     return {
-      pie,
+      pie: getPie(),
       stackedArea,
-      bar,
+      bar: getBar(),
       polar,
       map
     }
@@ -90,13 +90,13 @@ export default {
 }
 .gridContainer {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(14, 1fr);
   grid-template-rows: 25px 140px;
   grid-auto-rows: 830px;
   grid-gap: 30px;
 }
 .gridContainer > div {
-  grid-column: 2/10;
+  grid-column: 2/14;
 }
 .dropdown {
   height: 40px;

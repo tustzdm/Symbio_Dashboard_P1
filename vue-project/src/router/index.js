@@ -15,7 +15,7 @@ export const constantRouterMap = [
         component: _import("errorPage/404"),
         hidden: true
     },
-    {   
+    {
         path: "/",
         component: _import("login/index"),
         hidden: true
@@ -87,6 +87,20 @@ export const constantRouterMap = [
             }
         ],
         hidden: true
+    }, {
+        path: "/prdvisit",
+        component: Layout,
+        children: [
+            {
+                path: "/prdvisit/report",
+                component: _import("prdvisit/report"),
+                name: "report",
+                meta: {
+                    title: "report",
+                    icon: "",
+                },
+            }
+        ],
     },
     { path: "*", redirect: "/404", hidden: true }
 ];

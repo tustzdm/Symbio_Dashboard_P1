@@ -57,7 +57,7 @@ function postMethod([userOutput, supportCharts]) {
     body = body.replace(/regularChartsOutput|tableOutputs|bottomChartsOutput|customChartsOutput/gi, function (matched) {
         return mapObject[matched];
     })
-    console.log(body);
+    alert(body);
 
 }
 
