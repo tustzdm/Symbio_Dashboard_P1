@@ -83,18 +83,9 @@ public class SaveReleaseServiceImpl implements  SaveReleaseService{
                                   String end,String description) {
 
         Result result = new Result();
-        List<String> allName = releaseRepository.getAllName();
-        for (String s : allName) {
-            if (name.equals(s)) {
-                result.setEc(SaveReleaseErrorCode.SR0003.toString());
-                result.setEm("已有release的名字，请重新填写");
-                return result;
-            }
-        }
+        List<String> allName;
 
         List<Integer> allId = productRepository.getAllId();
-//        allId.forEach(id-> System.out.println(id));
-
 
         boolean existentProductId = false;
         for (int i : allId) {
@@ -105,49 +96,68 @@ public class SaveReleaseServiceImpl implements  SaveReleaseService{
         if (!existentProductId) {
             result.setEc(SaveReleaseErrorCode.SR0001.toString());
             result.setEm("无此product的id");
+            return result;
         }
 
-        Release release = new Release();
-        release.setId(releaseId);
-
-        //做product id 的查证
-        release.setProduct_id(productId);
-        release.setName(name);
-        release.setStatus(status);
-        release.setCreate_user(createUser);
+        Release release ;
 
         Date date = new Date();
         SimpleDateFormat systemTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        SimpleDateFormat releaseTime = new SimpleDateFormat("yyyy-MM-dd");
-
         try {
-            String nowtime = systemTime.format(date);
-            Date time = systemTime.parse(nowtime);
-            release.setUpdate_time(time);
+            String nowTime = systemTime.format(date);
+            Date time = systemTime.parse(nowTime);
             if (releaseId == null) {
+                allName = releaseRepository.getAllName(0);
+                for (String s : allName) {
+                    if (name.equals(s)) {
+                        result.setEc(SaveReleaseErrorCode.SR0003.toString());
+                        result.setEm("已有release的名字，请重新填写");
+                        return result;
+                    }
+                }
+                release = new Release();
+                release.setCreate_user(createUser);
                 release.setCreate_time(time);
             } else {
-                Date createTime = releaseRepository.getCreate_timeById(releaseId);
-                release.setCreate_time(createTime);
+                allName = releaseRepository.getAllName(releaseId);
+                for (String s : allName) {
+                    if (name.equals(s)) {
+                        result.setEc(SaveReleaseErrorCode.SR0003.toString());
+                        result.setEm("已有release的名字，请重新填写");
+                        return result;
+                    }
+                }
+                release = releaseRepository.getById(releaseId);
+//                Date createTime = releaseRepository.getCreate_timeById(releaseId);
+//                release.setCreate_time(createTime);
             }
 
+            release.setId(releaseId);
+            //做product id 的查证
+            release.setProduct_id(productId);
+            release.setName(name);
+            release.setStatus(status);
+            release.setUpdate_time(time);
+
             if (start != null) {
-                Date startTime = releaseTime.parse(start);
+                Date startTime = systemTime.parse(start);
                 release.setStart_time(startTime);
             }
 
             if (end != null) {
-                Date endTime = releaseTime.parse(end);
+                Date endTime = systemTime.parse(end);
                 release.setEnd_time(endTime);
             }
 
             release.setRemark(description);
-
             result.setCdAndRightEcAndEm(release);
 
-
         } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

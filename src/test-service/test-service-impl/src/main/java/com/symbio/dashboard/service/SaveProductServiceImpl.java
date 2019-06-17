@@ -92,14 +92,7 @@ public class SaveProductServiceImpl implements SaveProductService{
                                   Integer devleader, String description,Integer createUser) {
         Result result = new Result();
 
-        List<String> allName = productRepository.getAllName();
-        for (String s : allName) {
-            if (name.equals(s)) {
-                result.setEc(SaveProductErrorCode.SP0002.toString());
-                result.setEm("已有product的名字，请重新输入");
-                return result;
-            }
-        }
+        List<String> allName;
 
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -110,13 +103,28 @@ public class SaveProductServiceImpl implements SaveProductService{
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         Product product ;
         if (productId == null) {
+            allName = productRepository.getAllName(0);
+            for (String s : allName) {
+                if (name.equals(s)) {
+                    result.setEc(SaveProductErrorCode.SP0002.toString());
+                    result.setEm("已有product的名字，请重新输入");
+                    return result;
+                }
+            }
             product = new Product();
             product.setCreate_user(createUser);
             product.setCreate_time(date);
         } else {
+            allName = productRepository.getAllName(productId);
+            for (String s : allName) {
+                if (name.equals(s)) {
+                    result.setEc(SaveProductErrorCode.SP0002.toString());
+                    result.setEm("已有product的名字，请重新输入");
+                    return result;
+                }
+            }
             product = productRepository.getById(productId);
         }
 
@@ -130,25 +138,13 @@ public class SaveProductServiceImpl implements SaveProductService{
         product.setDescription(description);
         product.setUpdate_time(date);
 
-//        try {
-//            String nowtime = simpleDateFormat.format(date);
-//            Date time = simpleDateFormat.parse(nowtime);
-//            product.setUpdate_time(time);
-//            if (productId == null) {
-//                product.setCreate_time(time);
-//            } else {
-//                Date create_timeById = productRepository.getCreate_timeById(productId);
-//                product.setCreate_time(create_timeById);
-//            }
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-
         result.setCdAndRightEcAndEm(product);
 
 
         return result;
     }
+
+
 
 
 

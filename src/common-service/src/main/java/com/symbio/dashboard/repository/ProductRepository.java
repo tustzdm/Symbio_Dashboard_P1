@@ -20,8 +20,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @Query(value = "select p.id from product p",nativeQuery = true)
     List<Integer> getAllId();
 
-    @Query(value = "select p.name from product p",nativeQuery = true)
-    List<String> getAllName();
+    @Query(value = "select p.name from product p where p.id<>?1",nativeQuery = true)
+    List<String> getAllName(Integer id);
 
     Product getById(Integer id);
 

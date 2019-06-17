@@ -18,8 +18,11 @@ public interface ReleaseRepository extends JpaRepository<Release,Integer> {
     @Query(value = "select r.id from `releases` r", nativeQuery = true)
     List<Integer> getAllId();
 
-    @Query(value = "select r.name from `releases` r",nativeQuery = true)
-    List<String> getAllName();
+    @Query(value = "select r.name from `releases` r where r.id<>?1",nativeQuery = true)
+    List<String> getAllName(Integer id);
+
+
+    Release getById(Integer id);
 
 
 }

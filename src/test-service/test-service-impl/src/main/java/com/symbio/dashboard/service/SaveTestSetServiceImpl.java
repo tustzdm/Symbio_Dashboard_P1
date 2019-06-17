@@ -71,7 +71,7 @@ public class SaveTestSetServiceImpl implements SaveTestSetService {
             result.setCdAndRightEcAndEm("add");
         } else {
             result.setEc(SaveTestSetErrorCode.STSE002.toString());
-            result.setEm("没有正确的操作");
+            result.setEm("没有正确的操作"+flag);
             return result;
         }
 
@@ -87,14 +87,8 @@ public class SaveTestSetServiceImpl implements SaveTestSetService {
                                  Integer createUser,String extend) {
         Result result = new Result();
 
-        List<String> allName = testSetRepository.getAllName();
-        for (String s : allName) {
-            if (name.equals(s)) {
-                result.setEc(SaveReleaseErrorCode.SR0004.toString());
-                result.setEm("已有testSet的名字，请重新填写");
-                return result;
-            }
-        }
+        List<String> allName ;
+
         List<Integer> allId = releaseRepository.getAllId();
         boolean existentReleaseId = false;
         for (Integer i : allId) {
@@ -108,18 +102,7 @@ public class SaveTestSetServiceImpl implements SaveTestSetService {
             return result;
         }
 
-        TestSet testSet = new TestSet();
-        testSet.setId(testSetId);
-        testSet.setRelease_id(releaseId);
-        testSet.setName(name);
-        testSet.setType(type);
-        testSet.setStatus(status);
-        testSet.setTest_owner(testOwner);
-        testSet.setJira_project(jiraProduct);
-        testSet.setBug_assignee(bugAssignee);
-        testSet.setDescription(description);
-        testSet.setLocales(locale);
-        testSet.setCreate_user(createUser);
+        TestSet testSet ;
 
         Date date = new Date();
         SimpleDateFormat systemTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -127,13 +110,41 @@ public class SaveTestSetServiceImpl implements SaveTestSetService {
         try {
             String nowtime = systemTime.format(date);
             Date time = systemTime.parse(nowtime);
-            testSet.setUpdate_time(time);
-            if (releaseId == null) {
+            if (testSetId == null) {
+                allName = testSetRepository.getAllName(0);
+                for (String s : allName) {
+                    if (name.equals(s)) {
+                        result.setEc(SaveReleaseErrorCode.SR0004.toString());
+                        result.setEm("已有testSet的名字，请重新填写");
+                        return result;
+                    }
+                }
+                testSet = new TestSet();
+                testSet.setCreate_user(createUser);
                 testSet.setCreate_time(time);
             } else {
-                Date createTime = releaseRepository.getCreate_timeById(releaseId);
-                testSet.setCreate_time(createTime);
+                allName = testSetRepository.getAllName(testSetId);
+                for (String s : allName) {
+                    if (name.equals(s)) {
+                        result.setEc(SaveReleaseErrorCode.SR0004.toString());
+                        result.setEm("已有testSet的名字，请重新填写");
+                        return result;
+                    }
+                }
+                testSet = testSetRepository.getById(testSetId);
             }
+
+            testSet.setId(testSetId);
+            testSet.setRelease_id(releaseId);
+            testSet.setName(name);
+            testSet.setType(type);
+            testSet.setStatus(status);
+            testSet.setTest_owner(testOwner);
+            testSet.setJira_project(jiraProduct);
+            testSet.setBug_assignee(bugAssignee);
+            testSet.setDescription(description);
+            testSet.setLocales(locale);
+            testSet.setUpdate_time(time);
 
             if (startDate != null) {
                 Date startTime = systemTime.parse(startDate);
@@ -144,13 +155,13 @@ public class SaveTestSetServiceImpl implements SaveTestSetService {
                 Date endTime = systemTime.parse(endDate);
                 testSet.setEnd_time(endTime);
             }
+            result.setCdAndRightEcAndEm(testSet);
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
 
-        result.setCdAndRightEcAndEm(testSet);
 
         return result;
     }

@@ -11,6 +11,8 @@ public interface TestSetRepository extends JpaRepository<TestSet,Integer> {
     @Query(value = "select * from test_set ts where ts.release_id=?1 order by ts.update_time desc",nativeQuery = true)
     List<TestSet> findByRelease_idAndOrderByUpdate_timeAtDesc(Integer release_id);
 
-    @Query(value = "select ts.name from test_set ts",nativeQuery = true)
-    List<String> getAllName();
+    @Query(value = "select ts.name from test_set ts where ts.id<>?1",nativeQuery = true)
+    List<String> getAllName(Integer id);
+
+    TestSet getById(Integer id);
 }
