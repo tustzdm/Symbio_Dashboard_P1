@@ -19,19 +19,48 @@
         <button class="bugs-generate-report">Generate Report</button>
       </router-link>
     </div>
+    <bugs-custom-pie
+      class="bugs-edit"
+      :displayCustomPie="displayCustomPie"
+      :tableHeader="tableHeader"
+      v-if="displayCustomPie"
+      @closeDisplayCustomPie="displayCustomPie = $event.displayCustomPie;customPieSelected = $event.customPieSelected"
+      @cancelDisplayCustomPie="displayCustomPie = $event"
+    ></bugs-custom-pie>
+    <bugs-custom-bar
+      class="bugs-edit"
+      :displayCustomBar="displayCustomBar"
+      :tableHeader="tableHeader"
+      v-if="displayCustomBar"
+      @closeDisplayCustomBar="displayCustomBar = $event.displayCustomBar;customBarSelected = $event.customBarSelected"
+      @cancelDisplayCustomBar="displayCustomBar = $event"
+    ></bugs-custom-bar>
     <div class="bugs-charts">
       <div class="bugs-chartContainer">
         <chart :options="pie" class="panel" id="bugs-chartItem"/>
-        <button class="bugs-customize">Customize</button>
+        <button class="bugs-customize" @click="displayCustomPie = true">Customize</button>
       </div>
       <div>
         <chart :options="bar" class="panel"/>
-        <button class="bugs-customize">Customize</button>
+        <button class="bugs-customize" @click="displayCustomBar = true">Customize</button>
       </div>
     </div>
+    <bugs-custom-table
+      class="bugs-edit"
+      :displayCustomTable="displayCustomTable"
+      :tableHeader="tableHeader"
+      :displayPerPage="displayPerPage"
+      v-if="displayCustomTable"
+      @closeDisplayCustomTable="displayCustomTable = $event.displayCustomTable;tableHeader = $event.CustomTableSelected;displayPerPage = $event.displayPerPage"
+      @cancelDisplayCustomTable="displayCustomTable = $event"
+    ></bugs-custom-table>
     <div class="bugs-table">
-      <bugs-table class="tableItem panel"></bugs-table>
-      <button class="bugs-customize">Customize</button>
+      <bugs-table
+        class="tableItem panel"
+        :tableHeader="tableHeader"
+        :displayPerPage="displayPerPage"
+      ></bugs-table>
+      <button class="bugs-customize" @click="displayCustomTable = true">Customize</button>
     </div>
     <div>
       <p style="margin-top:50px">&nbsp;</p>
@@ -45,6 +74,9 @@ import 'echarts/lib/chart/bar'
 import 'echarts/lib/component/legend'
 import 'echarts/lib/component/dataset'
 import bugsTable from './table'
+import bugsCustomPie from './customPie'
+import bugsCustomBar from './customBar'
+import bugsCustomTable from './customTable'
 
 import getPie from './pie'
 import getBar from './bar'
@@ -54,17 +86,43 @@ export default {
     return {
       pie: getPie(),
       bar: getBar(),
-      basicHeader: true
+      basicHeader: true,
+      displayCustomPie: false,
+      customPieSelected: undefined,
+      displayCustomBar: false,
+      customBarSelected: undefined,
+      displayCustomTable: false,
+      displayPerPage: 30,
+      tableHeader: [
+        //need to store to DB
+        'ID',
+        'Summary',
+        'Assignee',
+        'Reporter',
+        'Priority',
+        'Status'
+      ]
     }
   },
   components: {
     chart: ECharts,
-    bugsTable
+    bugsTable,
+    bugsCustomPie,
+    bugsCustomBar,
+    bugsCustomTable
   },
   computed: {
     chartResize() {
       width = document.querySelector('.bugs-chartContainer').style.width
       consoe.log(width)
+    }
+  },
+  watch: {
+    customPieSelected() {
+      this.pie = getPie(this.customPieSelected)
+    },
+    customBarSelected() {
+      this.bar = getBar(this.customBarSelected)
     }
   }
 }
@@ -141,7 +199,7 @@ input {
     0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12),
     0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
   background-color: #7a85a1;
-  color: #e8e8e8;
+  color: white;
   width: 180px;
   height: 40px;
   border: none;
@@ -153,5 +211,11 @@ button:hover {
   position: absolute;
   top: 8px;
   right: -20px;
+}
+.bugs-edit {
+  position: absolute;
+  margin: auto;
+  justify-content: center;
+  align-items: center;
 }
 </style>

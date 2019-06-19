@@ -1,7 +1,6 @@
 import data from './data'
 
-let filter = 'Priority'
-let filterLower = filter.toLocaleLowerCase()
+let defaultValue = 'Priority'
 
 function descendingSort(array, filter) {
     array.sort((a, b) => {
@@ -35,7 +34,7 @@ function sortData(data, filter, getName = false) {
 
 }
 
-export default function getData() {
+export default function getData(filter = defaultValue) {
     return {
         title: {
             text: filter,
@@ -48,17 +47,17 @@ export default function getData() {
         },
         legend: {
             orient: 'vertical',
-            data: sortData(data, filterLower, true).sort(),
+            data: sortData(data, filter.toLowerCase(), true).sort(),
             x: '10px',
             y: '10px'
         },
         series: [
             {
-                name: 'Sample Data',
+                name: 'Bugs by ' + filter,
                 type: 'pie',
                 radius: '55%',
                 center: ['50%', '60%'],
-                data: sortData(data, filterLower),
+                data: sortData(data, filter.toLowerCase()),
                 color: ['#7A85A1', '#9EADC5', '#C9D4E3', '#E8E8E8', '#F3D1CD', '#F9E8E0'],
                 itemStyle: {
                     emphasis: {

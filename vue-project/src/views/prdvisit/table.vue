@@ -41,22 +41,18 @@
 <script>
 import data from './data'
 export default {
+  props: { tableHeader: Array, displayPerPage: Number },
   data() {
     return {
       data, //need to store to DB
-      displayPerPage: 30, //need to store to DB
       currentPageBegin: 0,
-      tableHeader: [
-        //need to store to DB
-        'ID',
-        'Summary',
-        'Assignee',
-        'Reporter',
-        'Priority',
-        'Status'
-      ],
       sortingDerection: 0,
       sortingPosition: undefined
+    }
+  },
+  watch: {
+    displayPerPage() {
+      this.currentPageBegin = 0
     }
   },
   computed: {

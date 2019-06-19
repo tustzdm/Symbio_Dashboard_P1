@@ -1,9 +1,6 @@
 import data from './data'
 
-let filterX = 'Priority'
-let filterY = 'Status'
-let filterXLower = filterX.toLocaleLowerCase()
-let filterYLower = filterY.toLocaleLowerCase()
+let dataXY = ['Priority', 'Status']
 
 function objectArrayReturnTable(data, filterX, filterY) {
     //[{},{},{}] return a table
@@ -49,18 +46,18 @@ function makingTable([x, y, result], xName, getSeries = false) {
 }
 
 
-export default function getData() {
+export default function getData([filterX, filterY] = dataXY) {
     return {
         title: {
             text: filterX + ' per ' + filterY,
             x: '20px',
-            y: '10px'
+            y: '5px'
         },
         color: ['#7A85A1', '#C9D4E3', '#E8E8E8', '#9EADC5', '#F3D1CD', '#F9E8E0'],
-        legend: { y: '10px' },
+        legend: { y: '30px', right: '20px' },
         tooltip: {},
         dataset: {
-            source: makingTable(objectArrayReturnTable(data, filterXLower, filterYLower), filterX)
+            source: makingTable(objectArrayReturnTable(data, filterX.toLowerCase(), filterY.toLowerCase()), filterX)
         },
         grid: {
             left: '3%',
@@ -70,6 +67,6 @@ export default function getData() {
         },
         xAxis: { type: 'category' },
         yAxis: {},
-        series: makingTable(objectArrayReturnTable(data, filterXLower, filterYLower), filterX, true)
+        series: makingTable(objectArrayReturnTable(data, filterX.toLowerCase(), filterY.toLowerCase()), filterX, true)
     }
 }
