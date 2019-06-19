@@ -158,7 +158,7 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
         String nowtime = simpleDateFormat.format(date);
         try {
             Date time = simpleDateFormat.parse(nowtime);
-            settingLayout.setCreate_time(time);
+            settingLayout.setCreateTime(time);
         } catch (ParseException e) {
             e.printStackTrace();
         }

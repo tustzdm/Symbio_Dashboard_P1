@@ -30,16 +30,16 @@ public class Product {
     private Integer manager;
 
     @Column(name = "qa_lead")
-    private Integer qa_lead;
+    private Integer qaLead;
 
     @Column(name = "dev_lead")
-    private Integer dev_lead;
+    private Integer devLead;
 
     @Column(name = "logo_id")
-    private Integer logo_id;
+    private Integer logoId;
 
     @Column(name = "logo_url")
-    private String logo_url;
+    private String logoUrl;
 
     @Column(name = "status",nullable = false)
     private Integer status = 0;
@@ -54,21 +54,21 @@ public class Product {
     private String locale;
 
     @Column(name = "create_time")
-    private Date create_time;
+    private Date createTime;
 
     @Column(name = "create_user",nullable = false)
-    private Integer create_user;
+    private Integer createUser;
 
     @Column(name = "create_user_name")
-    private String create_user_name;
+    private String createUserName;
 
     @Column(name = "update_time",nullable = false)
-    private Date update_time;
+    private Date updateTime;
 
     @Column(name = "update_user")
-    private Integer update_user;
+    private Integer updateUser;
 
     @Column(name = "update_user_name")
-    private String update_user_name;
+    private String updateUserName;
 
 }

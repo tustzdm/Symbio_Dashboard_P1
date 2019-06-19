@@ -22,7 +22,7 @@ public class Release {
     private Integer id;
 
     @Column(name = "product_id",nullable = false)
-    private Integer product_id;
+    private Integer productId;
 
     @Column(name = "name",nullable = false)
     private String name;
@@ -31,10 +31,10 @@ public class Release {
     private Integer status = 0;
 
     @Column(name = "start_time")
-    private Date start_time;
+    private Date startTime;
 
     @Column(name = "end_time")
-    private Date end_time;
+    private Date endTime;
 
     @Column(name = "display",nullable = false)
     private Integer display = 1;
@@ -43,21 +43,21 @@ public class Release {
     private String remark;
 
     @Column(name = "create_time")
-    private Date create_time;
+    private Date createTime;
 
     @Column(name = "create_user",nullable = false)
-    private Integer create_user;
+    private Integer createUser;
 
     @Column(name = "create_user_name")
-    private String create_user_name;
+    private String createUserName;
 
     @Column(name = "update_time",nullable = false)
-    private Date update_time;
+    private Date updateTime;
 
     @Column(name = "update_user")
-    private Integer update_user;
+    private Integer updateUser;
 
     @Column(name = "update_user_name")
-    private String update_user_name;
+    private String updateUserName;
 
 }

@@ -120,8 +120,8 @@ public class SaveTestSetServiceImpl implements SaveTestSetService {
                     }
                 }
                 testSet = new TestSet();
-                testSet.setCreate_user(createUser);
-                testSet.setCreate_time(time);
+                testSet.setCreateUser(createUser);
+                testSet.setCreateTime(time);
             } else {
                 allName = testSetRepository.getAllName(testSetId);
                 for (String s : allName) {
@@ -135,25 +135,25 @@ public class SaveTestSetServiceImpl implements SaveTestSetService {
             }
 
             testSet.setId(testSetId);
-            testSet.setRelease_id(releaseId);
+            testSet.setReleaseId(releaseId);
             testSet.setName(name);
             testSet.setType(type);
             testSet.setStatus(status);
-            testSet.setTest_owner(testOwner);
-            testSet.setJira_project(jiraProduct);
-            testSet.setBug_assignee(bugAssignee);
+            testSet.setTestOwner(testOwner);
+            testSet.setJiraProject(jiraProduct);
+            testSet.setBugAssignee(bugAssignee);
             testSet.setDescription(description);
             testSet.setLocales(locale);
-            testSet.setUpdate_time(time);
+            testSet.setUpdateTime(time);
 
             if (startDate != null) {
                 Date startTime = systemTime.parse(startDate);
-                testSet.setStart_time(startTime);
+                testSet.setStartTime(startTime);
             }
 
             if (endDate != null) {
                 Date endTime = systemTime.parse(endDate);
-                testSet.setEnd_time(endTime);
+                testSet.setEndTime(endTime);
             }
             result.setCdAndRightEcAndEm(testSet);
 

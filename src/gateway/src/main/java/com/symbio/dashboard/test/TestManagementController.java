@@ -1,17 +1,11 @@
 package com.symbio.dashboard.test;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.dto.upload.SaveProductUpload;
-import com.symbio.dashboard.dto.upload.SaveReleaseUpload;
-import com.symbio.dashboard.dto.upload.SaveTestSetUpload;
+import com.symbio.dashboard.dto.upload.*;
 import com.symbio.dashboard.model.TestSet;
 import com.symbio.dashboard.navigation.dto.upload.ReleaseUpload;
-import com.symbio.dashboard.service.SaveProductService;
-import com.symbio.dashboard.service.SaveReleaseService;
-import com.symbio.dashboard.service.SaveTestSetService;
-import com.symbio.dashboard.test.service.SaveProductAuthService;
-import com.symbio.dashboard.test.service.SaveReleaseAuthService;
-import com.symbio.dashboard.test.service.SaveTestSetAuthService;
+import com.symbio.dashboard.service.*;
+import com.symbio.dashboard.test.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 public class TestManagementController {
+    @Autowired
+    private GetProductListAuthService getProductListAuthService;
+
+    @Autowired
+    private GetProductListService getProductListService;
 
     @Autowired
     private SaveProductAuthService saveProductAuthService;
@@ -30,11 +29,20 @@ public class TestManagementController {
     private SaveProductService saveProductService;
 
 
+
+    @Autowired
+    private GetReleaseListAuthService getReleaseListAuthService;
+
+    @Autowired
+    private GetReleaseListService getReleaseListService;
+
     @Autowired
     private SaveReleaseAuthService saveReleaseAuthService;
 
     @Autowired
     private SaveReleaseService saveReleaseService;
+
+
 
 
     @Autowired
@@ -46,9 +54,41 @@ public class TestManagementController {
 
 
     //5.1
+
+    /**
+     * 此方法用于获得product的分页查询结果
+     *
+     * 测试接口：
+     *  localhost:8080/testmgmr/getProductList?token=111&locale=en_US&pageIndex=1&pageSize=2
+     *
+     * @param token 用户token
+     * @param locale 语种
+     * @param pageIndex 页面索引
+     * @param pageSize 页面大小
+     *
+     * @return 返回product的分页查询结果给前台
+     */
     @RequestMapping("/getProductList")
-    public Result getProductList(@RequestParam(value = "token") String token) {
-        Result result = new Result();
+    public Result getProductList(@RequestParam(value = "token") String token,
+                                 @RequestParam(value = "locale",defaultValue = "en_US") String locale,
+                                 @RequestParam(value = "pageIndex",required = false) Integer pageIndex,
+                                 @RequestParam(value = "pageSize",required = false) Integer pageSize) {
+        Result result ;
+        result = getProductListAuthService.getProductList(token);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
+
+        GetProductListUpload getProductListUpload = new GetProductListUpload();
+        getProductListUpload.setToken(token);
+        getProductListUpload.setLocale(locale);
+        getProductListUpload.setPageIndex(pageIndex);
+        getProductListUpload.setPageSize(pageSize);
+
+        result = getProductListService.getProductList(getProductListUpload);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
 
         return result;
     }
@@ -128,9 +168,44 @@ public class TestManagementController {
     }
 
     //5.4
+
+    /**
+     * 此方法用于返回release的信息，分页返回
+     *
+     * 测试接口：
+     *  localhost:8080/testmgmr/getReleaseList?token=111&productId=1&pageIndex=0&pageSize=2
+     *
+     * @param token 用户token
+     * @param locale 语种
+     * @param productId product 的id
+     * @param pageIndex 页面索引
+     * @param pageSize 页面大小
+     * @return
+     */
     @RequestMapping("/getReleaseList")
-    public Result getReleaseList(@RequestParam(value = "token") String token) {
-        Result result = new Result();
+    public Result getReleaseList(@RequestParam(value = "token") String token,
+                                 @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale,
+                                 @RequestParam(value = "productId") Integer productId,
+                                 @RequestParam(value = "pageIndex",required = false) Integer pageIndex,
+                                 @RequestParam(value = "pageSize",required = false) Integer pageSize) {
+        Result result ;
+
+        result = getReleaseListAuthService.getReleaseList(token);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
+
+        GetReleaseListUpload getReleaseListUpload = new GetReleaseListUpload();
+        getReleaseListUpload.setLocale(locale);
+        getReleaseListUpload.setToken(token);
+        getReleaseListUpload.setProductId(productId);
+        getReleaseListUpload.setPageIndex(pageIndex);
+        getReleaseListUpload.setPageSize(pageSize);
+
+        result = getReleaseListService.getReleaseList(getReleaseListUpload);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
 
         return result;
     }

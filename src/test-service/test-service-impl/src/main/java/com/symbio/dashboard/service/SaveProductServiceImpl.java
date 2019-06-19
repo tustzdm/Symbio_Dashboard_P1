@@ -114,8 +114,8 @@ public class SaveProductServiceImpl implements SaveProductService{
                 }
             }
             product = new Product();
-            product.setCreate_user(createUser);
-            product.setCreate_time(date);
+            product.setCreateUser(createUser);
+            product.setCreateTime(date);
         } else {
             allName = productRepository.getAllName(productId);
             for (String s : allName) {
@@ -133,10 +133,10 @@ public class SaveProductServiceImpl implements SaveProductService{
         product.setLocale(locale);
         product.setOwner(owner);
         product.setManager(manager);
-        product.setQa_lead(qaleader);
-        product.setDev_lead(devleader);
+        product.setQaLead(qaleader);
+        product.setDevLead(devleader);
         product.setDescription(description);
-        product.setUpdate_time(date);
+        product.setUpdateTime(date);
 
         result.setCdAndRightEcAndEm(product);
 

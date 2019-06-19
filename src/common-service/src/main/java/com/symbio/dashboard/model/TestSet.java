@@ -22,7 +22,7 @@ public class TestSet {
     private Integer id;
 
     @Column(name = "release_id",nullable = false)
-    private Integer release_id;
+    private Integer releaseId;
 
     @Column(name = "name",nullable = false)
     private String name;
@@ -34,20 +34,20 @@ public class TestSet {
     private Integer status;
 
     @Column(name = "start_time")
-    private Date start_time;
+    private Date startTime;
 
     @Column(name = "end_time")
-    private Date end_time;
+    private Date endTime;
 
 
     @Column(name = "test_owner")
-    private Integer test_owner;
+    private Integer testOwner;
 
     @Column(name = "jira_project")
-    private String jira_project;
+    private String jiraProject;
 
     @Column(name = "bug_assignee")
-    private Integer bug_assignee;
+    private Integer bugAssignee;
 
     @Column(name = "description")
     private String description;
@@ -59,56 +59,56 @@ public class TestSet {
     private String locales;
 
     @Column(name = "testset_field_bool1")
-    private Short testset_field_bool1;
+    private Short testsetFieldBool1;
 
     @Column(name = "testset_field_bool2")
-    private Short testset_field_bool2;
+    private Short testsetFieldBool2;
 
     @Column(name = "testset_field_int1")
-    private Integer testset_field_int1;
+    private Integer testsetFieldInt1;
 
     @Column(name = "testset_field_int2")
-    private Integer testset_field_int2;
+    private Integer testsetFieldInt2;
 
     @Column(name = "testset_field_int3")
-    private Integer testset_field_int3;
+    private Integer testsetFieldInt3;
 
     @Column(name = "testset_field_int4")
-    private Integer testset_field_int4;
+    private Integer testsetFieldInt4;
 
     @Column(name = "testset_field_int5")
-    private Integer testset_field_int5;
+    private Integer testsetFieldInt5;
 
     @Column(name = "testset_field_str1")
-    private String testset_field_str1;
+    private String testsetFieldStr1;
 
     @Column(name = "testset_field_str2")
-    private String testset_field_str2;
+    private String testsetFieldStr2;
 
     @Column(name = "testset_field_str3")
-    private String testset_field_str3;
+    private String testsetFieldStr3;
 
     @Column(name = "testset_field_str4")
-    private String testset_field_str4;
+    private String testsetFieldStr4;
 
     @Column(name = "testset_field_str5")
-    private String testset_field_str5;
+    private String testsetFieldStr5;
 
     @Column(name = "create_time")
-    private Date create_time;
+    private Date createTime;
 
     @Column(name = "create_user",nullable = false)
-    private Integer create_user;
+    private Integer createUser;
 
     @Column(name = "create_user_name")
-    private String create_user_name;
+    private String createUserName;
 
     @Column(name = "update_time",nullable = false)
-    private Date update_time;
+    private Date updateTime;
 
     @Column(name = "update_user")
-    private Integer update_user;
+    private Integer updateUser;
 
     @Column(name = "update_user_name")
-    private String update_user_name;
+    private String updateUserName;
 }

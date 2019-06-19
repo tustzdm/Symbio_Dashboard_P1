@@ -117,8 +117,8 @@ public class SaveReleaseServiceImpl implements  SaveReleaseService{
                     }
                 }
                 release = new Release();
-                release.setCreate_user(createUser);
-                release.setCreate_time(time);
+                release.setCreateUser(createUser);
+                release.setCreateTime(time);
             } else {
                 allName = releaseRepository.getAllName(releaseId);
                 for (String s : allName) {
@@ -135,19 +135,19 @@ public class SaveReleaseServiceImpl implements  SaveReleaseService{
 
             release.setId(releaseId);
             //做product id 的查证
-            release.setProduct_id(productId);
+            release.setProductId(productId);
             release.setName(name);
             release.setStatus(status);
-            release.setUpdate_time(time);
+            release.setUpdateTime(time);
 
             if (start != null) {
                 Date startTime = systemTime.parse(start);
-                release.setStart_time(startTime);
+                release.setStartTime(startTime);
             }
 
             if (end != null) {
                 Date endTime = systemTime.parse(end);
-                release.setEnd_time(endTime);
+                release.setEndTime(endTime);
             }
 
             release.setRemark(description);

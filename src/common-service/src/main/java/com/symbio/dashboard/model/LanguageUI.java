@@ -36,7 +36,7 @@ public class LanguageUI {
     private String label;
 
     @Column(name = "default_value")
-    private String default_value = null;
+    private String defaultValue = null;
 
     @Column(name = "idx" , nullable = false)
     private Integer idx;
