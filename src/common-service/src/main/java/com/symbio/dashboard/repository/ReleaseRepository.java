@@ -24,5 +24,7 @@ public interface ReleaseRepository extends JpaRepository<Release,Integer> {
 
     Release getById(Integer id);
 
-    Page<Release> findByProductId(Integer id, Pageable pageable);
+    Page<Release> findByProductId(Integer productId, Pageable pageable);
+
+    List<Release> findByProductId(Integer productId);
 }

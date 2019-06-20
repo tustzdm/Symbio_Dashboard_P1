@@ -1,6 +1,8 @@
 package com.symbio.dashboard.repository;
 
 import com.symbio.dashboard.model.TestSet;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,4 +17,10 @@ public interface TestSetRepository extends JpaRepository<TestSet,Integer> {
     List<String> getAllName(Integer id);
 
     TestSet getById(Integer id);
+
+    Page<TestSet> findByReleaseId(Integer releaseId, Pageable pageable);
+
+    List<TestSet> findByReleaseId(Integer releaseId);
+
+
 }

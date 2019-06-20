@@ -4,6 +4,7 @@ import com.symbio.dashboard.Result;
 import com.symbio.dashboard.dto.upload.*;
 import com.symbio.dashboard.model.TestSet;
 import com.symbio.dashboard.navigation.dto.upload.ReleaseUpload;
+import com.symbio.dashboard.navigation.dto.upload.TestSetUpload;
 import com.symbio.dashboard.service.*;
 import com.symbio.dashboard.test.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -18,13 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestManagementController {
     @Autowired
     private GetProductListAuthService getProductListAuthService;
-
     @Autowired
     private GetProductListService getProductListService;
-
     @Autowired
     private SaveProductAuthService saveProductAuthService;
-
     @Autowired
     private SaveProductService saveProductService;
 
@@ -32,22 +30,20 @@ public class TestManagementController {
 
     @Autowired
     private GetReleaseListAuthService getReleaseListAuthService;
-
     @Autowired
     private GetReleaseListService getReleaseListService;
-
     @Autowired
     private SaveReleaseAuthService saveReleaseAuthService;
-
     @Autowired
     private SaveReleaseService saveReleaseService;
 
 
-
-
+    @Autowired
+    private GetTestSetListAuthService getTestSetListAuthService;
+    @Autowired
+    private GetTestSetListService getTestSetListService;
     @Autowired
     private SaveTestSetAuthService saveTestSetAuthService;
-
     @Autowired
     private SaveTestSetService saveTestSetService;
 
@@ -162,7 +158,6 @@ public class TestManagementController {
         if (!"0".equals(result.getEc())) {
             return result;
         }
-
 
         return result;
     }
@@ -279,9 +274,44 @@ public class TestManagementController {
     }
 
     //5.7
+    /**
+     * 此方法用于分页查询返回testSet的内容
+     *
+     * 测试接口：
+     *  localhost:8080/testmgmr/getTestSetList?token=111&releaseId=1&pageIndex=0&pageSize=2
+     *
+     * @param token 用户token
+     * @param locale 语种
+     * @param releaseId release id
+     * @param pageIndex 页面索引
+     * @param pageSize 页面大小
+     * @return 返回分页好的testSet内容和页面的信息
+     */
     @RequestMapping("/getTestSetList")
-    public Result getTestSetList(@RequestParam(value = "token") String token) {
+    public Result getTestSetList(@RequestParam(value = "token") String token,
+                                 @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale,
+                                 @RequestParam(value = "releaseId") Integer releaseId,
+                                 @RequestParam(value = "pageIndex",required = false) Integer pageIndex,
+                                 @RequestParam(value = "pageSize",required = false) Integer pageSize) {
         Result result = new Result();
+
+        result = getTestSetListAuthService.getTestSetList(token);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
+
+        GetTestSetListUpload getTestSetListUpload = new GetTestSetListUpload();
+        getTestSetListUpload.setToken(token);
+        getTestSetListUpload.setLocale(locale);
+        getTestSetListUpload.setReleaseId(releaseId);
+        getTestSetListUpload.setPageIndex(pageIndex);
+        getTestSetListUpload.setPageSize(pageSize);
+
+        result = getTestSetListService.getTestSetList(getTestSetListUpload);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
+
 
         return result;
     }
