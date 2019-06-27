@@ -7,25 +7,25 @@
     </div>
     <div class="cards">
       <div class="card panel" style="background-color: #8396a2">
-        <div class="cardTitle">Release Overview</div>
+        <div class="cardTitle">Product Overview</div>
         <div class="cardNumber">32</div>
         <div class="cardPercentage">49%</div>
         <icon class="cardIcon" name="qualityOverview"></icon>
       </div>
       <div class="card panel" style="background-color: #BECDDF">
-        <div class="cardTitle">Testing archived</div>
+        <div class="cardTitle">Release Overview</div>
         <div class="cardNumber">44</div>
         <div class="cardPercentage">23%</div>
         <icon class="cardIcon" name="testManagement"></icon>
       </div>
       <div class="card panel" style="background-color: #E9CECE">
-        <div class="cardTitle">Reviewed pages</div>
+        <div class="cardTitle">Test Cases Overview</div>
         <div class="cardNumber">140</div>
         <div class="cardPercentage">77%</div>
         <icon class="cardIcon" name="resultReview"></icon>
       </div>
       <div class="card panel" style="background-color: #F6B8B8">
-        <div class="cardTitle">Bugs solving rate</div>
+        <div class="cardTitle">Bug Fix Rate</div>
         <div class="cardNumber">13</div>
         <div class="cardPercentage">8%</div>
         <icon class="cardIcon" name="bugs"></icon>
@@ -36,6 +36,7 @@
       <chart :options="bar" class="panel"/>
       <chart :options="stackedArea" class="panel"/>
       <chart :options="polar" class="panel"/>
+      <chart :options="radar" class="panel"/>
     </div>
     <div class="table panel">
       <chart :options="map" class="panel"/>
@@ -60,9 +61,10 @@ import 'echarts/map/js/world'
 
 import map from './map'
 import getPie from './pie'
-import stackedArea from './stackedArea'
+import getstackedArea from './stackedArea'
 import getBar from './bar'
 import polar from './polar'
+import radar from './radar'
 // Map of China
 import chinaMap from './china.json'
 // registering map data
@@ -71,10 +73,11 @@ export default {
   data() {
     return {
       pie: getPie(),
-      stackedArea,
+      stackedArea: getstackedArea(),
       bar: getBar(),
       polar,
-      map
+      map,
+      radar
     }
   },
   components: {
@@ -91,7 +94,7 @@ export default {
 .gridContainer {
   display: grid;
   grid-template-columns: repeat(14, 1fr);
-  grid-template-rows: 25px 140px;
+  grid-template-rows: 25px 140px 1260px;
   grid-auto-rows: 830px;
   grid-gap: 30px;
 }

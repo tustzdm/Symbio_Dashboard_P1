@@ -1,21 +1,22 @@
 export default function getData() {
     return {
-        color: ['#7A85A1', '#C9D4E3', '#E8E8E8', '#C9D4E3', '#F3D1CD', '#F9E8E0'],
-        legend: { y: '5px' },
+        title: { text: 'Testing type', left: '10px', y: '10px' },
+        color: ['#7A85A1', '#C9D4E3', '#E8E8E8', '#9EADC5', '#F3D1CD', '#F9E8E0'],
+        legend: { y: '10px', right: '10px', },
         tooltip: {},
         dataset: {
             source: [
-                ['Product', '2015', '2016', '2017'],
-                ['Matcha Latte', ...randomize()],
-                ['Milk Tea', ...randomize()],
-                ['Cheese Cocoa', ...randomize()],
-                ['Walnut Brownie', ...randomize()]
+                ['Product', 'Unit Testing', 'Integration Testing', 'System Testing'],
+                ['Product Venus', ...randomize()],
+                ['Product Apollo', ...randomize()],
+                ['Product Mars', ...randomize()],
+                ['Product Diana', ...randomize()]
             ]
         },
         grid: {
-            left: '5%',
-            right: '5%',
-            bottom: '5%',
+            left: '3%',
+            right: '3%',
+            bottom: '3%',
             containLabel: true
         },
         xAxis: { type: 'category' },
