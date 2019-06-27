@@ -11,7 +11,7 @@
     </router-link>
     <router-link class="headerResultReview headeritems" to="/searchvisit/index">
       <icon class="headerIcon" name="resultReview"></icon>
-      <div class="headerTitle">Result Review</div>
+      <div class="headerTitle">Test Result</div>
     </router-link>
     <router-link class="headerBugs headeritems" to="/prdvisit/index">
       <icon class="headerIcon" name="bugs"></icon>

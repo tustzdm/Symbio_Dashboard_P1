@@ -400,13 +400,14 @@ function convertData(data) {
 export default {
     backgroundColor: '#404a59',
     title: {
-        text: '全国主要城市空气质量',
-        subtext: 'data from PM25.in',
+        text: 'Covered Province',
+        subtext: 'Case per Province',
         sublink: 'http://www.pm25.in',
         left: 'center',
         textStyle: {
             color: '#fff'
-        }
+        },
+        y: '10px'
     },
     tooltip: {
         trigger: 'item'
@@ -415,7 +416,7 @@ export default {
         orient: 'vertical',
         y: 'bottom',
         x: 'right',
-        data: ['pm2.5'],
+        data: ['Case Amount'],
         textStyle: {
             color: '#fff'
         }
@@ -439,7 +440,7 @@ export default {
     },
     series: [
         {
-            name: 'pm2.5',
+            name: 'Case Amount',
             type: 'scatter',
             coordinateSystem: 'geo',
             data: convertData(data),

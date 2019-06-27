@@ -4,11 +4,7 @@ function randomize() {
 
 export default function getData() {
     return {
-        title: {
-            text: 'Platforms',
-            x: 'center',
-            y: '20px'
-        },
+        title: { text: 'Platforms', x: 'center', y: '10px' },
         tooltip: {
             trigger: 'item',
             formatter: '{a} <br/>{b} : {c} ({d}%)'
@@ -16,7 +12,7 @@ export default function getData() {
         legend: {
             orient: 'vertical',
             data: ['Android', 'iOS', 'Windows', 'Mac', 'Web'],
-            x: '10px',
+            left: '10px',
             y: '10px'
         },
         series: [
