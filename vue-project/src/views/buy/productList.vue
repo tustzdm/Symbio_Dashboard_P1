@@ -138,7 +138,7 @@ export default {
           finished: 300,
           all: 342,
           description:
-            'Description of product1, for nomal account ,function and performance test'
+            'Description of product1, for nomal account ,function and performance test' 
         },
         {
           product: 'GameSurface',
