@@ -1,11 +1,15 @@
 <template>
   <div class="buy-root" style="width:85%;margin-left:7.5%">
     <div class="manage-charts">
-      <div class="chartContainer">
-        <chart :options="pie" class="panel"/>
+      <div class="chartContainer" style="text-align:center">
+        <div style="display:inline-block">
+          <chart style="display:inline-block" :options="pie" class="panel" />
+        </div>
       </div>
       <div class="chartContainer">
-        <chart :options="rect" class="panel"/>
+        <div style="display:inline-block">
+          <chart :options="rect" class="panel" />
+        </div>
       </div>
     </div>
     <product-list></product-list>

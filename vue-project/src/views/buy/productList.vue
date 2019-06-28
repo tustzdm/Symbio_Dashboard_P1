@@ -69,7 +69,7 @@ export default {
       currentPage: 1,
       tableData: [
         {
-          product: 'MerchantSignUp',
+          product: 'NewAccountSignUp',
           progress: '39%',
           finished: 300,
           all: 342,
