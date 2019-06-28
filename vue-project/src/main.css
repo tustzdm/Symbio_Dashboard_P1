@@ -42,7 +42,9 @@
 }
 /* testmanagement tabel style reset */
 
-
+.el-card__body{
+    padding: 0;
+}
 
 /* testmanagement tabel style reset */
 .buy-root .caseTabel .el-card__body{
@@ -60,4 +62,12 @@
 
 .main{
     height: 100% !important;
+}
+
+/* productList tabelHead  */
+.manage-tabel .has-gutter {
+  font-size: 20px;
+}
+.manage-tabel .has-gutter th:first-child {
+  padding-right: 150px;
 }
