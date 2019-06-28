@@ -30,7 +30,7 @@ export default function getData() {
                     { value: randomize(), name: 'RiskTransfer' },
                     { value: randomize(), name: 'PersonalAddPhone' },
                     { value: randomize(), name: 'PersonalDeletePhone' },
-                    { value: randomize(), name: 'GameSurface' }
+                    { value: randomize(), name: 'GameSurface'}
                 ],
                 color: ['#F9E8E0', '#F3D1CD', '#7A85A1', '#9EADC5', '#C9D4E3', '#E8E8E8'],
                 itemStyle: {
