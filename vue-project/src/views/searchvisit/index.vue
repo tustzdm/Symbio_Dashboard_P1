@@ -1,5 +1,5 @@
 <template>
-  <div class="buy-root">
+  <div class="buy-root" style="width:85%;margin-left:7.5%">
     <!-- 两个部分mabage-top和(表格、翻页)，两者之间都用flex布局-->
 
     <!--manage-top start,后面单独把manage-top写成一个组件-->
@@ -51,7 +51,7 @@
             <i class="el-icon-caret-bottom el-icon--right"></i>
           </span>
           <el-dropdown-menu>
-            <input class="select-search" type="text" placeholder="Search here">
+            <input class="select-search" type="text" placeholder="Search here" />
             <el-dropdown-item>
               <i class="el-icon-plus"></i>Add Release
             </el-dropdown-item>
@@ -74,7 +74,7 @@
             <i class="el-icon-caret-bottom el-icon--right"></i>
           </span>
           <el-dropdown-menu>
-            <input class="select-search" type="text" placeholder="Search here">
+            <input class="select-search" type="text" placeholder="Search here" />
             <el-dropdown-item>
               <i class="el-icon-plus"></i>Add Test Set
             </el-dropdown-item>
@@ -116,9 +116,9 @@
         </el-dropdown>
       </div>
       <div class="manage-top-right">
-        <el-button type="primary" size="mini">Import</el-button>
-        <el-button type="success" size="mini">Run</el-button>
-        <el-button type="warning" size="mini">Refresh</el-button>
+        <el-button style="background-color:#c2eaae;color:white" size="mini">Run</el-button>
+        <el-button style="background-color:rgb(190, 205, 223);color:white" size="mini">Refresh</el-button>
+        <el-button style="background-color:rgb(246, 184, 184);color:white" size="mini">Add Bug</el-button>
         <div class="select" style="float:right; margin-right:30px">
           <el-dropdown trigger="click">
             <span class="el-dropdown-link">
@@ -139,7 +139,7 @@
     </el-card>
     <!-- manage-top end -->
 
-    <el-card class="caseTabel" shadow="hover">
+    <el-card class="caseTabel" shadow="hover" style="border:none">
       <el-table
         :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)"
         @selection-change="handleSelectionChange"
@@ -165,7 +165,7 @@
         <el-table-column prop="locale" label="Locale"></el-table-column>
         <el-table-column prop="screenshot" label="ScreenShot">
           <template slot-scope="scope">
-            <img :src="scope.row.screenshot" class="el-img-custom">
+            <img :src="scope.row.screenshot" class="el-img-custom" />
           </template>
         </el-table-column>
       </el-table>
@@ -339,7 +339,7 @@ export default {
 }
 
 .manage-top-right {
-  width: 320px;
+  width: 360px;
   height: 40px;
   line-height: 40px;
   float: right;
@@ -357,14 +357,14 @@ export default {
 
 /* 控制不同状态case的颜色 */
 .auto_block {
-  background: orange;
+  background: #ccc;
 }
 
 .auto_pass {
-  background: green;
+  background: #adedc5;
 }
 
 .auto_failed {
-  background: red;
+  background: rgb(246, 184, 184);
 }
 </style>
