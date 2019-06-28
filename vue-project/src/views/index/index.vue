@@ -35,13 +35,15 @@
       <chart :options="pie" class="panel"/>
       <chart :options="bar" class="panel"/>
       <chart :options="stackedArea" class="panel"/>
-      <chart :options="polar" class="panel"/>
       <chart :options="radar" class="panel"/>
+      
     </div>
     <div class="table panel">
-      <chart :options="map" class="panel"/>
+      <chart :options="polar" class="panel"/>
+      <!-- <chart :options="map" class="panel"/> -->
     </div>
-    <div class="bottomCharts panel"></div>
+    <!-- <div class="bottomCharts panel"></div> -->
+    <div></div>
   </div>
 </template>
 
@@ -94,8 +96,8 @@ export default {
 .gridContainer {
   display: grid;
   grid-template-columns: repeat(14, 1fr);
-  grid-template-rows: 25px 140px 1260px;
-  grid-auto-rows: 830px;
+  grid-template-rows: 25px 140px 830px;
+  grid-auto-rows: 530px;
   grid-gap: 30px;
 }
 .gridContainer > div {
