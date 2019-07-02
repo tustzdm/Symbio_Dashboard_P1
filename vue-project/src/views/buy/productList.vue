@@ -74,7 +74,7 @@ export default {
           finished: 300,
           all: 342,
           description:
-            'Description of product1, for merchant account ,function and performance test'
+            'Description of product1, for nomal account ,function and performance test'
         },
         {
           product: 'RiskTransfer',
@@ -82,7 +82,7 @@ export default {
           finished: 300,
           all: 342,
           description:
-            'Description of product1, for merchant account ,function and performance test'
+            'Description of product1, for nomal account ,function and performance test'
         },
         {
           product: 'PersonalAddPhone',
@@ -90,7 +90,7 @@ export default {
           finished: 300,
           all: 342,
           description:
-            'Description of product1, for merchant account ,function and performance test'
+            'Description of product1, for nomal account ,function and performance test'
         },
         {
           product: 'PersonalDeletePhone',
@@ -98,7 +98,7 @@ export default {
           finished: 300,
           all: 342,
           description:
-            'Description of product1, for merchant account ,function and performance test'
+            'Description of product1, for nomal account ,function and performance test'
         },
         {
           product: 'GameSurface',
@@ -106,7 +106,7 @@ export default {
           finished: 300,
           all: 342,
           description:
-            'Description of product1, for merchant account ,function and performance test'
+            'Description of product1, for nomal account ,function and performance test'
         },
         {
           product: 'GameSurface',
@@ -114,7 +114,7 @@ export default {
           finished: 300,
           all: 342,
           description:
-            'Description of product1, for merchant account ,function and performance test'
+            'Description of product1, for nomal account ,function and performance test'
         },
         {
           product: 'GameSurface',
@@ -122,7 +122,7 @@ export default {
           finished: 300,
           all: 342,
           description:
-            'Description of product1, for merchant account ,function and performance test'
+            'Description of product1, for nomal account ,function and performance test'
         },
         {
           product: 'GameSurface',
@@ -130,7 +130,7 @@ export default {
           finished: 300,
           all: 342,
           description:
-            'Description of product1, for merchant account ,function and performance test'
+            'Description of product1, for nomal account ,function and performance test'
         },
         {
           product: 'GameSurface',
@@ -138,7 +138,7 @@ export default {
           finished: 300,
           all: 342,
           description:
-            'Description of product1, for merchant account ,function and performance test'
+            'Description of product1, for nomal account ,function and performance test'
         },
         {
           product: 'GameSurface',
@@ -146,7 +146,7 @@ export default {
           finished: 300,
           all: 342,
           description:
-            'Description of product1, for merchant account ,function and performance test'
+            'Description of product1, for nomal account ,function and performance test'
         },
         {
           product: 'GameSurface',
@@ -154,7 +154,7 @@ export default {
           finished: 300,
           all: 342,
           description:
-            'Description of product1, for merchant account ,function and performance test'
+            'Description of product1, for nomal account ,function and performance test'
         }
       ]
     }
