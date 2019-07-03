@@ -21,7 +21,6 @@ public interface ReleaseRepository extends JpaRepository<Release,Integer> {
     @Query(value = "select r.name from `releases` r where r.id<>?1",nativeQuery = true)
     List<String> getAllName(Integer id);
 
-
     Release getById(Integer id);
 
     Page<Release> findByProductId(Integer productId, Pageable pageable);

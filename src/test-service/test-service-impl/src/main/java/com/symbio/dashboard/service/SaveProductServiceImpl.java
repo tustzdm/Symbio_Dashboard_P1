@@ -29,7 +29,7 @@ public class SaveProductServiceImpl implements SaveProductService{
      * @param saveProductUpload 上送的product信息
      * @return 返回一个创建好的product项目
      */
-    private Result saveProductResult(SaveProductUpload saveProductUpload) {
+    private synchronized Result saveProductResult(SaveProductUpload saveProductUpload) {
         Result result = new Result();
         String token = saveProductUpload.getToken();
         //暂时这样确定createUser

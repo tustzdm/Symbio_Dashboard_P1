@@ -22,6 +22,10 @@ public class TestManagementController {
     @Autowired
     private GetProductListService getProductListService;
     @Autowired
+    private GetProductInfoAuthService getProductInfoAuthService;
+    @Autowired
+    private GetProductInfoService getProductInfoService;
+    @Autowired
     private SaveProductAuthService saveProductAuthService;
     @Autowired
     private SaveProductService saveProductService;
@@ -32,6 +36,10 @@ public class TestManagementController {
     private GetReleaseListAuthService getReleaseListAuthService;
     @Autowired
     private GetReleaseListService getReleaseListService;
+    @Autowired
+    private GetReleaseInfoAuthService getReleaseInfoAuthService;
+    @Autowired
+    private GetReleaseInfoService getReleaseInfoService;
     @Autowired
     private SaveReleaseAuthService saveReleaseAuthService;
     @Autowired
@@ -90,9 +98,40 @@ public class TestManagementController {
     }
 
     //5.2
+
+    /**
+     *此方法用于获得产品的信息
+     *
+     * 测试接口：
+     *   localhost:8080/testmgmr/getProductInfo?token=aa&uiInfo=0&productId=1
+     *
+     * @param token 用户token
+     * @param locale 语种
+     * @param uiInfo ui信息是否需要，0 不需要，1需要
+     * @param productId product id
+     *
+     * @return 返回一个查询后的结果
+     */
     @RequestMapping("/getProductInfo")
-    public Result getProductInfo(@RequestParam(value = "token") String token) {
-        Result result = new Result();
+    public Result getProductInfo(@RequestParam(value = "token") String token,
+                                 @RequestParam(value = "locale",defaultValue = "en_US",required = false) String locale,
+                                 @RequestParam(value = "uiInfo",required = false) Integer uiInfo,
+                                 @RequestParam(value = "productId",required = false) Integer productId) {
+        Result result ;
+        result = getProductInfoAuthService.getProductInfo(token);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
+        GetProductInfoUpload getProductInfoUpload = new GetProductInfoUpload();
+        getProductInfoUpload.setToken(token);
+        getProductInfoUpload.setLocale(locale);
+        getProductInfoUpload.setUiInfo(uiInfo);
+        getProductInfoUpload.setProductId(productId);
+
+        result = getProductInfoService.getProductInfo(getProductInfoUpload);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
 
         return result;
     }
@@ -206,9 +245,44 @@ public class TestManagementController {
     }
 
     //5.5
+
+    /**
+     * 此方法用于返回release的信息
+     *
+     * 测试接口：
+     *  localhost:8080/testmgmr/getReleaseInfo?token=aaa&uiInfo=1&releaseId=2
+     *
+     * @param token 用户token
+     * @param locale 语种
+     * @param uiInfo 是否需要ui信息
+     * @param productId product id
+     * @param releaseId release id
+     * @return 返回最终的release的信息
+     */
     @RequestMapping("/getReleaseInfo")
-    public Result getReleaseInfo(@RequestParam(value = "token") String token) {
-        Result result = new Result();
+    public Result getReleaseInfo(@RequestParam(value = "token") String token,
+                                 @RequestParam(value = "locale",defaultValue = "en_US",required = false) String locale,
+                                 @RequestParam(value = "uiInfo",required = false) Integer uiInfo,
+                                 @RequestParam(value = "productId",required = false) Integer productId,
+                                 @RequestParam(value = "releaseId",required = false) Integer releaseId) {
+        Result result;
+        result = getReleaseInfoAuthService.getReleaseInfoAuth(token);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
+
+        GetReleaseInfoUpload getReleaseInfoUpload = new GetReleaseInfoUpload();
+        getReleaseInfoUpload.setLocale(locale);
+        getReleaseInfoUpload.setToken(token);
+        getReleaseInfoUpload.setProductId(productId);
+        getReleaseInfoUpload.setReleaseId(releaseId);
+        getReleaseInfoUpload.setUiInfo(uiInfo);
+
+        result = getReleaseInfoService.getReleaseInfo(getReleaseInfoUpload);
+        if (!"0".equals(result.getEc())) {
+            return result;
+        }
+
 
         return result;
     }
