@@ -250,7 +250,7 @@ public class TestManagementController {
      * 此方法用于返回release的信息
      *
      * 测试接口：
-     *  localhost:8080/testmgmr/getReleaseInfo?token=aaa&uiInfo=1&releaseId=2
+     *  localhost:8080/testmgmr/getReleaseInfo?token=aaa&uiInfo=1&releaseId=29
      *
      * @param token 用户token
      * @param locale 语种
