@@ -28,26 +28,26 @@
 	<!--</dependencies>-->
 
 	<modules>
+        <module>common-service</module>
+        <module>auth-service</module>
 		<module>report-service</module>
 		<module>test-service</module>
 		<module>review-service</module>
 		<module>bug-service</module>
 		<module>category-service</module>
-		<module>auth-service</module>
 		<module>file-service</module>
 		<module>jenkins-service</module>
-		<module>common-service</module>
-		<module>gateway</module>
 		<module>monitor</module>
+        <module>gateway</module>
 	</modules>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+<!--	<build>-->
+<!--		<plugins>-->
+<!--			<plugin>-->
+<!--				<groupId>org.springframework.boot</groupId>-->
+<!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--			</plugin>-->
+<!--		</plugins>-->
+<!--	</build>-->
 
 </project>
