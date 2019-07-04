@@ -2,16 +2,15 @@ package com.symbio.dashboard.report.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.ec.report.GetLayoutErrorCode;
+import com.symbio.dashboard.model.LanguageUi;
+import com.symbio.dashboard.model.ReportChart;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListChartCommon;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListChartOther;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListList;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListRowChart;
 import com.symbio.dashboard.report.dto.qualityViewLeyout.*;
-import com.symbio.dashboard.model.LanguageUI;
-import com.symbio.dashboard.model.ReportChart;
 import com.symbio.dashboard.report.repository.LanguageUIRepository;
 import com.symbio.dashboard.report.repository.ReportChartRepository;
 import com.symbio.dashboard.report.repository.SettingLayoutRepository;
@@ -101,11 +100,11 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
         String jsonMap = JSON.toJSONString(map, true);
 
         List<ReportChart> reportChartList = getReportChartEntityByPage();
-        List<LanguageUI> languageUIList = getLanguageUIEntityByPage();
+        List<LanguageUi> languageUiList = getLanguageUIEntityByPage();
 
         Result list;
 
-        list = setListLabel(locale, languageUIList);
+        list = setListLabel(locale, languageUiList);
         if (list.hasError()) {
             return list;
         }else {
@@ -354,16 +353,16 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
      * 本方法用于根据语种和language_ui中的信息，组装一个listLabel列表
      *
      * @param locale 语种
-     * @param languageUIS language_ui所有有用的对象
+     * @param languageUis language_ui所有有用的对象
      *
      * @return 返回一个listLabel列表对象
      */
-    private Result setListLabel(String locale,List<LanguageUI> languageUIS){
+    private Result setListLabel(String locale, List<LanguageUi> languageUis) {
         Result result = new Result();
 
         List list = new LinkedList();
 
-        for (LanguageUI l : languageUIS) {
+        for (LanguageUi l : languageUis) {
             String key = l.getKey();
             QualityViewLayoutCDLabel qualityViewLayoutCDLabel = new QualityViewLayoutCDLabel();
             qualityViewLayoutCDLabel.setKey(key);
@@ -447,8 +446,8 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
      * 在数据库language_ui中，通过page和validation获得LanguageUI集合
      * @return 返回page为 QualityOverviewLayout 中的所有实体类
      */
-    private List<LanguageUI> getLanguageUIEntityByPage() {
-        List<LanguageUI> list = languageUIRepository.getByPageAndValidation("QualityOverviewLayout", 1);
+    private List<LanguageUi> getLanguageUIEntityByPage() {
+        List<LanguageUi> list = languageUIRepository.getByPageAndValidation("QualityOverviewLayout", 1);
         return list;
     }
 

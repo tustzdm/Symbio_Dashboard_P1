@@ -2,9 +2,6 @@ package com.symbio.dashboard.test;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.dto.upload.*;
-import com.symbio.dashboard.model.TestSet;
-import com.symbio.dashboard.navigation.dto.upload.ReleaseUpload;
-import com.symbio.dashboard.navigation.dto.upload.TestSetUpload;
 import com.symbio.dashboard.service.*;
 import com.symbio.dashboard.test.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -63,7 +60,7 @@ public class TestManagementController {
      * 此方法用于获得product的分页查询结果
      *
      * 测试接口：
-     *  localhost:8080/testmgmr/getProductList?token=111&locale=en_US&pageIndex=1&pageSize=2
+     *  localhost:8080/testmgmr/getProductList?token=111&locale=en_US&pageIndex=0&pageSize=2
      *
      * @param token 用户token
      * @param locale 语种
@@ -77,7 +74,7 @@ public class TestManagementController {
                                  @RequestParam(value = "locale",defaultValue = "en_US") String locale,
                                  @RequestParam(value = "pageIndex",required = false) Integer pageIndex,
                                  @RequestParam(value = "pageSize",required = false) Integer pageSize) {
-        Result result ;
+        Result result;
         result = getProductListAuthService.getProductList(token);
         if (!"0".equals(result.getEc())) {
             return result;
@@ -127,11 +124,6 @@ public class TestManagementController {
         getProductInfoUpload.setLocale(locale);
         getProductInfoUpload.setUiInfo(uiInfo);
         getProductInfoUpload.setProductId(productId);
-
-        result = getProductInfoService.getProductInfo(getProductInfoUpload);
-        if (!"0".equals(result.getEc())) {
-            return result;
-        }
 
         return result;
     }

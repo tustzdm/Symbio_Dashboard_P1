@@ -59,7 +59,8 @@ public class GetProductListServiceImpl implements GetProductListService {
     private Result createProductList(Integer pageIndex,Integer pageSize) {
         Result result = new Result();
         List<ProductMessageData> list = new LinkedList<>();
-        Pageable pageable = new PageRequest(pageIndex,pageSize);
+//        Pageable pageable = new PageRequest(pageIndex,pageSize);
+        Pageable pageable = PageRequest.of(pageIndex, pageSize);
         Page<Product> all = productRepository.findAll(pageable);
 
 

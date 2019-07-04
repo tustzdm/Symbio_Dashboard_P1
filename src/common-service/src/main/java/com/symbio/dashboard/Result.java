@@ -40,6 +40,16 @@ public class Result {
     }
 
     /**
+     * @return boolean
+     * @Author - Danny
+     * @Description - 判断是否为成功信息
+     * @Date - 2019/7/5
+     * @Param - []
+     */
+    public boolean isSuccess() {
+        return "0".equals(ec);
+    }
+    /**
      * 用于建立一个正确的结果集
      *
      * @param cd 返回对象

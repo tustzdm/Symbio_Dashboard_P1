@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @Table(name = "language_ui")
 @Entity
-public class LanguageUI {
+public class LanguageUi {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
