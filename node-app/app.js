@@ -8,6 +8,7 @@ var http = require('http');
 var routes = require('./routes');
 var qo = require('./routes/qualityoverview');
 var uiinfo = require('./routes/uiinfo');
+var demolist = require('./routes/demolist');
 
 var app = express();
 // all environments(环境变量)
@@ -26,6 +27,9 @@ app.get('/menu/getPageList' , uiinfo.getPageList);
 app.get('/menu/getUIElementTypeList' , uiinfo.getUIElementTypeList);
 app.get('/menu/getProductUIInfoList' , uiinfo.getProductUIInfoList);
 app.get('/menu/getProductUiInfo' , uiinfo.getProductUiInfo);
+
+app.get('/getListDemo' , demolist.getListDemo);
+app.get('/getListDemo2' , demolist.getListDemo2);
 
 
 //启动及端口

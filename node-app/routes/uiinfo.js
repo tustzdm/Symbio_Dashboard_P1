@@ -34,9 +34,9 @@ exports.getUIElementTypeList = function(req, res){
 			"cd":[
 				{"key": "text","value": "Text"},
 				{"key": "number", "value":"Number"},
-				{"key": "date,", "value":"Date"},
-				{"key": "calendar,", "value":"Calendar"},
-				{"key": "bool,", "value":"Bool"},
+				{"key": "date", "value":"Date"},
+				{"key": "calendar", "value":"Calendar"},
+				{"key": "bool", "value":"Bool"},
 				{"key":"checkbox", "value":"CheckBox"},
 				{"key":"selectlist", "value":"SelectList"},
 				{"key":"dropdownlist", "value":"DropDownList"}
@@ -53,22 +53,15 @@ exports.getProductUIInfoList = function(req, res){
 	console.log('[URL] === ' + req.url);
 	console.log('token === ' + req.query.token);
 	//console.log('locale === ' + req.query.locale);
+	console.log('page === ' + req.query.page);
 	
 	var result;
-	result = {
-			"ec":"0",
-			"em":"",
-			"cd":{
-					"token": "123",
-					"page": "Product",
-					"locale":"en_US",
-					"role": 7,
-					"data": [
+	var listData = [
 					{
 							"id": 1,
 							"key": "name",
-							"type": "selectlist",
-							"data": "",
+							"type": "text",
+							"data": "{\"maxLenth\": 20}",
 							"is_required": 1,
 							"is_disable": 0,
 							"en_us": "Product Name",
@@ -81,7 +74,7 @@ exports.getProductUIInfoList = function(req, res){
 					},{
 							"id": 2,
 							"key": "projectOwner",
-							"type": "text",
+							"type": "selectlist",
 							"data": "[\"Paypal\",\"eBay\",\"Intuit\"]",
 							"is_required": 1,
 							"is_disable": 0,
@@ -121,7 +114,22 @@ exports.getProductUIInfoList = function(req, res){
 							"idx": 4,
 							"validation": 1
 						}
-					]
+					];
+	
+	if(req.query.page != 'Product') {
+		listData = [];
+	}
+	
+	
+	result = {
+			"ec":"0",
+			"em":"",
+			"cd":{
+					"token": "123",
+					"page": req.query.page,
+					"locale":"en_US",
+					"role": 7,
+					"data": listData
 			}
 	};
 	res.writeHead(200, {"Content-Type": "application/json"});
