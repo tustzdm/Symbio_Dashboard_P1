@@ -49,7 +49,7 @@ export default {
     },
     created() {
         this.Fetch('/menu/getPageList', {
-            method: 'get'
+            method: 'GET'
         }).then(res =>{
           this.pageList = res.cd;
           this.page = res.cd[0];
