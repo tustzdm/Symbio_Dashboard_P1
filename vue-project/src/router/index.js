@@ -38,6 +38,32 @@ export const constantRouterMap = [
         hidden: true
     },
     {
+        path: "/editPages",
+        component: Layout,
+        redirect: "/editPages/index",
+        children: [
+            {
+                path: "index",
+                component: _import("editPages/index"),
+                name: "editPages",
+                meta: {
+                    title: "editPages",
+                    icon: "",
+                },
+            },
+            {
+                path: "edit",
+                component: _import("editPages/edit"),
+                name: "edit",
+                meta: {
+                    title: "edit",
+                    icon: "",
+                },
+            }
+        ],
+        hidden: true
+    },    
+    {
         path: "/addproject",
         component: Layout,
         redirect: "/addproject/index",
@@ -97,6 +123,21 @@ export const constantRouterMap = [
                 name: "report",
                 meta: {
                     title: "report",
+                    icon: "",
+                },
+            }
+        ],
+    },
+    {
+        path: "/buy",
+        component: Layout,
+        children: [
+            {
+                path: "/buy/NewAccountSignUp",
+                component: _import("buy/productInfo"),
+                name: "productInfo",
+                meta: {
+                    title: "productInfo",
                     icon: "",
                 },
             }

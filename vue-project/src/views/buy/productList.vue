@@ -16,7 +16,7 @@
         <el-table-column prop="product" label="Name" :width="0.5*tabelWidth">
           <template slot-scope="scope">
             <div>
-              <router-link :to="{path:'/product/'+scope.row.product}">{{scope.row.product}}</router-link>
+              <router-link to='/buy/NewAccountSignUp'>{{scope.row.product}}</router-link>
             </div>
             <div>{{scope.row.description}}</div>
           </template>

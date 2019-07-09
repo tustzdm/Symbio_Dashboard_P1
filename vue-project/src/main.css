@@ -36,6 +36,26 @@
   font-family: 'Poppins';
 }
 
+/* tabel复用Class样式 */
+.common-table{
+  border-collapse:collapse;
+}
+.tableHead{
+  border-bottom: #7a85a1 solid 2px
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* testmanagement manage-top style reset */
 .manage-top .el-card__body{
     padding: 0

@@ -9,7 +9,9 @@ import { router } from "@/router";
 import { asyncRouterMap } from "@/router/meunsRouterMap";
 import store from "@/store";
 import i18n from "@/lang";
+import Fetch from './utils/fetch';
 import "./main.css";
+Vue.prototype.Fetch = Fetch;
 Vue.component("icon", Icon);
 Vue.use(scroll);
 Vue.use(Element, {

@@ -7,6 +7,7 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="forms">Forms</el-dropdown-item>
+        <el-dropdown-item command="EditPages">Page Element</el-dropdown-item>
         <el-dropdown-item command="logout">{{$t('sidebarDropDown.logout')}}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -40,6 +41,9 @@ export default {
         case 'forms':
           this.jumpToFroms()
           break
+        case 'EditPages':
+          this.editPages()
+          break  
       }
     },
     async logouthandle() {
@@ -50,6 +54,9 @@ export default {
     },
     jumpToFroms() {
       this.$router.push({ path: '/forms' })
+    },
+    editPages() {
+      this.$router.push({ path: '/editPages' })
     }
   }
 }
