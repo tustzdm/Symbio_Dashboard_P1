@@ -7,6 +7,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>dashboard</name>
+	<description>dashboard Service</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -15,8 +16,10 @@
 	</parent>
 
 	<properties>
-		<start-class>com.ebay.Starter</start-class>
+		<start.class>com.symbio.dashboard.Starter</start.class>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		<dashboard.version>1.0.0</dashboard.version>
 	</properties>
 
 	<!--<dependencies>-->
