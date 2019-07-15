@@ -54,16 +54,16 @@ public class GetTestSetListServiceImpl implements GetTestSetListService {
         getTestSetListMessage.setTotalRecord((long)testSetRepository.findByReleaseId(releaseId).size());
         getTestSetListMessage.setData(list);
 
-        result.setCdAndRightEcAndEm(getTestSetListMessage);
+        result = new Result(getTestSetListMessage);
 
 
         return result;
     }
 
     private Result createTestSetData(Integer pageIndex,Integer pageSize,Integer releaseId) {
-        Result result = new Result();
+        Result result = null;
 
-        Pageable pageable = new PageRequest(pageIndex,pageSize);
+        Pageable pageable = PageRequest.of(pageIndex,pageSize);
         Page<TestSet> byReleaseId = testSetRepository.findByReleaseId(releaseId, pageable);
 
         List<TestSetMessageData> list = new LinkedList<>();
@@ -91,7 +91,7 @@ public class GetTestSetListServiceImpl implements GetTestSetListService {
             list.add(testSetMessageData);
         }
 
-        result.setCdAndRightEcAndEm(list);
+        result = new Result(list);
 
         return result;
     }

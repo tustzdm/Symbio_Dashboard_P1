@@ -26,7 +26,6 @@ CREATE TABLE `dictionary` (
   `type` varchar(50) DEFAULT NULL COMMENT 'team type',
   `code` varchar(64) NOT NULL COMMENT 'key',
   `value` varchar(512) DEFAULT NULL COMMENT 'value',
---  `zh_cn` varchar(255) DEFAULT NULL COMMENT 'Label for zh_cn'
   `validation` smallint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1-true, 0-false',
   `description` varchar(255) DEFAULT '' COMMENT 'description',
   PRIMARY KEY (`id`),
@@ -40,7 +39,7 @@ INSERT INTO `dictionary` VALUES (4, 'TemplateCategory', 'tep', 'TEP', 1, 'Testru
 INSERT INTO `dictionary` VALUES (5, 'TemplateCategory', 'testcase', 'Test Case', 1, '');
 INSERT INTO `dictionary` VALUES (6, 'TemplateCategory', 'testrun', 'Test Run', 1, '');
 INSERT INTO `dictionary` VALUES (7, 'TemplateCategory', 'testresult', 'Test Result', 1, '');
-INSERT INTO `dictionary` VALUES (20, 'DataType', 'int', 'int', 1, '');
+INSERT INTO `dictionary` VALUES (20, 'DataType', 'int', 'Int', 1, '');
 INSERT INTO `dictionary` VALUES (21, 'DataType', 'bool', 'Bool', 1, '1-true, 0-false');
 INSERT INTO `dictionary` VALUES (22, 'DataType', 'string', 'String', 1, '');
 INSERT INTO `dictionary` VALUES (23, 'DataType', 'date', 'Date', 1, '');
@@ -70,6 +69,23 @@ INSERT INTO `dictionary`(`type`,`code`,`value`) VALUES ('HtmlType', 'testsetlist
 -- 2019/7/4
 INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) VALUES ('HtmlType', 'search', 'Search', '["User","Product","Release","TestSet"]');
 INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) VALUES ('HtmlType', 'link', 'Link', '["User","Product","Release","TestSet"]');
+-- 2019/7/15
+INSERT INTO `dictionary` VALUES ('100', 'UI_List_Count', '20', '20', '1', '');
+INSERT INTO `dictionary` VALUES ('101', 'UI_List_Count', '50', '50', '1', '');
+INSERT INTO `dictionary` VALUES ('103', 'UI_List_Count', '100', '100', '1', '');
+INSERT INTO `dictionary` VALUES ('104', 'UI_List_Count', '200', '200', '1', '');
+INSERT INTO `dictionary` VALUES ('111', 'ProductStatus', '0', 'normal', '1', '');
+INSERT INTO `dictionary` VALUES ('112', 'ProductStatus', '1', 'abnormal', '1', '');
+INSERT INTO `dictionary` VALUES ('113', 'ProductStatus', '2', 'completed', '1', '');
+INSERT INTO `dictionary` VALUES ('114', 'ProductStatus', '3', 'archived', '1', '');
+INSERT INTO `dictionary` VALUES ('115', 'ProductStatus', '4', 'blocked', '1', '');
+INSERT INTO `dictionary` VALUES ('120', 'ReleaseStatus', 'pending', 'Pending', '1', '');
+INSERT INTO `dictionary` VALUES ('121', 'ReleaseStatus', 'in-process', 'IN-Progress', '1', '');
+INSERT INTO `dictionary` VALUES ('122', 'ReleaseStatus', 'blocked', 'Blocked', '1', '');
+INSERT INTO `dictionary` VALUES ('123', 'ReleaseStatus', 'compwithissue', 'Completed with issue', '1', '');
+INSERT INTO `dictionary` VALUES ('124', 'ReleaseStatus', 'atrisk', 'At Risk', '1', '');
+INSERT INTO `dictionary` VALUES ('125', 'ReleaseStatus', 'signoff', 'SignOff', '1', '');
+
 
 DROP TABLE IF EXISTS `report_chart`;
 CREATE TABLE `report_chart` (
@@ -122,7 +138,7 @@ CREATE TABLE `ui_info` (
   `idx` SMALLINT NOT NULL DEFAULT 99,
   `version` VARCHAR(45) NULL,
   `validation` SMALLINT NOT NULL COMMENT '0: false, 1: true' DEFAULT 1,
-	`display` SMALLINT NOT NULL DEFAULT '1' COMMENT '1: enable, 4: removed' DEFAULT 1,
+  `display` SMALLINT NOT NULL DEFAULT '1' COMMENT '1: enable, 4: removed' DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniqe_ui_info_page_key` (`page`, `key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -218,7 +234,7 @@ CREATE TABLE `product` (
   `prodfld_str10` varchar(255) DEFAULT NULL COMMENT 'Product field string',
   
   `create_time` datetime DEFAULT NULL COMMENT 'create time',
-  `create_user` int(10) unsigned NOT NULL COMMENT 'user id for creation',
+  `create_user` int(10) unsigned DEFAULT NULL COMMENT 'user id for creation',
   `create_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
   `update_user` int(10) unsigned DEFAULT NULL COMMENT 'user id updated',
@@ -255,7 +271,7 @@ CREATE TABLE `release` (
   `relfld_str10` varchar(255) DEFAULT NULL COMMENT 'Field string',
 
   `create_time` datetime DEFAULT NULL COMMENT 'create time',
-  `create_user` int(10) unsigned NOT NULL COMMENT 'user id for creation',
+  `create_user` int(10) unsigned DEFAULT NULL COMMENT 'user id for creation',
   `create_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
   `update_user` int(10) unsigned DEFAULT NULL COMMENT 'user id updated',
@@ -309,7 +325,7 @@ CREATE TABLE `test_set` (
   `tsfield_str10` varchar(255) DEFAULT NULL COMMENT 'Field string',
 
   `create_time` datetime DEFAULT NULL COMMENT 'create time',
-  `create_user` int(10) unsigned NOT NULL COMMENT 'user id for creation',
+  `create_user` int(10) unsigned DEFAULT NULL COMMENT 'user id for creation',
   `create_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
   `update_user` int(10) unsigned DEFAULT NULL COMMENT 'user id updated',
@@ -371,13 +387,12 @@ CREATE TABLE `test_case` (
   `tcfield_str9` varchar(255) DEFAULT NULL COMMENT 'Field string',
   `tcfield_str10` varchar(255) DEFAULT NULL COMMENT 'Field string',
 
-  `create_time` datetime DEFAULT NULL,
   `create_user_id` int(10) unsigned DEFAULT NULL COMMENT 'user id',
   `create_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
-  `update_time` datetime DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
   `update_user_id` int(10) unsigned DEFAULT NULL COMMENT 'user id',
   `update_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
-  `record_update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Record update time',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_testcase_product_caseid_status` (`product_id`,`case_id`, `case_status`, `validation`),
   KEY `idx_test_case_productId_caseId` (`product_id`,`case_id`)
@@ -421,7 +436,7 @@ CREATE TABLE `test_run` (
   `validation` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT '0-invalid,1-valid,4-delete,8-archived',
   
   `create_time` datetime DEFAULT NULL COMMENT 'create time',
-  `create_user` int(10) unsigned NOT NULL COMMENT 'user id for creation',
+  `create_user` int(10) unsigned DEFAULT NULL COMMENT 'user id for creation',
   `create_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
   `update_user` int(10) unsigned DEFAULT NULL COMMENT 'user id updated',
@@ -489,7 +504,7 @@ CREATE TABLE `test_result` (
   `validation` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT '0-invalid,1-valid,4-delete,8-archived',
   
   `create_time` datetime DEFAULT NULL COMMENT 'create time',
-  `create_user` int(10) unsigned NOT NULL COMMENT 'user id for creation',
+  `create_user` int(10) unsigned DEFAULT NULL COMMENT 'user id for creation',
   `create_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
   `update_user` int(10) unsigned DEFAULT NULL COMMENT 'user id updated',

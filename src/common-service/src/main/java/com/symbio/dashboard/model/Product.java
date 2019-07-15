@@ -13,12 +13,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @Table(name = "product")
-public class Product {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id",nullable = false)
-    private Integer id;
+public class Product extends DBCreateUpdateModel {
 
     @Column(name = "name",nullable = false)
     private String name;
@@ -41,10 +36,10 @@ public class Product {
     @Column(name = "logo_url")
     private String logoUrl;
 
-    @Column(name = "status",nullable = false)
+    @Column(name = "status", nullable = false)
     private Integer status = 0;
 
-    @Column(name = "display",nullable = false)
+    @Column(name = "display", nullable = false)
     private Integer display = 1;
 
     @Column(name = "description")
@@ -52,23 +47,5 @@ public class Product {
 
     @Column(name = "locale")
     private String locale;
-
-    @Column(name = "create_time")
-    private Date createTime;
-
-    @Column(name = "create_user",nullable = false)
-    private Integer createUser;
-
-    @Column(name = "create_user_name")
-    private String createUserName;
-
-    @Column(name = "update_time",nullable = false)
-    private Date updateTime;
-
-    @Column(name = "update_user")
-    private Integer updateUser;
-
-    @Column(name = "update_user_name")
-    private String updateUserName;
 
 }

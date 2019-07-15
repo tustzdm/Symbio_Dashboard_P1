@@ -14,6 +14,9 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Result {
 
+    private final String RESULT_SUCCESS_CODE = "0";
+    private final String RESULT_SUCCESS_MSG = "";
+
     /**
      * 错误代码
      */
@@ -29,6 +32,17 @@ public class Result {
      */
     private Object cd = null;
 
+    public Result(String code, String message){
+        this.ec = code;
+        this.em = message;
+    }
+
+    public Result(Object data){
+        this.ec = RESULT_SUCCESS_CODE;  // "0"
+        this.em = RESULT_SUCCESS_MSG;   // ""
+        this.cd = data;
+    }
+
     /**
      * 根据ec错误代码，返回是否有错误，如果有，则返回错误信息，如果没有，返回其他的cd内容
      *
@@ -36,7 +50,7 @@ public class Result {
      *
      */
     public boolean hasError(){
-        return !"0".equals(ec);
+        return !RESULT_SUCCESS_CODE.equals(ec);
     }
 
     /**
@@ -47,20 +61,19 @@ public class Result {
      * @Param - []
      */
     public boolean isSuccess() {
-        return "0".equals(ec);
+        return RESULT_SUCCESS_CODE.equals(ec);
     }
+
     /**
      * 用于建立一个正确的结果集
      *
      * @param cd 返回对象
      */
+    @Deprecated
     public void setCdAndRightEcAndEm(Object cd){
-        setEc("0");
-        setEm("successful");
+        setEc(RESULT_SUCCESS_CODE);
+        setEm(RESULT_SUCCESS_MSG);
         setCd(cd);
     }
-
-
-
 
 }
