@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @ClassName - UiInfoController
  * @Author - admin
@@ -38,9 +42,11 @@ public class UiInfoController {
     private RemoveUiElementService removeUiElementService;
 
     /**
+     * @InterfaceNumber 5.1
+     *
      * @return com.symbio.dashboard.Result
      * @Author - Danny
-     * @Description - 返回页面所有UI元素
+     * @Description - 5.1 返回页面所有UI元素
      * @Date - 2019/7/5
      * @Param - [token, page]
      * <p>
@@ -67,7 +73,40 @@ public class UiInfoController {
         return result;
     }
 
+    @RequestMapping("/getUiInfoPage")
+    public Result getUiInfoList(@RequestParam(value = "token") String token) {
+
+//        Result result = getUiInfoListAuthService.getUiInfoListAuth(token);
+//        if (!result.isSuccess()) {
+//            return result;
+//        }
+//
+//        UiInfoUpload uiInfoUpload = new UiInfoUpload();
+//        uiInfoUpload.setPage(page);
+//
+//        result = getUiInfoListService.getUiInfoList(uiInfoUpload);
+//        if (!result.isSuccess()) {
+//            return result;
+//        }
+
+        ArrayList<Map<String, Object>> listPage = new ArrayList<>();
+        listPage.add(getUIInfoPageItem("QualityOverviewLayout", "Quality Overview Layout"));
+        listPage.add(getUIInfoPageItem("Product", "Product"));
+        listPage.add(getUIInfoPageItem("Release", "Release"));
+
+        return new Result(listPage);
+    }
+
+    private Map<String, Object> getUIInfoPageItem(String code, String value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("code", code);
+        map.put("value", value);
+        return map;
+    }
+
     /**
+     * @InterfaceNumber 5.2
+     *
      * @return com.symbio.dashboard.Result
      * @Author - Danny
      * @Description - 添加或跟新页面元素接口
@@ -94,6 +133,8 @@ public class UiInfoController {
     }
 
     /**
+     * @InterfaceNumber 5.3
+     *
      * @return com.symbio.dashboard.Result
      * @Author - Danny
      * @Description - 删除页面元素接口
