@@ -1,6 +1,5 @@
 package com.symbio.dashboard;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,12 +9,8 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@AllArgsConstructor
 public class Result {
-
-    private final String RESULT_SUCCESS_CODE = "0";
-    private final String RESULT_SUCCESS_MSG = "";
 
     /**
      * 错误代码
@@ -38,8 +33,8 @@ public class Result {
     }
 
     public Result(Object data){
-        this.ec = RESULT_SUCCESS_CODE;  // "0"
-        this.em = RESULT_SUCCESS_MSG;   // ""
+        this.ec = "0";
+        this.em = "";
         this.cd = data;
     }
 
@@ -50,7 +45,7 @@ public class Result {
      *
      */
     public boolean hasError(){
-        return !RESULT_SUCCESS_CODE.equals(ec);
+        return !"0".equals(ec);
     }
 
     /**
@@ -61,7 +56,7 @@ public class Result {
      * @Param - []
      */
     public boolean isSuccess() {
-        return RESULT_SUCCESS_CODE.equals(ec);
+        return "0".equals(ec);
     }
 
     /**
@@ -71,8 +66,8 @@ public class Result {
      */
     @Deprecated
     public void setCdAndRightEcAndEm(Object cd){
-        setEc(RESULT_SUCCESS_CODE);
-        setEm(RESULT_SUCCESS_MSG);
+        setEc("0");
+        setEm("");
         setCd(cd);
     }
 

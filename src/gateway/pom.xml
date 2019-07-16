@@ -28,6 +28,11 @@
             <artifactId>common-service</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.symbio</groupId>
+            <artifactId>data-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- auth dependency -->
         <dependency>
             <groupId>com.symbio</groupId>
@@ -37,6 +42,17 @@
         <dependency>
             <groupId>com.symbio</groupId>
             <artifactId>auth-service-impl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Setting dependency -->
+        <dependency>
+            <groupId>com.symbio</groupId>
+            <artifactId>setting-service-interface</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.symbio</groupId>
+            <artifactId>setting-service-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- report -->

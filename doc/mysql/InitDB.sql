@@ -1,6 +1,7 @@
 -- 2019-03-27, Ver0.1, for QualityOverviewLayout
 -- 2019-04-24 	Ver0.2 	Add Table: base_code
 -- 2019-04-30 	Ver0.3	Add Table: dict_table, user, product, release, test_set
+-- 2019-07-15	Ver0.5  Change 'create_user_id' NULL for Product, Release, TestSet etc.
 
 Drop Table IF EXISTS `base_code`;
 CREATE TABLE `base_code` (
