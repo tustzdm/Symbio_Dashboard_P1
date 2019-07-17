@@ -36,6 +36,17 @@ public class CommonServiceImpl implements CommonService {
     private CommonDao commonDao;
 
     @Override
+    public Result getDictionaryByType(String type){
+
+        List<Dictionary> list = dictionaryRep.getDictDataByType(type);
+        if(list == null || list.size() == 0) {
+            return new Result("10001", "Could not get data");
+        } else {
+            return new Result(list);
+        }
+    }
+
+    @Override
     public Result getDictionaryInfo(String type) {
         return getDictionaryInfoResult(type);
     }
@@ -46,7 +57,7 @@ public class CommonServiceImpl implements CommonService {
 
         try {
 
-            dictionaryList = dictionaryRep.getPageNameList(type);
+            dictionaryList = dictionaryRep.getDictDataByType(type);
 
             if (dictionaryList == null || dictionaryList.isEmpty()) {
                 return new Result("100011", "查询失败");

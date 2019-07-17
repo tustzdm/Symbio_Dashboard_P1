@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface DictionaryRep extends JpaRepository<Dictionary, Integer> {
 
-    @Query(value = "select * from dictionary where type=?1 and validation = 1 order by id", nativeQuery = true)
-    List<Dictionary> getPageNameList(String type);
+    @Query(value = "SELECT * FROM dictionary WHERE `type` = ? AND validation = 1 ORDER BY id", nativeQuery = true)
+    List<Dictionary> getDictDataByType(String type);
 
     @Override
     Dictionary getOne(Integer id);

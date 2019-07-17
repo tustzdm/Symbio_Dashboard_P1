@@ -6,4 +6,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CommonService {
     Result getDictionaryInfo(String type);
+
+    Result getDictionaryByType(String type);
 }
