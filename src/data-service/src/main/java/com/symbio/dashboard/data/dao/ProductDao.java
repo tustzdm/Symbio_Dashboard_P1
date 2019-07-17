@@ -20,7 +20,6 @@ import java.util.List;
 @Repository
 public class ProductDao {
 
-    //    private StringBuilder sql = new StringBuilder("select * from product p where 1=1 ");
     private StringBuilder sql = new StringBuilder("select db_field from ui_info where page = 'product'");
     private StringBuilder sql2 = new StringBuilder("from product where 1=1");
     private StringBuilder sqlOrder = new StringBuilder(" order by p.id");
@@ -37,7 +36,6 @@ public class ProductDao {
         try {
 
             query = entityManager.createNativeQuery(sql.toString());
-
             products = query.getResultList();
 
             for (int i = 0; i < products.size(); i++) {
@@ -47,9 +45,10 @@ public class ProductDao {
             s.deleteCharAt(s.length() - 2);
             s.append(sql2);
 
-            query = entityManager.createNativeQuery(s.toString(), Product.class);
+            query = entityManager.createNativeQuery(s.toString());
             products = query.getResultList();
 
+            //TODO
         } catch (Exception e) {
             e.printStackTrace();
         }
