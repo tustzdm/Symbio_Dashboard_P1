@@ -20,9 +20,13 @@ import com.symbio.dashboard.report.service.saveQualityViewLayout.SaveLayoutAuthI
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 本类用于对QualityOverview的一个控制，用于控制返回的内容信息
@@ -139,7 +143,7 @@ public class QualityOverviewController {
                                         @RequestParam(value = "listChartCommon",required = false) List<ListChartCommon> listChartCommons,
                                         @RequestParam(value = "listChartOther",required = false) List<ListChartOther> listChartOthers,
                                         @RequestParam(value = "listRowChart",required = false) List<ListRowChart> listRowCharts,
-                                        @RequestParam(value = "listList",required = false) List<ListList> listLists){
+                                        @RequestParam(value = "listlist", required = false) List<ListList> listLists) {
 
         //权限认证
         SaveLayoutAuth auth = new SaveLayoutAuthImpl();

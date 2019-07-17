@@ -10,7 +10,7 @@ import com.symbio.dashboard.report.dro.saveUploadInformation.ListChartCommon;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListChartOther;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListList;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListRowChart;
-import com.symbio.dashboard.report.dto.qualityViewLeyout.*;
+import com.symbio.dashboard.report.dto.qualityviewleyout.*;
 import com.symbio.dashboard.report.repository.LanguageUIRepository;
 import com.symbio.dashboard.report.repository.ReportChartRepository;
 import com.symbio.dashboard.report.repository.SettingLayoutRepository;
@@ -128,7 +128,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             qualityViewLayoutCD.setListRowChart((List) list.getCd());
         }
 
-        list = setListList(locale,JSON.parseArray(JSON.parseObject(jsonMap).getString("listList"), ListList.class),reportChartList);
+        list = setListList(locale, JSON.parseArray(JSON.parseObject(jsonMap).getString("listlist"), ListList.class), reportChartList);
         if (list.hasError()){
             return list;
         }else {
@@ -283,13 +283,13 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
     }
 
     /**
-     * 根据语种和setting_layout中layout里的的 listList 列表
-     *   封装一个返回到前台的 listList 的集合
+     * 根据语种和setting_layout中layout里的的 listlist 列表
+     *   封装一个返回到前台的 listlist 的集合
      *
      * @param locale 语种
-     * @param listLists listList 的列表
+     * @param listLists listlist 的列表
      *
-     * @return cd里面的对象是一个List<QualityViewLayoutCDList>  返回一个可以返回到前台的布局信息中的 listList 集合
+     * @return cd里面的对象是一个List<QualityViewLayoutCDList>  返回一个可以返回到前台的布局信息中的 listlist 集合
      */
     private Result setListList(String locale, List<ListList> listLists,List<ReportChart> reportChartList){
         List<QualityViewLayoutCDList> list = new LinkedList<>();
@@ -306,7 +306,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             }
 
             if (reportChart == null){
-                return new Result(GetLayoutErrorCode.N000009.toString(), "listList 根据key找不到相应的reportChart对象");
+                return new Result(GetLayoutErrorCode.N000009.toString(), "listlist 根据key找不到相应的reportChart对象");
             }
 
             keyList.add(key);
@@ -409,7 +409,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
      * @return 返回page为QualityOverview的所有实体类
      */
     private List<ReportChart> getReportChartEntityByPage() {
-        List<ReportChart> list = reportChartRepository.getByPageAndValidation("QualityOverview",1);
+        List<ReportChart> list = reportChartRepository.getByPageAndValidation("qualityoverview", 1);
         return list;
     }
 

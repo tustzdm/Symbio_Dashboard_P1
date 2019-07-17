@@ -92,14 +92,14 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
                                List<ListRowChart> listRowChart,
                                List<ListList> listList){
         int flag = 0;
-        Integer id = settingLayoutRepository.getIdByPageAndTypeAndLocale("QualityOverview",1,locale);
+        Integer id = settingLayoutRepository.getIdByPageAndTypeAndLocale("qualityoverview", 1, locale);
 
         String layout = saveLayoutJson(listChartCommon, listChartOther, listRowChart, listList);
         //settingLayoutRepository.saveAndFlush(createSettingLayout(id,page,1,locale,layout));
         if (id != null){
-            settingLayoutRepository.saveAndFlush(createSettingLayout(id,"QualityOverview",1,locale,layout));
+            settingLayoutRepository.saveAndFlush(createSettingLayout(id, "qualityoverview", 1, locale, layout));
         }else if (id == null){
-            settingLayoutRepository.saveAndFlush(createSettingLayout("QualityOverview",1,locale,layout));
+            settingLayoutRepository.saveAndFlush(createSettingLayout("qualityoverview", 1, locale, layout));
             flag++;//表示存放了数据到数据库中
         }
         return flag;
@@ -126,7 +126,7 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
         map.put("listChartCommon",listChartCommon);
         map.put("listChartOther",listChartOther);
         map.put("listRowChart",listRowChart);
-        map.put("listList",listList);
+        map.put("listlist", listList);
         return JSONObject.toJSONString(map);
     }
 
@@ -203,7 +203,7 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
                                      List<ListList> listList){
 
         //得到所有的key
-        List<String> keyList = reportChartRepository.getKeyByPageAndValidation("QualityOverview", 1);
+        List<String> keyList = reportChartRepository.getKeyByPageAndValidation("qualityoverview", 1);
         if (keyList == null) {
             return new Result(SaveErrorCode.N00005.toString(), "通过page与validation找不到相应的key");
         }
@@ -272,7 +272,7 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
     }
 
     /**
-     * 根据上送的 listRowCharts 中的key得到page，如果找不到page则返回空
+     * 根据上送的 listrowcharts 中的key得到page，如果找不到page则返回空
      *
      * @param listRowCharts listChartCommons列表
      *
@@ -293,7 +293,7 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
             String key = listRowChart.getKey();
 
             if (!keyList.contains(key)){
-                return new Result(SaveErrorCode.N00003.toString(), "根据 listRowCharts 中的key找不到相应的page");
+                return new Result(SaveErrorCode.N00003.toString(), "根据 listrowcharts 中的key找不到相应的page");
             }
         }
         return new Result();
