@@ -1,87 +1,80 @@
 <template>
-<el-card shadow="hover" style="margin-bottom:100px">
-    <!-- <div>
-         <ul style="float:left">
-            <li style="height:24px" v-for="item in tableHead"><span>{{item+':'}}</span></li>
-        </ul>
-        <ul style="float:left">
-            <li style="height:24px" v-if="index!='validation'&&index!='id'" v-for="(item,index) in this.$route.params.tr">
-                <input :value="item" :placeholder="index" :checked="item" :type="index =='is_required'||index =='is_disable'? 'checkbox':'text'">
-            </li>
-        </ul>
-    </div> -->
-    <el-form ref="form" :model="form" label-width="200px">
-        <p>{{form}}</p>
-        <el-form-item label="Page:" prop="Page">
-            <el-col :span="4">
-                <el-input v-model="form.page" placeholder="Ext Data"></el-input>
-            </el-col>
-        </el-form-item>
-        <el-form-item label="Key:" prop="name">
-            <el-col :span="8">
-                <el-input v-model="form.key" placeholder="Element Name"></el-input>
-            </el-col>
-        </el-form-item>
-        <el-form-item label="Type:" prop="type">
-            <el-col :span="8">
-                <select v-model="form.type" name="" id="">
-                    <option v-for="item in typeList">{{item.value}}</option>
-                </select>
-            </el-col>
-        </el-form-item>
-        <el-form-item label="Ext Data:" prop="Ext">
-            <el-col :span="8">
-                <el-input v-model="form.data" placeholder="Ext Data"></el-input>
-            </el-col>
-        </el-form-item>
-        <el-form-item label="Required:" prop="Required">
-            <el-radio-group v-model="form.isRequired">
-                <el-radio label="1">Yes</el-radio>
-                <el-radio label="0">No</el-radio>
-            </el-radio-group>
-        </el-form-item>
-        <el-form-item label="Disable:" prop="Disable">
-            <el-radio-group v-model="form.isDisable">
-                <el-radio label="1">Yes</el-radio>
-                <el-radio label="0">No</el-radio>
-            </el-radio-group>
-        </el-form-item>
-        <el-form-item label="en_US:" prop="en_US">
-            <el-col :span="8">
-                <el-input v-model="form.enUs" placeholder="English Name"></el-input>
-            </el-col>
-        </el-form-item>
-        <el-form-item label="zh_cn:" prop="zh_CN">
-            <el-col :span="8">
-                <el-input v-model="form.zhCn" placeholder="English Name"></el-input>
-            </el-col>
-        </el-form-item>
-        <el-form-item label="Place Holder:" prop="PlaceHolder">
-            <el-col :span="8">
-                <el-input v-model="form.placeHolder" placeholder="Element placeholder"></el-input>
-            </el-col>
-        </el-form-item>
-        <el-form-item label="Default Value:" prop="DefaultValue">
-            <el-col :span="8">
-                <el-input v-model="form.defaultValue" placeholder="Element DefaultValue"></el-input>
-            </el-col>
-        </el-form-item>
-        <el-form-item label="Constraint Condition:" prop="Constraint">
-            <el-col :span="8">
-                <el-input v-model="form.constCondition" placeholder="Max length"></el-input>
-            </el-col>
-        </el-form-item>
-        <el-form-item label="Order:" prop="Order">
-            <el-col :span="8">
-                <el-input v-model="form.idx" placeholder="Element order"></el-input>
-            </el-col>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="primary" @click="submit">Save</el-button>
-            <el-button @click="onCancel">Cancel</el-button>
-        </el-form-item>
-    </el-form>
-</el-card>
+<el-col :span="12" :offset="6">
+    <el-card shadow="hover" style="margin-bottom:100px;font-family:Poppins;">
+        <el-form ref="form" :model="form" label-width="200px">
+            <p>{{form}}</p>
+            <el-form-item label="Page:" prop="Page">
+                <el-col :span="4">
+                    <el-input v-model="form.page" placeholder="Ext Data"></el-input>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="Key:" prop="name">
+                <el-col :span="16">
+                    <el-input v-model="form.key" placeholder="Element Name"></el-input>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="Type:" prop="type">
+                <el-col :span="16">
+                    <select v-model="form.type" name="" id="">
+                        <option v-for="item in typeList">{{item.value}}</option>
+                    </select>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="Ext Data:" prop="Ext">
+                <el-col :span="16">
+                    <el-input v-model="form.data" placeholder="Ext Data"></el-input>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="Required:" prop="Required">
+                <el-radio-group v-model="form.isRequired">
+                    <el-radio label="1">Yes</el-radio>
+                    <el-radio label="0">No</el-radio>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item label="Disable:" prop="Disable">
+                <el-radio-group v-model="form.isDisable">
+                    <el-radio label="1">Yes</el-radio>
+                    <el-radio label="0">No</el-radio>
+                </el-radio-group>
+            </el-form-item>
+            <el-form-item label="en_US:" prop="en_US">
+                <el-col :span="16">
+                    <el-input v-model="form.enUs" placeholder="English Name"></el-input>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="zh_cn:" prop="zh_CN">
+                <el-col :span="16">
+                    <el-input v-model="form.zhCn" placeholder="English Name"></el-input>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="Place Holder:" prop="PlaceHolder">
+                <el-col :span="16">
+                    <el-input v-model="form.placeHolder" placeholder="Element placeholder"></el-input>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="Default Value:" prop="DefaultValue">
+                <el-col :span="16">
+                    <el-input v-model="form.defaultValue" placeholder="Element DefaultValue"></el-input>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="Constraint Condition:" prop="Constraint">
+                <el-col :span="16">
+                    <el-input v-model="form.constCondition" placeholder="Max length"></el-input>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="Order:" prop="Order">
+                <el-col :span="16">
+                    <el-input v-model="form.idx" placeholder="Element order"></el-input>
+                </el-col>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="submit">Save</el-button>
+                <el-button @click="onCancel">Cancel</el-button>
+            </el-form-item>
+        </el-form>
+    </el-card>
+</el-col>
+</div>
 </template>
 
 <script>
@@ -97,8 +90,8 @@ export default {
             radio1: '1',
             radio2: '1',
             form: {
-                id:'',
-                page:'',
+                id: '',
+                page: '',
                 key: '',
                 type: 'text',
                 data: '',
@@ -148,26 +141,26 @@ export default {
         onCancel() {
             this.$router.go(-1);
         },
-        submit(){
+        submit() {
             var formData = this.form;
             // var formData = JSON.stringify(this.form);
             console.log(formData);
-            this.$axios.post('/ui/updateUiElement?token=111&page=product',formData).then(res => {
-                    // success callback
-                    console.log(formData);
-                    console.log(res.data);
+            this.$axios.post('/ui/updateUiElement?token=111&page=product', formData).then(res => {
+                // success callback
+                console.log(formData);
+                console.log(res.data);
 
-                    var ec = res.data.ec;
-                    //debugger;
-                    if(ec != '0') {
-                        alert("Error Code:" + res.data.ec + ", Error Message:" + res.data.em);
-                    } else {
-                        this.$message.success("Operation Success！");
-                        this.$router.go(-1);
-                    }
-                }).catch(err => {
-                   alert(err);
-                });
+                var ec = res.data.ec;
+                //debugger;
+                if (ec != '0') {
+                    alert("Error Code:" + res.data.ec + ", Error Message:" + res.data.em);
+                } else {
+                    this.$message.success("Operation Success！");
+                    this.$router.go(-1);
+                }
+            }).catch(err => {
+                alert(err);
+            });
         }
     }
 }
