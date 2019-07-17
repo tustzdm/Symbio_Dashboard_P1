@@ -21,6 +21,8 @@ public class UiInfoUpload {
 
     private String key;
 
+    private String dbField;
+
     private String type;
 
     private String data;

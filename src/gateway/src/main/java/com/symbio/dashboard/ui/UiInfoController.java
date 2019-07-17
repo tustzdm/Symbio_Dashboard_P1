@@ -1,6 +1,9 @@
 package com.symbio.dashboard.ui;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.common.CommonAuthService;
+import com.symbio.dashboard.dictionary.dto.upload.DictionaryUpload;
+import com.symbio.dashboard.setting.service.CommonService;
 import com.symbio.dashboard.ui.dto.upload.UiInfoUpload;
 import com.symbio.dashboard.ui.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -9,10 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @ClassName - UiInfoController
@@ -30,6 +29,11 @@ public class UiInfoController {
     private GetUiInfoListAuthService getUiInfoListAuthService;
     @Autowired
     private GetUiInfoListService getUiInfoListService;
+
+    @Autowired
+    private CommonAuthService commonAuthService;
+    @Autowired
+    private CommonService commonService;
 
     @Autowired
     private UpdateUiElementAuthService updateUiElementAuthService;
@@ -56,53 +60,49 @@ public class UiInfoController {
     @RequestMapping("/getUiInfoList")
     public Result getUiInfoList(@RequestParam(value = "token") String token,
                                 @RequestParam(value = "page") String page) {
+        Result result;
+        try {
+            result = getUiInfoListAuthService.getUiInfoListAuth(token);
+            if (!result.isSuccess()) {
+                return result;
+            }
 
-        Result result = getUiInfoListAuthService.getUiInfoListAuth(token);
-        if (!result.isSuccess()) {
-            return result;
-        }
+            UiInfoUpload uiInfoUpload = new UiInfoUpload();
+            uiInfoUpload.setPage(page);
 
-        UiInfoUpload uiInfoUpload = new UiInfoUpload();
-        uiInfoUpload.setPage(page);
-
-        result = getUiInfoListService.getUiInfoList(uiInfoUpload);
-        if (!result.isSuccess()) {
-            return result;
+            result = getUiInfoListService.getUiInfoList(uiInfoUpload);
+            if (!result.isSuccess()) {
+                return result;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("100010", "");
         }
 
         return result;
     }
 
     @RequestMapping("/getUiInfoPage")
-    public Result getUiInfoList(@RequestParam(value = "token") String token) {
+    public Result getUiInfoList(@RequestBody DictionaryUpload dictionaryUpload) {
+        Result result;
+        try {
+            result = commonAuthService.getPageNamesDictionary(dictionaryUpload.getToken());
+            if (result.hasError()) {
+                return result;
+            }
 
-//        Result result = getUiInfoListAuthService.getUiInfoListAuth(token);
-//        if (!result.isSuccess()) {
-//            return result;
-//        }
-//
-//        UiInfoUpload uiInfoUpload = new UiInfoUpload();
-//        uiInfoUpload.setPage(page);
-//
-//        result = getUiInfoListService.getUiInfoList(uiInfoUpload);
-//        if (!result.isSuccess()) {
-//            return result;
-//        }
+            result = commonService.getDictionaryInfo(dictionaryUpload);
+            if (result.hasError()) {
+                return result;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("10010", "Get page name list interface exception");
+        }
 
-        ArrayList<Map<String, Object>> listPage = new ArrayList<>();
-        listPage.add(getUIInfoPageItem("QualityOverviewLayout", "Quality Overview Layout"));
-        listPage.add(getUIInfoPageItem("Product", "Product"));
-        listPage.add(getUIInfoPageItem("Release", "Release"));
-
-        return new Result(listPage);
+        return result;
     }
 
-    private Map<String, Object> getUIInfoPageItem(String code, String value) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("code", code);
-        map.put("value", value);
-        return map;
-    }
 
     /**
      * @InterfaceNumber 5.2
@@ -118,17 +118,22 @@ public class UiInfoController {
      */
     @RequestMapping("/updateUiElement")
     public Result updateUiElement(@RequestBody UiInfoUpload uiInfoUpload) {
+        Result result;
+        try {
+            result = updateUiElementAuthService.updateUiElementAuth(uiInfoUpload.getToken());
+            if (!result.isSuccess()) {
+                return result;
+            }
 
-        Result result = updateUiElementAuthService.updateUiElementAuth(uiInfoUpload.getToken());
-        if (!result.isSuccess()) {
-            return result;
+            result = updateUiElementService.updateUiElement(uiInfoUpload);
+            if (!result.isSuccess()) {
+                return result;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("123456", "更新或保存信息接口异常");
         }
-
-        result = updateUiElementService.updateUiElement(uiInfoUpload);
-        if (!result.isSuccess()) {
-            return result;
-        }
-
         return result;
     }
 

@@ -11,8 +11,6 @@ public class GetTestSetAuthServiceImpl implements GetTestSetAuthService {
     }
 
     private Result getTestSetAuthByToken(String token) {
-        Result result = new Result();
-        result.setCdAndRightEcAndEm("testSet token");
-        return result;
+        return new Result("testSet token");
     }
 }

@@ -1,7 +1,6 @@
 package com.symbio.dashboard.report.service.getQualityViewLayout;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.report.service.getQualityViewLayout.GetOverviewLayoutAuth;
 
 public class GetOverviewLayoutAuthImpl implements GetOverviewLayoutAuth {
     @Override
@@ -26,11 +25,9 @@ public class GetOverviewLayoutAuthImpl implements GetOverviewLayoutAuth {
      * @return cd中装的是权限的map
      */
     private Result setRole(String token){
-        Result result = new Result();
 
         Integer role = 1;
 
-        result.setCdAndRightEcAndEm(role);
-        return result;
+        return new Result(role);
     }
 }

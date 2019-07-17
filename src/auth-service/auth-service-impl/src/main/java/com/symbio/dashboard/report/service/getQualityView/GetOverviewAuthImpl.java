@@ -1,7 +1,6 @@
 package com.symbio.dashboard.report.service.getQualityView;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.report.service.getQualityView.GetOverviewAuth;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,13 +27,11 @@ public class GetOverviewAuthImpl implements GetOverviewAuth {
      * @return cd中的对象是权限值
      */
     private Result setRole(String token) {
-        Result result = new Result();
         Map<String,Integer> role = new HashMap<>();
         role.put("product",7);
         role.put("release",7);
         role.put("testset", 7);
 
-        result.setCdAndRightEcAndEm(role);
-        return result;
+        return new Result(role);
     }
 }

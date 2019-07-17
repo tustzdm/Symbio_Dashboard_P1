@@ -11,8 +11,6 @@ public class GetProductAuthServiceImpl implements GetProductAuthService {
     }
 
     private Result getProductAuthByToken(String token) {
-        Result result = new Result();
-        result.setCdAndRightEcAndEm("product token");
-        return result;
+        return new Result("product token");
     }
 }

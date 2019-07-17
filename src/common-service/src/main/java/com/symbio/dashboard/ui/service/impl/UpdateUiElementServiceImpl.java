@@ -80,24 +80,21 @@ public class UpdateUiElementServiceImpl implements UpdateUiElementService {
                 e.printStackTrace();
                 // 同一页面不能存在两个key相同的元素
                 if (e.getMessage().contains("uniqe_ui_info_page_key")) {
-                    result.setEc("123456");
-                    result.setEm("此页面key值相同的元素已存在");
+                    return new Result("123456", "此页面key值相同的元素已存在");
                 }
-                return result;
             }
 
             if (flag == 1) {
-                result.setCdAndRightEcAndEm("元素信息更新成功");
+                result = new Result("元素信息更新成功");
             } else if (flag == 2) {
-                result.setCdAndRightEcAndEm("元素添加成功");
+                result = new Result("元素添加成功");
             } else {
-                result.setEc("123456");
-                result.setEm("没有正确的操作" + flag);
-                return result;
+                return new Result("123456", "没有正确的操作" + flag);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+            return new Result("123456", "更新或添加异常");
         }
 
         return result;

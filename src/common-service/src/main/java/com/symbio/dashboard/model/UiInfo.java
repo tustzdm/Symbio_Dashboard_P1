@@ -29,6 +29,9 @@ public class UiInfo {
     @Column(name = "`key`", nullable = false)
     private String key;
 
+    @Column(name = "db_field")
+    private String dbField = null;
+
     @Column(name = "`type`", nullable = false)
     private String type = "text";
 

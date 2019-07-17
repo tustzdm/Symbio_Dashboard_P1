@@ -11,10 +11,7 @@ public class GetTestSetListAuthServiceImpl implements GetTestSetListAuthService 
     }
 
     private Result getTestSetListResult(String token) {
-        Result result = new Result();
 
-        result.setCdAndRightEcAndEm(token);
-
-        return result;
+        return new Result(token);
     }
 }

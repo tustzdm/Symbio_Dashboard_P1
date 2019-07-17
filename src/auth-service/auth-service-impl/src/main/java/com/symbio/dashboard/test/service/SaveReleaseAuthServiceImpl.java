@@ -11,8 +11,7 @@ public class SaveReleaseAuthServiceImpl implements SaveReleaseAuthService {
     }
 
     private Result saveReleaseResult(String token) {
-        Result result = new Result();
-        result.setCdAndRightEcAndEm(token);
-        return result;
+
+        return new Result(token);
     }
 }

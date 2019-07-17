@@ -11,10 +11,7 @@ public class SaveTestSetAuthServiceImpl implements SaveTestSetAuthService {
     }
 
     private Result saveTestSetResult(String token) {
-        Result result = new Result();
 
-        result.setCdAndRightEcAndEm(token);
-
-        return result;
+        return new Result(token);
     }
 }

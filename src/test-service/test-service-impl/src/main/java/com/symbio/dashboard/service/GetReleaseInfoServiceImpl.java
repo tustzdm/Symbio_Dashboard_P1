@@ -35,16 +35,15 @@ public class GetReleaseInfoServiceImpl implements GetReleaseInfoService {
         Integer uiInfo = getReleaseInfoUpload.getUiInfo();
 
         result = createReleaseData(releaseId);
-        if (!"0".equals(result.getEc())) {
+        if (result.hasError()) {
             return result;
         }
         List<ReleaseMessageData> dataList = (List<ReleaseMessageData>) result.getCd();
 
-
         GetReleaseInfoMessage getReleaseInfoMessage = new GetReleaseInfoMessage();
         if (uiInfo == 1) {
             result = createReleaseUiInfo();
-            if (!"0".equals(result.getEc())) {
+            if (result.hasError()) {
                 return result;
             }
             MessageUiInfo messageUiInfo = (MessageUiInfo) result.getCd();
@@ -55,9 +54,7 @@ public class GetReleaseInfoServiceImpl implements GetReleaseInfoService {
         getReleaseInfoMessage.setLocale(locale);
         getReleaseInfoMessage.setRole(token);
 
-        result.setCdAndRightEcAndEm(getReleaseInfoMessage);
-
-        return result;
+        return new Result(getReleaseInfoMessage);
     }
 
     /**
@@ -67,7 +64,6 @@ public class GetReleaseInfoServiceImpl implements GetReleaseInfoService {
      * @return
      */
     private Result createReleaseData(Integer releaseId) {
-        Result result = new Result();
         List<ReleaseMessageData> list = new LinkedList<>();
         Release byId = releaseRepository.getById(releaseId);
         if (byId != null) {
@@ -86,16 +82,13 @@ public class GetReleaseInfoServiceImpl implements GetReleaseInfoService {
             releaseMessageData.setDescription(byId.getRemark());
             list.add(releaseMessageData);
         }
-        result.setCdAndRightEcAndEm(list);
 
-        return result;
+        return new Result(list);
     }
 
     private Result createReleaseUiInfo() {
-        Result result = new Result();
         MessageUiInfo messageUiInfo = new MessageUiInfo();
-        result.setCdAndRightEcAndEm(messageUiInfo);
-        return result;
+        return new Result(messageUiInfo);
     }
 
 

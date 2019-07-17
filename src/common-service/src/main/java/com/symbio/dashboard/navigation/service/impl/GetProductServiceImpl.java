@@ -1,14 +1,13 @@
 package com.symbio.dashboard.navigation.service.impl;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.model.Product;
 import com.symbio.dashboard.navigation.dto.download.ProductData;
 import com.symbio.dashboard.navigation.dto.download.ProductMessage;
 import com.symbio.dashboard.navigation.dto.upload.ProductUpload;
-import com.symbio.dashboard.model.Product;
-import com.symbio.dashboard.repository.ProductRepository;
 import com.symbio.dashboard.navigation.service.GetProductService;
+import com.symbio.dashboard.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -33,7 +32,6 @@ public class GetProductServiceImpl implements GetProductService {
      * @return 返回product的全部信息
      */
     private Result getProductListResult(ProductUpload productUpload) {
-        Result result = new Result();
         String token = productUpload.getToken();
         String locale = productUpload.getLocale();
         //记录数
@@ -52,9 +50,7 @@ public class GetProductServiceImpl implements GetProductService {
         //做相关的token操作
         productMessage.setRole(token);
 
-        result.setCdAndRightEcAndEm(productMessage);
-
-        return result;
+        return new Result(productMessage);
     }
 
     /**
@@ -65,7 +61,6 @@ public class GetProductServiceImpl implements GetProductService {
      * @return 返回一个只有部分信息的product返回信息
      */
     private Result createProductList(Integer total) {
-        Result result = new Result();
         ProductMessage productMessage = new ProductMessage();
         boolean isShowMore = false;
 
@@ -75,8 +70,7 @@ public class GetProductServiceImpl implements GetProductService {
 
             productMessage.setIsShowMore(isShowMore);
 
-            result.setCdAndRightEcAndEm(productMessage);
-            return result;
+            return new Result(productMessage);
         }
 
         List<Product> productList = productRepository.findByOrderByUpdate_timeAtDesc();
@@ -94,9 +88,7 @@ public class GetProductServiceImpl implements GetProductService {
         productMessage.setIsShowMore(isShowMore);
         productMessage.setData(list);
 
-        result.setCdAndRightEcAndEm(productMessage);
-
-        return result;
+        return new Result(productMessage);
     }
 
     /**

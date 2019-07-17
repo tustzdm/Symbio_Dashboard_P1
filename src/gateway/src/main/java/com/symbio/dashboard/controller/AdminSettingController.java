@@ -1,18 +1,14 @@
 package com.symbio.dashboard.controller;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.common.CommonAuthService;
+import com.symbio.dashboard.dictionary.dto.upload.DictionaryUpload;
+import com.symbio.dashboard.setting.service.CommonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.symbio.dashboard.setting.service.CommonService;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @ClassName - AdminSettingController
@@ -27,12 +23,29 @@ import java.util.Map;
 public class AdminSettingController {
 
     @Autowired
+    private CommonAuthService commonAuthService;
+
+    @Autowired
     private CommonService commonService;
 
+    @RequestMapping("/getUiInfoPage")
+    public Result getUiInfoList(@RequestBody DictionaryUpload dictionaryUpload) {
+        Result result;
+        try {
+            result = commonAuthService.getPageNamesDictionary(dictionaryUpload.getToken());
+            if (result.hasError()) {
+                return result;
+            }
 
-    @RequestMapping("/getDictionary")
-    public Result getDictionary(@RequestParam(value = "token") String token,
-                                @RequestParam(value = "type") String type) {
-        return commonService.getDictionaryByType(type);
+            result = commonService.getDictionaryInfo(dictionaryUpload);
+            if (result.hasError()) {
+                return result;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("10010", "Get page name list interface exception");
+        }
+
+        return result;
     }
 }

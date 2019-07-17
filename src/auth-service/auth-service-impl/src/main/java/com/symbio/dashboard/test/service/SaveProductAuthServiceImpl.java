@@ -12,12 +12,7 @@ public class SaveProductAuthServiceImpl implements SaveProductAuthService {
     }
 
     private Result getSaveProductResult(String token) {
-        Result result = new Result();
 
-        result.setCdAndRightEcAndEm(token);
-
-
-        return result;
-
+        return new Result(token);
     }
 }

@@ -66,9 +66,9 @@ public class SaveReleaseServiceImpl implements  SaveReleaseService{
 
 
         if (flag == 1) {
-            result.setCdAndRightEcAndEm("edit");
+            result = new Result("edit");
         } else if (flag == 2) {
-            result.setCdAndRightEcAndEm("add");
+            result = new Result("add");
         } else {
             result.setEc(SaveReleaseErrorCode.SR0002.toString());
             result.setEm("没有做对的操作");
@@ -99,7 +99,7 @@ public class SaveReleaseServiceImpl implements  SaveReleaseService{
             return result;
         }
 
-        Release release ;
+        Release release = null;
 
         Date date = new Date();
         SimpleDateFormat systemTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -151,7 +151,6 @@ public class SaveReleaseServiceImpl implements  SaveReleaseService{
             }
 
             release.setRemark(description);
-            result.setCdAndRightEcAndEm(release);
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -161,6 +160,6 @@ public class SaveReleaseServiceImpl implements  SaveReleaseService{
             e.printStackTrace();
         }
 
-        return result;
+        return new Result(release);
     }
 }

@@ -11,8 +11,7 @@ public class GetReleaseInfoAuthServiceImpl implements GetReleaseInfoAuthService 
     }
 
     private Result getReleaseInfoAuthResult(String token) {
-        Result result = new Result();
-        result.setCdAndRightEcAndEm(token);
-        return result;
+
+        return new Result(token);
     }
 }

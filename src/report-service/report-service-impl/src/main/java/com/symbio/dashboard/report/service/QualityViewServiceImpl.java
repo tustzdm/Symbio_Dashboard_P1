@@ -63,7 +63,7 @@ public class QualityViewServiceImpl implements QualityViewService {
      * @return cd内的对象是一个拼装好的QualityOverviewCd对象
      */
     private Result setQualityOverviewCd(Map<String,Integer> role, String locale, Search search){
-        Result result = new Result();
+        Result result;
 
         QualityOverviewCd qualityOverviewCd = new QualityOverviewCd();
 
@@ -80,8 +80,6 @@ public class QualityViewServiceImpl implements QualityViewService {
 
         // 调用getLayout接口
         result = this.qualityViewLayout.getQualityViewLayout(locale);
-        Result result1 = result;
-
 
         if (result.hasError()){
             return result;
@@ -90,11 +88,8 @@ public class QualityViewServiceImpl implements QualityViewService {
         // 4个list
         QualityViewLayoutCD cd = (QualityViewLayoutCD) result.getCd();
         if (cd == null){
-            result.setEc("N20000");
-            result.setEm("对象不能为空");
-            result.setCd(null);
-            return result;
-        }else {
+            return new Result("N20000", "对象不能为空");
+        } else {
             try {
                 result = createListCharts(search, cd.getListCharts());
                 if (result.hasError()) {
@@ -131,14 +126,12 @@ public class QualityViewServiceImpl implements QualityViewService {
                 }else {
                     qualityOverviewCd.setListCombox((List) result.getCd());
                 }
-            }catch (ClassCastException ex){
+            } catch (ClassCastException ex) {
                 ex.printStackTrace();
             }
-
         }
 
-        result.setCdAndRightEcAndEm(qualityOverviewCd);
-        return result;
+        return new Result(qualityOverviewCd);
     }
 
 
@@ -147,22 +140,18 @@ public class QualityViewServiceImpl implements QualityViewService {
      * @param search 上送的search对象
      * @return cd中的对象是List 返回组装好的selectedItem列表
      */
-    private Result createSeletedItem(Search search){
-        Result result = new Result();
+    private Result createSeletedItem(Search search) {
         List list = new LinkedList();
-        if (new Integer(0).equals(search.getIsCommon())){ // 0, "0", null
+        if (new Integer(0).equals(search.getIsCommon())) { // 0, "0", null
             list.add("common");
-        }else if (new Integer(1).equals(search.getIsCommon())){
+        } else if (new Integer(1).equals(search.getIsCommon())) {
             list.add("common");
             //TODO 根据search中other里面的内容创建list
-        }else {
-            result.setEc("N10001");
-            result.setEm("没有这个数字");
-            return result;
+        } else {
+            return new Result("N10001", "没有这个数字");
         }
 
-        result.setCdAndRightEcAndEm(list);
-        return result;
+        return new Result(list);
     }
 
 
@@ -173,7 +162,6 @@ public class QualityViewServiceImpl implements QualityViewService {
      * @return cd中的对象是 组装好的ListCombox列表
      */
     private Result createListCombox(Search search,List<QualityViewLayoutCDChartOther> cdChartOthers){
-        Result result = new Result();
         List list = new LinkedList();
         ListCombox listComboxNo1 = new ListCombox();
         listComboxNo1.setName("common");
@@ -185,19 +173,16 @@ public class QualityViewServiceImpl implements QualityViewService {
             listCombox.setKey(q.getKey());
             listCombox.setName(q.getName());
 
-            if (new Integer(1).equals(search.getIsCommon())){
+            if (new Integer(1).equals(search.getIsCommon())) {
                 //TODO 根据search创建相应的condition
-            }else {
-                result.setEc("N100001");
-                result.setEm("iscommon只能为0或者1，不能为别的");
-                return result;
+            } else {
+                return new Result("N100001", "iscommon只能为0或者1，不能为别的");
             }
 
             list.add(listCombox);
 
         }
-        result.setCdAndRightEcAndEm(list);
-        return result;
+        return new Result(list);
     }
 
     /**
@@ -207,7 +192,6 @@ public class QualityViewServiceImpl implements QualityViewService {
      * @return cd中的对象是 组装好的listChart列表
      */
     private Result createListCharts(Search search, List<QualityViewLayoutCDChartCommon> cdChartCommonshartCommonList){
-        Result result = new Result();
 
         List list = new LinkedList();
         for (QualityViewLayoutCDChartCommon q : cdChartCommonshartCommonList){
@@ -228,14 +212,10 @@ public class QualityViewServiceImpl implements QualityViewService {
                 barLabelRotation.setData(null);
                 list.add(barLabelRotation);
             }else {
-                result.setEc("N1000001");
-                result.setEm("listChart列表不能存这个key");
-                result.setCd(null);
-                return result;
+                return new Result("N1000001", "listChart列表不能存这个key");
             }
         }
-        result.setCdAndRightEcAndEm(list);
-        return result;
+        return new Result(list);
     }
 
 
@@ -246,7 +226,6 @@ public class QualityViewServiceImpl implements QualityViewService {
      * @return cd中的对象是 返回一个组装好的listlist列表
      */
     private Result createListList(Search search, List<QualityViewLayoutCDList> cdLists){
-        Result result = new Result();
         List list = new LinkedList();
 
         for (QualityViewLayoutCDList q : cdLists){
@@ -260,14 +239,10 @@ public class QualityViewServiceImpl implements QualityViewService {
 
                 list.add(listProductStatistics);
             }else {
-                result.setEc("N1000005");
-                result.setEm("listList列表不能存这个key");
-                result.setCd(null);
-                return result;
+                return new Result("N1000005", "listList列表不能存这个key");
             }
         }
-        result.setCdAndRightEcAndEm(list);
-        return result;
+        return new Result(list);
     }
 
 
@@ -278,7 +253,6 @@ public class QualityViewServiceImpl implements QualityViewService {
      * @return cd中的对象是 返回一个组装好的ListRowChart列表
      */
     private Result createListRowCharts(Search search, List<QualityViewLayoutCDRowChart> cdRowCharts){
-        Result result = new Result();
 
         List list = new LinkedList();
         for (QualityViewLayoutCDRowChart q : cdRowCharts){
@@ -292,14 +266,10 @@ public class QualityViewServiceImpl implements QualityViewService {
 
                 list.add(mixLineBar);
             }else {
-                result.setEc("N1000003");
-                result.setEm("ListRowChart 列表不能存这个key");
-                result.setCd(null);
-                return result;
+                return new Result("N1000003", "ListRowChart 列表不能存这个key");
             }
         }
-        result.setCdAndRightEcAndEm(list);
-        return result;
+        return new Result(list);
     }
 
 
@@ -310,7 +280,6 @@ public class QualityViewServiceImpl implements QualityViewService {
      * @return cd中的对象是 返回一个组装好的ListChartOther列表
      */
     private Result createListChartOther(Search search, List<QualityViewLayoutCDChartOther> cdChartOthers){
-        Result result = new Result();
         List list = new LinkedList();
         for (QualityViewLayoutCDChartOther q : cdChartOthers){
             String key = q.getKey();
@@ -322,8 +291,7 @@ public class QualityViewServiceImpl implements QualityViewService {
             list.add(otherReport);
 
         }
-        result.setCdAndRightEcAndEm(list);
-        return result;
+        return new Result(list);
     }
 
 }

@@ -66,15 +66,14 @@ public class SaveTestSetServiceImpl implements SaveTestSetService {
         }
 
         if (flag == 1) {
-            result.setCdAndRightEcAndEm("edit");
+            result = new Result("edit");
         } else if (flag == 2) {
-            result.setCdAndRightEcAndEm("add");
+            result = new Result("add");
         } else {
             result.setEc(SaveTestSetErrorCode.STSE002.toString());
-            result.setEm("没有正确的操作"+flag);
+            result.setEm("没有正确的操作" + flag);
             return result;
         }
-
 
         return result;
     }
@@ -102,7 +101,7 @@ public class SaveTestSetServiceImpl implements SaveTestSetService {
             return result;
         }
 
-        TestSet testSet ;
+        TestSet testSet = null;
 
         Date date = new Date();
         SimpleDateFormat systemTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -155,14 +154,11 @@ public class SaveTestSetServiceImpl implements SaveTestSetService {
                 Date endTime = systemTime.parse(endDate);
                 testSet.setEndTime(endTime);
             }
-            result.setCdAndRightEcAndEm(testSet);
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-
-
-        return result;
+        return new Result(testSet);
     }
 }

@@ -6,6 +6,7 @@ import com.symbio.dashboard.service.*;
 import com.symbio.dashboard.test.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,8 +54,7 @@ public class TestManagementController {
     private SaveTestSetService saveTestSetService;
 
 
-
-    //5.1
+    //6.1
 
     /**
      * 此方法用于获得product的分页查询结果
@@ -70,21 +70,12 @@ public class TestManagementController {
      * @return 返回product的分页查询结果给前台
      */
     @RequestMapping("/getProductList")
-    public Result getProductList(@RequestParam(value = "token") String token,
-                                 @RequestParam(value = "locale",defaultValue = "en_US") String locale,
-                                 @RequestParam(value = "pageIndex",required = false) Integer pageIndex,
-                                 @RequestParam(value = "pageSize",required = false) Integer pageSize) {
+    public Result getProductList(@RequestBody GetProductListUpload getProductListUpload) {
         Result result;
-        result = getProductListAuthService.getProductList(token);
+        result = getProductListAuthService.getProductList(getProductListUpload.getToken());
         if (!"0".equals(result.getEc())) {
             return result;
         }
-
-        GetProductListUpload getProductListUpload = new GetProductListUpload();
-        getProductListUpload.setToken(token);
-        getProductListUpload.setLocale(locale);
-        getProductListUpload.setPageIndex(pageIndex);
-        getProductListUpload.setPageSize(pageSize);
 
         result = getProductListService.getProductList(getProductListUpload);
         if (!"0".equals(result.getEc())) {
@@ -94,7 +85,7 @@ public class TestManagementController {
         return result;
     }
 
-    //5.2
+    //6.2
 
     /**
      *此方法用于获得产品的信息
@@ -128,7 +119,7 @@ public class TestManagementController {
         return result;
     }
 
-    //5.3
+    //6.3
 
     /**
      * 此方法用于testManagement模块中的add或者edit product模块
@@ -193,7 +184,7 @@ public class TestManagementController {
         return result;
     }
 
-    //5.4
+    //6.4
 
     /**
      * 此方法用于返回release的信息，分页返回
@@ -236,7 +227,7 @@ public class TestManagementController {
         return result;
     }
 
-    //5.5
+    //6.5
 
     /**
      * 此方法用于返回release的信息
@@ -279,7 +270,7 @@ public class TestManagementController {
         return result;
     }
 
-    //5.6
+    //6.6
 
     /**
      * 此方法用于testManagement模块中的add或者edit release模块
@@ -339,7 +330,7 @@ public class TestManagementController {
         return result;
     }
 
-    //5.7
+    //6.7
     /**
      * 此方法用于分页查询返回testSet的内容
      *
@@ -382,7 +373,7 @@ public class TestManagementController {
         return result;
     }
 
-    //5.8
+    //6.8
     @RequestMapping("/getTestSetInfo")
     public Result getTestSetInfo(@RequestParam(value = "token") String token) {
         Result result = new Result();
@@ -390,7 +381,7 @@ public class TestManagementController {
         return result;
     }
 
-    //5.9
+    //6.9
 
     /**
      * 此方法用于testManagement模块中的add或者edit testSet模块
@@ -460,9 +451,7 @@ public class TestManagementController {
     }
 
 
-
-
-    //5.13
+    //6.13
     @RequestMapping("/getTestResultList")
     public Result getTestResultList(@RequestParam(value = "token") String token) {
         Result result = new Result();
@@ -470,7 +459,7 @@ public class TestManagementController {
         return result;
     }
 
-    //5.14
+    //6.14
     @RequestMapping("/getTRFilterList")
     public Result getTRFilterList(@RequestParam(value = "token") String token) {
         Result result = new Result();
@@ -479,7 +468,7 @@ public class TestManagementController {
     }
 
 
-    //5.15
+    //6.15
     @RequestMapping("/getJiraJobInfo")
     public Result getJiraJobInfo(@RequestParam(value = "token") String token) {
         Result result = new Result();
@@ -488,7 +477,7 @@ public class TestManagementController {
     }
 
 
-    //5.16
+    //6.16
     @RequestMapping("/getJiraJobSetting")
     public Result getJiraJobSetting(@RequestParam(value = "token") String token) {
         Result result = new Result();

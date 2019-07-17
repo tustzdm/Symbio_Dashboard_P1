@@ -3,11 +3,11 @@ package com.symbio.dashboard.report.service;
 import com.alibaba.fastjson.JSONObject;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.ec.report.SaveErrorCode;
+import com.symbio.dashboard.model.SettingLayout;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListChartCommon;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListChartOther;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListList;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListRowChart;
-import com.symbio.dashboard.model.SettingLayout;
 import com.symbio.dashboard.report.repository.ReportChartRepository;
 import com.symbio.dashboard.report.repository.SettingLayoutRepository;
 import lombok.Data;
@@ -64,9 +64,6 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
                                             List<ListRowChart> listRowChart,
                                             List<ListList> listList){
 
-        //创建反馈信息对象
-        Result result = new Result();
-
         //可以进行一些处理，最终确定反馈信息......
         //TODO 判断所有的key在reportChart能不能找到
         Result list = judgeAllListKey(listChartCommon,listChartOther,listRowChart,listList);
@@ -74,8 +71,7 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
             return list;
         }
         int flag = saveUploadInDB(locale, listChartCommon, listChartOther, listRowChart, listList);
-        result.setCdAndRightEcAndEm(flag);
-        return result;
+        return new Result(flag);
 
     }
 
@@ -205,14 +201,11 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
                                      List<ListChartOther> listChartOther,
                                      List<ListRowChart> listRowChart,
                                      List<ListList> listList){
-        Result result = new Result();
 
         //得到所有的key
         List<String> keyList = reportChartRepository.getKeyByPageAndValidation("QualityOverview", 1);
         if (keyList == null) {
-            result.setEc(SaveErrorCode.N00005.toString());
-            result.setEm("通过page与validation找不到相应的key");
-            return result;
+            return new Result(SaveErrorCode.N00005.toString(), "通过page与validation找不到相应的key");
         }
 
 
@@ -221,18 +214,16 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
         Result list3 = judgeListRowChartKey(listRowChart,keyList);
         Result list4 = judgeListListKey(listList,keyList);
 
-        if (list1.hasError()){
+        if (list1.hasError()) {
             return list1;
-        }else if (list2.hasError()){
+        } else if (list2.hasError()) {
             return list2;
-        }else if (list3.hasError()){
+        } else if (list3.hasError()) {
             return list3;
-        }else if (list4.hasError()){
+        } else if (list4.hasError()) {
             return list4;
-        }else {
-            result.setCdAndRightEcAndEm(null);
         }
-        return result;
+        return new Result(null);
     }
 
     /**
@@ -243,29 +234,23 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
      * @return cd中的对象是List<String> 根据上送的列表中的key返回一个相应的page集合
      */
     private Result judgeListChartCommonKey(List<ListChartCommon> listChartCommons,List<String> keyList){
-        Result result = new Result();
         //用于判断对象中的pos是不是存放在指定的位置
         List<Integer[]> posList = new LinkedList<>();
 
         for (ListChartCommon listChartCommon : listChartCommons){
             Integer[] pos = listChartCommon.getPos();
             if (!posListAddCommon(posList, pos)) {
-                result.setEc(SaveErrorCode.N10001.toString());
-                result.setEm("坐标不合法");
-                return result;
+                return new Result(SaveErrorCode.N10001.toString(), "坐标不合法");
             }
 
 
             String key = listChartCommon.getKey();
             if (!keyList.contains(key)){
-                result.setEc(SaveErrorCode.N00001.toString());
-                result.setEm("根据 listChartCommons 中的key找不到相应的page");
-                return result;
+                return new Result(SaveErrorCode.N00001.toString(), "根据 listChartCommons 中的key找不到相应的page");
             }
         }
 
-        result.setCdAndRightEcAndEm(null);
-        return result;
+        return new Result();
     }
 
     /**
@@ -276,19 +261,14 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
      * @return cd中的对象是List<String> 根据上送的列表中的key返回一个相应的page集合
      */
     private Result judgeListChartOtherKey(List<ListChartOther> listChartOthers,List<String> keyList){
-        Result result = new Result();
         for (ListChartOther listChartOther : listChartOthers){
             String key = listChartOther.getKey();
             if (!keyList.contains(key)){
-                result.setEc(SaveErrorCode.N00002.toString());
-                result.setEm("根据 listChartOthers 中的key找不到相应的page");
-                return result;
+                return new Result(SaveErrorCode.N00002.toString(), "根据 listChartOthers 中的key找不到相应的page");
             }
         }
 
-        result.setCdAndRightEcAndEm(null);
-
-        return result;
+        return new Result();
     }
 
     /**
@@ -299,7 +279,6 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
      * @return cd中的对象是List<String> 根据上送的列表中的key返回一个相应的page集合
      */
     private Result judgeListRowChartKey(List<ListRowChart> listRowCharts,List<String> keyList){
-        Result result = new Result();
 
         List<Integer> posList = new LinkedList<>();
 
@@ -307,21 +286,17 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
             Integer pos = listRowChart.getPos();
             //TODO
             if (isIllegalPosRowChart(posList, pos)) {
-                result.setEc(SaveErrorCode.N10002.toString());
-                result.setEm("ListRowChart的坐标不合法");
+                return new Result(SaveErrorCode.N10002.toString(), "ListRowChart的坐标不合法");
             }
 
 
             String key = listRowChart.getKey();
 
             if (!keyList.contains(key)){
-                result.setEc(SaveErrorCode.N00003.toString());
-                result.setEm("根据 listRowCharts 中的key找不到相应的page");
-                return result;
+                return new Result(SaveErrorCode.N00003.toString(), "根据 listRowCharts 中的key找不到相应的page");
             }
         }
-        result.setCdAndRightEcAndEm(null);
-        return result;
+        return new Result();
     }
 
     /**
@@ -339,19 +314,15 @@ public class SaveQualityViewLayoutServiceImpl implements SaveQualityViewLeyoutSe
         for (ListList listList : listLists){
             Integer pos = listList.getPos();
             if (isIllegalPosList(posList, pos)) {
-                result.setEc(SaveErrorCode.N10003.toString());
-                result.setEm("ListList的坐标不合法");
+                return new Result(SaveErrorCode.N10003.toString(), "ListList的坐标不合法");
             }
 
             String key = listList.getKey();
             if (!keyList.contains(key)){
-                result.setEc(SaveErrorCode.N00004.toString());
-                result.setEm("根据 listLists 中的key找不到相应的page");
-                return result;
+                return new Result(SaveErrorCode.N00004.toString(), "根据 listLists 中的key找不到相应的page");
             }
         }
-        result.setCdAndRightEcAndEm(null);
-        return result;
+        return new Result();
     }
 
 

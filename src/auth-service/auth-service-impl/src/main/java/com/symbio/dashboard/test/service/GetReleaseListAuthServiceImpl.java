@@ -12,9 +12,7 @@ public class GetReleaseListAuthServiceImpl implements GetReleaseListAuthService 
     }
 
     private Result getReleaseListResult(String token) {
-        Result result = new Result();
 
-        result.setCdAndRightEcAndEm(token);
-        return result;
+        return new Result(token);
     }
 }

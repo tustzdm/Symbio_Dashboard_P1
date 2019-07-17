@@ -12,8 +12,6 @@ public class GetReleaseAuthServiceImpl implements GetReleaseAuthService {
     }
 
     private Result getReleaseAuthByToken(String token) {
-        Result result = new Result();
-        result.setCdAndRightEcAndEm("release token");
-        return result;
+        return new Result("release token");
     }
 }

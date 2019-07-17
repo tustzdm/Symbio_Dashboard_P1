@@ -1,12 +1,11 @@
 package com.symbio.dashboard.setting.service;
 
-import com.symbio.dashboard.Result;
-//import com.symbio.dashboard.ui.service.SettingServiceInterface;
 import org.springframework.stereotype.Service;
-import com.symbio.dashboard.data.repository.DictionayRep;
+
+//import com.symbio.dashboard.ui.service.SettingService;
 
 /**
- * @ClassName - SettingService
+ * @ClassName - SettingServiceImpl
  * @Author - Admin - Setting
  * @Description -
  * @Date - 2019/7/16
@@ -14,7 +13,7 @@ import com.symbio.dashboard.data.repository.DictionayRep;
  */
 
 @Service
-public class SettingService implements SettingServiceInterface {
+public class SettingServiceImpl implements SettingService {
 
 //  @Override
 //  public Result getDictionaryByType(String type){

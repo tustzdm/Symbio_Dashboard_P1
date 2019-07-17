@@ -1,7 +1,6 @@
 package com.symbio.dashboard.report.service.saveQualityViewLayout;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.report.service.saveQualityViewLayout.SaveLayoutAuth;
 
 public class SaveLayoutAuthImpl implements SaveLayoutAuth {
 
@@ -27,9 +26,7 @@ public class SaveLayoutAuthImpl implements SaveLayoutAuth {
      * @return cd中的对象是权限值
      */
     private Result setRole(String token) {
-        Result result = new Result();
         int id = 1;
-        result.setCdAndRightEcAndEm(id);
-        return result;
+        return new Result(id);
     }
 }

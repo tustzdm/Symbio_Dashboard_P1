@@ -11,10 +11,7 @@ public class GetProductInfoAuthServiceImpl implements GetProductInfoAuthService 
     }
 
     private Result getProductInfoResult(String token) {
-        Result result = new Result();
 
-        result.setCdAndRightEcAndEm(token);
-
-        return result;
+        return new Result(token);
     }
 }

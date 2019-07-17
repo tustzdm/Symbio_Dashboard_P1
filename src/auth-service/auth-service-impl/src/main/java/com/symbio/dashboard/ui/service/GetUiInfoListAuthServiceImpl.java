@@ -19,10 +19,7 @@ public class GetUiInfoListAuthServiceImpl implements GetUiInfoListAuthService {
     }
 
     private Result getUiInfoListResult(String token) {
-        Result result = new Result();
 
-        result.setCdAndRightEcAndEm(token);
-
-        return result;
+        return new Result(token);
     }
 }

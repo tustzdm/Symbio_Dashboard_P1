@@ -37,7 +37,7 @@ public class GetUiInfoListServiceImpl implements GetUiInfoListService {
      * @Param - [uiInfoUpload]
      */
     private Result getUiInfoListResult(UiInfoUpload uiInfoUpload) {
-        Result result = new Result();
+        Result result;
 
         try {
             String page = uiInfoUpload.getPage();
@@ -46,18 +46,16 @@ public class GetUiInfoListServiceImpl implements GetUiInfoListService {
             List<UiInfo> uiInfoList = uiInfoRepository.getUiInfoListByPageName(page);
 
             if (uiInfoList == null || uiInfoList.isEmpty()) {
-                result.setEc("100011");
-                result.setEm("查询失败");
-                return result;
+                return new Result("100011", "查询失败");
             }
 
-            result.setCdAndRightEcAndEm(uiInfoList);
+            result = new Result(uiInfoList);
 
         } catch (Exception e) {
             e.printStackTrace();
-            result.setEc("100012");
-            result.setEm("SQL Error");
+            return new Result("100012", "SQL Error");
         }
+
         return result;
     }
 }

@@ -61,9 +61,9 @@ public class SaveProductServiceImpl implements SaveProductService{
         }
 
         if (flag == 1) {
-            result.setCdAndRightEcAndEm("edit");
+            result = new Result("edit");
         } else if (flag == 2) {
-            result.setCdAndRightEcAndEm("add");
+            result = new Result("add");
         } else {
             result.setEc(SaveProductErrorCode.SP0001.toString());
             result.setEm("没有对数据库进行操作或者操作异常");
@@ -138,10 +138,7 @@ public class SaveProductServiceImpl implements SaveProductService{
         product.setDescription(description);
         product.setUpdateTime(date);
 
-        result.setCdAndRightEcAndEm(product);
-
-
-        return result;
+        return new Result(product);
     }
 
 

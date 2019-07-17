@@ -19,10 +19,7 @@ public class RemoveUiElementAuthServiceImpl implements RemoveUiElementAuthServic
     }
 
     private Result removeUiElementResult(String token) {
-        Result result = new Result();
 
-        result.setCdAndRightEcAndEm(token);
-
-        return result;
+        return new Result(token);
     }
 }

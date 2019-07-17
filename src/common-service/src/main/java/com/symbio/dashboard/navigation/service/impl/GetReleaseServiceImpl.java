@@ -1,12 +1,12 @@
 package com.symbio.dashboard.navigation.service.impl;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.model.Release;
 import com.symbio.dashboard.navigation.dto.download.ReleaseData;
 import com.symbio.dashboard.navigation.dto.download.ReleaseMessage;
 import com.symbio.dashboard.navigation.dto.upload.ReleaseUpload;
-import com.symbio.dashboard.model.Release;
-import com.symbio.dashboard.repository.ReleaseRepository;
 import com.symbio.dashboard.navigation.service.GetReleaseService;
+import com.symbio.dashboard.repository.ReleaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +46,7 @@ public class GetReleaseServiceImpl implements GetReleaseService {
         releaseMessage.setLocale(locale);
         releaseMessage.setRole(token);
 
-        result.setCdAndRightEcAndEm(releaseMessage);
-        return result;
+        return new Result(releaseMessage);
     }
 
 
@@ -60,16 +59,13 @@ public class GetReleaseServiceImpl implements GetReleaseService {
      * @return 返回创建的部分release返回信息
      */
     private Result createReleaseList(Integer total, Integer productId) {
-        Result result = new Result();
         ReleaseMessage releaseMessage = new ReleaseMessage();
         boolean isShowMore = false;
 
         if (total == null) {
             //相应操作
-
             releaseMessage.setIsShowMore(isShowMore);
-            result.setCdAndRightEcAndEm(releaseMessage);
-            return result;
+            return new Result(releaseMessage);
         }
 
         List<Release> releaseList = releaseRepository.findByProduct_idAndOrderByUpdate_timeAtDesc(productId);
@@ -92,10 +88,7 @@ public class GetReleaseServiceImpl implements GetReleaseService {
         releaseMessage.setIsShowMore(isShowMore);
         releaseMessage.setProductId(productId);
 
-
-        result.setCdAndRightEcAndEm(releaseMessage);
-
-        return result;
+        return new Result(releaseMessage);
     }
 
 

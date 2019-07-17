@@ -1,12 +1,12 @@
 package com.symbio.dashboard.navigation.service.impl;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.model.TestSet;
 import com.symbio.dashboard.navigation.dto.download.TestSetData;
 import com.symbio.dashboard.navigation.dto.download.TestSetMessage;
 import com.symbio.dashboard.navigation.dto.upload.TestSetUpload;
-import com.symbio.dashboard.model.TestSet;
-import com.symbio.dashboard.repository.TestSetRepository;
 import com.symbio.dashboard.navigation.service.GetTestSetService;
+import com.symbio.dashboard.repository.TestSetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +40,7 @@ public class GetTestSetServiceImpl implements GetTestSetService {
 
         Result result = createTestSetList(total, releaseId);
 
-        if (!"0".equals(result.getEc())) {
+        if (result.hasError()) {
             return result;
         }
 
@@ -49,9 +49,7 @@ public class GetTestSetServiceImpl implements GetTestSetService {
         testSetMessage.setProductId(productId);
         testSetMessage.setRole(token);
 
-        result.setCdAndRightEcAndEm(testSetMessage);
-
-        return result;
+        return new Result(testSetMessage);
     }
 
 
@@ -64,14 +62,12 @@ public class GetTestSetServiceImpl implements GetTestSetService {
      * @return 返回部分release的信息
      */
     private Result createTestSetList(Integer total, Integer releaseId) {
-        Result result = new Result();
         boolean isShowMore = false;
         TestSetMessage testSetMessage = new TestSetMessage();
 
         if (total == null) {
             testSetMessage.setIsShowMore(isShowMore);
-            result.setCdAndRightEcAndEm(testSetMessage);
-            return result;
+            return new Result(testSetMessage);
         }
 
         List<TestSet> testSetList = testSetRepository.findByRelease_idAndOrderByUpdate_timeAtDesc(releaseId);
@@ -92,8 +88,7 @@ public class GetTestSetServiceImpl implements GetTestSetService {
         testSetMessage.setData(list);
         testSetMessage.setReleaseId(releaseId);
 
-        result.setCdAndRightEcAndEm(testSetMessage);
-        return result;
+        return new Result(testSetMessage);
     }
 
 

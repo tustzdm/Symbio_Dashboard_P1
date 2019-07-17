@@ -78,7 +78,6 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
      * @return cd里存放的是一个QualityViewLayoutCD对象用于返回给前台的一个cd对象里的所有集合
      */
     private Result setQualityViewLayoutCD(String locale){
-        Result result = new Result();
 
         QualityViewLayoutCD qualityViewLayoutCD = new QualityViewLayoutCD();
 
@@ -87,14 +86,10 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
         //菜单权限暂定写死
         qualityViewLayoutCD.setRole(7);
 
-
-
         //根据语种获得settinglayout中的layout
         Map<String, List> map = getSettingLayoutLayout(locale);
         if (map == null){
-            result.setEc(GetLayoutErrorCode.N000005.toString());
-            result.setEm("没有这类语言的layout");
-            return result;
+            return new Result(GetLayoutErrorCode.N000005.toString(), "没有这类语言的layout");
         }
 
         String jsonMap = JSON.toJSONString(map, true);
@@ -143,9 +138,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
 
         qualityViewLayoutCD.setListSupport(setListSupport(locale));
 
-        result.setCdAndRightEcAndEm(qualityViewLayoutCD);
-
-        return result;
+        return new Result(qualityViewLayoutCD);
     }
 
 
@@ -175,9 +168,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
      * @return cd里面的对象是一个List<QualityViewLayoutCDChartCommon> 返回一个可以返回到前台的布局信息中的ListChartCommon集合
      */
     private Result setListChartCommon(String locale,List<ListChartCommon> listChartCommons,List<ReportChart> reportChartList){
-        Result result = new Result();
         List<QualityViewLayoutCDChartCommon> list = new LinkedList<>();
-
 
         for (ListChartCommon listChartCommon : listChartCommons){
             Integer pos[] = listChartCommon.getPos();
@@ -191,9 +182,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             }
 
             if (reportChart == null){
-                result.setEc(GetLayoutErrorCode.N000006.toString());
-                result.setEm("ListChartCommon 根据key找不到相应的reportChart对象");
-                return result;
+                return new Result(GetLayoutErrorCode.N000006.toString(), "ListChartCommon 根据key找不到相应的reportChart对象");
             }
 
             keyList.add(key);
@@ -207,8 +196,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
 
             list.add(q);
         }
-        result.setCdAndRightEcAndEm(list);
-        return result;
+        return new Result(list);
     }
 
 
@@ -222,7 +210,6 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
      * @return cd里面的对象是一个List<QualityViewLayoutCDChartOther> 返回一个可以返回到前台的布局信息中的 listChartOther 集合
      */
     private Result setListChartOther(String locale, List<ListChartOther> listChartOthers,List<ReportChart> reportChartList){
-        Result result = new Result();
         List<QualityViewLayoutCDChartOther> list = new LinkedList<>();
 
         for (ListChartOther listChartOther : listChartOthers){
@@ -236,9 +223,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             }
 
             if (reportChart == null){
-                result.setEc(GetLayoutErrorCode.N000007.toString());
-                result.setEm("listChartOther 根据key找不到相应的reportChart对象");
-                return result;
+                return new Result(GetLayoutErrorCode.N000007.toString(), "listChartOther 根据key找不到相应的reportChart对象");
             }
 
             keyList.add(key);
@@ -252,9 +237,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             list.add(q);
         }
 
-        result.setCdAndRightEcAndEm(list);
-
-        return result;
+        return new Result(list);
     }
 
     /**
@@ -267,7 +250,6 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
      * @return cd里面的对象是一个List<QualityViewLayoutCDRowChart> 返回一个可以返回到前台的布局信息中的 listRowChart 集合
      */
     private Result setListRowChart(String locale, List<ListRowChart> listRowCharts,List<ReportChart> reportChartList){
-        Result result = new Result();
         List<QualityViewLayoutCDRowChart> list = new LinkedList<>();
 
         for (ListRowChart listRowChart : listRowCharts){
@@ -282,9 +264,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             }
 
             if (reportChart == null){
-                result.setEc(GetLayoutErrorCode.N000008.toString());
-                result.setEm("listRowChart 根据key找不到相应的reportChart对象");
-                return result;
+                return new Result(GetLayoutErrorCode.N000008.toString(), "listRowChart 根据key找不到相应的reportChart对象");
             }
 
             keyList.add(key);
@@ -299,9 +279,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             list.add(q);
         }
 
-        result.setCdAndRightEcAndEm(list);
-
-        return result;
+        return new Result(list);
     }
 
     /**
@@ -314,7 +292,6 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
      * @return cd里面的对象是一个List<QualityViewLayoutCDList>  返回一个可以返回到前台的布局信息中的 listList 集合
      */
     private Result setListList(String locale, List<ListList> listLists,List<ReportChart> reportChartList){
-        Result result = new Result();
         List<QualityViewLayoutCDList> list = new LinkedList<>();
 
         for(ListList listList : listLists){
@@ -329,9 +306,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             }
 
             if (reportChart == null){
-                result.setEc(GetLayoutErrorCode.N000009.toString());
-                result.setEm("listList 根据key找不到相应的reportChart对象");
-                return result;
+                return new Result(GetLayoutErrorCode.N000009.toString(), "listList 根据key找不到相应的reportChart对象");
             }
 
             keyList.add(key);
@@ -344,8 +319,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
 
             list.add(q);
         }
-        result.setCdAndRightEcAndEm(list);
-        return result;
+        return new Result(list);
     }
 
 
@@ -358,7 +332,6 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
      * @return 返回一个listLabel列表对象
      */
     private Result setListLabel(String locale, List<LanguageUi> languageUis) {
-        Result result = new Result();
 
         List list = new LinkedList();
 
@@ -377,8 +350,7 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
 
         }
 
-        result.setCdAndRightEcAndEm(list);
-        return result;
+        return new Result(list);
     }
 
     /**

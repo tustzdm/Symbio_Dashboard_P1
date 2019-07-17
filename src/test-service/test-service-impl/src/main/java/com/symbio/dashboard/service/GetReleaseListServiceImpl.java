@@ -5,7 +5,6 @@ import com.symbio.dashboard.dto.message.GetReleaseListMessage;
 import com.symbio.dashboard.dto.message.ReleaseMessageData;
 import com.symbio.dashboard.dto.upload.GetReleaseListUpload;
 import com.symbio.dashboard.model.Release;
-import com.symbio.dashboard.navigation.dto.download.ReleaseData;
 import com.symbio.dashboard.repository.ReleaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,7 +38,7 @@ public class GetReleaseListServiceImpl implements GetReleaseListService {
 
         result = createReleaseList(pageIndex, pageSize, productId);
 
-        if (!"0".equals(result.getEc())) {
+        if (result.hasError()) {
             return result;
         }
 
@@ -54,13 +53,10 @@ public class GetReleaseListServiceImpl implements GetReleaseListService {
         getReleaseListMessage.setPageIndex(pageIndex);
         getReleaseListMessage.setData(list);
 
-        result.setCdAndRightEcAndEm(getReleaseListMessage);
-
-        return result;
+        return new Result(getReleaseListMessage);
     }
 
     private Result createReleaseList(Integer pageIndex,Integer pageSize,Integer productId) {
-        Result result = new Result();
 
         Pageable pageable = new PageRequest(pageIndex, pageSize);
         Page<Release> byId = releaseRepository.findByProductId(productId, pageable);
@@ -83,7 +79,6 @@ public class GetReleaseListServiceImpl implements GetReleaseListService {
             list.add(releaseMessageData);
         }
 
-        result.setCdAndRightEcAndEm(list);
-        return result;
+        return new Result(list);
     }
 }

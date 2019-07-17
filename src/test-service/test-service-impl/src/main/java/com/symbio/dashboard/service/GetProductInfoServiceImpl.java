@@ -6,7 +6,6 @@ import com.symbio.dashboard.dto.message.MessageUiInfo;
 import com.symbio.dashboard.dto.message.ProductMessageData;
 import com.symbio.dashboard.dto.upload.GetProductInfoUpload;
 import com.symbio.dashboard.model.Product;
-import com.symbio.dashboard.navigation.dto.download.ProductData;
 import com.symbio.dashboard.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,6 @@ import java.util.List;
 @Service
 public class GetProductInfoServiceImpl implements GetProductInfoService {
 
-
     @Autowired
     private ProductRepository productRepository;
     @Override
@@ -26,13 +24,13 @@ public class GetProductInfoServiceImpl implements GetProductInfoService {
     }
 
     private Result getProductInfoResult(GetProductInfoUpload getProductInfoUpload) {
-        Result result ;
+        Result result;
         String token = getProductInfoUpload.getToken();
         String locale = getProductInfoUpload.getLocale();
         Integer uiInfo = getProductInfoUpload.getUiInfo();
         Integer productId = getProductInfoUpload.getProductId();
         result = createProductInfoData(productId);
-        if (!"0".equals(result.getEc())) {
+        if (result.hasError()) {
             return result;
         }
 
@@ -40,7 +38,7 @@ public class GetProductInfoServiceImpl implements GetProductInfoService {
         GetProductInfoMessage getProductInfoMessage = new GetProductInfoMessage();
         if (uiInfo == 1) {
             result = createProductUiInfo();
-            if (!"0".equals(result.getEc())) {
+            if (result.hasError()) {
                 return result;
             }
             MessageUiInfo messageUiInfo = (MessageUiInfo) result.getCd();
@@ -50,12 +48,7 @@ public class GetProductInfoServiceImpl implements GetProductInfoService {
         getProductInfoMessage.setLocale(locale);
         getProductInfoMessage.setRole(token);
 
-
-        result.setCdAndRightEcAndEm(getProductInfoMessage);
-
-
-
-        return result;
+        return new Result(getProductInfoMessage);
     }
 
     /**
@@ -64,7 +57,6 @@ public class GetProductInfoServiceImpl implements GetProductInfoService {
      * @return
      */
     private Result createProductInfoData(Integer productId) {
-        Result result = new Result();
         List<ProductMessageData> list = new LinkedList<>();
 
         Product byId = productRepository.getById(productId);
@@ -80,18 +72,13 @@ public class GetProductInfoServiceImpl implements GetProductInfoService {
             productMessageData.setOwner(byId.getOwner().toString());
             list.add(productMessageData);
         }
-        result.setCdAndRightEcAndEm(list);
 
-
-
-        return result;
+        return new Result(list);
     }
 
     private Result createProductUiInfo() {
-        Result result = new Result();
         MessageUiInfo messageUiInfo = new MessageUiInfo();
-        result.setCdAndRightEcAndEm(messageUiInfo);
 
-        return result;
+        return new Result(messageUiInfo);
     }
 }

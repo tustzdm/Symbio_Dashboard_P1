@@ -35,7 +35,6 @@ public class RemoveUiElementServiceImpl implements RemoveUiElementService {
      */
     private Result removeUiElementResult(UiInfoUpload uiInfoUpload) {
 
-        Result result = new Result();
         Integer id = uiInfoUpload.getId();
 
         try {
@@ -44,7 +43,6 @@ public class RemoveUiElementServiceImpl implements RemoveUiElementService {
             e.printStackTrace();
         }
 
-        result.setCdAndRightEcAndEm("Element removed");
-        return result;
+        return new Result("Element removed");
     }
 }
