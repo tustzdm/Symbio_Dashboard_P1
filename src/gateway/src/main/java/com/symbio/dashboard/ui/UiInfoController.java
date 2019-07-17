@@ -2,7 +2,6 @@ package com.symbio.dashboard.ui;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.common.CommonAuthService;
-import com.symbio.dashboard.dictionary.dto.upload.DictionaryUpload;
 import com.symbio.dashboard.setting.service.CommonService;
 import com.symbio.dashboard.ui.dto.upload.UiInfoUpload;
 import com.symbio.dashboard.ui.service.*;
@@ -76,33 +75,11 @@ public class UiInfoController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("100010", "");
+            return new Result("10010", "Get UI Element list Interface Exception");
         }
 
         return result;
     }
-
-    @RequestMapping("/getUiInfoPage")
-    public Result getUiInfoList(@RequestBody DictionaryUpload dictionaryUpload) {
-        Result result;
-        try {
-            result = commonAuthService.getPageNamesDictionary(dictionaryUpload.getToken());
-            if (result.hasError()) {
-                return result;
-            }
-
-            result = commonService.getDictionaryInfo(dictionaryUpload);
-            if (result.hasError()) {
-                return result;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Result("10010", "Get page name list interface exception");
-        }
-
-        return result;
-    }
-
 
     /**
      * @InterfaceNumber 5.2
@@ -132,7 +109,7 @@ public class UiInfoController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("123456", "更新或保存信息接口异常");
+            return new Result("10010", "Update/Save Info Interface Exception");
         }
         return result;
     }
@@ -152,18 +129,23 @@ public class UiInfoController {
     @RequestMapping("/removeUiElement")
     public Result removeUiElement(@RequestParam(value = "token") String token,
                                   @RequestParam(value = "id") Integer id) {
+        Result result;
+        try {
+            result = removeUiElementAuthService.removeUiElementAuth(token);
+            if (!result.isSuccess()) {
+                return result;
+            }
 
-        Result result = removeUiElementAuthService.removeUiElementAuth(token);
-        if (!result.isSuccess()) {
-            return result;
-        }
+            UiInfoUpload uiInfoUpload = new UiInfoUpload();
+            uiInfoUpload.setId(id);
 
-        UiInfoUpload uiInfoUpload = new UiInfoUpload();
-        uiInfoUpload.setId(id);
-
-        result = removeUiElementService.removeUiElement(uiInfoUpload);
-        if (!result.isSuccess()) {
-            return result;
+            result = removeUiElementService.removeUiElement(uiInfoUpload);
+            if (!result.isSuccess()) {
+                return result;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("10010", "Remove UI Element Interface Exception");
         }
 
         return result;

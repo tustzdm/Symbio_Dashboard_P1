@@ -2,12 +2,11 @@ package com.symbio.dashboard.controller;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.common.CommonAuthService;
-import com.symbio.dashboard.dictionary.dto.upload.DictionaryUpload;
 import com.symbio.dashboard.setting.service.CommonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -29,15 +28,16 @@ public class AdminSettingController {
     private CommonService commonService;
 
     @RequestMapping("/getUiInfoPage")
-    public Result getUiInfoList(@RequestBody DictionaryUpload dictionaryUpload) {
+    public Result getUiInfoList(@RequestParam(value = "token") String token,
+                                @RequestParam(value = "type") String type) {
         Result result;
         try {
-            result = commonAuthService.getPageNamesDictionary(dictionaryUpload.getToken());
+            result = commonAuthService.getPageNamesDictionary(token);
             if (result.hasError()) {
                 return result;
             }
 
-            result = commonService.getDictionaryInfo(dictionaryUpload);
+            result = commonService.getDictionaryInfo(type);
             if (result.hasError()) {
                 return result;
             }

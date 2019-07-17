@@ -4,7 +4,6 @@ import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.repository.DictionaryRep;
 import com.symbio.dashboard.dictionary.dto.message.UiInfoPageNames;
-import com.symbio.dashboard.dictionary.dto.upload.DictionaryUpload;
 import com.symbio.dashboard.model.Dictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,16 +36,15 @@ public class CommonServiceImpl implements CommonService {
     private CommonDao commonDao;
 
     @Override
-    public Result getDictionaryInfo(DictionaryUpload dictionaryUpload) {
-        return getDictionaryInfoResult(dictionaryUpload);
+    public Result getDictionaryInfo(String type) {
+        return getDictionaryInfoResult(type);
     }
 
-    private Result getDictionaryInfoResult(DictionaryUpload dictionaryUpload) {
+    private Result getDictionaryInfoResult(String type) {
         List<Dictionary> dictionaryList;
         List<UiInfoPageNames> pageNamesList = new ArrayList<>();
 
         try {
-            String type = dictionaryUpload.getType();
 
             dictionaryList = dictionaryRep.getPageNameList(type);
 

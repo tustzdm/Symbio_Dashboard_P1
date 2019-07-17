@@ -1,7 +1,7 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.dao.ProductDao;
+import com.symbio.dashboard.data.dao.ProductDao;
 import com.symbio.dashboard.dto.message.GetProductListMessage;
 import com.symbio.dashboard.dto.message.ProductMessageData;
 import com.symbio.dashboard.dto.upload.GetProductListUpload;
@@ -113,7 +113,7 @@ public class GetProductListServiceImpl implements GetProductListService {
             String locale = getProductListUpload.getLocale();
 
             List<ProductMessageData> list = new ArrayList<>();
-            List<Product> all = productDao.getProductList(getProductListUpload);
+            List<Product> all = productDao.getProductList();
 
             for (Product o : all) {
                 ProductMessageData productMessageData = new ProductMessageData();
