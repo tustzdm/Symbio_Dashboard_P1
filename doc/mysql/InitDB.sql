@@ -127,7 +127,7 @@ CREATE TABLE `ui_info` (
   `db_field` varchar(32) DEFAULT NULL COMMENT 'DB field. Defined in different table according to page if needed',
   `type` VARCHAR(45) NOT NULL COMMENT 'text, number, bool, checkbox, list' DEFAULT 'text',
   `data` VARCHAR(512) DEFAULT NULL COMMENT 'For List, Using JSON format.',
-  `disp_status` SMALLINT(5) DEFAULT 0 COMMENT 'Display status for the element. 0-Add/Edit 1-Only add, 2-Only Edit',
+  `disp_status` SMALLINT(5) DEFAULT 0 COMMENT 'Display status for the element. 0-edit only, 1-user defined',
   `is_required` TINYINT(1) DEFAULT true COMMENT 'The element is required or not. 1-True, 0-False',
   `is_disable` TINYINT(1) DEFAULT false COMMENT 'The element is disable or not. 1-True, 0-False',
   `en_us` VARCHAR(128) DEFAULT NULL COMMENT 'Label for en_US',
@@ -141,7 +141,8 @@ CREATE TABLE `ui_info` (
   `validation` SMALLINT NOT NULL COMMENT '0: false, 1: true' DEFAULT 1,
   `display` SMALLINT NOT NULL DEFAULT '1' COMMENT '1: enable, 4: removed' DEFAULT 1,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniqe_ui_info_page_key` (`page`, `key`)
+  UNIQUE KEY `uniqe_ui_info_page_key` (`page`, `key`),
+  UNIQUE KEY `uniqe_ui_info_page_dbfield` (`page`, `db_field`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 INSERT INTO `ui_info`(`id`,`page`,`key`,`type`,`en_us`,`zh_cn`,`label`,`idx` ) 
