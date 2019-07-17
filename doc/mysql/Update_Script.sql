@@ -75,6 +75,7 @@ CREATE TABLE `sys_list_setting` (
   `formatter` varchar(256) DEFAULT NULL COMMENT 'Column formatter',
   `idx` smallint(5) NOT NULL DEFAULT 99 COMMENT 'index for the list column',
   `is_entity` smallint(5) NOT NULL DEFAULT '1' COMMENT 'Column data comes from db entity or not. 1-db entity, 2-statistics data, 3-virtual key',
+  `attribute_field` smallint(5) NOT NULL DEFAULT '0' COMMENT 'Field is table entity field or attribute field. 0-false, 1-true',
 
   `custfld_int1` int(10) DEFAULT NULL COMMENT 'field int',
   `custfld_int2` int(10) DEFAULT NULL COMMENT 'field int',
@@ -91,3 +92,10 @@ CREATE TABLE `sys_list_setting` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_sys_list_setting_name_field` (`name`, `field`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
+	VALUES (215, 'ColumnType', 'datetime', 'DateTime', 'DateTime yyyy-mm-dd HH:MM:SS');
+INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
+	VALUES (216, 'ColumnType', 'date', 'Date', 'DateTime yyyy-mm-dd');
+INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
+	VALUES (217, 'ColumnType', 'user', 'User', 'User Info');
