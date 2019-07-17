@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unchecked")
 public class EntityUtils {
   private static Logger logger = LoggerFactory.getLogger(EntityUtils.class);
 

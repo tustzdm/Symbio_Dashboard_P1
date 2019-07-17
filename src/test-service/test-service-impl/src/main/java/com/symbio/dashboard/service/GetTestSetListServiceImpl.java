@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
+@SuppressWarnings("unchecked")
 public class GetTestSetListServiceImpl implements GetTestSetListService {
 
     @Autowired

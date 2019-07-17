@@ -1,15 +1,20 @@
 package com.symbio.dashboard.setting.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.repository.DictionaryRep;
 import com.symbio.dashboard.dictionary.dto.message.UiInfoPageNames;
 import com.symbio.dashboard.dictionary.dto.upload.DictionaryUpload;
 import com.symbio.dashboard.model.Dictionary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName - CommonServiceImpl
@@ -20,10 +25,16 @@ import java.util.List;
  */
 
 @Service
+@SuppressWarnings("unchecked")
 public class CommonServiceImpl implements CommonService {
+
+    private static Logger logger = LoggerFactory.getLogger(CommonService.class);
 
     @Autowired
     private DictionaryRep dictionaryRep;
+
+    @Autowired
+    private CommonDao commonDao;
 
     @Override
     public Result getDictionaryInfo(DictionaryUpload dictionaryUpload) {
@@ -59,5 +70,33 @@ public class CommonServiceImpl implements CommonService {
             return new Result("100012", "SQL Error");
         }
         return new Result(pageNamesList);
+    }
+
+    public List<Map<String, String>> getUserDefinedFields(String table) {
+        List<Map<String, String>> retList = new ArrayList<>();
+        try {
+            Result retResult = commonDao.getDescField(table);
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("code", "");
+            map.put("value", "(Empty)");
+            retList.add(map);
+
+            if (retResult.isSuccess()) {
+                List<String> listFields = (List<String>) retResult.getCd();
+                String strField = "";
+                for (int i = 0; i < listFields.size(); i++) {
+                    strField = listFields.get(i);
+                    map = new HashMap<String, String>();
+                    map.put("code", strField);
+                    map.put("value", strField);
+                    retList.add(map);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("CommonService - getUserDefinedFields() Exception!!!", e);
+            retList = new ArrayList<>();
+        }
+
+        return retList;
     }
 }
