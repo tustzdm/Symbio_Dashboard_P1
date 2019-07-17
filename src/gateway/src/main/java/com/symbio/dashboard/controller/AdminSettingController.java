@@ -27,6 +27,12 @@ public class AdminSettingController {
     @Autowired
     private CommonService commonService;
 
+    @RequestMapping("/getDictionary")
+    public Result getDictionary(@RequestParam(value = "token") String token,
+                                @RequestParam(value = "type") String type) {
+        return commonService.getDictionaryByType(type);
+    }
+
     @RequestMapping("/getUiInfoPage")
     public Result getUiInfoList(@RequestParam(value = "token") String token,
                                 @RequestParam(value = "type") String type) {
