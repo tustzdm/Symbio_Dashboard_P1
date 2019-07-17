@@ -1,10 +1,20 @@
 <template>
+<el-card shadow="hover" style="margin-bottom:100px">
+    <!-- <div>
+         <ul style="float:left">
+            <li style="height:24px" v-for="item in tableHead"><span>{{item+':'}}</span></li>
+        </ul>
+        <ul style="float:left">
+            <li style="height:24px" v-if="index!='validation'&&index!='id'" v-for="(item,index) in this.$route.params.tr">
+                <input :value="item" :placeholder="index" :checked="item" :type="index =='is_required'||index =='is_disable'? 'checkbox':'text'">
+            </li>
+        </ul>
+    </div> -->
     <el-form ref="form" :model="form" label-width="200px">
         <p>{{form}}</p>
         <el-form-item label="Page:" prop="Page">
             <el-col :span="4">
-                <span>{{form.page}}</span>
-                <span>{{type}}</span>
+                <el-input v-model="form.page" placeholder="Ext Data"></el-input>
             </el-col>
         </el-form-item>
         <el-form-item label="Key:" prop="name">
@@ -15,7 +25,7 @@
         <el-form-item label="Type:" prop="type">
             <el-col :span="8">
                 <select v-model="form.type" name="" id="">
-                    <option v-for="item in typeList">{{item.code}}</option>
+                    <option v-for="item in typeList">{{item.value}}</option>
                 </select>
             </el-col>
         </el-form-item>
@@ -24,7 +34,7 @@
                 <el-input v-model="form.data" placeholder="Ext Data"></el-input>
             </el-col>
         </el-form-item>
-         <el-form-item label="Required:" prop="Required">
+        <el-form-item label="Required:" prop="Required">
             <el-radio-group v-model="form.isRequired">
                 <el-radio label="1">Yes</el-radio>
                 <el-radio label="0">No</el-radio>
@@ -43,7 +53,7 @@
         </el-form-item>
         <el-form-item label="zh_cn:" prop="zh_CN">
             <el-col :span="8">
-                <el-input v-model="form.zhCn" placeholder="Chinese Name"></el-input>
+                <el-input v-model="form.zhCn" placeholder="English Name"></el-input>
             </el-col>
         </el-form-item>
         <el-form-item label="Place Holder:" prop="PlaceHolder">
@@ -71,28 +81,43 @@
             <el-button @click="onCancel">Cancel</el-button>
         </el-form-item>
     </el-form>
+</el-card>
 </template>
+
 <script>
 import {
     saveProjectInfo,
 } from '@/api/index';
 import storage from "@/utils/storage";
 export default {
-    name: 'edit',
+    name: 'add',
     data() {
         return {
             tableHead: ['Key', 'Type', 'Ext.Data', 'Required', 'Disable', 'en_US', 'zh_CN', 'Place Holder', 'Default Value', 'Constraint', 'Order'],
             radio1: '1',
             radio2: '1',
             form: {
+                id:'',
+                page:'',
+                key: '',
+                type: 'text',
+                data: '',
+                isRequired: '1',
+                isDisable: '0',
+                enUs: '',
+                zhCn: '',
+                placeHolder: '',
+                defaultValue: '',
+                constCondition: '',
+                idx: ''
             },
-            typeList: []
+            typeList: [],
+            page: ''
         }
     },
     created() {
-        this.form = this.$route.params.tr;
-        console.log(this.form);
-        console.log(this.form)
+        console.log(this.$route.params)
+        this.form.page = this.$route.params.page;
         this.Fetch("/setting/getDictionary?token=1&type=HtmlType", {
             method: "GET"
         }).then(res => {
@@ -125,28 +150,24 @@ export default {
         },
         submit(){
             var formData = this.form;
-            this.Fetch('/ui/updateUiElement?token=111&page=product', {
-                formData
-            }).then(res => {
-                console.log(res);
-            });
-            // axios
-            // this.$axios.post('/ui/updateUiElement?token=111&page=product',formData).then(res => {
-            //         // success callback
-            //         console.log(formData);
-            //         console.log(res);
+            // var formData = JSON.stringify(this.form);
+            console.log(formData);
+            this.$axios.post('/ui/updateUiElement?token=111&page=product',formData).then(res => {
+                    // success callback
+                    console.log(formData);
+                    console.log(res.data);
 
-            //         var ec = res.ec;
-            //         debugger;
-            //         if(ec != '0') {
-            //             alert(res.ec + ", " + res.em);
-            //         } else {
-            //             this.$message.success("保存成功！");
-            //             this.$router.go(-1);
-            //         }
-            //     }).catch(err => {
-            //        alert(err);
-            //     });
+                    var ec = res.data.ec;
+                    //debugger;
+                    if(ec != '0') {
+                        alert("Error Code:" + res.data.ec + ", Error Message:" + res.data.em);
+                    } else {
+                        this.$message.success("Operation Success！");
+                        this.$router.go(-1);
+                    }
+                }).catch(err => {
+                   alert(err);
+                });
         }
     }
 }

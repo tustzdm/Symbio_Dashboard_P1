@@ -49,6 +49,7 @@ export const constantRouterMap = [
                 meta: {
                     title: "editPages",
                     icon: "",
+                    keepAlive: true // 需要被缓存
                 },
             },
             {
@@ -58,6 +59,17 @@ export const constantRouterMap = [
                 meta: {
                     title: "edit",
                     icon: "",
+                    keepAlive: true // 需要被缓存
+                },
+            },
+            {
+                path: "add",
+                component: _import("editPages/add"),
+                name: "add",
+                meta: {
+                    title: "add",
+                    icon: "",
+                    keepAlive: true // 需要被缓存
                 },
             }
         ],

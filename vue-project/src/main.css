@@ -39,6 +39,7 @@
 /* tabel复用Class样式 */
 .common-table{
   border-collapse:collapse;
+  text-align: center
 }
 .tableHead{
   border-bottom: #7a85a1 solid 2px

@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Element from "element-ui";
+import axios from 'axios';
 import scroll from "vue-seamless-scroll";
 import Icon from "vue-svg-icon/Icon.vue";
 import 'element-ui/lib/theme-chalk/index.css';
@@ -12,6 +13,10 @@ import i18n from "@/lang";
 import Fetch from './utils/fetch';
 import "./main.css";
 Vue.prototype.Fetch = Fetch;
+Vue.prototype.$axios = axios;
+axios.defaults.baseURL = '/mock';
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+
 Vue.component("icon", Icon);
 Vue.use(scroll);
 Vue.use(Element, {

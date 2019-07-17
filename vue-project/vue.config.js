@@ -57,7 +57,7 @@ module.exports = {
         hotOnly: false,
         proxy: {
             '/mock': {
-                target: "http://127.0.0.1:8100",
+                target: "http://192.168.170.100:9090",
                 changeOrigin: true,
                 pathRewrite: {
                     '^/mock': ''
