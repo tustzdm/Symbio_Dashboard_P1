@@ -46,6 +46,9 @@ public class UpdateUiElementServiceImpl implements UpdateUiElementService {
             if (id == null) {
                 uiInfo = new UiInfo();
                 uiInfo.setPage(uiInfoUpload.getPage());
+                if (uiInfoUpload.getDbField() == null) {
+                    return new Result("100010", "Value of db_field cannot be empty, save failed");
+                }
             } else {
                 // 获取已有元素对象
                 uiInfo = uiInfoRepository.getOne(id);
@@ -53,6 +56,7 @@ public class UpdateUiElementServiceImpl implements UpdateUiElementService {
 
             uiInfo.setKey(uiInfoUpload.getKey());
             uiInfo.setType(uiInfoUpload.getType());
+            uiInfo.setDbField(uiInfoUpload.getDbField());
             uiInfo.setData(uiInfoUpload.getData());
             uiInfo.setDispStatus(uiInfoUpload.getDispStatus());
             uiInfo.setIsRequired(uiInfoUpload.getIsRequired());
