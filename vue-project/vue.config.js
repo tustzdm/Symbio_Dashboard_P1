@@ -44,15 +44,15 @@ module.exports = {
             .loader("raw-loader");
     },
 
-    productionSourceMap: true,
+    productionSourceMap: false,
     css: {
         sourceMap: true
     },
 
     devServer: {
-        open: process.platform === "linux",
-        host: "dashboard.symbio.com.cn",
-        port: 80,
+        open: process.platform === "darwin",
+        host: '0.0.0.0',
+        port: 8863,
         https: false,
         hotOnly: false,
         proxy: {
@@ -63,6 +63,6 @@ module.exports = {
                     '^/mock': ''
                 }
             }
-        }
+        },
     }
 };
