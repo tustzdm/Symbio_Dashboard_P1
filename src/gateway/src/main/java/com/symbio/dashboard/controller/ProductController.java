@@ -66,6 +66,7 @@ public class ProductController {
             }
 
             result = productService.getProductInfo(userId, id);
+
             if (result.hasError()) {
                 return new Result("100011", "Product List Error");
             }

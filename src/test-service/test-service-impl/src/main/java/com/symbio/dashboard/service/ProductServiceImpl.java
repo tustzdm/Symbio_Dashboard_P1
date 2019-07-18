@@ -30,12 +30,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Result getProductPageList(Integer userId, String locale, int pageIndex, int pageSize) {
+    public Result getProductPageList(Integer userId, String locale, int pageIndex, int pageSize){
         return null;
     }
 
     @Override
-    public Result getProductInfo(Integer userId, Integer id) {
+    public Result getProductInfo(Integer userId, Integer id){
         return null;
     }
 
