@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ProductService {
 
-    Result getProductList(String locale);
+    Result getProductList(Integer userId, String locale);
 
-    Result getProductPageList(String locale, int pageIndex, int pageSize);
+    Result getProductPageList(Integer userId, String locale, int pageIndex, int pageSize);
 
-    Result getProductInfo(Integer id);
+    Result getProductInfo(Integer userId, Integer id);
 
-    Result editProduct(Product product);
+    Result updateProduct(Product product);
 
     Result removeProduct(Integer id);
 

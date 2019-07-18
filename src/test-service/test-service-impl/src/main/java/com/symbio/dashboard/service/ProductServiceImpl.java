@@ -25,12 +25,22 @@ public class ProductServiceImpl implements ProductService {
     private ProductRep productRep;
 
     @Override
-    public Result getProductList(Integer id) {
+    public Result getProductList(Integer userId, String locale) {
         return null;
     }
 
     @Override
-    public Result editProduct(Product product) {
+    public Result getProductPageList(Integer userId, String locale, int pageIndex, int pageSize) {
+        return null;
+    }
+
+    @Override
+    public Result getProductInfo(Integer userId, Integer id) {
+        return null;
+    }
+
+    @Override
+    public Result updateProduct(Product product) {
         return null;
     }
 

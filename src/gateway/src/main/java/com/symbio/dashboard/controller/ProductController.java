@@ -35,25 +35,29 @@ public class ProductController {
 
     @RequestMapping("/getProductList")
     public Result getProductList(@RequestParam(value = "token") String token,
+                                 @RequestParam(value = "userId") Integer userId,
                                  @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale) {
-        // Result retResult = productService.getProductList(locale);
+
+        Result retResult = productService.getProductList(userId, locale);
         return null;
     }
 
     @RequestMapping("/getProductPageList")
     public Result getProductPageList(@RequestParam(value = "token") String token,
+                                     @RequestParam(value = "userId") Integer userId,
                                      @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale,
                                      @RequestParam(value = "pageIndex",required = false) Integer pageIndex,
                                      @RequestParam(value = "pageSize",required = false) Integer pageSize) {
 
-        // Result retResult = productService.getProductPageList(locale, pageIndex, pageSize);
+        Result retResult = productService.getProductPageList(userId, locale, pageIndex, pageSize);
         return null;
     }
 
     @RequestMapping("/getProductInfo")
     public Result getProductInfo(@RequestParam(value = "token") String token,
                                  @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale,
-                                 @RequestParam(value = "id") Integer id) {
+                                 @RequestParam(value = "id") Integer id,
+                                 @RequestParam(value = "userId") Integer userId) {
         Result result;
         try {
             result = productAuthService.getProductListAuth(token);
@@ -61,7 +65,7 @@ public class ProductController {
                 return new Result("100010", "Product Auth Error");
             }
 
-            result = productService.getProductList(id);
+            result = productService.getProductInfo(userId, id);
             if (result.hasError()) {
                 return new Result("100011", "Product List Error");
             }
@@ -84,7 +88,7 @@ public class ProductController {
                 return new Result("100010", "Edit Product Auth Error");
             }
 
-            result = productService.editProduct(product);
+            result = productService.updateProduct(product);
             if (result.hasError()) {
                 return new Result("100011", "Edit Product Error");
             }

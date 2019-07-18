@@ -1,6 +1,7 @@
 package com.symbio.dashboard.test.service;
 
 import com.symbio.dashboard.Result;
+import org.springframework.stereotype.Service;
 
 /**
  * @ClassName - ProductAuthServiceImpl
@@ -9,6 +10,8 @@ import com.symbio.dashboard.Result;
  * @Date - 2019/7/17 17:07
  * @Version 1.0
  */
+
+@Service
 public class ProductAuthServiceImpl implements ProductAuthService {
     @Override
     public Result getProductListAuth(String token) {

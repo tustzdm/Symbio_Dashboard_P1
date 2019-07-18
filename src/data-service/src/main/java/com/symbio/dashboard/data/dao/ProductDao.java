@@ -1,12 +1,15 @@
 package com.symbio.dashboard.data.dao;
 
+import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.model.Product;
 import com.symbio.dashboard.model.UiInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,25 +30,39 @@ public class ProductDao {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private UiInfoRep uiInfoRep;
+
 
     public List<Product> getProductList() {
         Query query;
         List<Product> products = null;
-        StringBuilder s = new StringBuilder("select ");
+        StringBuilder sb = new StringBuilder();
 
         try {
+            sb.append("select ");
+
+            List<UiInfo> uiInfoList = uiInfoRep.getUiInfoListByPageName("product");
+
 
             query = entityManager.createNativeQuery(sql.toString());
             products = query.getResultList();
+            List<String> listFields = new ArrayList<>();
 
             for (int i = 0; i < products.size(); i++) {
-                s.append(products.get(i));
-                s.append(", ");
+                sb.append(products.get(i)).append(",");
+                listFields.add(products.get(i).toString());
             }
-            s.deleteCharAt(s.length() - 2);
-            s.append(sql2);
+            System.out.println(listFields);
 
-            query = entityManager.createNativeQuery(s.toString());
+
+            if (sb.length() > 0) {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            sb.append(sql2);
+
+
+            query = entityManager.createNativeQuery(sb.toString());
             products = query.getResultList();
 
             //TODO
