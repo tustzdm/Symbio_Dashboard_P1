@@ -2,8 +2,11 @@ package com.symbio.dashboard.controller;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.common.CommonAuthService;
+import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.setting.service.CommonService;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 public class AdminSettingController {
+
+    private static Logger logger = LoggerFactory.getLogger(AdminSettingController.class);
 
     @Autowired
     private CommonAuthService commonAuthService;

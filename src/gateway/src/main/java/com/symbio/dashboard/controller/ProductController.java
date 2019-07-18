@@ -5,6 +5,8 @@ import com.symbio.dashboard.model.Product;
 import com.symbio.dashboard.service.ProductService;
 import com.symbio.dashboard.test.service.ProductAuthService;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class ProductController {
 
+    private static Logger logger = LoggerFactory.getLogger(ProductController.class);
+
     @Autowired
     private ProductAuthService productAuthService;
     @Autowired
@@ -31,6 +35,24 @@ public class ProductController {
 
     @RequestMapping("/getProductList")
     public Result getProductList(@RequestParam(value = "token") String token,
+                                 @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale) {
+        // Result retResult = productService.getProductList(locale);
+        return null;
+    }
+
+    @RequestMapping("/getProductPageList")
+    public Result getProductPageList(@RequestParam(value = "token") String token,
+                                     @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale,
+                                     @RequestParam(value = "pageIndex",required = false) Integer pageIndex,
+                                     @RequestParam(value = "pageSize",required = false) Integer pageSize) {
+
+        // Result retResult = productService.getProductPageList(locale, pageIndex, pageSize);
+        return null;
+    }
+
+    @RequestMapping("/getProductInfo")
+    public Result getProductInfo(@RequestParam(value = "token") String token,
+                                 @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale,
                                  @RequestParam(value = "id") Integer id) {
         Result result;
         try {
@@ -51,8 +73,9 @@ public class ProductController {
         return result;
     }
 
-    @RequestMapping("/editProduct")
-    public Result editProduct(@RequestParam(value = "token") String token,
+    @RequestMapping("/updateProduct")
+    public Result updateProduct(@RequestParam(value = "token") String token,
+                              @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale,
                               @RequestBody Product product) {
         Result result;
         try {
@@ -75,6 +98,7 @@ public class ProductController {
 
     @RequestMapping("/removeProduct")
     public Result removeProduct(@RequestParam(value = "token") String token,
+                                @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale,
                                 @RequestParam(value = "id") Integer id) {
         Result result;
         try {
