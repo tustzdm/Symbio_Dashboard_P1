@@ -51,8 +51,8 @@ module.exports = {
 
     devServer: {
         open: process.platform === "linux",
-        host: "0.0.0.0",
-        port: 8863,
+        host: "dashboard.symbio.com.cn",
+        port: 80,
         https: false,
         hotOnly: false,
         proxy: {
