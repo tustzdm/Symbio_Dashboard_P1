@@ -1,8 +1,9 @@
 <template>
 <el-col :span="12" :offset="6">
     <el-card shadow="hover" style="margin-bottom:100px;font-family:Poppins;">
+        <h2 style="padding-left:100px">Element of Product</h2>
+        <el-divider></el-divider>
         <el-form ref="form" :model="form" label-width="200px">
-            <p>{{form}}</p>
             <el-form-item label="Page:" prop="Page">
                 <el-col :span="4">
                     <span>{{form.page}}</span>
