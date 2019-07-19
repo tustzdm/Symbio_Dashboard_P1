@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Data
-public class UserServiceImpl implements UserService {
+public class AuthUserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
 
