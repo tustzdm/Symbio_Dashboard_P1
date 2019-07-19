@@ -7,6 +7,9 @@ import com.symbio.dashboard.ui.service.RemoveUiElementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @ClassName - RemoveUiElementServiceImpl
  * @Author - Danny
@@ -41,8 +44,19 @@ public class RemoveUiElementServiceImpl implements RemoveUiElementService {
             uiInfoRepository.deleteById(id);
         } catch (Exception e) {
             e.printStackTrace();
+            if (match(e.getMessage())) {
+                return new Result("100010", "Id does not exist");
+            }
         }
-
         return new Result("Element removed");
+    }
+
+    private boolean match(String text) {
+        Pattern pattern = Pattern.compile("(No|entity|id|exists)");
+        Matcher matcher = pattern.matcher(text);
+        if (matcher.find()) {
+            return true;
+        }
+        return false;
     }
 }
