@@ -4,6 +4,7 @@ import com.symbio.dashboard.Result;
 import com.symbio.dashboard.common.CommonAuthService;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.setting.service.CommonService;
+import com.symbio.dashboard.setting.service.CommonServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ public class AdminSettingController {
     private CommonAuthService commonAuthService;
 
     @Autowired
-    private CommonService commonService;
+    private CommonServiceImpl commonService;
 
     @RequestMapping("/getDictionary")
     public Result getDictionary(@RequestParam(value = "token") String token,
@@ -55,6 +56,23 @@ public class AdminSettingController {
         } catch (Exception e) {
             e.printStackTrace();
             return new Result("10010", "Get page name list interface exception");
+        }
+
+        return result;
+    }
+
+    @RequestMapping("/getDBFields")
+    public Result getDBFields(@RequestParam(value = "token") String token,
+                                @RequestParam(value = "table") String table) {
+        Result result;
+        try {
+            result = new Result(commonService.getUserDefinedFields(table));
+            if (result.hasError()) {
+                return result;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("10010", String.format("Could not get Table[%s] field info", table));
         }
 
         return result;
