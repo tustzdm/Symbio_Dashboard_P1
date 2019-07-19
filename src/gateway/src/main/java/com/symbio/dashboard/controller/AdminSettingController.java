@@ -5,6 +5,7 @@ import com.symbio.dashboard.common.CommonAuthService;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.setting.service.CommonService;
 import com.symbio.dashboard.setting.service.CommonServiceImpl;
+import com.symbio.dashboard.setting.service.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,9 @@ public class AdminSettingController {
 
     @Autowired
     private CommonServiceImpl commonService;
+
+    @Autowired
+    private UserServiceImpl userService;
 
     @RequestMapping("/getDictionary")
     public Result getDictionary(@RequestParam(value = "token") String token,
@@ -75,6 +79,30 @@ public class AdminSettingController {
             return new Result("10010", String.format("Could not get Table[%s] field info", table));
         }
 
+        return result;
+    }
+
+    /**
+     *
+     * @param token
+     * @param locale
+     * @param status
+     * @return
+     */
+    @RequestMapping("/getUserList")
+    public Result getUserList(@RequestParam(value = "token") String token,
+                              @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                              @RequestParam(value = "status", required = false, defaultValue = "1") Integer status) {
+        Result result;
+        try {
+            result = new Result(userService.getUserListByStatus(locale, status));
+            if (result.hasError()) {
+                return result;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("10010", "Could not get user list info");
+        }
         return result;
     }
 }
