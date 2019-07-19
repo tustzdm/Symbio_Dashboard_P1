@@ -7,6 +7,8 @@ import com.symbio.dashboard.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @ClassName - ProductServiceImpl
  * @Author - Danny
@@ -26,16 +28,24 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Result getProductList(Integer userId, String locale) {
+        List<Product> list;
+        try {
+            list = productDao.getProductList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("100011", "Product list error");
+        }
+        return new Result(list);
+    }
+
+    @Override
+    public Result getProductPageList(Integer userId, String locale, int pageIndex, int pageSize) {
+
         return null;
     }
 
     @Override
-    public Result getProductPageList(Integer userId, String locale, int pageIndex, int pageSize){
-        return null;
-    }
-
-    @Override
-    public Result getProductInfo(Integer userId, Integer id){
+    public Result getProductInfo(Integer userId, Integer id) {
         return null;
     }
 

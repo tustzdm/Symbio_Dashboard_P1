@@ -35,20 +35,20 @@ public class ProductController {
 
     @RequestMapping("/getProductList")
     public Result getProductList(@RequestParam(value = "token") String token,
-                                 @RequestParam(value = "userId") Integer userId,
                                  @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale) {
 
+        Integer userId = 0;
         Result retResult = productService.getProductList(userId, locale);
-        return null;
+        return retResult;
     }
 
     @RequestMapping("/getProductPageList")
     public Result getProductPageList(@RequestParam(value = "token") String token,
-                                     @RequestParam(value = "userId") Integer userId,
                                      @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale,
                                      @RequestParam(value = "pageIndex",required = false) Integer pageIndex,
                                      @RequestParam(value = "pageSize",required = false) Integer pageSize) {
 
+        Integer userId = 0;
         Result retResult = productService.getProductPageList(userId, locale, pageIndex, pageSize);
         return null;
     }
@@ -56,9 +56,9 @@ public class ProductController {
     @RequestMapping("/getProductInfo")
     public Result getProductInfo(@RequestParam(value = "token") String token,
                                  @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale,
-                                 @RequestParam(value = "id") Integer id,
-                                 @RequestParam(value = "userId") Integer userId) {
+                                 @RequestParam(value = "id") Integer id) {
         Result result;
+        Integer userId = 0;
         try {
             result = productAuthService.getProductListAuth(token);
             if (result.hasError()) {

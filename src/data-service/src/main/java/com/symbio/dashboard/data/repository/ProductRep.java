@@ -7,14 +7,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface ProductRep extends JpaRepository<Product, Integer> {
 
     @Query(value = "select * from product p order by p.update_time desc", nativeQuery = true)
-    List<Product> findByOrderByUpdate_timeAtDesc();
+    List<Product> findAllOrderByUpdateTimeDesc();
+
+    @Query(value = "select * from product p order by p.id", nativeQuery = true)
+    List<Product> findAllOrderById();
 
     @Query(value = "select p.id from product p",nativeQuery = true)
     List<Integer> getAllId();

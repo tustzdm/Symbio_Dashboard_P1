@@ -1,9 +1,12 @@
 package com.symbio.dashboard.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -12,10 +15,17 @@ import java.util.Date;
 @Data
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name = "product")
-public class Product extends DBCreateUpdateModel {
+public class Product implements Serializable {
 
-    @Column(name = "name",nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "owner")
@@ -47,5 +57,39 @@ public class Product extends DBCreateUpdateModel {
 
     @Column(name = "locale")
     private String locale;
+
+    @Column(name = "create_time")
+    private Date createTime;
+
+    @Column(name = "create_user")
+    private Integer createUser;
+
+    @Column(name = "create_user_name")
+    private String createUserName;
+
+    @Column(name = "update_time", nullable = false)
+    private Date updateTime;
+
+    @Column(name = "update_user")
+    private Integer updateUser;
+
+    @Column(name = "update_user_name")
+    private String updateUserName;
+
+    public Product(String name, Integer owner, Integer qaLead, Integer status, String locale, String description, Date createTime) {
+        this.name = name;
+        this.owner = owner;
+        this.qaLead = qaLead;
+        this.status = status;
+        this.locale = locale;
+        this.description = description;
+        this.createTime = createTime;
+    }
+
+//    public Product(Object... objects) {
+//        for (int i = 0; i < objects.length; i++) {
+//            objects[i] =
+//        }
+//    }
 
 }
