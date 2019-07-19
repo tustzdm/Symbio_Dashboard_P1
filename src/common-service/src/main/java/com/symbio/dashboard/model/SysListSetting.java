@@ -50,30 +50,30 @@ public class SysListSetting implements Serializable {
     private Integer idx = 99;
 
     @Column(name = "is_entity")
-    private Integer is_entity = 1;
+    private Integer isEntity = 1;
 
     @Column(name = "attribute_field")
-    private Integer attribute_field = 1;
+    private Integer attributeField = 1;
 
     @Column(name = "custfld_int1")
-    private Integer custfld_int1;
+    private Integer custfldIntd;
     @Column(name = "custfld_int2")
-    private Integer custfld_int2;
+    private Integer custfldIntd2;
     @Column(name = "custfld_int3")
-    private Integer custfld_int3;
+    private Integer custfldIntd3;
 
-    @Column(name = "`custfld_str1`")
-    private String custfld_str1;
-    @Column(name = "`custfld_str2`")
-    private String custfld_str2;
-    @Column(name = "`custfld_str3`")
-    private String custfld_str3;
-    @Column(name = "`custfld_str4`")
-    private String custfld_str4;
-    @Column(name = "`custfld_str5`")
-    private String custfld_str5;
-    @Column(name = "`custfld_str6`")
-    private String custfld_str6;
+    @Column(name = "custfld_str1")
+    private String custfldStr1;
+    @Column(name = "custfld_str2")
+    private String custfldStr2;
+    @Column(name = "custfld_str3")
+    private String custfldStr3;
+    @Column(name = "custfld_str4")
+    private String custfldStr4;
+    @Column(name = "custfld_str5")
+    private String custfldStr5;
+    @Column(name = "custfld_str6")
+    private String custfldStr6;
 
     @Column(name = "validation", nullable = false)
     private Integer validation = 1;

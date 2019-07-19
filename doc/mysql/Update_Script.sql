@@ -99,3 +99,41 @@ INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`)
 	VALUES (216, 'ColumnType', 'date', 'Date', 'DateTime yyyy-mm-dd');
 INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
 	VALUES (217, 'ColumnType', 'user', 'User', 'User Info');
+	
+-- 2019/7/19
+Drop Table IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL COMMENT 'Nickname',
+  `email` varchar(32) NULL COMMENT 'Email of user',
+  `passwd` varchar(32) NOT NULL COMMENT 'password for local system',
+  `first_name` varchar(32) DEFAULT NULL COMMENT 'Last mame',
+  `last_name` varchar(32) DEFAULT NULL COMMENT 'Last mame',
+  `full_name` varchar(32) DEFAULT NULL COMMENT 'Last mame+First name',
+  `portrait_id` int unsigned DEFAULT NULL COMMENT 'avatar id',
+  `mobile` varchar(11) DEFAULT NULL COMMENT 'phone number',
+  `locale` varchar(6) NOT NULL DEFAULT 'en_US' COMMENT 'default locale ',
+  `status` smallint(5) NOT NULL DEFAULT '1' COMMENT  'Status. 0-inactive，1-active, 4-delete',
+  `disable` smallint(5) NOT NULL DEFAULT '0' COMMENT  'Account forbidden or not. 0-no，1-yes',
+  `channel` smallint(5) NOT NULL DEFAULT '0' COMMENT 'Channel that user logged in. 0 - local, 1 - LDAP',
+  `group_id` int unsigned DEFAULT NULL COMMENT 'Group ID.',
+  `level_id` int unsigned DEFAULT '0' COMMENT '用户等级Id. SystemAdmin(99), Client, Tester(10), Engineer, Lead, Manager, Admin(1), User(0)',
+  `login` datetime DEFAULT NULL COMMENT 'login time',
+  `description` varchar(255) DEFAULT NULL COMMENT 'Description of user',
+
+  `userfld_int1` int(10) DEFAULT NULL COMMENT 'Product field int',
+  `userfld_int2` int(10) DEFAULT NULL COMMENT 'Product field int',
+  `userfld_int3` int(10) DEFAULT NULL COMMENT 'Product field int',
+  `userfld_str1` varchar(255) DEFAULT NULL COMMENT 'Product field string',
+  `userfld_str2` varchar(255) DEFAULT NULL COMMENT 'Product field string',
+  `userfld_str3` varchar(255) DEFAULT NULL COMMENT 'Product field string',
+  `userfld_str4` varchar(255) DEFAULT NULL COMMENT 'Product field string',
+  `userfld_str5` varchar(255) DEFAULT NULL COMMENT 'Product field string',
+  `userfld_str6` varchar(255) DEFAULT NULL COMMENT 'Product field string',
+
+  `create_time` datetime DEFAULT NULL COMMENT 'create time',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_user_nickName` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
