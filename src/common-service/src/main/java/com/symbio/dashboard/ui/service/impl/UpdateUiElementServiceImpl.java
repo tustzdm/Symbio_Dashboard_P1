@@ -49,28 +49,33 @@ public class UpdateUiElementServiceImpl implements UpdateUiElementService {
                 if (uiInfoUpload.getDbField() == null) {
                     return new Result("100010", "Value of db_field cannot be empty, save failed");
                 }
+
+                uiInfo.setDispStatus(1); // user-defined
+                uiInfo.setValidation(1);
+                uiInfo.setDisplay(1);
+
             } else {
                 // 获取已有元素对象
                 uiInfo = uiInfoRepository.getOne(id);
+                uiInfo.setDisplay(uiInfoUpload.getDisplay());
             }
 
             uiInfo.setKey(uiInfoUpload.getKey());
             uiInfo.setType(uiInfoUpload.getType());
             uiInfo.setDbField(uiInfoUpload.getDbField());
             uiInfo.setData(uiInfoUpload.getData());
-            uiInfo.setDispStatus(uiInfoUpload.getDispStatus());
             uiInfo.setIsRequired(uiInfoUpload.getIsRequired());
             uiInfo.setIsDisable(uiInfoUpload.getIsDisable());
             uiInfo.setEnUs(uiInfoUpload.getEnUs());
             uiInfo.setZhCn(uiInfoUpload.getZhCn());
             uiInfo.setPlaceHolder(uiInfoUpload.getPlaceHolder());
-            uiInfo.setLabel(uiInfoUpload.getLabel());
+            //uiInfo.setLabel(uiInfoUpload.getLabel());
             uiInfo.setDefaultValue(uiInfoUpload.getDefaultValue());
             uiInfo.setConstCondition(uiInfoUpload.getConstCondition());
             uiInfo.setIdx(uiInfoUpload.getIdx());
-            uiInfo.setVersion(uiInfoUpload.getVersion());
-            uiInfo.setValidation(uiInfoUpload.getValidation());
-            uiInfo.setDisplay(uiInfoUpload.getDisplay());
+            //uiInfo.setVersion(uiInfoUpload.getVersion());
+            //uiInfo.setValidation(uiInfoUpload.getValidation());
+            //uiInfo.setDisplay(uiInfoUpload.getDisplay());
 
             int flag = 0;
             try {
