@@ -1,18 +1,27 @@
 <template>
 <el-col :span="12" :offset="6">
-    <el-card shadow="hover" style="margin-bottom:100px;font-family:Poppins;">
-        <h2 style="padding-left:100px">Element of Product</h2>
+    <el-card style="margin-bottom:100px;font-family:Poppins;">
+        <h2 style="width:100%;text-align:center">Element of Product</h2>
         <el-divider></el-divider>
-        <el-form ref="form" :model="form" label-width="200px">
+        <el-form ref="form" :model="form" label-width="300px">
             <el-form-item label="Page:" prop="Page">
                 <el-col :span="4">
                     <el-input v-model="form.page" placeholder="Ext Data"></el-input>
                 </el-col>
             </el-form-item>
-            <el-form-item label="Key:" prop="name">
+            <el-form-item :rules="[
+      { required: true, message: 'Order is required'}
+    ]" label="Key:" prop="key">
                 <el-col :span="16">
-                    <el-input v-model="form.key" placeholder="Element Name"></el-input>
+                    <el-input  v-model="form.key" placeholder="Element Name"></el-input>
                 </el-col>
+            </el-form-item>
+            <el-form-item label="DbField:" prop="">
+                <el-col :span="16">
+                    <select  v-model="form.dbField">
+                        <option v-for="item in dbfieldList">{{item.code}}</option>
+                    </select>
+                </el-col>              
             </el-form-item>
             <el-form-item label="Type:" prop="type">
                 <el-col :span="16">
@@ -63,15 +72,20 @@
                     <el-input v-model="form.constCondition" placeholder="Max length"></el-input>
                 </el-col>
             </el-form-item>
-            <el-form-item label="Order:" prop="Order">
+            <el-form-item :rules="[
+      { required: true, message: 'Order is required'},
+      { type: 'number', message: 'Order must be number'}
+    ]" label="Order:" prop="idx">
                 <el-col :span="16">
-                    <el-input v-model="form.idx" placeholder="Element order"></el-input>
+                    <el-input v-model.number="form.idx" placeholder="Element order"></el-input>
                 </el-col>
             </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="submit">Save</el-button>
-                <el-button @click="onCancel">Cancel</el-button>
-            </el-form-item>
+            <div class="sbumitArea">
+                <span>
+                    <el-button class="saveButton" type="primary" @click="submit">Save</el-button>
+                    <el-button class="cancelButton" @click="onCancel">Cancel</el-button>
+                </span>
+            </div>
         </el-form>
     </el-card>
 </el-col>
@@ -105,8 +119,8 @@ export default {
                 constCondition: '',
                 idx: ''
             },
-            typeList: [],
-            page: ''
+            typeList: '',
+            dbfieldList:''
         }
     },
     created() {
@@ -117,6 +131,12 @@ export default {
         }).then(res => {
             console.log(res);
             this.typeList = res.cd;
+        });
+        this.Fetch("setting/getDBFields?table=product&token=1", {
+            method: "GET"
+        }).then(res => {
+            console.log(res);
+            this.dbfieldList = res.cd;
         });
     },
     mounted() {
@@ -167,8 +187,8 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-    .el-input__inner{
-        color:black;
-    }
+<style lang="stylus" >
+.el-input__inner {
+    color: black;
+}
 </style>

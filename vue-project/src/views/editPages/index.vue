@@ -5,8 +5,8 @@
         <select v-model="page" id="" style="margin-left:20px">
             <option v-for="item in pageList">{{item.value}}</option>
         </select>
-        <el-button @click="addRouter" style="float:right;margin-right:10%;color:white;background-color:#7a85a1;line-heigt:32px;width:100px;">
-            + Add
+        <el-button @click="addRouter" style="float:right;margin-right:10%;color:white;background-color:#7a85a1;line-heigt:32px;width:150px;">
+            + Add Element
         </el-button>
     </div>
     <table class="common-table" style="width:100%">
@@ -19,12 +19,12 @@
         </thead>
         <tbody>
             <tr class="tableBody" v-for="items in tableData">
-                <td v-for="(item,index) in items" v-if="['dbField','page','label','dispStatus','version','validation','display'].indexOf(index) === -1">
+                <td v-for="(item,index) in items" v-if="['page','label','dispStatus','version','validation','display'].indexOf(index) === -1">
                     <p>{{item}}</p>
                 </td>
-                <td :order="items.idx">
-                    <el-button @click="returnTrIndex();editRouter()" :order="items.idx" class="editDeleteBtn" icon="el-icon-edit" circle></el-button>
-                    <el-button @click="returnTrIndex();deleteTr()" :order="items.idx" class="editDeleteBtn" type="danger" icon="el-icon-delete" circle></el-button>
+                <td :formId="items.id">
+                    <el-button @click="editRouter()" :formId="items.id" class="editDeleteBtn" icon="el-icon-edit" circle></el-button>
+                    <el-button @click="returnTrIndex();deleteTr()" :formId="items.id" class="editDeleteBtn" type="danger" icon="el-icon-delete" circle></el-button>
                 </td>
             </tr>
         </tbody>
@@ -37,11 +37,11 @@ export default {
     name: 'editPages',
     data() {
         return {
-            tableHead: ['No', 'Key', 'Type', 'Ext.Data', 'Required', 'Disable', 'en_US', 'zh_CN', 'PlaceHolder', 'DefaultValue', 'Constraint', 'Order', 'Operation'],
+            tableHead: ['ID', 'Key', 'DbFeild', 'Type', 'Ext.Data', 'Required', 'Disable', 'en_US', 'zh_CN', 'PlaceHolder', 'DefaultValue', 'Constraint', 'Order', 'Operation'],
             pageList: [],
             tableData: [],
             page: '',
-            trIndex: '123'
+            trIndex: '1'
         }
     },
     created() {
@@ -94,23 +94,31 @@ export default {
             })
         },
         editRouter() {
+            this.returnTrIndex();
+            alert("+++++++++" +this.trIndex);
             this.$router.push({
                 path: 'edit',
                 name: 'edit',
                 params: {
-                    page: this.page,
-                    tr: this.tableData[this.trIndex - 1], //这里的数字要根据点击的是第几行
+                    tr: this.tableData[this.trIndex], //这里的数字要根据点击的是第几行
                 }
             })
         },
         returnTrIndex() {
-            return this.trIndex = event.target.parentNode.getAttribute('order');
+            var nodes = document.getElementsByTagName("tr");
+            for (var i = 0; i < nodes.length; i += 1) {
+                nodes[i].onclick = (function (i) {
+                    return function () {
+                        this.trIndex = i-1;
+                        alert('trindex is' + this.trIndex)
+                    }
+                })(i);
+            }
         },
         deleteTr() {
-            // var tr = this.tableData[this.trIndex - 1].id;
-            // console.log(tr);    
-            // console.log(typeof(tr));
-            this.$axios.post(`/ui/removeUiElement?token=111&id=26`).then(res => {//token先是写死的
+
+            alert(this.trIndex);
+            this.$axios.post(`/ui/removeUiElement?token=111&id=${this.tableData[this.trIndex].id}`).then(res => { //token先是写死的
                 // success callback
                 console.log(res);
                 var ec = res.data.ec;

@@ -1,10 +1,10 @@
 <template>
 <el-col :span="12" :offset="6">
-    <el-card shadow="hover" style="margin-bottom:100px;font-family:Poppins;">
-        <h2 style="padding-left:100px">Element of Product</h2>
+    <el-card style="margin-bottom:100px;font-family:Poppins;">
+        <h2 style="width:100%;text-align:center">Element of Product</h2>
         <el-divider></el-divider>
-        <el-form ref="form" :model="form" label-width="200px">
-            <el-form-item label="Page:" prop="Page">
+        <el-form ref="form" :model="form" label-width="300px">
+            <el-form-item label="Page:" prop="page">
                 <el-col :span="4">
                     <span>{{form.page}}</span>
                     <span>{{type}}</span>
@@ -13,6 +13,13 @@
             <el-form-item label="Key:" prop="name">
                 <el-col :span="16">
                     <el-input v-model="form.key" placeholder="Element Name"></el-input>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="DbField:" prop="">
+                <el-col :span="16">
+                    <select v-model="form.dbField">
+                        <option v-for="item in dbfieldList">{{item.code}}</option>
+                    </select>
                 </el-col>
             </el-form-item>
             <el-form-item label="Type:" prop="type">
@@ -69,10 +76,12 @@
                     <el-input v-model="form.idx" placeholder="Element order"></el-input>
                 </el-col>
             </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="submit">Save</el-button>
-                <el-button @click="onCancel">Cancel</el-button>
-            </el-form-item>
+            <div class="sbumitArea">
+                <span>
+                    <el-button class="saveButton" type="primary" @click="submit">Save</el-button>
+                    <el-button class="cancelButton" @click="onCancel">Cancel</el-button>
+                </span>
+            </div>
         </el-form>
     </el-card>
 </el-col>
@@ -91,18 +100,24 @@ export default {
             radio1: '1',
             radio2: '1',
             form: {},
-            typeList: []
+            typeList: [],
+            dbfieldList: ''
         }
     },
     created() {
         this.form = this.$route.params.tr;
         console.log(this.form);
-        console.log(this.form)
         this.Fetch("/setting/getDictionary?token=1&type=HtmlType", {
             method: "GET"
         }).then(res => {
             console.log(res);
             this.typeList = res.cd;
+        });
+        this.Fetch("setting/getDBFields?table=product&token=1", {
+            method: "GET"
+        }).then(res => {
+            console.log(res);
+            this.dbfieldList = res.cd;
         });
     },
     mounted() {

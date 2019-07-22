@@ -49,6 +49,16 @@
 
 
 
+/* sbumitArea: save button and cancel button;including page: Element page add&edit ,Add Product&Release&Testset */
+.sbumitArea{
+  width:100%;text-align:center;padding-top:15px;
+}
+.saveButton{
+  color:white;background-color:#17c671;border:none;width:75px;
+}
+.cancelButton{
+  color:white;background-color:#ff7400;border:none;
+}
 
 
 
