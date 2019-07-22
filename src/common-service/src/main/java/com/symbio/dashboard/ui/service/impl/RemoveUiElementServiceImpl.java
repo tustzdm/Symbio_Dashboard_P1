@@ -2,7 +2,6 @@ package com.symbio.dashboard.ui.service.impl;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.repository.UiInfoRepository;
-import com.symbio.dashboard.ui.dto.upload.UiInfoUpload;
 import com.symbio.dashboard.ui.service.RemoveUiElementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +24,8 @@ public class RemoveUiElementServiceImpl implements RemoveUiElementService {
     private UiInfoRepository uiInfoRepository;
 
     @Override
-    public Result removeUiElement(UiInfoUpload uiInfoUpload) {
-        return removeUiElementResult(uiInfoUpload);
+    public Result removeUiElement(Integer id) {
+        return removeUiElementResult(id);
     }
 
     /**
@@ -36,9 +35,7 @@ public class RemoveUiElementServiceImpl implements RemoveUiElementService {
      * @Date - 2019/7/9
      * @Param - [uiInfoUpload]
      */
-    private Result removeUiElementResult(UiInfoUpload uiInfoUpload) {
-
-        Integer id = uiInfoUpload.getId();
+    private Result removeUiElementResult(Integer id) {
 
         try {
             uiInfoRepository.deleteById(id);

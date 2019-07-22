@@ -136,10 +136,7 @@ public class UiInfoController {
                 return result;
             }
 
-            UiInfoUpload uiInfoUpload = new UiInfoUpload();
-            uiInfoUpload.setId(id);
-
-            result = removeUiElementService.removeUiElement(uiInfoUpload);
+            result = removeUiElementService.removeUiElement(id);
             if (!result.isSuccess()) {
                 return result;
             }
