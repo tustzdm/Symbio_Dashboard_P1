@@ -21,6 +21,7 @@
             <tr class="tableBody" v-for="items in tableData">
                 <td v-for="(item,index) in items" v-if="['page','label','dispStatus','version','validation','display'].indexOf(index) === -1">
                     <p>{{item}}</p>
+                    <!-- <p v-if="index == 'constCondition'">{{JSON.parse(item.constCondition).maxLength}}</p> -->
                 </td>
                 <td :formId="items.id">
                     <el-button @click="editRouter()" :formId="items.id" class="editDeleteBtn" icon="el-icon-edit" circle></el-button>
@@ -95,7 +96,11 @@ export default {
         },
         editRouter() {
             this.returnTrIndex();
-            alert("+++++++++" +this.trIndex);
+            for(var i=0;i<this.tableData.length;i++){
+                if (this.tableData[i].id == this.trIndex){
+                    this.trIndex = i;
+                }
+            }
             this.$router.push({
                 path: 'edit',
                 name: 'edit',
@@ -105,15 +110,21 @@ export default {
             })
         },
         returnTrIndex() {
-            var nodes = document.getElementsByTagName("tr");
-            for (var i = 0; i < nodes.length; i += 1) {
-                nodes[i].onclick = (function (i) {
-                    return function () {
-                        this.trIndex = i-1;
-                        alert('trindex is' + this.trIndex)
-                    }
-                })(i);
+            this.trIndex = event.target.parentNode.getAttribute('formId');
+            for(var i=0;i<this.tableData.length;i++){
+                if (this.tableData[i].id == this.trIndex){
+                   return this.trIndex = i;
+                }
             }
+            // var nodes = document.getElementsByTagName("tr");
+            // for (var i = 0; i < nodes.length; i += 1) {
+            //     nodes[i].onclick = (function (i) {
+            //         return function () {
+            //             this.trIndex = i-1;
+            //             alert('trindex is' + this.trIndex)
+            //         }
+            //     })(i);
+            // }
         },
         deleteTr() {
 

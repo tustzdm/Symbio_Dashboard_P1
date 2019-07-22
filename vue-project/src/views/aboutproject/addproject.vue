@@ -9,7 +9,7 @@
     ]" :key="item.id" :label="item.key+' :'" :prop="item.key">
                 <el-col :span="15">
                     <!-- <input v-if="['text','Number'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"> -->
-                    <el-input v-model="product[item.key]" maxlength="30" v-if="['text','Number','user'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"></el-input>
+                    <el-input v-model="product[item.key]" maxlength="30" v-if="['text','Number','user','User','Text'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"></el-input>
                     <select v-if="['list'].indexOf(item.type) >= 0" >
                         <option v-for="item in statusList">{{item.value}}</option>
                     </select>
