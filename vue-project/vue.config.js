@@ -56,11 +56,11 @@ module.exports = {
         https: false,
         hotOnly: false,
         proxy: {
-            '/mock': {
+            '/api': {
                 target: "http://192.168.170.100:9090",
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/mock': ''
+                    '^/api': ''
                 }
             }
         },

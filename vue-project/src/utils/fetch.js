@@ -3,7 +3,7 @@
 
 
 //前置拼接url
-let api = '/mock';
+let api = '/api';
 
 // //处理promise和fetch的兼容性以及引入
 // require('es6-promise').polyfill();

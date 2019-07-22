@@ -3,11 +3,10 @@
     <el-card style="margin-bottom:100px;font-family:Poppins;">
         <h2 style="width:100%;text-align:center">Element of Product</h2>
         <el-divider></el-divider>
-        <el-form ref="form" :model="form" label-width="300px">
+        <el-form ref="form" v-model="form" label-width="300px">
             <el-form-item label="Page:" prop="page">
                 <el-col :span="4">
                     <span>{{form.page}}</span>
-                    <span>{{type}}</span>
                 </el-col>
             </el-form-item>
             <el-form-item label="Key:" prop="name">

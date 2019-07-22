@@ -10,7 +10,7 @@
                 <el-col :span="15">
                     <!-- <input v-if="['text','Number'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"> -->
                     <el-input v-model="product[item.key]" maxlength="30" v-if="['text','Number','user','User','Text'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"></el-input>
-                    <select v-if="['list'].indexOf(item.type) >= 0" >
+                    <select v-if="['list','SelectList'].indexOf(item.type) >= 0" >
                         <option v-for="item in statusList">{{item.value}}</option>
                     </select>
                     <el-date-picker v-model="time" v-if="item.type === 'DateTime'" placeholder="Choose Date"></el-date-picker>

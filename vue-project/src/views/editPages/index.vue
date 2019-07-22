@@ -2,12 +2,12 @@
 <div class="main" style="width:75%;margin-left:12.5%">
     <div class="top" style="margin:25px 0">
         <span style="padding-left:80px;font-family:Poppins;">Choose Page:</span>
-        <select v-model="page" id="" style="margin-left:20px">
+        <select v-model="page" id="" style="margin-left:20px;height:30px">
             <option v-for="item in pageList">{{item.value}}</option>
         </select>
-        <el-button @click="addRouter" style="float:right;margin-right:10%;color:white;background-color:#7a85a1;line-heigt:32px;width:150px;">
-            + Add Element
-        </el-button>
+            <el-button @click="addRouter" style="float:right;margin-right:10%;color:white;background-color:#7a85a1;heigt:27px;width:150px;border:none">
+                + Add Element
+            </el-button>
     </div>
     <table class="common-table" style="width:100%">
         <thead class="tableHead">
@@ -20,12 +20,15 @@
         <tbody>
             <tr class="tableBody" v-for="items in tableData">
                 <td v-for="(item,index) in items" v-if="['page','label','dispStatus','version','validation','display'].indexOf(index) === -1">
-                    <p>{{item}}</p>
+                    <p v-if="['isRequired', 'isDisable'].indexOf(index) == -1">{{item}}</p>
+                    <el-switch  :model="item" v-if="['isRequired', 'isDisable'].indexOf(index) != -1" disabled active-color="#13ce66"
+    inactive-color="#ff4949" active-value="1" inactive-value="0" >
+                    </el-switch>
                     <!-- <p v-if="index == 'constCondition'">{{JSON.parse(item.constCondition).maxLength}}</p> -->
                 </td>
                 <td :formId="items.id">
                     <el-button @click="editRouter()" :formId="items.id" class="editDeleteBtn" icon="el-icon-edit" circle></el-button>
-                    <el-button @click="returnTrIndex();deleteTr()" :formId="items.id" class="editDeleteBtn" type="danger" icon="el-icon-delete" circle></el-button>
+                    <el-button v-if="items.dispStatus ==1" @click="returnTrIndex();deleteTr()" :formId="items.id" class="editDeleteBtn" type="danger" icon="el-icon-delete" circle></el-button>
                 </td>
             </tr>
         </tbody>
@@ -42,7 +45,8 @@ export default {
             pageList: [],
             tableData: [],
             page: '',
-            trIndex: '1'
+            trIndex: '1',
+            test:'1'
         }
     },
     created() {
@@ -50,7 +54,7 @@ export default {
             method: 'GET'
         }).then(res => {
             this.pageList = res.cd;
-            this.page = res.cd[0].value;
+            this.page = res.cd[1].value;
         });
         // Fetch("/mock/menu/getPageList", {
         //     method: "GET"
@@ -96,8 +100,8 @@ export default {
         },
         editRouter() {
             this.returnTrIndex();
-            for(var i=0;i<this.tableData.length;i++){
-                if (this.tableData[i].id == this.trIndex){
+            for (var i = 0; i < this.tableData.length; i++) {
+                if (this.tableData[i].id == this.trIndex) {
                     this.trIndex = i;
                 }
             }
@@ -105,15 +109,15 @@ export default {
                 path: 'edit',
                 name: 'edit',
                 params: {
-                    tr: this.tableData[this.trIndex], //这里的数字要根据点击的是第几行
+                    tr: this.tableData[this.trIndex], //Pass the tr data to next router
                 }
             })
         },
         returnTrIndex() {
             this.trIndex = event.target.parentNode.getAttribute('formId');
-            for(var i=0;i<this.tableData.length;i++){
-                if (this.tableData[i].id == this.trIndex){
-                   return this.trIndex = i;
+            for (var i = 0; i < this.tableData.length; i++) {
+                if (this.tableData[i].id == this.trIndex) {
+                    return this.trIndex = i;
                 }
             }
             // var nodes = document.getElementsByTagName("tr");
@@ -129,7 +133,7 @@ export default {
         deleteTr() {
 
             alert(this.trIndex);
-            this.$axios.post(`/ui/removeUiElement?token=111&id=${this.tableData[this.trIndex].id}`).then(res => { //token先是写死的
+            this.$axios.post(`/ui/removeUiElement?token=111&id=${this.tableData[this.trIndex].id}`).then(res => {
                 // success callback
                 console.log(res);
                 var ec = res.data.ec;

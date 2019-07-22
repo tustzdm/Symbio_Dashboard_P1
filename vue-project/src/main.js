@@ -14,7 +14,7 @@ import Fetch from './utils/fetch';
 import "./main.css";
 Vue.prototype.Fetch = Fetch;
 Vue.prototype.$axios = axios;
-axios.defaults.baseURL = '/mock';
+axios.defaults.baseURL = '/api';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 Vue.component("icon", Icon);
