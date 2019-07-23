@@ -184,4 +184,14 @@ public class ProductServiceImpl implements ProductService {
         }
         return false;
     }
+
+    /**
+     *
+     * @return
+     */
+    public Result testProductEntity() {
+        List<Product> listResult = productDao.getProductListBySql();
+        return new Result(listResult);
+    }
+
 }

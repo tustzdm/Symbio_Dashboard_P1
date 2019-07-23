@@ -46,11 +46,13 @@ public class Product implements Serializable {
     @Column(name = "logo_url")
     private String logoUrl;
 
+    // 0-normal,1-abnormal,2-completed,3-archived,4-blocked
     @Column(name = "status", nullable = false)
-    private Integer status = 0;
+    private Integer status;
 
+    // 0-hide, 1-show
     @Column(name = "display", nullable = false)
-    private Integer display = 1;
+    private Integer display;
 
     @Column(name = "description")
     private String description;
@@ -76,4 +78,8 @@ public class Product implements Serializable {
     @Column(name = "update_user_name")
     private String updateUserName;
 
+    public Product(Integer status, Integer display) {
+        this.status = status;  // default: 0
+        this.display = display; // default: 1
+    }
 }

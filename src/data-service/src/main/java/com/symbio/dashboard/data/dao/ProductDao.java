@@ -71,7 +71,7 @@ public class ProductDao {
             query = entityManager.createNativeQuery(sb.toString());
             products = query.getResultList();
 
-            productList = EntityUtils.castEntity(products, Product.class, new Product(), dbFields);
+            productList = EntityUtils.castModel(products, Product.class, String.join(",", dbFields));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,6 +122,37 @@ public class ProductDao {
         }
 
         return list;
+    }
+
+    /**
+     * Test Method for castModel()
+     * @return
+     */
+    public List<Product> getProductListBySql() {
+        List<Product> listProduct = new ArrayList<>();
+        try {
+            String sql = "SELECT owner,id,name FROM product LIMIT 0,3";
+
+            List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+            System.out.println(listResult);
+
+            for(Object o : listResult){
+                System.out.println(o);
+            }
+
+            Product objProdcut = new Product();
+
+            listProduct = EntityUtils.castModel(listResult, Product.class, "owner,id,name");
+            System.out.println(objProdcut);
+            System.out.println(listProduct);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            listProduct = null;
+        }
+
+        return listProduct;
     }
 
 }

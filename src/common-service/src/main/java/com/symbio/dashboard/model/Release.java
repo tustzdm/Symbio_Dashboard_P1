@@ -28,7 +28,7 @@ public class Release {
     private String name;
 
     @Column(name = "status",nullable = false)
-    private Integer status = 0;
+    private Integer status;
 
     @Column(name = "start_time")
     private Date startTime;
@@ -37,7 +37,7 @@ public class Release {
     private Date endTime;
 
     @Column(name = "display",nullable = false)
-    private Integer display = 1;
+    private Integer display;
 
     @Column(name = "remark")
     private String remark;
