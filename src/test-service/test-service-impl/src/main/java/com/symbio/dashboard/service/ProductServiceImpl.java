@@ -12,7 +12,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,11 +34,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Result getProductList(Integer userId, String locale) {
-//        List<Product> list;
-        List<Map<String, Object>> list;
+        List<Product> list;
+//        List<Map<String, Object>> list;
         try {
-//            list = productDao.getProductList();
-            list = productDao.getProductUsers(2);
+            list = productDao.getProductList();
+//            list = productDao.getProductUsers(2);
         } catch (Exception e) {
             e.printStackTrace();
             return new Result("100011", "Product list error");
@@ -91,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
 
             // If id is null, add new Product
             if (id == null) {
-                product = new Product();
+                product = new Product(0, 1);
 
                 product.setCreateTime(date);
                 product.setCreateUser(productInfo.getCreateUser());
@@ -109,8 +108,6 @@ public class ProductServiceImpl implements ProductService {
             product.setDevLead(productInfo.getDevLead());
             product.setLogoId(productInfo.getLogoId());
             product.setLogoUrl(productInfo.getLogoUrl());
-            product.setStatus(productInfo.getStatus());
-            product.setDisplay(productInfo.getDisplay());
             product.setDescription(productInfo.getDescription());
             product.setLocale(productInfo.getLocale());
             product.setUpdateTime(date);
