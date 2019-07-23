@@ -170,7 +170,6 @@ export default {
                 // success callback
                 console.log(formData);
                 console.log(res.data);
-
                 var ec = res.data.ec;
                 //debugger;
                 if (ec != '0') {

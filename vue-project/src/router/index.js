@@ -159,5 +159,6 @@ export const constantRouterMap = [
 ];
 export const router = new VueRouter({
     routes: constantRouterMap,
+    mode:'history'   ,
     scrollBehavior: () => ({ y: 0 })
 });

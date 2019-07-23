@@ -5,9 +5,9 @@
         <select v-model="page" id="" style="margin-left:20px;height:30px">
             <option v-for="item in pageList">{{item.value}}</option>
         </select>
-            <el-button @click="addRouter" style="float:right;margin-right:10%;color:white;background-color:#7a85a1;heigt:27px;width:150px;border:none">
-                + Add Element
-            </el-button>
+        <el-button @click="addRouter" style="float:right;margin-right:10%;color:white;background-color:#7a85a1;heigt:27px;width:150px;border:none">
+            + Add Element
+        </el-button>
     </div>
     <table class="common-table" style="width:100%">
         <thead class="tableHead">
@@ -21,8 +21,7 @@
             <tr class="tableBody" v-for="items in tableData">
                 <td v-for="(item,index) in items" v-if="['page','label','dispStatus','version','validation','display'].indexOf(index) === -1">
                     <p v-if="['isRequired', 'isDisable'].indexOf(index) == -1">{{item}}</p>
-                    <el-switch  :model="item" v-if="['isRequired', 'isDisable'].indexOf(index) != -1" disabled active-color="#13ce66"
-    inactive-color="#ff4949" active-value="1" inactive-value="0" >
+                    <el-switch :model="item" v-if="['isRequired', 'isDisable'].indexOf(index) != -1" disabled active-color="#13ce66" inactive-color="#ff4949" active-value="1" inactive-value="0">
                     </el-switch>
                     <!-- <p v-if="index == 'constCondition'">{{JSON.parse(item.constCondition).maxLength}}</p> -->
                 </td>
@@ -46,7 +45,7 @@ export default {
             tableData: [],
             page: '',
             trIndex: '1',
-            test:'1'
+            test: '1'
         }
     },
     created() {
@@ -76,18 +75,18 @@ export default {
         page: function (val) {
             console.log(val);
             //get the page UIUIInfoList
+            this.getTableData();
+        },
+
+    },
+    methods: {
+        getTableData(){
             this.Fetch(`/ui/getUiInfoList?token=111&page=${this.page}`, {
                 method: "GET"
             }).then(data => {
                 console.log(data.cd);
                 this.tableData = data.cd;
             });
-        },
-
-    },
-    methods: {
-        beforeRemove(file, fileList) {
-            return this.$confirm(`确定移除 ${file.name}？`)
         },
         addRouter() {
             this.$router.push({
@@ -131,22 +130,26 @@ export default {
             // }
         },
         deleteTr() {
-
-            alert(this.trIndex);
-            this.$axios.post(`/ui/removeUiElement?token=111&id=${this.tableData[this.trIndex].id}`).then(res => {
-                // success callback
-                console.log(res);
-                var ec = res.data.ec;
-                debugger;
-                if (ec != '0') {
-                    alert(res.ec + ", " + res.em);
-                } else {
-                    this.$message.success("Delete Sucess！");
-                    console.log(this.tableData);
-                }
-            }).catch(err => {
-                alert(err);
-            });
+            this.$confirm('Confirm to delete?', {
+                confirmButtonText: 'Confirm',
+                cancelButtonText: 'Cancel',
+                type: 'warning'
+            }).then(() => {
+                 this.$axios.post(`/ui/removeUiElement?token=111&id=${this.tableData[this.trIndex].id}`).then(res => {
+                    // success callback
+                    console.log(res);
+                    var ec = res.data.ec;
+                    if (ec != '0') {
+                        alert(res.dat.ec + ", " + res.data.em);//弹出错误
+                    } else {
+                        this.$message.success("Delete Sucess！");
+                        this.getTableData();
+                        console.log(this.tableData);
+                    }
+                }).catch(err => {
+                    alert(err);
+                });
+            })
         }
     }
 }

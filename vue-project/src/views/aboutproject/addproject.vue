@@ -4,17 +4,21 @@
         <h2 style="width:100%;padding-left:150px">Add Product</h2>
         <el-divider></el-divider>
         <el-form :model="product" ref="product" label-width="300px">
+            <p>{{product}}</p>
             <el-form-item v-for="item in uiList" :rules="[
       { required: item.isRequired == 1, message: `Please input ${item.key}`, trigger: 'blur' }
     ]" :key="item.id" :label="item.key+' :'" :prop="item.key">
                 <el-col :span="15">
                     <!-- <input v-if="['text','Number'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"> -->
-                    <el-input v-model="product[item.key]" maxlength="30" v-if="['text','Number','user','User','Text'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"></el-input>
-                    <select v-if="['list','SelectList'].indexOf(item.type) >= 0" >
+                    <el-input v-model="product[item.key]" maxlength="30" v-if="['text','Number','Text'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"></el-input>
+                    <select v-if="['list','SelectList'].indexOf(item.type) >= 0" v-model="product[item.key]">
                         <option v-for="item in statusList">{{item.value}}</option>
                     </select>
-                    <el-date-picker v-model="time" v-if="item.type === 'DateTime'" placeholder="Choose Date"></el-date-picker>
-                    <el-input type="textarea" :autosize="{ minRows: 4}" v-model="product.description" v-if="item.type == 'textarea'" :maxlength="JSON.parse(item.constCondition).maxLength" show-word-limit></el-input>
+                    <select v-if="['user','User'].indexOf(item.type) >= 0" v-model="product[item.key]">
+                        <option v-for="item in userList">{{item.fullName}}</option>
+                    </select>
+                    <el-date-picker v-model="product[item.key]" v-if="item.type === 'DateTime'" placeholder="Choose Date"></el-date-picker>
+                    <el-input type="textarea" v-model="product[item.key]" :autosize="{ minRows: 4}" v-if="item.type == 'textarea'" :maxlength="JSON.parse(item.constCondition).maxLength" show-word-limit></el-input>
                 </el-col>
             </el-form-item>
         </el-form>
@@ -22,7 +26,7 @@
             <span>
                 <!-- <button class="saveButton" style="border-radius:10px"> asdfas</button> -->
                 <el-button class="saveButton" type="primary" @click="onSubmit">Save</el-button>
-                <el-button  class="cancelButton" @click="onCancel">Cancel</el-button>
+                <el-button class="cancelButton" @click="onCancel">Cancel</el-button>
             </span>
         </div>
     </el-card>
@@ -42,14 +46,9 @@ export default {
             time: '',
             uploadUrl: uploadUrl,
             uiList: '',
-            statusList:'',
-            product: {
-                name: '',
-                locale: '',
-                qalead: '',
-                status: '',
-                description: ''
-            }
+            statusList: '',
+            product: {},
+            userList:''
         }
     },
     created() {
@@ -65,6 +64,12 @@ export default {
             console.log(res.cd);
             this.statusList = res.cd;
         });
+        this.Fetch(`/setting/getUserList?token=1`, {
+            method: "GET"
+        }).then(res => {
+            console.log(res.cd.cd);
+            this.userList = res.cd.cd;
+        });
     },
     mounted() {
         let type = this.$route.query.type;
@@ -76,19 +81,27 @@ export default {
         inputTips(msg, locale) {
             return (locale == 'en_US' || typeof locale == 'undefined') ? "Please input " + msg : "请输入" + msg;
         },
-
         onSubmit() {
-            saveProjectInfo(this.form).then(res => {
-                if (res.code == 200) {
-                    this.$message.success("保存成功！")
+            // saveProjectInfo(this.form).then(res => {
+            //     if (res.code == 200) {
+            //         this.$message.success("保存成功！")
+            //     }
+            // });
+            this.$axios.post('/testmgmr/saveProduct?token=111', this.product).then(res => {
+                // success callback
+                console.log(this.product);
+                console.log(res.data);
+                var ec = res.data.ec;
+                //debugger;
+                if (ec != '0') {
+                    alert("Error Code:" + res.data.ec + ", Error Message:" + res.data.em);
+                } else {
+                    this.$message.success("Operation Success！");
+                    this.$router.go(-1);
                 }
+            }).catch(err => {
+                alert(err);
             });
-        },
-        beforeRemove(file, fileList) {
-            return this.$confirm(`确定移除 ${file.name}？`)
-        },
-        handleSuccess(res) {
-            this.form.logo = res.url;
         },
         onCancel() {
             this.$router.go(-1);
