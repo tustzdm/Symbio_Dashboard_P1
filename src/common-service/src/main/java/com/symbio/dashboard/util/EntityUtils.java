@@ -171,11 +171,19 @@ public class EntityUtils {
             return returnList;
         }
 
+        //获取当前实体类的属性名、属性值、属性类别
+
+
         try {
+            List<Map> attributeInfoList = getFieldsInfo(clazz.newInstance());
+            arrFields = getFieldMethodNames(arrFields, attributeInfoList);
+
+            String fieldName = null;
             for (Object[] item : list) {
                 T objModel = clazz.newInstance();
                 for (int i = 0; i < item.length; i++) {
-                    PropertyUtil.setProperty(objModel, arrFields[i].trim(), item[i]);
+                    fieldName = arrFields[i].trim().replace("_","");
+                    PropertyUtil.setProperty(objModel, fieldName, item[i]);
                 }
                 returnList.add(objModel);
             }
@@ -185,4 +193,47 @@ public class EntityUtils {
         }
         return returnList;
     }
+
+    /**
+     * Check sql field and its method name
+     * @param fields
+     * @param map
+     * @return
+     */
+    private static String[] getFieldMethodNames(String[] fields, List<Map> map) throws Exception{
+        String[] retData = fields;
+
+        String strField = null;
+        for(int i =0;i<fields.length;i++) {
+            strField = convertFieldToMethName(fields[i],map);
+            if (strField == null) {
+                String msg = "Could not find exact method name. field = " + fields[i];
+                System.out.println(msg);
+                logger.error(msg);
+                throw new Exception("EntityUtils !!!ERROR!!!" + msg);
+            }
+            retData[i] = strField;
+        }
+        return retData;
+    }
+
+    private static String convertFieldToMethName(String field, List<Map> mapAttr) {
+        if(field == null || field.length() == 0) {
+            return null;
+        }
+
+        String methodName = null;
+        String testField = field.trim().replace("_","");
+        String fieldName = null;
+        for (Map item : mapAttr) {
+            fieldName = item.get("name").toString();
+            if(testField.equalsIgnoreCase(fieldName)){
+                methodName = fieldName;
+                break;
+            }
+        }
+
+        return methodName;
+    }
+
 }

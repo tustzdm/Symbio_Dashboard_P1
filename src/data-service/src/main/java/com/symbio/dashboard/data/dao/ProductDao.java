@@ -131,7 +131,7 @@ public class ProductDao {
     public List<Product> getProductListBySql() {
         List<Product> listProduct = new ArrayList<>();
         try {
-            String sql = "SELECT owner,id,name FROM product LIMIT 0,3";
+            String sql = "SELECT qa_lead, owner,id,name FROM product LIMIT 0,3";
 
             List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
             System.out.println(listResult);
@@ -142,7 +142,7 @@ public class ProductDao {
 
             Product objProdcut = new Product();
 
-            listProduct = EntityUtils.castModel(listResult, Product.class, "owner,id,name");
+            listProduct = EntityUtils.castModel(listResult, Product.class, "qa_lead, owner,id,name");
             System.out.println(objProdcut);
             System.out.println(listProduct);
 
