@@ -50,7 +50,7 @@ public class ProductController {
 
         Integer userId = 0;
         Result retResult = productService.getProductPageList(userId, locale, pageIndex, pageSize);
-        return null;
+        return retResult;
     }
 
     @RequestMapping("/getProductInfo")
@@ -62,17 +62,16 @@ public class ProductController {
         try {
             result = productAuthService.getProductListAuth(token);
             if (result.hasError()) {
-                return new Result("100010", "Product Auth Error");
+                return result;
             }
 
             result = productService.getProductInfo(userId, id);
-
             if (result.hasError()) {
-                return new Result("100011", "Product List Error");
+                return result;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("100012", "Get Product List Interface Exception");
+            return new Result("100012", "Get Product Info Interface Exception");
         }
 
         return result;
@@ -86,12 +85,12 @@ public class ProductController {
         try {
             result = productAuthService.editProductAuth(token);
             if (result.hasError()) {
-                return new Result("100010", "Edit Product Auth Error");
+                return result;
             }
 
             result = productService.updateProduct(product);
             if (result.hasError()) {
-                return new Result("100011", "Edit Product Error");
+                return result;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,12 +108,12 @@ public class ProductController {
         try {
             result = productAuthService.removeProductAuth(token);
             if (result.hasError()) {
-                return new Result("100010", "Remove Product Auth Error");
+                return result;
             }
 
             result = productService.removeProduct(id);
             if (result.hasError()) {
-                return new Result("100011", "Remove Product Error");
+                return result;
             }
         } catch (Exception e) {
             e.printStackTrace();

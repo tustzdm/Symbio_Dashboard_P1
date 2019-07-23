@@ -31,7 +31,7 @@ public class EntityUtils {
         Object[] co = list.get(0);
 
         //获取当前实体类的属性名、属性值、属性类别
-        List<Map> attributeInfoList = getFiledsInfo(model);
+        List<Map> attributeInfoList = getFieldsInfo(model);
         //创建属性类别数组
         Class[] c2 = new Class[attributeInfoList.size()];
         //如果数组集合元素个数与实体类属性个数不一致则发生错误
@@ -79,7 +79,7 @@ public class EntityUtils {
      * @param model 实体类
      * @return list集合
      */
-    private static List<Map> getFiledsInfo(Object model) {
+    private static List<Map> getFieldsInfo(Object model) {
         Field[] fields = model.getClass().getDeclaredFields();
         List<Map> list = new ArrayList(fields.length);
         Map infoMap = null;
@@ -98,28 +98,13 @@ public class EntityUtils {
         if (list.isEmpty()) {
             return returnList;
         }
-        //获取每个数组集合的元素个数
-        Object[] co = list.get(0);
 
         //获取当前实体类的属性名、属性值、属性类别
         List<Map> attributeInfoList = getFieldsInfo(model, dbFields);
 
-        //创建属性类别数组
-        Class[] c2 = new Class[attributeInfoList.size()];
-
-        //如果数组集合元素个数与实体类属性个数不一致则发生错误
-        if (attributeInfoList.size() != co.length) {
-            return returnList;
-        }
-        //确定构造方法
-        for (int i = 0; i < attributeInfoList.size(); i++) {
-            c2[i] = (Class) attributeInfoList.get(i).get("type");
-        }
         try {
-            for (Object[] o : list) {
-                Constructor<T> constructor = clazz.getConstructor(c2);
-                returnList.add(constructor.newInstance(o));
-            }
+
+
         } catch (Exception ex) {
             logger.error("实体数据转化为实体类发生异常：异常信息：{}", ex.getMessage());
             return returnList;
@@ -162,5 +147,25 @@ public class EntityUtils {
         Field[] fields = new Field[fieldList.size()];
         fieldList.toArray(fields);
         return fields;
+    }
+
+//    public static void setValue(Object obj, Class<?> clazz, String filedName, Class<?> typeClass, Object value) {
+//        filedName = removeLine(filedName);
+//        String methodName = "set" + filedName.substring(0, 1).toUpperCase() + filedName.substring(1);
+//        try {
+//            Method method = clazz.getDeclaredMethod(methodName, new Class[]{typeClass});
+//            method.invoke(obj, new Object[]{getClassTypeValue(typeClass, value)});
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
+
+    private static void setValues(List<Object[]> list, Object model, List<String> dbFields) {
+
+        Field[] fields = getAllFields(model);
+        List<Map> mapList = new ArrayList(fields.length);
+        Map infoMap;
+
+
     }
 }

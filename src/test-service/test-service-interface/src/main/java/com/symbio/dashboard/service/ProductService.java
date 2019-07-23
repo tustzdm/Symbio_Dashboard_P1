@@ -9,7 +9,11 @@ public interface ProductService {
 
     Result getProductList(Integer userId, String locale);
 
+    Result getProductList(Integer userId);
+
     Result getProductPageList(Integer userId, String locale, int pageIndex, int pageSize);
+
+    Result getProductPageList(Integer userId, int pageIndex, int pageSize);
 
     Result getProductInfo(Integer userId, Integer id);
 

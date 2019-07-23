@@ -15,4 +15,5 @@ public interface UiInfoRep extends JpaRepository<UiInfo, Integer> {
 
     @Override
     UiInfo getOne(Integer id);
+
 }

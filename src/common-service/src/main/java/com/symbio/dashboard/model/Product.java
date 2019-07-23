@@ -76,20 +76,4 @@ public class Product implements Serializable {
     @Column(name = "update_user_name")
     private String updateUserName;
 
-    public Product(String name, Integer owner, Integer qaLead, Integer status, String locale, String description, Date createTime) {
-        this.name = name;
-        this.owner = owner;
-        this.qaLead = qaLead;
-        this.status = status;
-        this.locale = locale;
-        this.description = description;
-        this.createTime = createTime;
-    }
-
-//    public Product(Object... objects) {
-//        for (int i = 0; i < objects.length; i++) {
-//            objects[i] =
-//        }
-//    }
-
 }

@@ -21,8 +21,8 @@ public interface ProductRep extends JpaRepository<Product, Integer> {
     @Query(value = "select p.id from product p",nativeQuery = true)
     List<Integer> getAllId();
 
-    @Query(value = "select p.name from product p where p.id<>?1",nativeQuery = true)
-    List<String> getAllName(Integer id);
+    @Query(value = "select p.name from product p", nativeQuery = true)
+    List<String> getAllName();
 
     Product getById(Integer id);
 
