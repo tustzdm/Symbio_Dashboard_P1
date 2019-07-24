@@ -137,3 +137,14 @@ CREATE TABLE `user` (
   UNIQUE KEY `unique_user_nickName` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+-- 2019/7/24
+Drop Table IF EXISTS `result_message`;
+CREATE TABLE `result_message` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(16) NOT NULL COMMENT 'Error code',
+  `en_us` VARCHAR(255) NOT NULL COMMENT 'Message for en_US',
+  `zh_cn` VARCHAR(255) NOT NULL COMMENT 'Message for zh_cn',
+  `formatter` varchar(255) NULL COMMENT 'Formatter for locales if needed',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_result_message_code` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

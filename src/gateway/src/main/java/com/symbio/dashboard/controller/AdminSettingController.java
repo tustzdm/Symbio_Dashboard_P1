@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/setting")
 @RestController
 @Slf4j
-public class AdminSettingController {
+public class AdminSettingController extends BaseController {
 
     private static Logger logger = LoggerFactory.getLogger(AdminSettingController.class);
 
@@ -59,7 +59,7 @@ public class AdminSettingController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("10010", "Get page name list interface exception");
+            return getResult("200001");
         }
 
         return result;
@@ -76,7 +76,7 @@ public class AdminSettingController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("10010", String.format("Could not get Table[%s] field info", table));
+            return getResult("001001", table);
         }
 
         return result;
@@ -101,7 +101,7 @@ public class AdminSettingController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("10010", "Could not get user list info");
+            return getResult("000120", "user list");
         }
         return result;
     }

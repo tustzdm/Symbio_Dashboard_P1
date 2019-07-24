@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/testmgmt")
 @RestController
 @Slf4j
-public class ProductController {
+public class ProductController extends BaseController {
 
     private static Logger logger = LoggerFactory.getLogger(ProductController.class);
 
