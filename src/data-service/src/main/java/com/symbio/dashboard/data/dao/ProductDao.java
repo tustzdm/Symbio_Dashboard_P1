@@ -39,6 +39,10 @@ public class ProductDao {
     @Autowired
     private UserRep userRep;
 
+    public List<Object> getFormatProductList() {
+
+        return null;
+    }
 
     public List<Product> getProductList() {
         Query query;
@@ -48,16 +52,23 @@ public class ProductDao {
         List<Product> productList = new ArrayList<>();
         List<String> dbFields = new ArrayList<>();
 
-        List<Integer> index = new ArrayList<>();
+        List<String> columns = new ArrayList<>();
+        List<Integer> productIds = new ArrayList<>();
+
+        List<Map<String, Object>> usersInfo;
 
         try {
             sb.append("select ");
+            dbFields.add("id");
 
             List<UiInfo> uiInfoList = uiInfoRep.getUiInfoListByPageName("product");
 
             if (uiInfoList != null && uiInfoList.size() > 0) {
                 for (int i = 0; i < uiInfoList.size(); i++) {
                     dbFields.add(uiInfoList.get(i).getDbField());
+                    if (uiInfoList.get(i).getType().equalsIgnoreCase("user")) {
+                        columns.add(uiInfoList.get(i).getDbField());
+                    }
                 }
                 for (String s : dbFields) {
                     sb.append(s).append(",");
@@ -67,6 +78,7 @@ public class ProductDao {
                 }
                 sb.append(" from product where 1=1");
             }
+
 
             query = entityManager.createNativeQuery(sb.toString());
             products = query.getResultList();
@@ -80,33 +92,32 @@ public class ProductDao {
         return productList;
     }
 
-    public List<Map<String, Object>> getProductUsers(Integer productId) {
-        Query query;
-        StringBuilder sb = new StringBuilder();
+    public List<Map<String, Object>> getProductUsers(List<Integer> productIds, List<String> columns) {
 
-        User user;
-        Product product;
-        List<Object> userList = new ArrayList<>();
         List<Map<String, Object>> users = new ArrayList<>();
 
         try {
-            getUserInfo(productId, "qa_lead");
-            getUserInfo(productId, "manager");
-            getUserInfo(productId, "owner");
+
+            for (int i = 0; i < productIds.size(); i++) {
+                for (int j = 0; j < columns.size(); j++) {
+                    users.add(getUserInfo(productIds.get(i), columns.get(j)));
+                }
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();
 
         }
 
-        return null;
+        return users;
     }
 
-    private List<Object> getUserInfo(Integer productId, String column) {
+    private Map<String, Object> getUserInfo(Integer productId, String column) {
         Query query;
         StringBuilder sb = new StringBuilder();
-        List<Object> list = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
+        List<User> users;
+        Map<String, Object> userInfo = new HashMap<>();
 
         try {
             sb.append("select * from user u join product p on u.id=p.");
@@ -115,13 +126,24 @@ public class ProductDao {
             sb.append(productId);
 
             query = entityManager.createNativeQuery(sb.toString(), User.class);
-            list = query.getResultList();
+            users = query.getResultList();
+
+            if (users == null || users.isEmpty()) {
+                userInfo.put("id", "");
+                userInfo.put("name", "");
+                userInfo.put("email", "");
+            } else {
+                User user = users.get(0);
+                userInfo.put("id", user.getId());
+                userInfo.put("name", user.getFullName());
+                userInfo.put("email", user.getEmail());
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return list;
+        return userInfo;
     }
 
     /**

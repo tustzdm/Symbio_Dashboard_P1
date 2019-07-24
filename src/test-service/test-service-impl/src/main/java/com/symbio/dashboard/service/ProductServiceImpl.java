@@ -64,7 +64,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Result getProductInfo(Integer userId, Integer id) {
-        return null;
+        Product product;
+        try {
+            product = productRep.getById(id);
+            if (product == null || "".equals(product)) {
+                return new Result("000120", "Product Info");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("200102", "Product Info");
+        }
+
+        return new Result(product);
     }
 
     @Override

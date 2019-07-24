@@ -56,6 +56,7 @@ public class PropertyUtil {
    */
   public static void setProperty(Object obj, String propertyName, Object value) {
     Class<?> clazz = obj.getClass();
+    propertyName = getFieldString(propertyName);
     PropertyDescriptor pd = getPropertyDescriptor(clazz, propertyName);
     Method setMethod = pd.getWriteMethod();
     try {
@@ -82,5 +83,20 @@ public class PropertyUtil {
       e.printStackTrace();
     }
     return value;
+  }
+
+  public static String getFieldString(String string) {
+    String temp = "";
+    if (string.contains("_")) {
+      String[] args = string.split("_");
+      String first = args[0];
+      for (int i = 0; i < args.length - 1; i++) {
+        String check = args[i + 1];
+        String letter = check.substring(0, 1).toUpperCase();
+        temp += letter + check.substring(1);
+      }
+      return first + temp;
+    }
+    return string;
   }
 }
