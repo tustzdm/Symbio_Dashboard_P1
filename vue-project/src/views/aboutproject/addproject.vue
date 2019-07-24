@@ -7,15 +7,16 @@
             <p>{{product}}</p>
             <el-form-item v-for="item in uiList" :rules="[
       { required: item.isRequired == 1, message: `Please input ${item.key}`, trigger: 'blur' }
-    ]" :key="item.id" :label="item.key+' :'" :prop="item.key">
+    ]" :key="item.id" :label="item.enUs+' :'" :prop="item.key">
                 <el-col :span="15">
                     <!-- <input v-if="['text','Number'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"> -->
                     <el-input v-model="product[item.key]" maxlength="30" v-if="['text','Number','Text'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"></el-input>
                     <select v-if="['list','SelectList'].indexOf(item.type) >= 0" v-model="product[item.key]">
-                        <option v-for="item in statusList">{{item.value}}</option>
+                        <!-- <option v-for="item in statusList">{{item.value}}</option> -->
+                        <option value="">1</option>
                     </select>
                     <select v-if="['user','User'].indexOf(item.type) >= 0" v-model="product[item.key]">
-                        <option v-for="item in userList">{{item.fullName}}</option>
+                        <option v-for="item in userList">{{item.id}}</option>
                     </select>
                     <el-date-picker v-model="product[item.key]" v-if="item.type === 'DateTime'" placeholder="Choose Date"></el-date-picker>
                     <el-input type="textarea" v-model="product[item.key]" :autosize="{ minRows: 4}" v-if="item.type == 'textarea'" :maxlength="JSON.parse(item.constCondition).maxLength" show-word-limit></el-input>
@@ -47,7 +48,8 @@ export default {
             uploadUrl: uploadUrl,
             uiList: '',
             statusList: '',
-            product: {},
+            product: {
+            },
             userList:''
         }
     },
@@ -87,7 +89,8 @@ export default {
             //         this.$message.success("保存成功！")
             //     }
             // });
-            this.$axios.post('/testmgmr/saveProduct?token=111', this.product).then(res => {
+            alert(this.product);
+            this.$axios.post('/testmgmt/updateProduct?token=111', this.product).then(res => {
                 // success callback
                 console.log(this.product);
                 console.log(res.data);
@@ -97,7 +100,7 @@ export default {
                     alert("Error Code:" + res.data.ec + ", Error Message:" + res.data.em);
                 } else {
                     this.$message.success("Operation Success！");
-                    this.$router.go(-1);
+                    // this.$router.go(-1);
                 }
             }).catch(err => {
                 alert(err);

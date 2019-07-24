@@ -8,11 +8,11 @@
     </el-card>
     <el-card class="manage-tabel" shadow="never">
         <!-- <el-table :data="tableData"> -->
-        <el-table :data="productList">
-            <el-table-column prop="name" label="Name" :width="0.5*tabelWidth">
+        <el-table :data="tableData">
+            <el-table-column prop="product" label="Name" :width="0.5*tabelWidth">
                 <template slot-scope="scope">
                     <div>
-                        <router-link :to="{ name: 'productInfo', params: { productName: scope.row.name }}">{{scope.row.name}}</router-link>
+                        <router-link to='/buy/NewAccountSignUp'>{{scope.row.product}}</router-link>
                     </div>
                     <div>{{scope.row.description}}</div>
                 </template>

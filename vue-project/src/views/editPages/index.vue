@@ -176,4 +176,7 @@ export default {
 .chooseArea .chooseN {
     float: right;
 }
+td{
+    width: 7%
+}
 </style>

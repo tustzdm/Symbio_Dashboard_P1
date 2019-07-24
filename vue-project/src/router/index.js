@@ -145,7 +145,7 @@ export const constantRouterMap = [
         component: Layout,
         children: [
             {
-                path: "/buy/NewAccountSignUp",
+                path: "/buy/product/:productName",
                 component: _import("buy/productInfo"),
                 name: "productInfo",
                 meta: {
@@ -159,6 +159,5 @@ export const constantRouterMap = [
 ];
 export const router = new VueRouter({
     routes: constantRouterMap,
-    mode:'history'   ,
     scrollBehavior: () => ({ y: 0 })
 });
