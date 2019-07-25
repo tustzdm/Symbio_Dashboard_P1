@@ -65,9 +65,10 @@ public class ProductDTO implements Serializable {
   private Integer pageIndex;
   private Integer pageSize;
   private Integer totalRecord;
+  private Integer dateType = 1;  // 1: Array[Array], 2: Array[Map]
   private String locale;
   private List columns;
-  private String fields;
+  private List<String> fields;
   private List data;
 
   public ProductDTO(String locale, Integer pageIndex, Integer pageSize){
