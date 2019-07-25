@@ -39,18 +39,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Result getProductList(Integer userId, String locale) {
-//        List<Product> list;
-//        List<Map<String, Object>> list;
-        Map<String, Object> list;
+        Map<String, Object> map;
         try {
-//            list = productDao.getProductList();
-//            list = productDao.getProductUsers(2);
-            list = productDao.getFormatProductList();
+            map = productDao.getFormatProductList();
         } catch (Exception e) {
             e.printStackTrace();
             return new Result("100011", "Product list error");
         }
-        return new Result(list);
+        return new Result(map);
     }
 
     @Override
@@ -188,6 +184,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             Product product = productRep.getById(id);
             product.setDisplay(0);
+            productRep.saveAndFlush(product);
         } catch (Exception e) {
             e.printStackTrace();
             if (match(e.getMessage())) {
