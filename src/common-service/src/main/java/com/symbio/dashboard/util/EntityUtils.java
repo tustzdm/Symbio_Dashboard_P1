@@ -194,6 +194,67 @@ public class EntityUtils {
         return returnList;
     }
 
+
+    /**
+     * 将数组数据转换为实体类
+     * 此处数组元素的顺序必须与实体类构造函数中的属性顺序一致
+     *
+     * @param list  数组对象集合
+     * @param <T>   实体类
+     * @param clazz 实例化的实体类
+     * @param fields 查询字段
+     * @return 实体类集合
+     */
+    public static <T> List<Map<String, Object>> castMap(List<Object[]> list, Class<T> clazz, String fields) {
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+        if (list.isEmpty()) {
+            return returnList;
+        }
+
+        String[] arrFields = fields.split(",");
+        if(arrFields == null || arrFields.length == 0) {
+            return returnList;
+        }
+
+        // 获取每个数组集合的元素个数
+        Object[] co = list.get(0);
+
+        // 如果数组集合元素个数与实体类属性个数不一致则发生错误
+        if (arrFields.length != co.length) {
+            return returnList;
+        }
+
+        //获取当前实体类的属性名、属性值、属性类别
+        try {
+            List<Map> attributeInfoList = getFieldsInfo(clazz.newInstance());
+            arrFields = getFieldMethodNames(arrFields, attributeInfoList);
+
+            String fieldName = null;
+            Map<String, Object> mapData = null;
+            Object objData = null;
+            String strCamelField = null;
+            for (Object[] item : list) {
+                //T objModel = clazz.newInstance();
+                //for (int i = 0; i < item.length; i++) {
+                //    fieldName = arrFields[i].trim().replace("_","");
+                //    PropertyUtil.setProperty(objModel, fieldName, item[i]);
+                //}
+                mapData = new HashMap<String, Object>();
+                for (int i = 0; i < item.length; i++) {
+                    fieldName = arrFields[i].trim().replace("_","");
+                    strCamelField = CommonUtil.getCamelField(fieldName);
+                    //objData = PropertyUtil.getProperty(item[i], fieldName);
+                    mapData.put(strCamelField, item[i]);
+                }
+                returnList.add(mapData);
+            }
+        } catch (Exception ex) {
+            logger.error("EntityUtils.castJAPModel() Exception!!!", ex.getMessage());
+            return returnList;
+        }
+        return returnList;
+    }
+
     /**
      * Check sql field and its method name
      * @param fields

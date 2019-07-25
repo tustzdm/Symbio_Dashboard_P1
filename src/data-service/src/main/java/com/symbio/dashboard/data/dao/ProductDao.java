@@ -1,22 +1,29 @@
 package com.symbio.dashboard.data.dao;
 
+import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.repository.ProductRep;
+import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.data.repository.UserRep;
+import com.symbio.dashboard.dto.ProductDTO;
+import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.Product;
+import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.UiInfo;
 import com.symbio.dashboard.model.User;
+import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
+import com.symbio.dashboard.util.StringUtil;
+import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName - ProductDao
@@ -29,6 +36,8 @@ import java.util.Map;
 @Repository
 public class ProductDao {
 
+    private static Logger logger = LoggerFactory.getLogger(ProductDao.class);
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -39,9 +48,29 @@ public class ProductDao {
     @Autowired
     private UserRep userRep;
 
+    @Autowired
+    private SysListSettingRep sysListSettingRep;
+
     public List<Object> getFormatProductList() {
 
         return null;
+    }
+
+    @Data
+    public class Progress {
+      private int total;
+      private int done;
+      private String progress;
+
+      public Progress(int done, int total){
+        this.done = done;
+        this.total = total;
+        if(total > 0) {
+          this.progress = String.format("%d%%", Integer.valueOf(done * 100 / total));
+        } else {
+          this.progress = "";
+        }
+      }
     }
 
     public List<Product> getProductList() {
@@ -176,5 +205,106 @@ public class ProductDao {
 
         return listProduct;
     }
+
+    public List<Map<String, Object>> mergeStaticticsData(List<Map<String, Object>> entityMap) {
+      List<Map<String, Object>> retMap = entityMap;
+
+      Progress progress;
+      Random random = new Random();
+      for(Map item: retMap){
+        int total = random.nextInt(500);
+        int done = random.nextInt(500);
+        if(done > total) done = total;
+        progress = new Progress(done, total);
+        item.put("progress" , progress);
+      }
+      return retMap;
+    }
+
+  public Result getProductMapInfoByField(String strFields, Integer pageIndex, Integer pageSize) {
+    Result retResult = null;
+
+    try {
+      ProductDTO retProduct = new ProductDTO();
+      List<Map<String, Object>> listProduct = new ArrayList<Map<String, Object>>();
+
+      String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER by id", strFields);// LIMIT 0,3";
+      if(pageIndex != null && pageSize != null) {
+        sql += String.format(" LIMIT %d,%d", pageIndex, pageSize);
+      }
+
+      List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+      listProduct = EntityUtils.castMap(listResult, Product.class, strFields);
+
+      int nCount = productRep.getCount();
+      retProduct.setTotalRecord(nCount);
+
+      List<Map<String, Object>> listProdInfo = mergeStaticticsData(listProduct);
+      retProduct.setData(listProdInfo);
+      retResult = new Result(retProduct);
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error("Exception happened while invoking ProductDao.getProductInfoByField()", e);
+      retResult = new Result("000002", e.getMessage());
+    }
+
+    return retResult;
+  }
+
+  /**
+   * 得到dbFiled信息
+   * @param listSetting
+   * @return
+   */
+  private List<String> getQueryFields(List<SysListSetting> listSetting) {
+    List<String> dbFields = new ArrayList<>();
+
+    boolean bFindId = false;
+
+    for(SysListSetting item : listSetting){
+      if(!StringUtil.isEmpty(item.getField())) {
+        dbFields.add(item.getField());
+        if(!bFindId && item.getField().contains("id")) {
+          bFindId = true;
+        }
+      }
+    }
+
+    if(!bFindId) dbFields.add(0, "id");
+
+    return dbFields;
+  }
+
+  public Result getProductList2(String locale, Integer pageIndex, Integer pageSize) {
+    logger.trace("ProductDao.getProductList2() Enter.");
+    logger.trace(String.format("Args: locale = %s, pageIndex = %d, pageSize = %d", locale, pageIndex, pageSize));
+
+    ProductDTO retProdDTO = new ProductDTO(locale, pageIndex, pageSize);
+    Result retResult = new Result(retProdDTO);
+
+    List<SysListSetting> listSetting = sysListSettingRep.getEntityInfo(SystemListSetting.Product.toString());
+    if (CommonUtil.isEmpty(listSetting)) {
+      return retResult;
+    }
+
+    List<String> listFields = getQueryFields(listSetting);
+    if(CommonUtil.isEmpty(listFields)) {
+      logger.debug("There is no field to query");
+      return retResult;
+    }
+
+    Result retProductResult = getProductMapInfoByField(String.join(",", listFields), pageIndex, pageSize);
+    if(retProductResult.hasError()) {
+      retResult = retProductResult;
+    } else {
+      ProductDTO retProduct = (ProductDTO)retProductResult.getCd();
+      retProdDTO.setTotalRecord(retProduct.getTotalRecord());
+      retProdDTO.setData(retProduct.getData());
+      retResult = new Result(retProdDTO);
+    }
+
+    logger.trace("ProductDao.getProductList2() Exit");
+    return retResult;
+  }
 
 }

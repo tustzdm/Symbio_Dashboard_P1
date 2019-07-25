@@ -60,6 +60,37 @@ public class Product implements Serializable {
     @Column(name = "locale")
     private String locale;
 
+    @Column(name = "prodfld_int1")
+    private Integer prodfldInt1;
+    @Column(name = "prodfld_int2")
+    private Integer prodfldInt2;
+    @Column(name = "prodfld_int3")
+    private Integer prodfldInt3;
+    @Column(name = "prodfld_int4")
+    private Integer prodfldInt4;
+    @Column(name = "prodfld_int5")
+    private Integer prodfldInt5;
+    @Column(name = "prodfld_str1")
+    private Integer prodfldStr1;
+    @Column(name = "prodfld_str2")
+    private Integer prodfldStr2;
+    @Column(name = "prodfld_str3")
+    private Integer prodfldStr3;
+    @Column(name = "prodfld_str4")
+    private Integer prodfldStr4;
+    @Column(name = "prodfld_str5")
+    private Integer prodfldStr5;
+    @Column(name = "prodfld_str6")
+    private Integer prodfldStr6;
+    @Column(name = "prodfld_str7")
+    private Integer prodfldStr7;
+    @Column(name = "prodfld_str8")
+    private Integer prodfldStr8;
+    @Column(name = "prodfld_str9")
+    private Integer prodfldStr9;
+    @Column(name = "prodfld_str10")
+    private Integer prodfldStr10;
+
     @Column(name = "create_time")
     private Date createTime;
 

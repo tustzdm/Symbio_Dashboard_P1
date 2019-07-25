@@ -3,8 +3,11 @@ package com.symbio.dashboard.service;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.dao.ProductDao;
 import com.symbio.dashboard.data.repository.ProductRep;
+import com.symbio.dashboard.dto.ProductDTO;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.Product;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,8 @@ import java.util.regex.Pattern;
 @Service
 @SuppressWarnings("unchecked")
 public class ProductServiceImpl implements ProductService {
+
+    private static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Autowired
     private ProductDao productDao;
@@ -200,6 +205,15 @@ public class ProductServiceImpl implements ProductService {
     public Result testProductEntity() {
         List<Product> listResult = productDao.getProductListBySql();
         return new Result(listResult);
+    }
+
+    @Override
+    public Result getProductPageList2(Integer userId, String locale, Integer pageIndex, Integer pageSize) {
+        Result retResult = productDao.getProductList2(locale, pageIndex, pageSize);
+        if(retResult.hasError()) {
+            logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+        }
+        return retResult;
     }
 
 }

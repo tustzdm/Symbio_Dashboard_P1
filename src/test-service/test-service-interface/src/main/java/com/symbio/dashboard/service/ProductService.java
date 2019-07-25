@@ -21,4 +21,7 @@ public interface ProductService {
 
     Result removeProduct(Integer id);
 
+    // Temp
+    Result getProductPageList2(Integer userId, String locale, Integer pageIndex, Integer pageSize);
+
 }

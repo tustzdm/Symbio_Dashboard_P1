@@ -12,6 +12,9 @@ import java.util.List;
 @Repository
 public interface ProductRep extends JpaRepository<Product, Integer> {
 
+    @Query(value = "SELECT count(*) FROM product WHERE display = 1", nativeQuery = true)
+    int getCount();
+
     @Query(value = "select * from product p order by p.update_time desc", nativeQuery = true)
     List<Product> findAllOrderByUpdateTimeDesc();
 

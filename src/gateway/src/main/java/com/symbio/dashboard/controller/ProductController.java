@@ -123,4 +123,18 @@ public class ProductController extends BaseController {
         return result;
     }
 
+    @RequestMapping("/getProductListDemo")
+    public Result getProductListDemo(@RequestParam(value = "token") String token,
+                                     @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                     @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
+                                     @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+
+        Integer userId = 0;
+        Result retResult = productService.getProductPageList2(userId, locale, pageIndex, pageSize);
+        if(retResult.hasError()) {
+            return getResult("000120" , "Product List");
+        }
+        return retResult;
+    }
+
 }
