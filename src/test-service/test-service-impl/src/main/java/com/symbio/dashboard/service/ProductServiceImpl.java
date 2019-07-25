@@ -3,7 +3,6 @@ package com.symbio.dashboard.service;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.dao.ProductDao;
 import com.symbio.dashboard.data.repository.ProductRep;
-import com.symbio.dashboard.dto.ProductDTO;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.Product;
 import org.slf4j.Logger;
@@ -102,13 +101,12 @@ public class ProductServiceImpl implements ProductService {
         }
 
         try {
-            result = verifyProductInfo(productInfo);
-            if (result.hasError()) {
-                return result;
-            }
-
             // If id is null, add new Product
             if (id == null) {
+                result = verifyProductInfo(productInfo);
+                if (result.hasError()) {
+                    return result;
+                }
                 product = new Product(0, 1);
 
                 product.setCreateTime(date);
@@ -118,6 +116,12 @@ public class ProductServiceImpl implements ProductService {
             } else {
                 // Get existed Product object
                 product = productRep.getById(id);
+                if (!productInfo.getName().equalsIgnoreCase(product.getName())) {
+                    result = verifyProductInfo(productInfo);
+                    if (result.hasError()) {
+                        return result;
+                    }
+                }
             }
 
             product.setName(productInfo.getName());
@@ -182,7 +186,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Result removeProduct(Integer id) {
         try {
-            productRep.deleteById(id);
+            Product product = productRep.getById(id);
+            product.setDisplay(0);
         } catch (Exception e) {
             e.printStackTrace();
             if (match(e.getMessage())) {
