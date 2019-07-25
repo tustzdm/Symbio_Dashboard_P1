@@ -15,6 +15,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,11 +40,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Result getProductList(Integer userId, String locale) {
-        List<Product> list;
+//        List<Product> list;
 //        List<Map<String, Object>> list;
+        Map<String, Object> list;
         try {
-            list = productDao.getProductList();
+//            list = productDao.getProductList();
 //            list = productDao.getProductUsers(2);
+            list = productDao.getFormatProductList();
         } catch (Exception e) {
             e.printStackTrace();
             return new Result("100011", "Product list error");

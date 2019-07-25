@@ -9,7 +9,6 @@ import com.symbio.dashboard.dto.ProductDTO;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.Product;
 import com.symbio.dashboard.model.SysListSetting;
-import com.symbio.dashboard.model.UiInfo;
 import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
@@ -47,30 +46,67 @@ public class ProductDao {
     private ProductRep productRep;
     @Autowired
     private UserRep userRep;
-
     @Autowired
     private SysListSettingRep sysListSettingRep;
 
-    public List<Object> getFormatProductList() {
+    public Map<String, Object> getFormatProductList() {
+        Query query;
+        StringBuilder sb = new StringBuilder();
 
-        return null;
-    }
+        Map<String, Object> resultMap = new HashMap<>();
+        List<Map<String, Object>> columns = new ArrayList<>();
+        List<String> fields = new ArrayList<>();
+        List<Object> data = new ArrayList<>();
 
-    @Data
-    public class Progress {
-      private int total;
-      private int done;
-      private String progress;
+        SysListSetting sysListSetting;
 
-      public Progress(int done, int total){
-        this.done = done;
-        this.total = total;
-        if(total > 0) {
-          this.progress = String.format("%d%%", Integer.valueOf(done * 100 / total));
-        } else {
-          this.progress = "";
+        try {
+            sb.append("select s.* from sys_list_setting s where s.field = 'id' " +
+                    "union " +
+                    "select s.* from sys_list_setting s join ui_info u on s.field = u.db_field where s.name = 'product' and u.display = 1");
+            query = entityManager.createNativeQuery(sb.toString(), SysListSetting.class);
+            List<SysListSetting> resultList = query.getResultList();
+            if (resultList != null && !resultList.isEmpty()) {
+                for (int i = 0; i < resultList.size(); i++) {
+                    sysListSetting = resultList.get(i);
+                    //Get fields
+                    fields.add(sysListSetting.getField());
+                    //Get columns
+                    Map<String, Object> columnMap = new HashMap<>();
+                    columnMap.put("key", sysListSetting.getKey());
+                    columnMap.put("label", sysListSetting.getLabel());
+                    columnMap.put("type", sysListSetting.getType());
+                    columnMap.put("align", sysListSetting.getAlign());
+                    columnMap.put("field", sysListSetting.getField());
+                    columnMap.put("formatter", sysListSetting.getFormatter());
+
+                    columns.add(columnMap);
+                }
+                sb.delete(0, sb.length());
+                if (fields != null && !fields.isEmpty()) {
+                    sb.append("select ");
+                    for (String s : fields) {
+                        sb.append(s).append(",");
+                    }
+                    if (sb.length() > 0) {
+                        sb.deleteCharAt(sb.length() - 1);
+                    }
+                    sb.append(" from product where 1=1");
+                    query = entityManager.createNativeQuery(sb.toString());
+                    data = query.getResultList();
+                }
+
+
+            }
+            resultMap.put("columns", columns);
+            resultMap.put("fields", fields);
+            resultMap.put("data", data);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-      }
+
+        return resultMap;
     }
 
     public List<Product> getProductList() {
@@ -79,26 +115,21 @@ public class ProductDao {
 
         List<Object[]> products;
         List<Product> productList = new ArrayList<>();
+        List<SysListSetting> sysList;
         List<String> dbFields = new ArrayList<>();
-
-        List<String> columns = new ArrayList<>();
-        List<Integer> productIds = new ArrayList<>();
-
-        List<Map<String, Object>> usersInfo;
 
         try {
             sb.append("select ");
-            dbFields.add("id");
 
-            List<UiInfo> uiInfoList = uiInfoRep.getUiInfoListByPageName("product");
+            sysList = sysListSettingRep.getDbFieldsInProduct();
 
-            if (uiInfoList != null && uiInfoList.size() > 0) {
-                for (int i = 0; i < uiInfoList.size(); i++) {
-                    dbFields.add(uiInfoList.get(i).getDbField());
-                    if (uiInfoList.get(i).getType().equalsIgnoreCase("user")) {
-                        columns.add(uiInfoList.get(i).getDbField());
-                    }
+            if (sysList != null && sysList.size() > 0) {
+
+                dbFields.add("id");
+                for (int i = 0; i < sysList.size(); i++) {
+                    dbFields.add(sysList.get(i).getField());
                 }
+
                 for (String s : dbFields) {
                     sb.append(s).append(",");
                 }
@@ -107,7 +138,6 @@ public class ProductDao {
                 }
                 sb.append(" from product where 1=1");
             }
-
 
             query = entityManager.createNativeQuery(sb.toString());
             products = query.getResultList();
@@ -132,7 +162,6 @@ public class ProductDao {
                     users.add(getUserInfo(productIds.get(i), columns.get(j)));
                 }
             }
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,6 +206,7 @@ public class ProductDao {
 
     /**
      * Test Method for castModel()
+     *
      * @return
      */
     public List<Product> getProductListBySql() {
@@ -187,7 +217,7 @@ public class ProductDao {
             List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
             System.out.println(listResult);
 
-            for(Object o : listResult){
+            for (Object o : listResult) {
                 System.out.println(o);
             }
 
@@ -207,104 +237,122 @@ public class ProductDao {
     }
 
     public List<Map<String, Object>> mergeStaticticsData(List<Map<String, Object>> entityMap) {
-      List<Map<String, Object>> retMap = entityMap;
+        List<Map<String, Object>> retMap = entityMap;
 
-      Progress progress;
-      Random random = new Random();
-      for(Map item: retMap){
-        int total = random.nextInt(500);
-        int done = random.nextInt(500);
-        if(done > total) done = total;
-        progress = new Progress(done, total);
-        item.put("progress" , progress);
-      }
-      return retMap;
-    }
-
-  public Result getProductMapInfoByField(String strFields, Integer pageIndex, Integer pageSize) {
-    Result retResult = null;
-
-    try {
-      ProductDTO retProduct = new ProductDTO();
-      List<Map<String, Object>> listProduct = new ArrayList<Map<String, Object>>();
-
-      String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER by id", strFields);// LIMIT 0,3";
-      if(pageIndex != null && pageSize != null) {
-        sql += String.format(" LIMIT %d,%d", pageIndex, pageSize);
-      }
-
-      List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
-      listProduct = EntityUtils.castMap(listResult, Product.class, strFields);
-
-      int nCount = productRep.getCount();
-      retProduct.setTotalRecord(nCount);
-
-      List<Map<String, Object>> listProdInfo = mergeStaticticsData(listProduct);
-      retProduct.setData(listProdInfo);
-      retResult = new Result(retProduct);
-    } catch (Exception e) {
-      e.printStackTrace();
-      logger.error("Exception happened while invoking ProductDao.getProductInfoByField()", e);
-      retResult = new Result("000002", e.getMessage());
-    }
-
-    return retResult;
-  }
-
-  /**
-   * 得到dbFiled信息
-   * @param listSetting
-   * @return
-   */
-  private List<String> getQueryFields(List<SysListSetting> listSetting) {
-    List<String> dbFields = new ArrayList<>();
-
-    boolean bFindId = false;
-
-    for(SysListSetting item : listSetting){
-      if(!StringUtil.isEmpty(item.getField())) {
-        dbFields.add(item.getField());
-        if(!bFindId && item.getField().contains("id")) {
-          bFindId = true;
+        Progress progress;
+        Random random = new Random();
+        for (Map item : retMap) {
+            int total = random.nextInt(500);
+            int done = random.nextInt(500);
+            if (done > total) done = total;
+            progress = new Progress(done, total);
+            item.put("progress", progress);
         }
-      }
+        return retMap;
     }
 
-    if(!bFindId) dbFields.add(0, "id");
+    public Result getProductMapInfoByField(String strFields, Integer pageIndex, Integer pageSize) {
+        Result retResult = null;
 
-    return dbFields;
-  }
+        try {
+            ProductDTO retProduct = new ProductDTO();
+            List<Map<String, Object>> listProduct = new ArrayList<Map<String, Object>>();
 
-  public Result getProductList2(String locale, Integer pageIndex, Integer pageSize) {
-    logger.trace("ProductDao.getProductList2() Enter.");
-    logger.trace(String.format("Args: locale = %s, pageIndex = %d, pageSize = %d", locale, pageIndex, pageSize));
+            String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER by id", strFields);// LIMIT 0,3";
+            if (pageIndex != null && pageSize != null) {
+                sql += String.format(" LIMIT %d,%d", pageIndex, pageSize);
+            }
 
-    ProductDTO retProdDTO = new ProductDTO(locale, pageIndex, pageSize);
-    Result retResult = new Result(retProdDTO);
+            List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+            listProduct = EntityUtils.castMap(listResult, Product.class, strFields);
 
-    List<SysListSetting> listSetting = sysListSettingRep.getEntityInfo(SystemListSetting.Product.toString());
-    if (CommonUtil.isEmpty(listSetting)) {
-      return retResult;
+            int nCount = productRep.getCount();
+            retProduct.setTotalRecord(nCount);
+
+            List<Map<String, Object>> listProdInfo = mergeStaticticsData(listProduct);
+            retProduct.setData(listProdInfo);
+            retResult = new Result(retProduct);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Exception happened while invoking ProductDao.getProductInfoByField()", e);
+            retResult = new Result("000002", e.getMessage());
+        }
+
+        return retResult;
     }
 
-    List<String> listFields = getQueryFields(listSetting);
-    if(CommonUtil.isEmpty(listFields)) {
-      logger.debug("There is no field to query");
-      return retResult;
+    /**
+     * 得到dbFiled信息
+     *
+     * @param listSetting
+     * @return
+     */
+    private List<String> getQueryFields(List<SysListSetting> listSetting) {
+        List<String> dbFields = new ArrayList<>();
+
+        boolean bFindId = false;
+
+        for (SysListSetting item : listSetting) {
+            if (!StringUtil.isEmpty(item.getField())) {
+                dbFields.add(item.getField());
+                if (!bFindId && item.getField().contains("id")) {
+                    bFindId = true;
+                }
+            }
+        }
+
+        if (!bFindId) dbFields.add(0, "id");
+
+        return dbFields;
     }
 
-    Result retProductResult = getProductMapInfoByField(String.join(",", listFields), pageIndex, pageSize);
-    if(retProductResult.hasError()) {
-      retResult = retProductResult;
-    } else {
-      ProductDTO retProduct = (ProductDTO)retProductResult.getCd();
-      retProdDTO.setTotalRecord(retProduct.getTotalRecord());
-      retProdDTO.setData(retProduct.getData());
-      retResult = new Result(retProdDTO);
+    public Result getProductList2(String locale, Integer pageIndex, Integer pageSize) {
+        logger.trace("ProductDao.getProductList2() Enter.");
+        logger.trace(String.format("Args: locale = %s, pageIndex = %d, pageSize = %d", locale, pageIndex, pageSize));
+
+        ProductDTO retProdDTO = new ProductDTO(locale, pageIndex, pageSize);
+        Result retResult = new Result(retProdDTO);
+
+        List<SysListSetting> listSetting = sysListSettingRep.getEntityInfo(SystemListSetting.Product.toString());
+        if (CommonUtil.isEmpty(listSetting)) {
+            return retResult;
+        }
+
+        List<String> listFields = getQueryFields(listSetting);
+        if (CommonUtil.isEmpty(listFields)) {
+            logger.debug("There is no field to query");
+            return retResult;
+        }
+
+        Result retProductResult = getProductMapInfoByField(String.join(",", listFields), pageIndex, pageSize);
+        if (retProductResult.hasError()) {
+            retResult = retProductResult;
+        } else {
+            ProductDTO retProduct = (ProductDTO) retProductResult.getCd();
+            retProdDTO.setTotalRecord(retProduct.getTotalRecord());
+            retProdDTO.setData(retProduct.getData());
+            retResult = new Result(retProdDTO);
+        }
+
+        logger.trace("ProductDao.getProductList2() Exit");
+        return retResult;
     }
 
-    logger.trace("ProductDao.getProductList2() Exit");
-    return retResult;
-  }
+    @Data
+    public class Progress {
+        private int total;
+        private int done;
+        private String progress;
+
+        public Progress(int done, int total) {
+            this.done = done;
+            this.total = total;
+            if (total > 0) {
+                this.progress = String.format("%d%%", Integer.valueOf(done * 100 / total));
+            } else {
+                this.progress = "";
+            }
+        }
+    }
 
 }

@@ -15,6 +15,21 @@ public interface ProductRep extends JpaRepository<Product, Integer> {
     @Query(value = "SELECT count(*) FROM product WHERE display = 1", nativeQuery = true)
     int getCount();
 
+    @Query(value = "select s.field from sys_list_setting s " +
+            "join ui_info u " +
+            "on s.field = u.db_field " +
+            "where s.name = 'product' " +
+            "and u.display = 1", nativeQuery = true)
+    List<String> getDbFieldsInProduct();
+
+    @Query(value = "select s.field from sys_list_setting s " +
+            "join ui_info u " +
+            "on s.field = u.db_field " +
+            "where s.name = 'product' " +
+            "and u.display = 1" +
+            "and s.type = 'user'", nativeQuery = true)
+    List<String> getUserTypeDbFieldsInProduct();
+
     @Query(value = "select * from product p order by p.update_time desc", nativeQuery = true)
     List<Product> findAllOrderByUpdateTimeDesc();
 
