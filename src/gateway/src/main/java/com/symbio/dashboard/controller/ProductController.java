@@ -75,7 +75,7 @@ public class ProductController extends BaseController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("000102", "Product Info");
+            return getResult("000102", "Product Info");
         }
 
         return result;

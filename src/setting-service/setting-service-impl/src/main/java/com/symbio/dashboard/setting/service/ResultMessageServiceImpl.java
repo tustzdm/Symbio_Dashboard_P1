@@ -28,26 +28,9 @@ import java.util.Map;
 public class ResultMessageServiceImpl implements MessageService {
 
     private static Logger logger = LoggerFactory.getLogger(ResultMessageServiceImpl.class);
-
-    @Data
-    private class Message {
-        public String code;
-        public String enUs;
-        public String zhCn;
-        public String formmater;
-
-        public Message(String ec, String en, String zh, String formmater){
-            this.code = ec;
-            this.enUs = en;
-            this.zhCn = zh;
-            this.formmater = formmater;
-        }
-    }
-
+    private static Map<String, Message> mapMessage = null;
     @Autowired
     private ResultMessageRep messageRep;
-
-    private static Map<String, Message> mapMessage = null;
 
     private Message getMessage(ResultMessage data) {
         return new Message(data.getCode(), data.getEnUs(), data.getZhCn(), data.getFormatter());
@@ -139,6 +122,21 @@ public class ResultMessageServiceImpl implements MessageService {
             return null;
         } else {
             return new Result(code, strMsg);
+        }
+    }
+
+    @Data
+    private class Message {
+        public String code;
+        public String enUs;
+        public String zhCn;
+        public String formmater;
+
+        public Message(String ec, String en, String zh, String formmater){
+            this.code = ec;
+            this.enUs = en;
+            this.zhCn = zh;
+            this.formmater = formmater;
         }
     }
 

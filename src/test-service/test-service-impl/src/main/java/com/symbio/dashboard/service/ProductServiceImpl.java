@@ -5,6 +5,7 @@ import com.symbio.dashboard.data.dao.ProductDao;
 import com.symbio.dashboard.data.repository.ProductRep;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.Product;
+import com.symbio.dashboard.util.CommonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @ClassName - ProductServiceImpl
@@ -187,20 +186,11 @@ public class ProductServiceImpl implements ProductService {
             productRep.saveAndFlush(product);
         } catch (Exception e) {
             e.printStackTrace();
-            if (match(e.getMessage())) {
+            if (CommonUtil.match(e.getMessage(), "(No|entity|id|exists)")) {
                 return new Result("100018", "Id does not exist");
             }
         }
         return new Result("Product Removed");
-    }
-
-    private boolean match(String text) {
-        Pattern pattern = Pattern.compile("(No|entity|id|exists)");
-        Matcher matcher = pattern.matcher(text);
-        if (matcher.find()) {
-            return true;
-        }
-        return false;
     }
 
     /**

@@ -11,15 +11,17 @@ import java.util.List;
 
 @Repository
 public interface ReleaseRep extends JpaRepository<Release,Integer> {
-    @Query(value = "select * from `releases` r where r.product_id=?1 order by r.update_time desc",nativeQuery = true)
+    @Query(value = "select * from `release` r where r.product_id=?1 order by r.update_time desc", nativeQuery = true)
     List<Release> findByProduct_idAndOrderByUpdate_timeAtDesc(Integer product_id);
 
-
-    @Query(value = "select r.id from `releases` r", nativeQuery = true)
+    @Query(value = "select r.id from `release` r", nativeQuery = true)
     List<Integer> getAllId();
 
-    @Query(value = "select r.name from `releases` r where r.id<>?1",nativeQuery = true)
+    @Query(value = "select r.name from `release` r where r.id<>?1", nativeQuery = true)
     List<String> getAllName(Integer id);
+
+    @Query(value = "select r.name from `release` r where r.product_id=?1", nativeQuery = true)
+    List<String> getAllNamesByProductId(Integer productId);
 
     Release getById(Integer id);
 

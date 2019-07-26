@@ -60,4 +60,8 @@ public class Release {
     @Column(name = "update_user_name")
     private String updateUserName;
 
+    public Release(Integer status, Integer display) {
+        this.status = status;  // default: 0
+        this.display = display; // default: 1
+    }
 }
