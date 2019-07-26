@@ -26,6 +26,16 @@ public interface SysListSettingRep extends JpaRepository<SysListSetting, Integer
             "and u.display = 1", nativeQuery = true)
     List<SysListSetting> getDbFieldsInProduct();
 
-    @Query(value = "SELECT * FROM sys_list_setting WHERE `name` = ? AND sls.display = 1 AND sls.is_entity = 0 ORDER by sls.idx", nativeQuery = true)
+    @Query(value = "SELECT * FROM sys_list_setting WHERE `name` = ? AND display = 1 AND is_entity = 0 ORDER by idx", nativeQuery = true)
     List<SysListSetting> getStatisticsInfo(String pageName);
+
+    @Query(value = "SELECT a.* FROM (" +
+            "SELECT sls.* FROM sys_list_setting sls " +
+            "JOIN ui_info ui ON sls.field = ui.db_field AND sls.`name` = ui.page " +
+            "WHERE sls.`name` = ?1 AND sls.is_entity = 1 AND sls.display = 1 " +
+            " UNION " +
+            "SELECT * FROM sys_list_setting WHERE display = 1 AND is_entity = 0" +
+            ") a ORDER BY a.idx", nativeQuery = true)
+    List<SysListSetting> getListColumnsInfo(String pageName);
+
 }

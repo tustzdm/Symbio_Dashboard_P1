@@ -6,7 +6,6 @@ import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.data.repository.UserRep;
 import com.symbio.dashboard.dto.ProductDTO;
-import com.symbio.dashboard.enums.ColumnType;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.Product;
@@ -261,6 +260,17 @@ public class ProductDao {
   public List<Map<String, Object>> mergeStaticticsData(List<Map<String, Object>> entityMap) {
     List<Map<String, Object>> retMap = entityMap;
 
+
+    try {
+      // ToDo: Product - Get actrual List statistics column info
+      List<SysListSetting> listSetting = sysListSettingRep.getStatisticsInfo(SystemListSetting.Product.toString());
+      if (CommonUtil.isEmpty(listSetting)) {
+        return retMap;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
     Progress progress;
     Random random = new Random();
     for (Map item : retMap) {
@@ -334,7 +344,14 @@ public class ProductDao {
     return retList;
   }
 
-
+  /**
+   * 得到Product List Map数据对象
+   * @param strFields
+   * @param pageIndex
+   * @param pageSize
+   * @param listUserFields
+   * @return
+   */
   public Result getProductMapInfoByField(String strFields, Integer pageIndex, Integer pageSize, List<String> listUserFields) {
     Result retResult = null;
 
@@ -405,6 +422,13 @@ public class ProductDao {
     return dbFields;
   }
 
+  /**
+   *
+   * @param locale
+   * @param pageIndex
+   * @param pageSize
+   * @return
+   */
   public Result getProductList2(String locale, Integer pageIndex, Integer pageSize) {
     logger.trace("ProductDao.getProductList2() Enter.");
     logger.trace(String.format("Args: locale = %s, pageIndex = %d, pageSize = %d", locale, pageIndex, pageSize));
@@ -415,6 +439,14 @@ public class ProductDao {
     List<SysListSetting> listSetting = sysListSettingRep.getEntityInfo(SystemListSetting.Product.toString());
     if (CommonUtil.isEmpty(listSetting)) {
       return retResult;
+    }
+
+    // Get Columns Info
+    List<SysListSetting> listColumns = sysListSettingRep.getListColumnsInfo(SystemListSetting.Product.toString());
+    if (CommonUtil.isEmpty(listColumns)) {
+      return new Result("000121", "List columns info is empty");
+    } else {
+      retProdDTO.setColumns(BusinessUtil.getListColumnInfo(locale, listColumns));
     }
 
     List<String> listFields = CommonDao.getQueryFields(listSetting);

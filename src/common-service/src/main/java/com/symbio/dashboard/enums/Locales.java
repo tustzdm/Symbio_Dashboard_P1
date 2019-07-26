@@ -9,6 +9,10 @@ public enum Locales {
   }
   private String locale;
 
+  public String getKey() {
+    return this.locale.toLowerCase();
+  }
+
   @Override
   public String toString() {
     return locale;

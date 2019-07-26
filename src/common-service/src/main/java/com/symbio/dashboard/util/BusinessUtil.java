@@ -1,11 +1,13 @@
 package com.symbio.dashboard.util;
 
+import com.symbio.dashboard.enums.ListColumns;
+import com.symbio.dashboard.enums.Locales;
+import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.User;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import org.json.JSONObject;
+
+import java.util.*;
 
 public class BusinessUtil {
 
@@ -44,6 +46,50 @@ public class BusinessUtil {
     }
 
     return retData;
+  }
+
+  /**
+   * List 的 Column Info 信息
+   *
+   * @param listData
+   * @return
+   */
+  public static List<Map<String, Object>> getListColumnInfo(String locale, List<SysListSetting> listData) {
+    List<Map<String, Object>> listColInfo = new ArrayList<>();
+
+    try {
+      Map<String, Object> mapColInfo = new HashMap<String, Object>();
+      String strKeyCN = Locales.ZH_CN.getKey();
+      String strKeyEN = Locales.EN_US.getKey();
+
+      for (SysListSetting item : listData) {
+        mapColInfo = new HashMap<String, Object>();
+
+        mapColInfo.put(ListColumns.KEY.getKey(), item.getKey());
+        String strColLabel = item.getLabel();
+        try {
+          JSONObject jsonLabel = new JSONObject(strColLabel);
+          if (locale == Locales.ZH_CN.toString()) {
+            mapColInfo.put(ListColumns.LABEL.getKey(), jsonLabel.get(strKeyCN));
+          } else {
+            mapColInfo.put(ListColumns.LABEL.getKey(), jsonLabel.get(strKeyEN));
+          }
+        } catch (Exception jsonE){
+          jsonE.printStackTrace();
+        }
+        mapColInfo.put(ListColumns.TYPE.getKey(), item.getType());
+        mapColInfo.put(ListColumns.FIELD.getKey(), WebUtil.getItemValue(item.getField()));
+        mapColInfo.put(ListColumns.ALIGN.getKey(), item.getAlign());
+        mapColInfo.put(ListColumns.FORMAT.getKey(), WebUtil.getItemValue(item.getFormatter()));
+
+        listColInfo.add(mapColInfo);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println("BusinessUtil.getListColumnInfo() ERROR!!! " + e.getMessage());
+    }
+
+    return listColInfo;
   }
 
   /**
