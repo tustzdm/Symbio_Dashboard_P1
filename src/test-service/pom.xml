@@ -30,12 +30,6 @@
       <version>${project.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>com.symbio</groupId>
-      <artifactId>setting-service</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
   </dependencies>
 
 
