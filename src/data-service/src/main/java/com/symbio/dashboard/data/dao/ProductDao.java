@@ -5,7 +5,7 @@ import com.symbio.dashboard.data.repository.ProductRep;
 import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.data.repository.UserRep;
-import com.symbio.dashboard.dto.ProductDTO;
+import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.Product;
@@ -340,7 +340,7 @@ public class ProductDao {
         Result retResult = null;
 
         try {
-            ProductDTO retProduct = new ProductDTO();
+            CommonListDTO retProduct = new CommonListDTO();
             List<Map<String, Object>> listProduct = new ArrayList<Map<String, Object>>();
 
             String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER by id", strFields);
@@ -416,7 +416,7 @@ public class ProductDao {
         logger.trace("ProductDao.getProductList2() Enter.");
         logger.trace(String.format("Args: locale = %s, pageIndex = %d, pageSize = %d", locale, pageIndex, pageSize));
 
-        ProductDTO retProdDTO = new ProductDTO(locale, pageIndex, pageSize);
+        CommonListDTO retProdDTO = new CommonListDTO(locale, pageIndex, pageSize);
         Result retResult = new Result(retProdDTO);
 
         List<SysListSetting> listSetting = sysListSettingRep.getEntityInfo(SystemListSetting.Product.toString());
@@ -445,7 +445,7 @@ public class ProductDao {
         if (retProductResult.hasError()) {
             retResult = retProductResult;
         } else {
-            ProductDTO retProduct = (ProductDTO) retProductResult.getCd();
+            CommonListDTO retProduct = (CommonListDTO) retProductResult.getCd();
             retProdDTO.setTotalRecord(retProduct.getTotalRecord());
             retProdDTO.setFields(retProduct.getFields());
             retProduct.setDateType(retProduct.getDateType());

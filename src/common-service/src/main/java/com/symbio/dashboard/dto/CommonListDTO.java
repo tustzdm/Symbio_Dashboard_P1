@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProductDTO implements Serializable {
+public class CommonListDTO implements Serializable {
 
     // Product
 //    private Integer id;
@@ -71,7 +71,7 @@ public class ProductDTO implements Serializable {
   private List<String> fields;
   private List data;
 
-  public ProductDTO(String locale, Integer pageIndex, Integer pageSize){
+  public CommonListDTO(String locale, Integer pageIndex, Integer pageSize){
     this.locale = locale;
     this.pageIndex = pageIndex == null ? 0 : pageIndex;
     this.pageSize = pageSize == null ? 20 : pageIndex;

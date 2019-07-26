@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @ClassName - ReleaseController
  * @Author - admin
- * @Description - TODO
- * @Date - 2019/7/25 16:49
+ * @Description
+ * @Date - 2019/7/26
  * @Version 1.0
  */
 
@@ -78,6 +78,20 @@ public class ReleaseController extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
             return getResult("000102", "Remove Release");
+        }
+        return result;
+    }
+
+    @RequestMapping("/getReleaseList")
+    public Result getReleaseList(@RequestParam(value = "token") String token,
+                                 @RequestParam(value = "id") Integer id,
+                                 @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                 @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
+                                 @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        Integer userId = 0;
+        Result result = null; // releaseService.getReleaseList(userId, locale, id, pageIndex, pageSize);
+        if (result.hasError()) {
+            return result;
         }
         return result;
     }
