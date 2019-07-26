@@ -389,6 +389,7 @@ CREATE TABLE `test_set` (
   `name` varchar(32) NOT NULL COMMENT 'Test set name',
   `type` int unsigned NOT NULL DEFAULT '0' COMMENT '1-Automation,2-Manual Test,4-API Test,8-Performance Test',
   `status` int unsigned NOT NULL DEFAULT '0' COMMENT 'Status：0-open,1-completed',
+  `display` smallint(5) NOT NULL DEFAULT '1' COMMENT 'Display or not. 0-hide, 1-show',
   `start_time` datetime DEFAULT NULL COMMENT 'Start time. YYYY-MM-DD 00:00:00',
   `end_time` datetime DEFAULT NULL COMMENT 'End time. YYYY-MM-DD 23:59:59',
   `test_owner` int(10) unsigned NULL COMMENT 'Test Owner',

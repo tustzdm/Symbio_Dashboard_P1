@@ -1,6 +1,8 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.data.dao.ProductDao;
+import com.symbio.dashboard.data.dao.ReleaseDao;
 import com.symbio.dashboard.data.repository.ReleaseRep;
 import com.symbio.dashboard.data.repository.ResultMessageRep;
 import com.symbio.dashboard.data.repository.SysListSettingRep;
@@ -38,25 +40,21 @@ public class ReleaseServiceImpl implements ReleaseService {
     @Autowired
     private ResultMessageRep resultMessageRep;
 
+    @Autowired
+    private ReleaseDao releaseDao;
 
     @Override
-    public Result getReleaseList(Integer userId, String locale) {
-        return null;
+    public Result getReleaseList(Integer productId, Integer pageIndex, Integer pageSize) {
+        return getReleaseList(null, Locales.EN_US.toString(), productId, pageIndex, pageSize);
     }
 
     @Override
-    public Result getReleaseList(Integer userId) {
-        return getReleaseList(userId, Locales.EN_US.toString());
-    }
-
-    @Override
-    public Result getReleasePageList(Integer userId, String locale, int pageIndex, int pageSize) {
-        return null;
-    }
-
-    @Override
-    public Result getReleasePageList(Integer userId, int pageIndex, int pageSize) {
-        return getReleasePageList(userId, Locales.EN_US.toString(), pageIndex, pageSize);
+    public Result getReleaseList(Integer userId, String locale, Integer productId, Integer pageIndex, Integer pageSize) {
+        Result retResult = releaseDao.getReleaseList(locale, productId, pageIndex, pageSize);
+        if(retResult.hasError()) {
+            logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+        }
+        return retResult;
     }
 
     @Override

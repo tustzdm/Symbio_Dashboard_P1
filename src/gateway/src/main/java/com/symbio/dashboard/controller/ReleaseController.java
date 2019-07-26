@@ -84,12 +84,12 @@ public class ReleaseController extends BaseController {
 
     @RequestMapping("/getReleaseList")
     public Result getReleaseList(@RequestParam(value = "token") String token,
-                                 @RequestParam(value = "id") Integer id,
+                                 @RequestParam(value = "productId") Integer productId,
                                  @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                  @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
                                  @RequestParam(value = "pageSize", required = false) Integer pageSize) {
         Integer userId = 0;
-        Result result = null; // releaseService.getReleaseList(userId, locale, id, pageIndex, pageSize);
+        Result result = releaseService.getReleaseList(userId, locale, productId, pageIndex, pageSize);
         if (result.hasError()) {
             return result;
         }

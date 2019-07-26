@@ -9,6 +9,7 @@ import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.Product;
+import com.symbio.dashboard.model.Release;
 import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.util.BusinessUtil;
@@ -27,17 +28,17 @@ import javax.persistence.Query;
 import java.util.*;
 
 /**
- * @ClassName - ProductDao
+ * @ClassName - ReleaseDao
  * @Author - Admin
  * @Description
- * @Date - 2019/7/11 16:05
+ * @Date - 2019/7/26
  * @Version 1.0
  */
 @SuppressWarnings("unchecked")
 @Repository
-public class ProductDao {
+public class ReleaseDao {
 
-    private static Logger logger = LoggerFactory.getLogger(ProductDao.class);
+    private static Logger logger = LoggerFactory.getLogger(ReleaseDao.class);
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -53,65 +54,6 @@ public class ProductDao {
     @Autowired
     private SysListSettingRep sysListSettingRep;
 
-    public Map<String, Object> getFormatProductList() {
-        Query query;
-        StringBuilder sb = new StringBuilder();
-
-        Map<String, Object> resultMap = new HashMap<>();
-        List<Map<String, Object>> columns = new ArrayList<>();
-        List<String> fields = new ArrayList<>();
-        List<Object> data = new ArrayList<>();
-
-        SysListSetting sysListSetting;
-
-        try {
-            sb.append("select s.* from sys_list_setting s where s.field = 'id' " +
-                    "union " +
-                    "select s.* from sys_list_setting s join ui_info u on s.field = u.db_field where s.name = 'product' and u.display = 1");
-            query = entityManager.createNativeQuery(sb.toString(), SysListSetting.class);
-            List<SysListSetting> resultList = query.getResultList();
-            if (resultList != null && !resultList.isEmpty()) {
-                for (int i = 0; i < resultList.size(); i++) {
-                    sysListSetting = resultList.get(i);
-                    //Get fields
-                    fields.add(sysListSetting.getField());
-                    //Get columns
-                    Map<String, Object> columnMap = new HashMap<>();
-                    columnMap.put("key", sysListSetting.getKey());
-                    columnMap.put("label", sysListSetting.getLabel());
-                    columnMap.put("type", sysListSetting.getType());
-                    columnMap.put("align", sysListSetting.getAlign());
-                    columnMap.put("field", sysListSetting.getField());
-                    columnMap.put("formatter", sysListSetting.getFormatter());
-
-                    columns.add(columnMap);
-                }
-                sb.delete(0, sb.length());
-                if (fields != null && !fields.isEmpty()) {
-                    sb.append("select ");
-                    for (String s : fields) {
-                        sb.append(s).append(",");
-                    }
-                    if (sb.length() > 0) {
-                        sb.deleteCharAt(sb.length() - 1);
-                    }
-                    sb.append(" from product where 1=1");
-                    query = entityManager.createNativeQuery(sb.toString());
-                    data = query.getResultList();
-                }
-
-
-            }
-            resultMap.put("columns", columns);
-            resultMap.put("fields", fields);
-            resultMap.put("data", data);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return resultMap;
-    }
 
     public List<Product> getProductList() {
         Query query;
@@ -243,10 +185,9 @@ public class ProductDao {
     public List<Map<String, Object>> mergeStaticticsData(List<Map<String, Object>> entityMap) {
         List<Map<String, Object>> retMap = entityMap;
 
-
         try {
             // ToDo: Product - Get actrual List statistics column info
-            List<SysListSetting> listSetting = sysListSettingRep.getStatisticsInfo(SystemListSetting.Product.toString());
+            List<SysListSetting> listSetting = sysListSettingRep.getStatisticsInfo(SystemListSetting.Release.toString());
             if (CommonUtil.isEmpty(listSetting)) {
                 return retMap;
             }
@@ -328,7 +269,7 @@ public class ProductDao {
     }
 
     /**
-     * 得到Product List Map数据对象
+     * 得到Release List Map数据对象
      *
      * @param strFields
      * @param pageIndex
@@ -336,14 +277,14 @@ public class ProductDao {
      * @param listUserFields
      * @return
      */
-    public Result getProductMapInfoByField(String strFields, Integer pageIndex, Integer pageSize, List<String> listUserFields) {
+    public Result getReleaseMapInfoByField(String strFields, Integer productId, Integer pageIndex, Integer pageSize, List<String> listUserFields) {
         Result retResult = null;
 
         try {
-            CommonListDTO retProduct = new CommonListDTO();
-            List<Map<String, Object>> listProduct = new ArrayList<Map<String, Object>>();
+            CommonListDTO retListDTO = new CommonListDTO();
+            List<Map<String, Object>> listRelease = new ArrayList<Map<String, Object>>();
 
-            String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER by id", strFields);
+            String sql = String.format("SELECT %s FROM `release` WHERE product_id = %d and display = 1 ORDER by id",  strFields, productId);
             if (pageIndex != null && pageSize != null) {
                 sql += String.format(" LIMIT %d,%d", pageIndex, pageSize);
             }
@@ -353,25 +294,25 @@ public class ProductDao {
             ListDataType dataType = ListDataType.Map;
 
             if (dataType == ListDataType.Map) {
-                listProduct = EntityUtils.castMap(listResult, Product.class, strFields);
-                List<Map<String, Object>> listProdInfo = mergeStaticticsData(listProduct);
-                retProduct.setFields(CommonUtil.getListByMergeString(strFields, "progress"));
-                retProduct.setDataType(ListDataType.Map.getDataType());
+                listRelease = EntityUtils.castMap(listResult, Release.class, strFields);
+                List<Map<String, Object>> listProdInfo = mergeStaticticsData(listRelease);
+                retListDTO.setFields(CommonUtil.getListByMergeString(strFields, "progress"));
+                retListDTO.setDataType(ListDataType.Map.getDataType());
 
                 if (CommonUtil.isEmpty(listUserFields)) {
-                    retProduct.setData(listProdInfo);
+                    retListDTO.setData(listProdInfo);
                 } else {
                     listProdInfo = setUserMapInfo(listProdInfo, listUserFields);
-                    retProduct.setData(listProdInfo);
+                    retListDTO.setData(listProdInfo);
                 }
             } else if (dataType == ListDataType.JSONArray) {
 
             }
 
             int nCount = productRep.getCount();
-            retProduct.setTotalRecord(nCount);
+            retListDTO.setTotalRecord(nCount);
 
-            retResult = new Result(retProduct);
+            retResult = new Result(retListDTO);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("Exception happened while invoking ProductDao.getProductInfoByField()", e);
@@ -382,57 +323,34 @@ public class ProductDao {
     }
 
     /**
-     * 得到dbFiled信息
-     *
-     * @param listSetting
-     * @return
-     */
-    private List<String> getQueryFields(List<SysListSetting> listSetting) {
-        List<String> dbFields = new ArrayList<>();
-
-        boolean bFindId = false;
-
-        for (SysListSetting item : listSetting) {
-            if (!StringUtil.isEmpty(item.getField())) {
-                dbFields.add(item.getField());
-                if (!bFindId && item.getField().contains("id")) {
-                    bFindId = true;
-                }
-            }
-        }
-
-        if (!bFindId) dbFields.add(0, "id");
-
-        return dbFields;
-    }
-
-    /**
      * @param locale
      * @param pageIndex
      * @param pageSize
      * @return
      */
-    public Result getProductList2(String locale, Integer pageIndex, Integer pageSize) {
-        logger.trace("ProductDao.getProductList2() Enter.");
-        logger.trace(String.format("Args: locale = %s, pageIndex = %d, pageSize = %d", locale, pageIndex, pageSize));
+    public Result getReleaseList(String locale, Integer productId, Integer pageIndex, Integer pageSize) {
+        logger.trace("ReleaseDao.getReleaseList() Enter.");
+        logger.trace(String.format("Args: locale = %s, productId = &d, pageIndex = %d, pageSize = %d", locale, productId, pageIndex, pageSize));
 
         CommonListDTO retProdDTO = new CommonListDTO(locale, pageIndex, pageSize);
         Result retResult = new Result(retProdDTO);
 
-        List<SysListSetting> listSetting = sysListSettingRep.getEntityInfo(SystemListSetting.Product.toString());
+        List<SysListSetting> listSetting = sysListSettingRep.getEntityInfo(SystemListSetting.Release.toString());
         if (CommonUtil.isEmpty(listSetting)) {
             return retResult;
         }
 
         // Get Columns Info
-        List<SysListSetting> listColumns = sysListSettingRep.getListColumnsInfo(SystemListSetting.Product.toString());
+        List<SysListSetting> listColumns = sysListSettingRep.getListColumnsInfo(SystemListSetting.Release.toString());
         if (CommonUtil.isEmpty(listColumns)) {
             return new Result("000121", "List columns info is empty");
         } else {
             retProdDTO.setColumns(BusinessUtil.getListColumnInfo(locale, listColumns));
         }
 
-        List<String> listFields = CommonDao.getQueryFields(listSetting);
+        List<String> listAppend = new ArrayList<>();
+        listAppend.add("product_id");
+        List<String> listFields = CommonDao.getQueryFieldsAppend(listSetting, listAppend);
         if (CommonUtil.isEmpty(listFields)) {
             logger.debug("There is no field to query");
             return retResult;
@@ -441,11 +359,11 @@ public class ProductDao {
         List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
 
         String strFields = String.join(",", listFields);
-        Result retProductResult = getProductMapInfoByField(strFields, pageIndex, pageSize, listUserFields);
-        if (retProductResult.hasError()) {
-            retResult = retProductResult;
+        Result retReleaseResult = getReleaseMapInfoByField(strFields, productId, pageIndex, pageSize, listUserFields);
+        if (retReleaseResult.hasError()) {
+            retResult = retReleaseResult;
         } else {
-            CommonListDTO retProduct = (CommonListDTO) retProductResult.getCd();
+            CommonListDTO retProduct = (CommonListDTO) retReleaseResult.getCd();
             retProdDTO.setTotalRecord(retProduct.getTotalRecord());
             retProdDTO.setFields(retProduct.getFields());
             retProduct.setDataType(retProduct.getDataType());
@@ -453,7 +371,7 @@ public class ProductDao {
             retResult = new Result(retProdDTO);
         }
 
-        logger.trace("ProductDao.getProductList2() Exit");
+        logger.trace("ReleaseDao.getReleaseList() Exit");
         return retResult;
     }
 
@@ -467,40 +385,40 @@ public class ProductDao {
     public Result getNavitionList(String locale, Integer total) {
         Result retResult = new Result("");
 
-        try {
-            int nFetchDataMode = 2; // 1 - Product， 2-Map
-
-            if (nFetchDataMode == 1) {
-                List<Product> listProduct = null;
-                if (total == null || total < 1) {
-                    listProduct = productRep.findNavigationList();
-                } else {
-                    listProduct = productRep.findNavigationPage(total);
-                }
-
-                if (CommonUtil.isEmpty(listProduct)) {
-                    return new Result("000120", "Product Navigation");
-                }
-                retResult = new Result(listProduct);
-            } else {
-                String strFields = "id,name";
-                String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER BY id", strFields);
-                if (total != null && total > 0) {
-                    sql += String.format(" LIMIT 0,%d", total);
-                }
-                // Fetch db
-                List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
-                if (CommonUtil.isEmpty(listResult)) {
-                    return new Result("000120", "Product Navigation");
-                }
-                // Change to Map
-                List<Map<String, Object>> listProduct = EntityUtils.castMap(listResult, Product.class, strFields);
-                retResult = new Result(listProduct);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            retResult = new Result("000102", "Product Navigation");
-        }
+//        try {
+//            int nFetchDataMode = 2; // 1 - Product， 2-Map
+//
+//            if (nFetchDataMode == 1) {
+//                List<Product> listRelease = null;
+//                if (total == null || total < 1) {
+//                    listRelease = productRep.findNavigationList();
+//                } else {
+//                    listRelease = productRep.findNavigationPage(total);
+//                }
+//
+//                if (CommonUtil.isEmpty(listRelease)) {
+//                    return new Result("000120", "Product Navigation");
+//                }
+//                retResult = new Result(listRelease);
+//            } else {
+//                String strFields = "id,name";
+//                String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER BY id", strFields);
+//                if (total != null && total > 0) {
+//                    sql += String.format(" LIMIT 0,%d", total);
+//                }
+//                // Fetch db
+//                List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+//                if (CommonUtil.isEmpty(listResult)) {
+//                    return new Result("000120", "Product Navigation");
+//                }
+//                // Change to Map
+//                List<Map<String, Object>> listRelease = EntityUtils.castMap(listResult, Product.class, strFields);
+//                retResult = new Result(listRelease);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            retResult = new Result("000102", "Product Navigation");
+//        }
 
         return retResult;
     }

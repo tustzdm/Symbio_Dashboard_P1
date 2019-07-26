@@ -148,3 +148,7 @@ CREATE TABLE `result_message` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_result_message_code` (`code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- 2019/7/26
+ALTER Table `test_set`
+ADD COLUMN `display` smallint(5) NOT NULL DEFAULT '1' COMMENT 'Display or not. 0-hide, 1-show' AFTER `status`;

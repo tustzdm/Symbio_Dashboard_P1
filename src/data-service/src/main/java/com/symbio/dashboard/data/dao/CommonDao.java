@@ -82,7 +82,8 @@ public class CommonDao {
   }
 
   /**
-   * 得到dbFiled信息
+   * 得到Entity 相关的dbFiled信息
+   *
    * @param listSetting
    * @return
    */
@@ -94,7 +95,7 @@ public class CommonDao {
     for(SysListSetting item : listSetting){
       if(!StringUtil.isEmpty(item.getField())) {
         dbFields.add(item.getField());
-        if(!bFindId && item.getField().contains("id")) {
+        if(!bFindId && item.getField().equals("id")) {
           bFindId = true;
         }
       }
@@ -102,6 +103,12 @@ public class CommonDao {
 
     if(!bFindId) dbFields.add(0, "id");
 
+    return dbFields;
+  }
+
+  public static List<String> getQueryFieldsAppend(List<SysListSetting> listSetting, List<String> listAppendFields) {
+    List<String> dbFields = getQueryFields(listSetting);
+    dbFields.addAll(listAppendFields);
     return dbFields;
   }
 }
