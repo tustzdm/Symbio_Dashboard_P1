@@ -167,4 +167,25 @@ public class BusinessUtil {
 
     return retData;
   }
+
+  /**
+   * 数据库字段是否是用户可指定的字段
+   * @param strFieldName
+   * @return  true :  user could define it
+   *          false:  PK or FK or system field used
+   */
+  public static boolean isUserDefinedField (String strFieldName) {
+    boolean bRet = true;
+
+    if (strFieldName.startsWith("create_") || strFieldName.startsWith("update_")) {
+      bRet = false;
+    } else if (strFieldName.equals("id") || strFieldName.equals("description") || strFieldName.equals("display") || strFieldName.equals("validation")) {
+      bRet = false;
+    } else if (strFieldName.endsWith("_id")) {
+      bRet = false;
+    }
+
+    return bRet;
+  }
+
 }

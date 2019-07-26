@@ -86,9 +86,9 @@ public class CommonServiceImpl implements CommonService {
         try {
             Result retResult = commonDao.getDescField(table);
             Map<String, String> map = new HashMap<String, String>();
-            map.put("code", "");
-            map.put("value", "(Empty)");
-            retList.add(map);
+            //map.put("code", "");
+            //map.put("value", "(Empty)");
+            //retList.add(map);
 
             if (retResult.isSuccess()) {
                 List<String> listFields = (List<String>) retResult.getCd();

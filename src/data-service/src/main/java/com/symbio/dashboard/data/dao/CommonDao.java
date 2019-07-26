@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 
 import com.symbio.dashboard.enums.ColumnType;
 import com.symbio.dashboard.model.SysListSetting;
+import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.StringUtil;
 import org.slf4j.Logger;
@@ -35,23 +36,15 @@ public class CommonDao {
     logger.trace("CommonDao - getDescField() Enter. tableName = " + tableName);
     Result retResult = null;
     try {
-      String strSql = "desc " + tableName;
+      String strSql = String.format("DESC `%s`", tableName);
       List<Object[]> listData = this.entityManager.createNativeQuery(strSql).getResultList();
 
       String strField = null;
       StringBuffer sb = new StringBuffer();
       List<String> listFields = new ArrayList<String>();
-      boolean bIgnore = false;
       for (Object[] item : listData) {
         strField = item[0].toString();
-        bIgnore = false;
-        if (strField.startsWith("create_") || strField.startsWith("update_")) {
-          bIgnore = true;
-        } else if (strField.equals("id") || strField.equals("description") || strField.equals("display") || strField.equals("validation")) {
-          bIgnore = true;
-        }
-
-        if (!bIgnore) {
+        if (BusinessUtil.isUserDefinedField(strField)) {
           listFields.add(strField);
         }
       }
