@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @ClassName - ProductController
  * @Author - admin
- * @Description - TODO
+ * @Description - Product UI controller
  * @Date - 2019/7/17 16:34
  * @Version 1.0
  */
@@ -33,24 +33,28 @@ public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
 
+    /**
+     * 得到Product List 相关数据
+     * @param token
+     * @param locale
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
     @RequestMapping("/getProductList")
     public Result getProductList(@RequestParam(value = "token") String token,
-                                 @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale) {
-
-        Integer userId = 0;
-        Result retResult = productService.getProductList(userId, locale);
-        return retResult;
+                                 @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                 @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
+                                 @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        return getProductListBase(token, locale, pageIndex, pageSize);
     }
 
     @RequestMapping("/getProductPageList")
     public Result getProductPageList(@RequestParam(value = "token") String token,
-                                     @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale,
-                                     @RequestParam(value = "pageIndex",required = false) Integer pageIndex,
-                                     @RequestParam(value = "pageSize",required = false) Integer pageSize) {
-
-        Integer userId = 0;
-        Result retResult = productService.getProductPageList(userId, locale, pageIndex, pageSize);
-        return retResult;
+                                     @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                     @RequestParam(value = "total", required = false) Integer pageIndex,
+                                     @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        return getProductListBase(token, locale, pageIndex, pageSize);
     }
 
     @RequestMapping("/getProductInfo")
@@ -128,12 +132,22 @@ public class ProductController extends BaseController {
                                      @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                      @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
                                      @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        return getProductListBase(token, locale, pageIndex, pageSize);
+    }
+
+    private Result getProductListBase(String token, String locale, Integer pageIndex, Integer pageSize) {
+        logger.trace("getProductListBase() Enter. token = "+ token);
 
         Integer userId = 0;
         Result retResult = productService.getProductPageList2(userId, locale, pageIndex, pageSize);
         if(retResult.hasError()) {
-            return getResult("000120" , "Product List");
+            logger.debug(String.format("Get Error Info from productService. ec=%s, em=%s", retResult.getEc(), retResult.getEm()));
+            if ("000121".equals(retResult.getEc())) {
+                return getResult("000121", "Product");
+            }
         }
+
+        logger.trace("getProductListBase() Exit");
         return retResult;
     }
 

@@ -42,6 +42,12 @@ public interface ProductRep extends JpaRepository<Product, Integer> {
     @Query(value = "select p.name from product p", nativeQuery = true)
     List<String> getAllName();
 
+    @Query(value = "SELECT * FROM product WHERE display = 1 ORDER BY id", nativeQuery = true)
+    List<Product> findNavigationList();
+
+    @Query(value = "SELECT * FROM product WHERE display = 1 ORDER BY id LIMIT 0,?1", nativeQuery = true)
+    List<Product> findNavigationPage(int total);
+
     Product getById(Integer id);
 
     Page<Product> findAll(Pageable pageable);

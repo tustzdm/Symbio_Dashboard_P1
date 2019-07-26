@@ -89,11 +89,11 @@ INSERT INTO `dictionary` VALUES ('123', 'ReleaseStatus', 'compwithissue', 'Compl
 INSERT INTO `dictionary` VALUES ('124', 'ReleaseStatus', 'atrisk', 'At Risk', '1', '');
 INSERT INTO `dictionary` VALUES ('125', 'ReleaseStatus', 'signoff', 'SignOff', '1', '');
 
-INSERT INTO `dictionary`(`id`,`type`,`code`,`value`) VALUES ('150', 'Page_Element_Setting', 'QualityOverviewLayout', 'Quality Overview Layout');
-INSERT INTO `dictionary`(`type`,`code`,`value`) VALUES ('Page_Element_Setting', 'Product', 'Product');
-INSERT INTO `dictionary`(`type`,`code`,`value`) VALUES ('Page_Element_Setting', 'Release', 'Release');
-INSERT INTO `dictionary`(`type`,`code`,`value`) VALUES ('Page_Element_Setting', 'TestSet', 'Test Set');
-INSERT INTO `dictionary`(`type`,`code`,`value`) VALUES ('Page_Element_Setting', 'TestCase', 'Test Case');
+INSERT INTO `dictionary`(`id`,`type`,`code`,`value`) VALUES ('150', 'Page_Element_Setting', 'qualityoverviewlayout', 'Quality Overview Layout');
+INSERT INTO `dictionary`(`type`,`code`,`value`) VALUES ('Page_Element_Setting', 'product', 'Product');
+INSERT INTO `dictionary`(`type`,`code`,`value`) VALUES ('Page_Element_Setting', 'release', 'Release');
+INSERT INTO `dictionary`(`type`,`code`,`value`) VALUES ('Page_Element_Setting', 'testset', 'Test Set');
+INSERT INTO `dictionary`(`type`,`code`,`value`) VALUES ('Page_Element_Setting', 'testcase', 'Test Case');
 -- list name
 INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) VALUES ('180', 'sys_list_setting', 'product', 'Product', 'TestMgmr Product list');
 INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 

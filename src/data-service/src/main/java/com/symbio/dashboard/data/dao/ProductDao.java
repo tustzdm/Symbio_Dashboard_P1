@@ -473,4 +473,52 @@ public class ProductDao {
     logger.trace("ProductDao.getProductList2() Exit");
     return retResult;
   }
+
+  /**
+   * 得到Product 导航条信息
+   *
+   * @param locale
+   * @param total
+   * @return
+   */
+  public Result getNavitionList(String locale, Integer total) {
+    Result retResult = new Result("");
+
+    try {
+      int nFetchDataMode = 2; // 1 - Product， 2-Map
+
+      if (nFetchDataMode == 1) {
+        List<Product> listProduct = null;
+        if (total == null || total < 1) {
+          listProduct = productRep.findNavigationList();
+        } else {
+          listProduct = productRep.findNavigationPage(total);
+        }
+
+        if (CommonUtil.isEmpty(listProduct)) {
+          return new Result("000120", "Product Navigation");
+        }
+        retResult = new Result(listProduct);
+      } else {
+        String strFields = "id,name";
+        String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER BY id", strFields);
+        if (total != null && total > 0) {
+          sql += String.format(" LIMIT 0,%d", total);
+        }
+        // Fetch db
+        List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+        if (CommonUtil.isEmpty(listResult)) {
+          return new Result("000120", "Product Navigation");
+        }
+        // Change to Map
+        List<Map<String, Object>> listProduct = EntityUtils.castMap(listResult, Product.class, strFields);
+        retResult = new Result(listProduct);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      retResult = new Result("000102", "Product Navigation");
+    }
+
+    return retResult;
+  }
 }

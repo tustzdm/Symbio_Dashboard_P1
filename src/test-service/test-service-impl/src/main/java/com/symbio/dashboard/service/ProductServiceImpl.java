@@ -221,4 +221,15 @@ public class ProductServiceImpl implements ProductService {
         return retResult;
     }
 
+    @Override
+    public Result getNavitionList(Integer userId, String locale, Integer total){
+        logger.trace("ProductServiceImpl.getNavitionList Enter. total = %d", total);
+
+        Result retResult = productDao.getNavitionList(locale, total);
+        if(retResult.hasError()) {
+            logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+        }
+        return retResult;
+    }
+
 }
