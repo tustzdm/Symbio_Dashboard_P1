@@ -33,6 +33,9 @@ public class TestSet {
     @Column(name = "status",nullable = false)
     private Integer status;
 
+    @Column(name = "display", nullable = false)
+    private Integer display;
+
     @Column(name = "start_time")
     private Date startTime;
 
@@ -111,4 +114,9 @@ public class TestSet {
 
     @Column(name = "update_user_name")
     private String updateUserName;
+
+    public TestSet(Integer status, Integer display) {
+        this.status = status;  // default: 0
+        this.display = display; // default: 1
+    }
 }

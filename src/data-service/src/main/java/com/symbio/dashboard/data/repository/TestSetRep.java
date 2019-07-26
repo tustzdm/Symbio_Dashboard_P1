@@ -22,5 +22,6 @@ public interface TestSetRep extends JpaRepository<TestSet,Integer> {
 
     List<TestSet> findByReleaseId(Integer releaseId);
 
-
+    @Query(value = "select t.name from test_set t where t.release_id=?1", nativeQuery = true)
+    List<String> getAllNamesByReleaseId(Integer releaseId);
 }

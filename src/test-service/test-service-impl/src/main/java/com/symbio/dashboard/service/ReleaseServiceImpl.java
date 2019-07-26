@@ -116,6 +116,9 @@ public class ReleaseServiceImpl implements ReleaseService {
 
             release.setProductId(releaseInfo.getProductId());
             release.setName(releaseInfo.getName());
+            release.setStartTime(releaseInfo.getStartTime());
+            release.setEndTime(releaseInfo.getEndTime());
+            release.setRemark(releaseInfo.getRemark());
 
             release.setUpdateTime(date);
             release.setUpdateUser(releaseInfo.getUpdateUser());
@@ -170,7 +173,7 @@ public class ReleaseServiceImpl implements ReleaseService {
             return new Result("000101", "Name cannot be empty");
         }
         if (releaseInfo.getProductId() == null) {
-            return new Result("000101", "Release Id cannot be empty");
+            return new Result("000101", "Product Id cannot be empty");
         }
 
         List<String> allNames = releaseRep.getAllNamesByProductId(releaseInfo.getProductId());
