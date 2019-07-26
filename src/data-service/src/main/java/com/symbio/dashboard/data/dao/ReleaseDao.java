@@ -290,7 +290,6 @@ public class ReleaseDao {
             }
 
             List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
-
             ListDataType dataType = ListDataType.Map;
 
             if (dataType == ListDataType.Map) {

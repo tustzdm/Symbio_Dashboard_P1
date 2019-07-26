@@ -34,8 +34,8 @@ public interface SysListSettingRep extends JpaRepository<SysListSetting, Integer
             "JOIN ui_info ui ON sls.field = ui.db_field AND sls.`name` = ui.page " +
             "WHERE sls.`name` = ?1 AND sls.is_entity = 1 AND sls.display = 1 " +
             " UNION " +
-            "SELECT * FROM sys_list_setting WHERE display = 1 AND is_entity = 0" +
-            ") a ORDER BY a.idx", nativeQuery = true)
+            "SELECT * FROM sys_list_setting WHERE `name` = ?1 AND display = 1 " +
+            "AND (is_entity = 0 OR field in ('product_id', 'release_id'))) a ORDER BY a.idx", nativeQuery = true)
     List<SysListSetting> getListColumnsInfo(String pageName);
 
 }
