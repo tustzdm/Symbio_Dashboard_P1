@@ -1,7 +1,7 @@
 <template>
 <el-col :span="12" :offset="6">
     <el-card style="margin-bottom:100px;font-family:Poppins;">
-        <h2 style="width:100%;text-align:center">Element of Product</h2>
+        <h2 style="width:100%;text-align:center">Element of {{form.page}}</h2>
         <el-divider></el-divider>
         <el-form ref="form" v-model="form" label-width="300px">
             <el-form-item label="Page:" prop="page">
@@ -112,7 +112,7 @@ export default {
             console.log(res);
             this.typeList = res.cd;
         });
-        this.Fetch("setting/getDBFields?table=product&token=1", {
+        this.Fetch(`setting/getDBFields?table=${this.form.page.toLowerCase()}&token=1`, {
             method: "GET"
         }).then(res => {
             console.log(res);
@@ -150,13 +150,12 @@ export default {
             //     console.log(res);
             // });
             // axios
-            this.$axios.post('/ui/updateUiElement?token=111&page=product', formData).then(res => {
+            this.$axios.post(`/ui/updateUiElement?token=111&page=${this.form.page.toLowerCase()}`, formData).then(res => {
                 // success callback
                 console.log(formData);
                 console.log(res);
 
                 var ec = res.data.ec;
-                debugger;
                 if (ec != '0') {
                     alert(res.ec + ", " + res.em);
                 } else {

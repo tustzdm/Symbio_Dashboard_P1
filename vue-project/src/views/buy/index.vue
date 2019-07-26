@@ -12,7 +12,15 @@
         </div>
       </div>
     </div>
-    <product-list></product-list>
+    <div>
+        <el-card class="listHead" shadow="never" style="padding-right:5%">
+            <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Product List</h2>
+            <el-button style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
+                <router-link to="/addproject/index" style="color:white">+ Add Product</router-link>
+            </el-button>
+        </el-card>
+    </div>
+    <productList></productList>
   </div>
 </template>
 <script>

@@ -81,11 +81,28 @@ export const constantRouterMap = [
         redirect: "/addproject/index",
         children: [
             {
-                path: "index/:type?",
+                path: "index",
                 component: _import("aboutproject/addproject"),
                 name: "addproject",
                 meta: {
                     title: "addproject",
+                    icon: "",
+                },
+            }
+        ],
+        hidden: true
+    },
+    {
+        path: "/editproject",
+        component: Layout,
+        redirect: "/editproject/index",
+        children: [
+            {
+                path: "index",
+                component: _import("aboutproject/editproject"),
+                name: "editproject",
+                meta: {
+                    title: "editproject",
                     icon: "",
                 },
             }
@@ -150,6 +167,15 @@ export const constantRouterMap = [
                 name: "productInfo",
                 meta: {
                     title: "productInfo",
+                    icon: "",
+                },
+            },
+            {
+                path: "/buy/release/:releaseName",
+                component: _import("buy/productInfo"),
+                name: "releaseInfo",
+                meta: {
+                    title: "releaseInfo",
                     icon: "",
                 },
             }

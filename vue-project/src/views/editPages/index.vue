@@ -21,13 +21,13 @@
             <tr class="tableBody" v-for="items in tableData">
                 <td v-for="(item,index) in items" v-if="['page','label','dispStatus','version','validation','display'].indexOf(index) === -1">
                     <p v-if="['isRequired', 'isDisable'].indexOf(index) == -1">{{item}}</p>
-                    <el-switch :model="item" v-if="['isRequired', 'isDisable'].indexOf(index) != -1" disabled active-color="#13ce66" inactive-color="#ff4949" active-value="1" inactive-value="0">
-                    </el-switch>
+                    <el-switch key="dsfg" :model="item" v-if="['isRequired', 'isDisable'].indexOf(index) != -1" disabled active-color="#13ce66" inactive-color="#ff4949" active-value=1 inactive-value=0>
+                    </el-switch><p v-if="['isRequired', 'isDisable'].indexOf(index) != -1">{{item}}</p>
                     <!-- <p v-if="index == 'constCondition'">{{JSON.parse(item.constCondition).maxLength}}</p> -->
                 </td>
                 <td :formId="items.id">
                     <el-button @click="editRouter()" :formId="items.id" class="editDeleteBtn" icon="el-icon-edit" circle></el-button>
-                    <el-button v-if="items.dispStatus ==1" @click="returnTrIndex();deleteTr()" :formId="items.id" class="editDeleteBtn" type="danger" icon="el-icon-delete" circle></el-button>
+                    <el-button v-if="items.dispStatus ==1" @click="deleteTr()" :formId="items.id" class="editDeleteBtn" type="danger" icon="el-icon-delete" circle></el-button>
                 </td>
             </tr>
         </tbody>
@@ -44,8 +44,7 @@ export default {
             pageList: [],
             tableData: [],
             page: '',
-            trIndex: '1',
-            test: '1'
+            trIndex: '1'
         }
     },
     created() {
@@ -99,11 +98,7 @@ export default {
         },
         editRouter() {
             this.returnTrIndex();
-            for (var i = 0; i < this.tableData.length; i++) {
-                if (this.tableData[i].id == this.trIndex) {
-                    this.trIndex = i;
-                }
-            }
+            
             this.$router.push({
                 path: 'edit',
                 name: 'edit',
@@ -116,7 +111,7 @@ export default {
             this.trIndex = event.target.parentNode.getAttribute('formId');
             for (var i = 0; i < this.tableData.length; i++) {
                 if (this.tableData[i].id == this.trIndex) {
-                    return this.trIndex = i;
+                    this.trIndex = i;
                 }
             }
             // var nodes = document.getElementsByTagName("tr");
@@ -130,6 +125,7 @@ export default {
             // }
         },
         deleteTr() {
+            this.returnTrIndex();
             this.$confirm('Confirm to delete?', {
                 confirmButtonText: 'Confirm',
                 cancelButtonText: 'Cancel',

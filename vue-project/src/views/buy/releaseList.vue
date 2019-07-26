@@ -1,6 +1,5 @@
 <template>
 <div>
-    
     <el-card class="manage-tabel" shadow="never">
         <!-- <el-table :data="tableData"> -->
         <el-table :data="productList">
@@ -73,7 +72,7 @@ export default {
     components: {},
     methods: {
         getProductList() {
-            this.Fetch("/testmgmt/getProductListDemo?token=1", {
+            this.Fetch("/testmgmt/getReleaseList?token=1&productId=1", {
                 method: "GET"
             }).then(res => {
                 console.log(res);
