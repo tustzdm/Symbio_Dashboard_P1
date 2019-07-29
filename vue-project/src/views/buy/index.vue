@@ -15,8 +15,8 @@
     <div>
         <el-card class="listHead" shadow="never" style="padding-right:5%">
             <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Product List</h2>
-            <el-button style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
-                <router-link to="/addproject/index" style="color:white">+ Add Product</router-link>
+            <el-button @click="add" style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
+                + Add Product
             </el-button>
         </el-card>
     </div>
@@ -45,6 +45,15 @@ export default {
       getProjectInfo().then(res => {
         this.projectInfo = res.data
       })
+    },
+    add(){
+      this.$router.push({
+                path: '/addproject/index',
+                name: 'addproject',
+                params: {
+                    pageType: 'Product'
+                }
+            })
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
 <el-col :span="12" :offset="6">
     <el-card style="padding-bottom:100px;font-family:Poppins;">
-        <h2 style="width:100%;padding-left:150px">Add Product</h2>
+        <h2 style="width:100%;padding-left:150px">Add {{pageType}}</h2>
         <el-divider></el-divider>
         <el-form :model="product" ref="product" label-width="300px">
             <p>{{product}}</p>
@@ -15,8 +15,8 @@
                         <!-- <option v-for="item in statusList">{{item.value}}</option> -->
                         <option value="">1</option>
                     </select>
-                    <select v-if="['user','User'].indexOf(item.type) >= 0" v-model="product[item.key]">
-                        <option v-for="item in userList">{{item.id}}</option>
+                    <select v-if="['user','User'].indexOf(item.type) >= 0"v-model="product[tranformStr(item.dbField)]">
+                        <option :value="user.id" v-for="user in userList" >{{user.fullName}}</option>
                     </select>
                     <el-date-picker v-model="product[item.key]" v-if="item.type === 'DateTime'" placeholder="Choose Date"></el-date-picker>
                     <el-input type="textarea" v-model="product[item.key]" :autosize="{ minRows: 4}" v-if="item.type == 'textarea'" :maxlength="JSON.parse(item.constCondition).maxLength" show-word-limit></el-input>
@@ -50,7 +50,8 @@ export default {
             statusList: '',
             product: {
             },
-            userList:''
+            userList:'',
+            pageType:''
         }
     },
     created() {
@@ -72,6 +73,7 @@ export default {
             console.log(res.cd.cd);
             this.userList = res.cd.cd;
         });
+        this.pageType =  this.$route.params.pageType;
     },
     mounted() {
         let type = this.$route.query.type;
@@ -90,7 +92,7 @@ export default {
             //     }
             // });
             alert(this.product);
-            this.$axios.post('/testmgmt/updateProduct?token=111', this.product).then(res => {
+            this.$axios.post(`/testmgmt/update${this.pageType}?token=111`, this.product).then(res => {
                 // success callback
                 console.log(this.product);
                 console.log(res.data);
@@ -108,6 +110,13 @@ export default {
         },
         onCancel() {
             this.$router.go(-1);
+        },
+        tranformStr(str) {
+            var strArr = str.split('_');
+            for (var i = 1; i < strArr.length; i++) {
+                strArr[i] = strArr[i].charAt(0).toUpperCase() + strArr[i].substring(1);
+            }
+            return strArr.join('');
         }
     }
 }

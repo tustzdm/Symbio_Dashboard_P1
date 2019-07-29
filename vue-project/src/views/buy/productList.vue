@@ -1,13 +1,12 @@
 <template>
 <div>
-    
     <el-card class="manage-tabel" shadow="never">
         <!-- <el-table :data="tableData"> -->
         <el-table :data="productList">
             <el-table-column prop="name" label="Name" :width="0.5*tabelWidth">
                 <template slot-scope="scope">
                     <div>
-                        <router-link :to="{ name: 'productInfo', params: { productName: scope.row.name }}">{{scope.row.name}}</router-link>
+                        <router-link :to="{ name: 'productInfo', params: { productName: scope.row.name}}">{{scope.row.name}}</router-link>
                     </div>
                     <div>{{scope.row.description}}</div>
                 </template>
@@ -100,6 +99,7 @@ export default {
                 name: 'editproject',
                 params: {
                     tr: this.productList[this.trIndex], //Pass the tr data to next router
+                    editPageType: 'Product'
                 }
             })
         },

@@ -100,6 +100,7 @@ export default {
                 name: 'editproject',
                 params: {
                     tr: this.productList[this.trIndex], //Pass the tr data to next router
+                    editPageType: 'Testset'
                 }
             })
         },

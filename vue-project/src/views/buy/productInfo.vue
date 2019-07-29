@@ -15,8 +15,8 @@
     <div>
         <el-card class="listHead" shadow="never" style="padding-right:5%">
             <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Release List</h2>
-            <el-button style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
-                <router-link to="/addproject/index" style="color:white">+ Add Release</router-link>
+            <el-button @click="add" style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
+                + Add Release
             </el-button>
         </el-card>
     </div>
@@ -46,7 +46,7 @@ export default {
         }
     },
     components: {
-        releaseList:releaseList,
+        releaseList: releaseList,
         chart: ECharts
     },
     mounted() {},
@@ -55,8 +55,17 @@ export default {
             getProjectInfo().then(res => {
                 this.projectInfo = res.data
             })
+        },
+        add() {//通过这个传给 add页面要取的值的类型比如product release
+            this.$router.push({
+                path: '/addproject/index',
+                name: 'addproject',
+                params: {
+                    pageType: 'Release'
+                }
+            })
         }
-    }
+    },
 }
 </script>
 

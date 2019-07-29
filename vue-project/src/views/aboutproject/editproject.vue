@@ -1,7 +1,7 @@
 <template>
 <el-col :span="12" :offset="6">
     <el-card style="padding-bottom:100px;font-family:Poppins;">
-        <h2 style="width:100%;padding-left:150px">Edit Product</h2>
+        <h2 style="width:100%;padding-left:150px">Edit {{editPageType}}</h2>
         <el-divider></el-divider>
         <el-form :model="product" ref="product" label-width="300px">
             <p>{{product}}</p>
@@ -44,7 +44,8 @@ export default {
             uiList: '',
             statusList: '',
             product: {},
-            userList: ''
+            userList: '',
+            editPageType:''
         }
     },
     created() {
@@ -71,6 +72,7 @@ export default {
             // }
         });
         this.product = this.$route.params.tr;
+        this.editPageType = this.$route.params.editPageType;
     },
     mounted() {
 
@@ -78,7 +80,7 @@ export default {
     methods: {
         onSubmit() {
             alert(this.product);
-            this.$axios.post('/testmgmt/updateProduct?token=111', this.product).then(res => {
+            this.$axios.post(`/testmgmt/update${this.editPageType}?token=111`, this.product).then(res => {
                 // success callback
                 console.log(this.product);
                 console.log(res.data);

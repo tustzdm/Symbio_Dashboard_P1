@@ -22,7 +22,7 @@
                 <td v-for="(item,index) in items" v-if="['page','label','dispStatus','version','validation','display'].indexOf(index) === -1">
                     <p v-if="['isRequired', 'isDisable'].indexOf(index) == -1">{{item}}</p>
                     <el-switch key="dsfg" :model="item" v-if="['isRequired', 'isDisable'].indexOf(index) != -1" disabled active-color="#13ce66" inactive-color="#ff4949" active-value=1 inactive-value=0>
-                    </el-switch><p v-if="['isRequired', 'isDisable'].indexOf(index) != -1">{{item}}</p>
+                    </el-switch>
                     <!-- <p v-if="index == 'constCondition'">{{JSON.parse(item.constCondition).maxLength}}</p> -->
                 </td>
                 <td :formId="items.id">

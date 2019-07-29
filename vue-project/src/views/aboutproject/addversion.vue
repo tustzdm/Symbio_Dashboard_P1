@@ -1,4 +1,5 @@
 <template>
+  <!-- 这个页面不再单独写了，product release testset 统一用一个动态的页面 -->
   <el-card shadow="hover" :rules="rules" ref="form" style="margin-bottom:100px">
     <el-form ref="form" :model="form" label-width="200px">
       <el-form-item label="Product">

@@ -72,7 +72,7 @@ export default {
     components: {},
     methods: {
         getProductList() {
-            this.Fetch("/testmgmt/getReleaseList?token=1&productId=1", {
+            this.Fetch("/testmgmt/getReleaseList?token=1&productId=3", {
                 method: "GET"
             }).then(res => {
                 console.log(res);
@@ -99,6 +99,7 @@ export default {
                 name: 'editproject',
                 params: {
                     tr: this.productList[this.trIndex], //Pass the tr data to next router
+                    editPageType: 'Release'
                 }
             })
         },
