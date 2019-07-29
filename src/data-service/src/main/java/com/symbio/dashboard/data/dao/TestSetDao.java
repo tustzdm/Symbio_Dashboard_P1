@@ -1,13 +1,12 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.data.repository.SysListSettingRep;
-import com.symbio.dashboard.data.repository.TestSetRep;
-import com.symbio.dashboard.data.repository.UiInfoRep;
-import com.symbio.dashboard.data.repository.UserRep;
+import com.symbio.dashboard.data.repository.*;
 import com.symbio.dashboard.dto.CommonListDTO;
+import com.symbio.dashboard.dto.TestSetDTO;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
+import com.symbio.dashboard.model.Product;
 import com.symbio.dashboard.model.Release;
 import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.TestSet;
@@ -55,6 +54,10 @@ public class TestSetDao {
     private UserDao userDao;
     @Autowired
     private SysListSettingRep sysListSettingRep;
+    @Autowired
+    private ReleaseRep releaseRep;
+    @Autowired
+    private ProductRep productRep;
 
     public List<Map<String, Object>> mergeStaticticsData(List<Map<String, Object>> entityMap) {
         List<Map<String, Object>> retMap = entityMap;
@@ -188,6 +191,27 @@ public class TestSetDao {
 
         logger.trace("TestSetDao.getTestSetList() Exit");
         return retResult;
+    }
+
+    public Result getReleaseAndProductNames(Integer releaseId) {
+        TestSetDTO testSetDTO = new TestSetDTO();
+        List<String> productName = new ArrayList<>();
+        List<String> releaseName = new ArrayList<>();
+        try {
+            Release release = releaseRep.getById(releaseId);
+            if (!CommonUtil.isEmpty(release)) {
+                releaseName.add(release.getName());
+                Product product = productRep.getById(release.getProductId());
+                if (!CommonUtil.isEmpty(product)) {
+                    productName.add(product.getName());
+                }
+            }
+            testSetDTO.setProjectName(productName);
+            testSetDTO.setReleaseName(releaseName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Result(testSetDTO);
     }
 
     @Data

@@ -52,4 +52,7 @@ public interface ProductRep extends JpaRepository<Product, Integer> {
 
     Page<Product> findAll(Pageable pageable);
 
+    @Query(value = "select p.name from product p where id=?1", nativeQuery = true)
+    String getName(Integer id);
+
 }

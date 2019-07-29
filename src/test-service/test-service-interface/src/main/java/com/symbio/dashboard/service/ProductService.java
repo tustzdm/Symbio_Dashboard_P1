@@ -28,4 +28,6 @@ public interface ProductService {
 
     Result getProductUiInfo(Integer userId, String locale, Integer uiInfo, Integer id);
 
+    Result getProductPieChart(Integer userId, String locale, Integer... productId);
+
 }
