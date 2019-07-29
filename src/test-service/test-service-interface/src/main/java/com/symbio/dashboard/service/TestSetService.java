@@ -7,13 +7,10 @@ import org.springframework.stereotype.Service;
 @Service
 public interface TestSetService {
 
-    Result getTestSetList(Integer userId, String locale);
+    Result getTestSetList(Integer userId, String locale, Integer releaseId, Integer pageIndex, Integer pageSize);
 
-    Result getTestSetList(Integer userId);
+    Result getTestSetList(Integer releaseId, Integer pageIndex, Integer pageSize);
 
-    Result getTestSetPageList(Integer userId, String locale, int pageIndex, int pageSize);
-
-    Result getTestSetPageList(Integer userId, int pageIndex, int pageSize);
 
     Result getTestSetInfo(Integer userId, Integer id);
 

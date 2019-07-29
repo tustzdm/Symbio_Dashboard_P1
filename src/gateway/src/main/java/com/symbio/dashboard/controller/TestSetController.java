@@ -3,6 +3,7 @@ package com.symbio.dashboard.controller;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.model.TestSet;
 import com.symbio.dashboard.service.TestSetService;
+import com.symbio.dashboard.service.TestSetServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @ClassName - TestSetController
- * @Author - admin
- * @Description - TODO
+ * @Author - Admin
+ * @Description
  * @Date - 2019/7/26 15:39
  * @Version 1.0
  */
@@ -84,12 +85,12 @@ public class TestSetController extends BaseController {
 
     @RequestMapping("/getTestSetList")
     public Result getTestSetList(@RequestParam(value = "token") String token,
-                                 @RequestParam(value = "id") Integer id,
+                                 @RequestParam(value = "releaseId") Integer releaseId,
                                  @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                  @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
                                  @RequestParam(value = "pageSize", required = false) Integer pageSize) {
         Integer userId = 0;
-        Result result = null; // TestSetService.getTestSetList(userId, locale, id, pageIndex, pageSize);
+        Result result = testSetService.getTestSetList(userId, locale, releaseId, pageIndex, pageSize);
         if (result.hasError()) {
             return result;
         }

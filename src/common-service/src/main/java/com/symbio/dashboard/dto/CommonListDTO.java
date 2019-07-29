@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,54 +17,10 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommonListDTO implements Serializable {
 
-    // Product
-//    private Integer id;
-//    private String name;
-//    private Integer owner;
-//    private Integer manager;
-//    private Integer qaLead;
-//    private Integer devLead;
-//    private Integer logoId;
-//    private String logoUrl;
-//    // 0-normal,1-abnormal,2-completed,3-archived,4-blocked
-//    private Integer status;
-//    // 0-hide, 1-show
-//    private Integer display;
-//    private String description;
-//    private String locale;
-//
-//    private Integer prodfldInt1;
-//    private Integer prodfldInt2;
-//    private Integer prodfldInt3;
-//    private Integer prodfldInt4;
-//    private Integer prodfldInt5;
-//    private Integer prodfldStr1;
-//    private Integer prodfldStr2;
-//    private Integer prodfldStr3;
-//    private Integer prodfldStr4;
-//    private Integer prodfldStr5;
-//    private Integer prodfldStr6;
-//    private Integer prodfldStr7;
-//    private Integer prodfldStr8;
-//    private Integer prodfldStr9;
-//    private Integer prodfldStr10;
-//
-//    private Date createTime;
-//    private Integer createUser;
-//    private String createUserName;
-////    private Date updateTime;
-////    private Integer updateUser;
-////    private String updateUserName;
-//
-////    private Product product;
-//
-//    // JSON format
-//    private String progress;
-
   private Integer pageIndex;
   private Integer pageSize;
   private Integer totalRecord;
-  private Integer dataType = 1;  // 1: Array[Array], 2: Array[Map]
+  private Integer dataType;  // 1: Array[Array], 2: Array[Map]
   private String locale;
   private List columns;
   private List<String> fields;

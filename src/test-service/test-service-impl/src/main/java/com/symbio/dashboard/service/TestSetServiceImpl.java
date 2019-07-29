@@ -1,7 +1,9 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.data.dao.TestSetDao;
 import com.symbio.dashboard.data.repository.TestSetRep;
+import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.TestSet;
 import com.symbio.dashboard.util.CommonUtil;
 import org.slf4j.Logger;
@@ -16,8 +18,8 @@ import java.util.List;
 
 /**
  * @ClassName - TestSetServiceImpl
- * @Author - admin
- * @Description - TODO
+ * @Author - Admin
+ * @Description
  * @Date - 2019/7/26 15:38
  * @Version 1.0
  */
@@ -31,24 +33,21 @@ public class TestSetServiceImpl implements TestSetService {
     @Autowired
     private TestSetRep testSetRep;
 
+    @Autowired
+    private TestSetDao testsetDao;
+
     @Override
-    public Result getTestSetList(Integer userId, String locale) {
-        return null;
+    public Result getTestSetList(Integer userId, String locale, Integer releaseId, Integer pageIndex, Integer pageSize) {
+        Result retResult = testsetDao.getTestSetList(locale, releaseId, pageIndex, pageSize);
+        if(retResult.hasError()) {
+            logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+        }
+        return retResult;
     }
 
     @Override
-    public Result getTestSetList(Integer userId) {
-        return null;
-    }
-
-    @Override
-    public Result getTestSetPageList(Integer userId, String locale, int pageIndex, int pageSize) {
-        return null;
-    }
-
-    @Override
-    public Result getTestSetPageList(Integer userId, int pageIndex, int pageSize) {
-        return null;
+    public Result getTestSetList(Integer releaseId, Integer pageIndex, Integer pageSize){
+        return getTestSetList(null, Locales.EN_US.toString(), releaseId, pageIndex, pageSize);
     }
 
     @Override

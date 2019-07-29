@@ -41,6 +41,8 @@ public class ProductDao {
 
     @PersistenceContext
     private EntityManager entityManager;
+    @Autowired
+    private CommonDao commonDao;
 
     @Autowired
     private UiInfoRep uiInfoRep;
@@ -280,53 +282,7 @@ public class ProductDao {
 
         return listFields;
     }
-
-    private List<Map<String, Object>> setUserMapInfo(List<Map<String, Object>> data, List<String> listUserFields) {
-        List<Map<String, Object>> retList = data;
-
-        try {
-            if (CommonUtil.isEmpty(listUserFields) || CommonUtil.isEmpty(data)) {
-                return data;
-            }
-
-            Set<Integer> userIds = new TreeSet<>();
-
-            // Check map key is match
-            Map<String, Object> mapTest = data.get(0);
-            CommonUtil.validateMapKey(mapTest, listUserFields);
-
-            for (Map map : data) {
-                for (String field : listUserFields) {
-                    userIds.add((Integer) map.get(field));
-                }
-            }
-
-            // Find User infos
-            List<Integer> listUsers = new ArrayList<>(userIds);
-            String inIds = CommonUtil.join(listUsers);
-            List<User> listUserInfo = userDao.getUserByIds(inIds);
-            System.out.println("ids == " + inIds);
-            System.out.println("Find user length == " + listUserInfo.size());
-
-            if (CommonUtil.isEmpty(listUserInfo)) {
-                return data;
-            }
-
-            Map<Integer, User> mapUsers = new HashMap<>();
-            for (User user : listUserInfo) {
-                mapUsers.put(user.getId(), user);
-            }
-
-            // Get User Map
-            retList = BusinessUtil.ReplaceUserShortInfo(data, listUserFields, mapUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-        }
-
-        return retList;
-    }
-
+    
     /**
      * 得到Product List Map数据对象
      *
@@ -361,7 +317,7 @@ public class ProductDao {
                 if (CommonUtil.isEmpty(listUserFields)) {
                     retProduct.setData(listProdInfo);
                 } else {
-                    listProdInfo = setUserMapInfo(listProdInfo, listUserFields);
+                    listProdInfo = commonDao.setUserMapInfo(listProdInfo, listUserFields);
                     retProduct.setData(listProdInfo);
                 }
             } else if (dataType == ListDataType.JSONArray) {

@@ -1,12 +1,12 @@
 package com.symbio.dashboard.data.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javax.persistence.EntityManager;
 
 import com.symbio.dashboard.enums.ColumnType;
 import com.symbio.dashboard.model.SysListSetting;
+import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.StringUtil;
@@ -25,6 +25,9 @@ public class CommonDao {
 
   @Autowired
   private EntityManager entityManager;
+
+  @Autowired
+  private UserDao userDao;
 
   /**
    * Get Mysql Table's field info except non user defined
@@ -110,5 +113,51 @@ public class CommonDao {
     List<String> dbFields = getQueryFields(listSetting);
     dbFields.addAll(listAppendFields);
     return dbFields;
+  }
+
+  public List<Map<String, Object>> setUserMapInfo(List<Map<String, Object>> data, List<String> listUserFields) {
+    List<Map<String, Object>> retList = data;
+
+    try {
+      if (CommonUtil.isEmpty(listUserFields) || CommonUtil.isEmpty(data)) {
+        return data;
+      }
+
+      Set<Integer> userIds = new TreeSet<>();
+
+      // Check map key is match
+      Map<String, Object> mapTest = data.get(0);
+      CommonUtil.validateMapKey(mapTest, listUserFields);
+
+      for (Map map : data) {
+        for (String field : listUserFields) {
+          userIds.add((Integer) map.get(field));
+        }
+      }
+
+      // Find User infos
+      List<Integer> listUsers = new ArrayList<>(userIds);
+      String inIds = CommonUtil.join(listUsers);
+      List<User> listUserInfo = userDao.getUserByIds(inIds);
+      System.out.println("ids == " + inIds);
+      System.out.println("Find user length == " + listUserInfo.size());
+
+      if (CommonUtil.isEmpty(listUserInfo)) {
+        return data;
+      }
+
+      Map<Integer, User> mapUsers = new HashMap<>();
+      for (User user : listUserInfo) {
+        mapUsers.put(user.getId(), user);
+      }
+
+      // Get User Map
+      retList = BusinessUtil.ReplaceUserShortInfo(data, listUserFields, mapUsers);
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    }
+
+    return retList;
   }
 }

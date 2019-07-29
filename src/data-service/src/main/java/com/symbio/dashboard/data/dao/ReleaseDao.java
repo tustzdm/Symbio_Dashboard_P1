@@ -1,10 +1,7 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.data.repository.ProductRep;
-import com.symbio.dashboard.data.repository.SysListSettingRep;
-import com.symbio.dashboard.data.repository.UiInfoRep;
-import com.symbio.dashboard.data.repository.UserRep;
+import com.symbio.dashboard.data.repository.*;
 import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
@@ -42,11 +39,13 @@ public class ReleaseDao {
 
     @PersistenceContext
     private EntityManager entityManager;
+    @Autowired
+    private CommonDao commonDao;
 
     @Autowired
     private UiInfoRep uiInfoRep;
     @Autowired
-    private ProductRep productRep;
+    private ReleaseRep releaseRep;
     @Autowired
     private UserRep userRep;
     @Autowired
@@ -222,52 +221,6 @@ public class ReleaseDao {
         return listFields;
     }
 
-    private List<Map<String, Object>> setUserMapInfo(List<Map<String, Object>> data, List<String> listUserFields) {
-        List<Map<String, Object>> retList = data;
-
-        try {
-            if (CommonUtil.isEmpty(listUserFields) || CommonUtil.isEmpty(data)) {
-                return data;
-            }
-
-            Set<Integer> userIds = new TreeSet<>();
-
-            // Check map key is match
-            Map<String, Object> mapTest = data.get(0);
-            CommonUtil.validateMapKey(mapTest, listUserFields);
-
-            for (Map map : data) {
-                for (String field : listUserFields) {
-                    userIds.add((Integer) map.get(field));
-                }
-            }
-
-            // Find User infos
-            List<Integer> listUsers = new ArrayList<>(userIds);
-            String inIds = CommonUtil.join(listUsers);
-            List<User> listUserInfo = userDao.getUserByIds(inIds);
-            System.out.println("ids == " + inIds);
-            System.out.println("Find user length == " + listUserInfo.size());
-
-            if (CommonUtil.isEmpty(listUserInfo)) {
-                return data;
-            }
-
-            Map<Integer, User> mapUsers = new HashMap<>();
-            for (User user : listUserInfo) {
-                mapUsers.put(user.getId(), user);
-            }
-
-            // Get User Map
-            retList = BusinessUtil.ReplaceUserShortInfo(data, listUserFields, mapUsers);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-        }
-
-        return retList;
-    }
-
     /**
      * 得到Release List Map数据对象
      *
@@ -301,14 +254,14 @@ public class ReleaseDao {
                 if (CommonUtil.isEmpty(listUserFields)) {
                     retListDTO.setData(listProdInfo);
                 } else {
-                    listProdInfo = setUserMapInfo(listProdInfo, listUserFields);
+                    listProdInfo = commonDao.setUserMapInfo(listProdInfo, listUserFields);
                     retListDTO.setData(listProdInfo);
                 }
             } else if (dataType == ListDataType.JSONArray) {
 
             }
 
-            int nCount = productRep.getCount();
+            int nCount = releaseRep.getProductCount(productId);
             retListDTO.setTotalRecord(nCount);
 
             retResult = new Result(retListDTO);

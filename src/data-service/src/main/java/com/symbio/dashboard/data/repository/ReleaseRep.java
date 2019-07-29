@@ -28,4 +28,7 @@ public interface ReleaseRep extends JpaRepository<Release,Integer> {
     Page<Release> findByProductId(Integer productId, Pageable pageable);
 
     List<Release> findByProductId(Integer productId);
+
+    @Query(value = "SELECT count(*) FROM `release` WHERE product_id = ?1 AND display = 1", nativeQuery = true)
+    int getProductCount(Integer productId);
 }
