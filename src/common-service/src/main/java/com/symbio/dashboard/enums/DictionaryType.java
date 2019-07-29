@@ -1,0 +1,27 @@
+package com.symbio.dashboard.enums;
+
+public enum DictionaryType {
+  TemplateCategory("TemplateCategory"),
+  DataType("DataType"),
+  HtmlType("HtmlType"),
+  UI_List_Count("UI_List_Count"),
+  ProductStatus("ProductStatus"),
+  ReleaseStatus("ReleaseStatus"),
+  Page_Element_Setting("Page_Element_Setting"),
+  sys_list_setting("sys_list_setting"),
+  ColumnType("ColumnType");
+
+  private DictionaryType(String type){
+    this.type = type;
+  }
+  private String type;
+
+  public String getType() {
+    return this.type;
+  }
+
+  @Override
+  public String toString() {
+    return type;
+  }
+}

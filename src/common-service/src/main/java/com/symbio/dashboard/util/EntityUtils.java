@@ -1,5 +1,6 @@
 package com.symbio.dashboard.util;
 
+import com.symbio.dashboard.model.UiInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -255,6 +256,41 @@ public class EntityUtils {
         return returnList;
     }
 
+
+    /**
+     * 将对象按 uiInfo 组成Map对象
+     *
+     * @param <T>        实体类
+     * @param entityObj  实例化的实体类
+     * @param listUiInfo UiInfo列表信息
+     * @return 实体类集合
+     */
+    public static <T> Map<String, Object> castMap(T entityObj, List<UiInfo> listUiInfo) {
+        Map<String, Object> retMap = new HashMap<String, Object>();
+        if (CommonUtil.isEmpty(listUiInfo)) {
+            return retMap;
+        }
+
+        //获取当前实体类的属性名、属性值、属性类别
+        try {
+            List<Map> attributeInfoList = getFieldsInfo(entityObj);
+            List<String> arrFields = new ArrayList<>();
+            for (UiInfo uiInfo : listUiInfo) {
+                arrFields.add(uiInfo.getDbField());
+            }
+            arrFields.add("id"); // fix column
+
+            arrFields = getFieldListMethodNames(arrFields, attributeInfoList);
+            for (String methodName : arrFields) {
+                retMap.put(methodName, getFieldValueByName(methodName, entityObj));
+            }
+        } catch (Exception ex) {
+            logger.error("EntityUtils.castMap() Exception!!!", ex.getMessage());
+            return retMap;
+        }
+        return retMap;
+    }
+
     /**
      * Check sql field and its method name
      * @param fields
@@ -274,6 +310,23 @@ public class EntityUtils {
                 throw new Exception("EntityUtils !!!ERROR!!!" + msg);
             }
             retData[i] = strField;
+        }
+        return retData;
+    }
+
+    private static List<String> getFieldListMethodNames(List<String> fields, List<Map> map) throws Exception{
+        List<String> retData = new ArrayList<>();
+
+        String strField = null;
+        for(String field : fields) {
+            strField = convertFieldToMethName(field, map);
+            if (strField == null) {
+                String msg = "Could not find exact method name. field = " + field;
+                System.out.println(msg);
+                logger.error(msg);
+                throw new Exception("EntityUtils !!!ERROR!!!" + msg);
+            }
+            retData.add(strField);
         }
         return retData;
     }

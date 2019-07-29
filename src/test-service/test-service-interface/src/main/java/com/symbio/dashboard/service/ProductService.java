@@ -26,4 +26,6 @@ public interface ProductService {
 
     Result getNavitionList(Integer userId, String locale, Integer total);
 
+    Result getProductUiInfo(Integer userId, String locale, Integer uiInfo, Integer id);
+
 }

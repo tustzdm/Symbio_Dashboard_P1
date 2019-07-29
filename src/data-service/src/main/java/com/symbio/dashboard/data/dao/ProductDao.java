@@ -6,10 +6,14 @@ import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.data.repository.UserRep;
 import com.symbio.dashboard.dto.CommonListDTO;
+import com.symbio.dashboard.dto.ProductUiDTO;
+import com.symbio.dashboard.enums.DictionaryType;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
+import com.symbio.dashboard.enums.UIInfoPage;
 import com.symbio.dashboard.model.Product;
 import com.symbio.dashboard.model.SysListSetting;
+import com.symbio.dashboard.model.UiInfo;
 import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
@@ -458,6 +462,39 @@ public class ProductDao {
             retResult = new Result("000102", "Product Navigation");
         }
 
+        return retResult;
+    }
+
+    public Result getProductUiInfo(Integer userId, String locale, Integer uiInfo, Integer id) {
+        logger.trace("ProductDao.getProductUiInfo() Enter");
+        Result retResult = new Result("");
+
+        try {
+            ProductUiDTO  prodUiDto = new ProductUiDTO();
+            List<UiInfo> listUiInfo = new ArrayList<UiInfo>();
+            if(uiInfo == 1) {
+                listUiInfo = commonDao.getUIInfoByPage(UIInfoPage.Product.toString());
+            }
+            prodUiDto.setLocale(locale);
+            prodUiDto.setRole(7);
+            prodUiDto.setUiInfo(commonDao.getUiInfoList(locale, listUiInfo));
+
+            Product product = productRep.getById(id);
+            if (product == null || "".equals(product)) {
+                logger.error("Could not find product data info.");
+            } else {
+                prodUiDto.setData(EntityUtils.castMap(product, listUiInfo));
+            }
+
+            prodUiDto.setStatusList(commonDao.getDictDataByType(DictionaryType.ProductStatus.getType()));
+            prodUiDto.setUserList(commonDao.getUserUIList(listUiInfo));
+            retResult = new Result(prodUiDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            retResult = new Result("000102", "Product UI Info");
+        }
+
+        logger.trace("ProductDao.getProductUiInfo() Exit");
         return retResult;
     }
 

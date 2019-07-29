@@ -100,7 +100,7 @@ public class Product implements Serializable {
     @Column(name = "create_user_name")
     private String createUserName;
 
-    @Column(name = "update_time", nullable = false)
+    @Column(name = "update_time")
     private Date updateTime;
 
     @Column(name = "update_user")

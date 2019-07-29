@@ -1,13 +1,14 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.data.dao.ProductDao;
 import com.symbio.dashboard.data.dao.ReleaseDao;
 import com.symbio.dashboard.data.repository.ReleaseRep;
 import com.symbio.dashboard.data.repository.ResultMessageRep;
 import com.symbio.dashboard.data.repository.SysListSettingRep;
+import com.symbio.dashboard.data.repository.UserRep;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.Release;
+import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.util.CommonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,9 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Autowired
     private ReleaseDao releaseDao;
+
+    @Autowired
+    private UserRep userRep;
 
     @Override
     public Result getReleaseList(Integer productId, Integer pageIndex, Integer pageSize) {
@@ -79,15 +83,6 @@ public class ReleaseServiceImpl implements ReleaseService {
         Release release;
         Integer id = releaseInfo.getId();
 
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            String time = simpleDateFormat.format(date);
-            date = simpleDateFormat.parse(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
         try {
             // If id is null, add new Product
             if (id == null) {
@@ -96,11 +91,15 @@ public class ReleaseServiceImpl implements ReleaseService {
                     return result;
                 }
                 release = new Release(0, 1);
+                release.setCreateTime(new Date());
 
-                release.setCreateTime(date);
-                release.setCreateUser(releaseInfo.getCreateUser());
-                release.setCreateUserName(releaseInfo.getCreateUserName());
-
+                if(releaseInfo.getCreateUser() != null){
+                    User createUser = getUserById(releaseInfo.getCreateUser());
+                    if(createUser != null) {
+                        release.setCreateUser(createUser.getId());
+                        release.setCreateUserName(createUser.getFullName());
+                    }
+                }
             } else {
                 // Get existed Product object
                 release = releaseRep.getById(id);
@@ -118,9 +117,13 @@ public class ReleaseServiceImpl implements ReleaseService {
             release.setEndTime(releaseInfo.getEndTime());
             release.setRemark(releaseInfo.getRemark());
 
-            release.setUpdateTime(date);
-            release.setUpdateUser(releaseInfo.getUpdateUser());
-            release.setUpdateUserName(releaseInfo.getUpdateUserName());
+            if(releaseInfo.getUpdateUser() != null){
+                User user = getUserById(releaseInfo.getUpdateUser());
+                if(user != null) {
+                    release.setCreateUser(user.getId());
+                    release.setCreateUserName(user.getFullName());
+                }
+            }
 
             int flag = 0;
             try {
@@ -184,5 +187,15 @@ public class ReleaseServiceImpl implements ReleaseService {
         }
 
         return new Result("Info verified");
+    }
+
+    private User getUserById(Integer userId) {
+        User retUser = null;
+        try {
+            retUser = userRep.getOne(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return retUser;
     }
 }

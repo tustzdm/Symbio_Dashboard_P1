@@ -2,6 +2,7 @@ package com.symbio.dashboard.util;
 
 import com.symbio.dashboard.enums.ListColumns;
 import com.symbio.dashboard.enums.Locales;
+import com.symbio.dashboard.model.Dictionary;
 import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.User;
 
@@ -97,7 +98,21 @@ public class BusinessUtil {
    * @param user
    * @return
    */
-  private static Map<String, Object> getUserUIInfo(User user) {
+  public static Map<String, Object> getUserUIListInfo(User user) {
+    Map<String, Object> userInfo = new HashMap<String, Object>();
+
+    userInfo.put("id", user.getId());
+    userInfo.put("fullName", user.getFullName());
+
+    return userInfo;
+  }
+
+  /**
+   * UI 使用的User 信息
+   * @param user
+   * @return
+   */
+  public static Map<String, Object> getUserUIInfo(User user) {
     Map<String, Object> userInfo = new HashMap<String, Object>();
 
     userInfo.put("id", user.getId());

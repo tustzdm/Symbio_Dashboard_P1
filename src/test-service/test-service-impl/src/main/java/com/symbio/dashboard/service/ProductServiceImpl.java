@@ -222,4 +222,13 @@ public class ProductServiceImpl implements ProductService {
         return retResult;
     }
 
+    @Override
+    public Result getProductUiInfo(Integer userId, String locale, Integer uiInfo, Integer id){
+        Result retResult = productDao.getProductUiInfo(userId, locale, uiInfo, id);
+        if(retResult.hasError()) {
+            logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+        }
+        return retResult;
+    }
+
 }

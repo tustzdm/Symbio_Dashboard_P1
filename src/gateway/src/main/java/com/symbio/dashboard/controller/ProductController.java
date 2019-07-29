@@ -151,4 +151,29 @@ public class ProductController extends BaseController {
         return retResult;
     }
 
+    @RequestMapping("/getProductUiInfo")
+    public Result getProductUiInfo(@RequestParam(value = "token") String token,
+                                   @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                   @RequestParam(value = "uiInfo", required = false, defaultValue = "1") Integer uiInfo,
+                                   @RequestParam(value = "id") Integer id) {
+        Result result;
+        Integer userId = 0;
+        try {
+            result = productAuthService.getProductListAuth(token);
+            if (result.hasError()) {
+                return result;
+            }
+
+            result = productService.getProductUiInfo(userId, locale, uiInfo, id);
+            if (result.hasError()) {
+                return result;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return getResult("000102", "Product UI Info");
+        }
+
+        return result;
+    }
+
 }

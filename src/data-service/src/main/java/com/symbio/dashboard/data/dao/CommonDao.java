@@ -4,8 +4,12 @@ import java.util.*;
 
 import javax.persistence.EntityManager;
 
+import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.enums.ColumnType;
+import com.symbio.dashboard.enums.HtmlType;
+import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.SysListSetting;
+import com.symbio.dashboard.model.UiInfo;
 import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
@@ -28,6 +32,12 @@ public class CommonDao {
 
   @Autowired
   private UserDao userDao;
+
+  @Autowired
+  private UiInfoRep uiInfoRep;
+
+  @Autowired
+  private DictionaryDao dictionaryDao;
 
   /**
    * Get Mysql Table's field info except non user defined
@@ -115,6 +125,12 @@ public class CommonDao {
     return dbFields;
   }
 
+  /**
+   * 将 User字段的 user信息转成UserMap，以便后面直接替换User字段为User Map信息
+   * @param data
+   * @param listUserFields
+   * @return
+   */
   public List<Map<String, Object>> setUserMapInfo(List<Map<String, Object>> data, List<String> listUserFields) {
     List<Map<String, Object>> retList = data;
 
@@ -160,4 +176,80 @@ public class CommonDao {
 
     return retList;
   }
+
+  /**
+   * 得到该Page的所有UI Info信息
+   * @param page
+   * @return
+   */
+  public List<UiInfo> getUIInfoByPage(String page) {
+    return uiInfoRep.getUiInfoListByPageName(page);
+  }
+
+  /**
+   * 得到用于List显示用的SelectList信息
+   * @param listUiInfo
+   * @return
+   */
+  public List<Map<String, Object>> getUserUIList(List<UiInfo> listUiInfo) {
+    List<Map<String, Object>> retListUser = new ArrayList<Map<String, Object>>();
+
+    if(CommonUtil.isEmpty(listUiInfo)) {
+      return retListUser;
+    }
+
+    boolean bUserRef = false;
+    for(UiInfo uiInfo : listUiInfo) {
+      if (HtmlType.User.getCode().equals(uiInfo.getType())) {
+        bUserRef = true;
+        break;
+      }
+    }
+
+    if(bUserRef) {
+      retListUser = userDao.getAllUserUiListInfo();
+    }
+
+    return retListUser;
+  }
+
+  /**
+   * 得到字典的Map数据
+   * @return
+   */
+  public List<Map<String, Object>> getDictDataByType(String type){
+    return dictionaryDao.getDicMapDataByType(type);
+  }
+
+  /**
+   * 得到 UiInfo 的Map数据
+   * @return
+   */
+  public List<Map<String, Object>> getUiInfoList(String locale, List<UiInfo> listUiInfo){
+    List<Map<String, Object>> retMap = new ArrayList<>();
+
+    Map<String, Object> mapData = new HashMap<>();
+    for(UiInfo item : listUiInfo){
+      mapData = new HashMap<>();
+
+      mapData.put("key", item.getKey());
+      mapData.put("dbField", item.getDbField());
+      mapData.put("type", item.getType());
+      mapData.put("data", item.getData());
+      mapData.put("dispStatus", item.getDispStatus());
+      mapData.put("isRequired", item.getIsRequired());
+      mapData.put("isDisable", item.getIsDisable());
+      mapData.put("label", Locales.EN_US.toString().equals(locale) ? item.getEnUs() : item.getZhCn());
+      mapData.put("placeHolder", item.getPlaceHolder());
+      mapData.put("defaultValue", item.getDefaultValue());
+      mapData.put("constCondition", item.getConstCondition());
+      mapData.put("idx", item.getIdx());
+
+      retMap.add(mapData);
+    }
+
+    return retMap;
+  }
+
+
 }

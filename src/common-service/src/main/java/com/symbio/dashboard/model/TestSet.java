@@ -100,13 +100,13 @@ public class TestSet {
     @Column(name = "create_time")
     private Date createTime;
 
-    @Column(name = "create_user",nullable = false)
+    @Column(name = "create_user")
     private Integer createUser;
 
     @Column(name = "create_user_name")
     private String createUserName;
 
-    @Column(name = "update_time",nullable = false)
+    @Column(name = "update_time")
     private Date updateTime;
 
     @Column(name = "update_user")
