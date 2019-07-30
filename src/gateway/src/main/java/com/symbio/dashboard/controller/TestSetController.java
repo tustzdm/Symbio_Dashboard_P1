@@ -96,4 +96,29 @@ public class TestSetController extends BaseController {
         }
         return result;
     }
+
+    @RequestMapping("/getTestSetUiInfo")
+    public Result getTestSetUiInfo(@RequestParam(value = "token") String token,
+                                   @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                   @RequestParam(value = "uiInfo", required = false, defaultValue = "1") Integer uiInfo,
+                                   @RequestParam(value = "id", required = false, defaultValue = "0") Integer id) {
+        Result result;
+        Integer userId = 0;
+        try {
+//            result = productAuthService.getProductListAuth(token);
+//            if (result.hasError()) {
+//                return result;
+//            }
+
+            result = testSetService.getTestSetUiInfo(userId, locale, uiInfo, id);
+            if (result.hasError()) {
+                return result;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return getResult("000102", "TestSet UI Info");
+        }
+
+        return result;
+    }
 }

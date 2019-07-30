@@ -409,6 +409,16 @@ public class ReleaseDao {
         return result;
     }
 
+    public List<Map<String, Object>> getReleaseMapList() {
+        List<Map<String, Object>> retList = new ArrayList<>();
+        List<Release> listRelease = releaseRep.findAllRelease();
+
+        for(Release item: listRelease) {
+            retList.add(BusinessUtil.getReleaseUIListInfo(item));
+        }
+        return retList;
+    }
+
     @Data
     public class Progress {
         private int total;

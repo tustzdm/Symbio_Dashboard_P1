@@ -276,7 +276,9 @@ public class EntityUtils {
             List<Map> attributeInfoList = getFieldsInfo(entityObj);
             List<String> arrFields = new ArrayList<>();
             for (UiInfo uiInfo : listUiInfo) {
-                arrFields.add(uiInfo.getDbField());
+                if(!StringUtil.isEmpty(uiInfo.getDbField())) {
+                    arrFields.add(uiInfo.getDbField());
+                }
             }
             arrFields.add("id"); // fix column
 

@@ -510,6 +510,16 @@ public class ProductDao {
         return retResult;
     }
 
+    public List<Map<String, Object>> getProductMapList() {
+        List<Map<String, Object>> retList = new ArrayList<>();
+        List<Product> listProduct = productRep.findAllProducts();
+
+        for(Product item: listProduct) {
+            retList.add(BusinessUtil.getProductUIListInfo(item));
+        }
+        return retList;
+    }
+
     @Data
     public class Progress {
         private int total;

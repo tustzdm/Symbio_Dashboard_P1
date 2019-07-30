@@ -3,10 +3,15 @@ package com.symbio.dashboard.data.dao;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.repository.*;
 import com.symbio.dashboard.dto.CommonListDTO;
+import com.symbio.dashboard.dto.TestSetUiDTO;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.TestSet;
+import com.symbio.dashboard.enums.DictionaryType;
+import com.symbio.dashboard.enums.UIInfoPage;
+import com.symbio.dashboard.model.*;
+
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
@@ -18,10 +23,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @ClassName - TestSetDao
@@ -40,6 +42,10 @@ public class TestSetDao {
     private EntityManager entityManager;
     @Autowired
     private CommonDao commonDao;
+    @Autowired
+    private ProductDao productDao;
+    @Autowired
+    private ReleaseDao releaseDao;
 
     @Autowired
     private TestSetRep testSetRep;
@@ -187,6 +193,54 @@ public class TestSetDao {
         }
 
         logger.trace("TestSetDao.getTestSetList() Exit");
+        return retResult;
+    }
+
+    /**
+     * 得到 TestSet Add/Edit 页面信息
+     * @param userId
+     * @param locale
+     * @param uiInfo
+     * @param id
+     * @return
+     */
+    public Result getTestSetUiInfo(Integer userId, String locale, Integer uiInfo, Integer id) {
+        logger.trace("TestSetDao.getTestSetUiInfo() Enter");
+        Result retResult = new Result("");
+
+        try {
+            TestSetUiDTO testsetUiDto = new TestSetUiDTO();
+            List<UiInfo> listUiInfo = new ArrayList<UiInfo>();
+            if(uiInfo == 1) {
+                listUiInfo = commonDao.getUIInfoByPage(UIInfoPage.TestSet.toString());
+            }
+            testsetUiDto.setLocale(locale);
+            testsetUiDto.setRole(7);
+            testsetUiDto.setUiInfo(commonDao.getUiInfoList(locale, listUiInfo));
+            testsetUiDto.setData(new HashMap<String, Object>());
+
+            if(id != null && id > 0) { // Not add
+                TestSet testset = testSetRep.getById(id);
+                if (testset == null || "".equals(testset)) {
+                    logger.error("Could not find TestSet data info.");
+                    testsetUiDto.setData(null);
+                } else {
+                    testsetUiDto.setData(EntityUtils.castMap(testset, listUiInfo));
+                }
+            }
+
+            testsetUiDto.setTypeList(commonDao.getDictDataByType(DictionaryType.TestSetType.getType()));
+            testsetUiDto.setStatusList(commonDao.getDictDataByType(DictionaryType.TestSetStatus.getType()));
+            testsetUiDto.setUserList(commonDao.getUserUIList(listUiInfo));
+            testsetUiDto.setProductList(productDao.getProductMapList());
+            testsetUiDto.setReleaseList(releaseDao.getReleaseMapList());
+            retResult = new Result(testsetUiDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            retResult = new Result("000102", "TestSet UI Info");
+        }
+
+        logger.trace("TestSetDao.getTestSetUiInfo() Exit");
         return retResult;
     }
 

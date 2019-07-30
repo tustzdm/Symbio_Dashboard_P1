@@ -4,6 +4,8 @@ import java.util.*;
 
 import javax.persistence.EntityManager;
 
+import com.symbio.dashboard.data.repository.ProductRep;
+import com.symbio.dashboard.data.repository.ReleaseRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.enums.ColumnType;
 import com.symbio.dashboard.enums.HtmlType;

@@ -2,10 +2,9 @@ package com.symbio.dashboard.util;
 
 import com.symbio.dashboard.enums.ListColumns;
 import com.symbio.dashboard.enums.Locales;
-import com.symbio.dashboard.model.Dictionary;
-import com.symbio.dashboard.model.SysListSetting;
-import com.symbio.dashboard.model.User;
+import com.symbio.dashboard.model.*;
 
+import com.symbio.dashboard.model.Dictionary;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -122,6 +121,35 @@ public class BusinessUtil {
 
     return userInfo;
   }
+
+  /**
+   * UI 使用的 Product 信息
+   * @param product
+   * @return
+   */
+  public static Map<String, Object> getProductUIListInfo(Product product) {
+    Map<String, Object> userInfo = new HashMap<String, Object>();
+
+    userInfo.put("id", product.getId());
+    userInfo.put("name", product.getName());
+
+    return userInfo;
+  }
+
+  /**
+   * UI 使用的 Release 信息
+   * @param release
+   * @return
+   */
+  public static Map<String, Object> getReleaseUIListInfo(Release release) {
+    Map<String, Object> userInfo = new HashMap<String, Object>();
+
+    userInfo.put("id", release.getId());
+    userInfo.put("name", release.getName());
+
+    return userInfo;
+  }
+
 
   /**
    * 得到 UI 使用的User Map数据

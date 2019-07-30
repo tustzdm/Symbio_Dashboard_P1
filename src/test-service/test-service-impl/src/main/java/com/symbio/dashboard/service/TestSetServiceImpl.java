@@ -171,15 +171,24 @@ public class TestSetServiceImpl implements TestSetService {
             return new Result("000101", "Release Id cannot be empty");
         }
 
-        List<String> allNames = testSetRep.getAllNamesByReleaseId(testSetInfo.getReleaseId());
-        if (allNames != null && !allNames.isEmpty()) {
-            for (String name : allNames) {
-                if (testSetInfo.getName().equalsIgnoreCase(name)) {
-                    return new Result("000123", "TestSet name already exists");
-                }
-            }
-        }
+//        List<String> allNames = testSetRep.getAllNamesByReleaseId(testSetInfo.getReleaseId());
+//        if (allNames != null && !allNames.isEmpty()) {
+//            for (String name : allNames) {
+//                if (testSetInfo.getName().equalsIgnoreCase(name)) {
+//                    return new Result("000123", "TestSet name already exists");
+//                }
+//            }
+//        }
 
         return new Result("Info verified");
+    }
+
+    @Override
+    public Result getTestSetUiInfo(Integer userId, String locale, Integer uiInfo, Integer id){
+        Result retResult = testsetDao.getTestSetUiInfo(userId, locale, uiInfo, id);
+        if (retResult.hasError()) {
+            logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+        }
+        return retResult;
     }
 }

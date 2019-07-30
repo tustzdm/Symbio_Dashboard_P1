@@ -31,4 +31,7 @@ public interface ReleaseRep extends JpaRepository<Release,Integer> {
 
     @Query(value = "SELECT count(*) FROM `release` WHERE product_id = ?1 AND display = 1", nativeQuery = true)
     int getProductCount(Integer productId);
+
+    @Query(value = "SELECT * FROM `release` WHERE display = 1 ORDER BY id", nativeQuery = true)
+    List<Release> findAllRelease();
 }
