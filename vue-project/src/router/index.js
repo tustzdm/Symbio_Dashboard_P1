@@ -162,8 +162,9 @@ export const constantRouterMap = [
         component: Layout,
         children: [
             {
-                path: "/buy/product/:productName",
+                path: "product/:productName",
                 component: _import("buy/productInfo"),
+                
                 name: "productInfo",
                 meta: {
                     title: "productInfo",
@@ -171,8 +172,8 @@ export const constantRouterMap = [
                 },
             },
             {
-                path: "/buy/release/:releaseName",
-                component: _import("buy/productInfo"),
+                path: "release/:releaseName",
+                component: _import("buy/releaseInfo"),
                 name: "releaseInfo",
                 meta: {
                     title: "releaseInfo",

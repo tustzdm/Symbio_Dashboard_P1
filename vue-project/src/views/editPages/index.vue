@@ -3,7 +3,7 @@
     <div class="top" style="margin:25px 0">
         <span style="padding-left:80px;font-family:Poppins;">Choose Page:</span>
         <select v-model="page" id="" style="margin-left:20px;height:30px">
-            <option v-for="item in pageList">{{item.value}}</option>
+            <option v-for="item in pageList" :value="item.code">{{item.value}}</option>
         </select>
         <el-button @click="addRouter" style="float:right;margin-right:10%;color:white;background-color:#7a85a1;heigt:27px;width:150px;border:none">
             + Add Element
@@ -21,7 +21,7 @@
             <tr class="tableBody" v-for="items in tableData">
                 <td v-for="(item,index) in items" v-if="['page','label','dispStatus','version','validation','display'].indexOf(index) === -1">
                     <p v-if="['isRequired', 'isDisable'].indexOf(index) == -1">{{item}}</p>
-                    <el-switch key="dsfg" :model="item" v-if="['isRequired', 'isDisable'].indexOf(index) != -1" disabled active-color="#13ce66" inactive-color="#ff4949" active-value=1 inactive-value=0>
+                    <el-switch key="dsfg" :model="item" v-if="['isRequired', 'isDisable'].indexOf(index) != -1" disabled active-color="#13ce66" inactive-color="gray" active-value=1 inactive-value=0>
                     </el-switch>
                     <!-- <p v-if="index == 'constCondition'">{{JSON.parse(item.constCondition).maxLength}}</p> -->
                 </td>
@@ -52,7 +52,7 @@ export default {
             method: 'GET'
         }).then(res => {
             this.pageList = res.cd;
-            this.page = res.cd[1].value;
+            this.page = res.cd[1].code;
         });
         // Fetch("/mock/menu/getPageList", {
         //     method: "GET"

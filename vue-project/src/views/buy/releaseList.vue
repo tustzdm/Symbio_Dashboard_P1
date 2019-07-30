@@ -6,7 +6,7 @@
             <el-table-column prop="name" label="Name" :width="0.5*tabelWidth">
                 <template slot-scope="scope">
                     <div>
-                        <router-link :to="{ name: 'productInfo', params: { productName: scope.row.name }}">{{scope.row.name}}</router-link>
+                        <router-link :to="{ name: 'releaseInfo', params: { releaseName: scope.row.name }}">{{scope.row.name}}</router-link>
                     </div>
                     <div>{{scope.row.description}}</div>
                 </template>
@@ -48,10 +48,12 @@ export default {
             currentPage: 1,
             productList: '',
             trIndex: '',
-            tableData:''
+            tableData: '',
+            fatherId: ''
         }
     },
     created() {
+        this.fatherId = this.$route.params.productId;
         this.getProductList();
     },
     mounted() {
@@ -72,7 +74,7 @@ export default {
     components: {},
     methods: {
         getProductList() {
-            this.Fetch("/testmgmt/getReleaseList?token=1&productId=3", {
+            this.Fetch(`/testmgmt/getReleaseList?token=1&productId=${this.fatherId}`, {
                 method: "GET"
             }).then(res => {
                 console.log(res);
@@ -82,7 +84,6 @@ export default {
         },
         returnTrIndex() {
             this.trIndex = event.target.parentNode.getAttribute('formId') || event.target.getAttribute('formId');
-            alert('formId ' + this.trIndex);
             for (var i = 0; i < this.productList.length; i++) {
                 if (this.productList[i].id == this.trIndex) {
                     this.trIndex = i;
@@ -90,15 +91,12 @@ export default {
             }
         },
         editRouter() {
-            alert('editRouter');
             this.returnTrIndex();
-
-            alert('end' + this.trIndex);
             this.$router.push({
                 path: 'editproject',
                 name: 'editproject',
                 params: {
-                    tr: this.productList[this.trIndex], //Pass the tr data to next router
+                    id: this.productList[this.trIndex].id, //Pass the tr data to next router
                     editPageType: 'Release'
                 }
             })

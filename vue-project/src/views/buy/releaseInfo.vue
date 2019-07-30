@@ -14,13 +14,13 @@
     </div>
     <div>
         <el-card class="listHead" shadow="never" style="padding-right:5%">
-            <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Release List</h2>
+            <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Testset List</h2>
             <el-button @click="add" style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
-                + Add Release
+                + Add Testset
             </el-button>
         </el-card>
     </div>
-    <releaseList></releaseList>
+    <testsetList></testsetList>
 </div>
 </template>
 
@@ -37,19 +37,25 @@ import {
     getProjectInfo
 } from '@/api/index'
 import storage from '@/utils/storage'
-import releaseList from './releaseList'
+import testsetList from './testsetList'
 export default {
     data() {
         return {
             pie: getPie(),
-            rect: getRect()
+            rect: getRect(),
+            fatherId:''
         }
     },
     components: {
-        releaseList: releaseList,
+        testsetList: testsetList,
         chart: ECharts
     },
-    mounted() {},
+    mounted() {
+         
+    },
+    created(){
+        this.fatherId =this.$route.params.productId;
+    },
     methods: {
         initProjet() {
             getProjectInfo().then(res => {
@@ -61,7 +67,8 @@ export default {
                 path: '/addproject/index',
                 name: 'addproject',
                 params: {
-                    pageType: 'Tsetset'
+                    pageType: 'Tsetset',
+                    fatherId: this.fatherId
                 }
             })
         }

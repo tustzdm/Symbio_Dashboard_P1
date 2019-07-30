@@ -24,7 +24,7 @@
             <el-form-item label="Type:" prop="type">
                 <el-col :span="16">
                     <select v-model="form.type" name="" id="">
-                        <option v-for="item in typeList" :key="item.code" selected="item.code == form.type">{{item.value}}</option>
+                        <option v-for="item in typeList" :key="item.code" :value="item.code">{{item.value}}</option>
                     </select>
                 </el-col>
             </el-form-item>

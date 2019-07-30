@@ -73,7 +73,7 @@ export default {
     components: {},
     methods: {
         getProductList() {
-            this.Fetch("/testmgmt/getProductListDemo?token=1", {
+            this.Fetch("/testmgmt/getTestSetList?token=1&releaseId=1", {
                 method: "GET"
             }).then(res => {
                 console.log(res);

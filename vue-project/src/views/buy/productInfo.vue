@@ -1,5 +1,6 @@
 <template>
 <div class="buy-root" style="width:85%;margin-left:7.5%">
+    <dir>asdfsadfljsaldkfjlk</dir>
     <div class="manage-charts">
         <div class="chartContainer" style="text-align:center">
             <div style="display:inline-block">
@@ -16,7 +17,7 @@
         <el-card class="listHead" shadow="never" style="padding-right:5%">
             <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Release List</h2>
             <el-button @click="add" style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
-                + Add Release
+                + Add Release 
             </el-button>
         </el-card>
     </div>
@@ -42,12 +43,16 @@ export default {
     data() {
         return {
             pie: getPie(),
-            rect: getRect()
+            rect: getRect(),
+            fatherId:''
         }
     },
     components: {
         releaseList: releaseList,
         chart: ECharts
+    },
+    created(){
+        this.fatherId =this.$route.params.productId;
     },
     mounted() {},
     methods: {
@@ -61,7 +66,8 @@ export default {
                 path: '/addproject/index',
                 name: 'addproject',
                 params: {
-                    pageType: 'Release'
+                    pageType: 'Release',
+                     fatherId: this.fatherId
                 }
             })
         }
