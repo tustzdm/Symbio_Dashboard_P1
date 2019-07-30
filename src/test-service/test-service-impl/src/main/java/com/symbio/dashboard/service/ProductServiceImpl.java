@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +99,7 @@ public class ProductServiceImpl implements ProductService {
 
             // If id is null, add new Product
             if (BusinessUtil.isIdEmpty(productInfo.getId())) {
-                strMsg = "Add";
+                strMsg = "Added";
                 result = verifyProductInfo(productInfo);
                 if (result.hasError()) {
                     return result;
@@ -118,13 +116,13 @@ public class ProductServiceImpl implements ProductService {
                 // Get existed Product object
                 // ToDo: fetch entity, then set the value from UI
                 // product = productRep.getById(productInfo.getId());
-                strMsg = "Update";
+                strMsg = "Updated";
 
                 if(product.getDisplay() == null) {
                     product.setDisplay(EntityDisplay.SHOW.getValue());
                 }
                 if(product.getStatus() == null) {
-                    product.setDisplay(0);
+                    product.setStatus(0);
                 }
             }
             strMsg = String.format("Product %s", strMsg);

@@ -53,6 +53,9 @@ public class ReleaseController extends BaseController {
                                 @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                 @RequestBody Release release) {
         Result result;
+        // Set update user id
+        Integer userId = 1;
+        release.setUpdateUser(userId);
         try {
             result = releaseService.updateRelease(release);
             if (result.hasError()) {

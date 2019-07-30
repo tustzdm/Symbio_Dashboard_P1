@@ -2,21 +2,23 @@ package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.dao.ReleaseDao;
+import com.symbio.dashboard.data.dao.UserDao;
 import com.symbio.dashboard.data.repository.ReleaseRep;
 import com.symbio.dashboard.data.repository.ResultMessageRep;
 import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.UserRep;
+import com.symbio.dashboard.enums.EntityDisplay;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.Release;
 import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.util.CommonUtil;
+import com.symbio.dashboard.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @ClassName - ReleaseServiceImpl
@@ -44,6 +46,9 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Autowired
     private UserRep userRep;
+
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public Result getReleaseList(Integer productId, Integer pageIndex, Integer pageSize) {
@@ -76,78 +81,73 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Override
     public Result updateRelease(Release releaseInfo) {
+        logger.trace("ReleaseServiceImpl.updateRelease() Enter");
 
         Result result;
         Release release;
+        String strMsg = null;
         Integer id = releaseInfo.getId();
 
         try {
+            release = releaseInfo;
+            Integer userId = release.getUpdateUser();
+            User userInfo = userDao.getUserById(userId);
+
             // If id is null, add new Product
             if (id == null) {
+                strMsg = "Added";
                 result = verifyInfo(releaseInfo);
                 if (result.hasError()) {
                     return result;
                 }
-                release = new Release(0, 1);
+                release.setStatus(0); // 0: Pending
+                release.setDisplay(EntityDisplay.SHOW.getValue());
                 release.setCreateTime(new Date());
 
-                if(releaseInfo.getCreateUser() != null){
-                    User createUser = getUserById(releaseInfo.getCreateUser());
-                    if(createUser != null) {
-                        release.setCreateUser(createUser.getId());
-                        release.setCreateUserName(createUser.getFullName());
-                    }
+                if (userInfo != null) {
+                    release.setCreateUser(userInfo.getId());
+                    release.setCreateUserName(userInfo.getFullName());
                 }
             } else {
+                strMsg = "Updated";
                 // Get existed Product object
-                release = releaseRep.getById(id);
-                if (!releaseInfo.getName().equalsIgnoreCase(release.getName())) {
-                    result = verifyInfo(releaseInfo);
-                    if (result.hasError()) {
-                        return result;
-                    }
+                // ToDo: fetch entity, then set the value from UI
+                // release = releaseRep.getById(id);
+
+                if (release.getDisplay() == null) {
+                    release.setDisplay(EntityDisplay.SHOW.getValue());
                 }
+                if (release.getStatus() == null) {
+                    release.setStatus(0);
+                }
+
+            }
+            strMsg = String.format("Release %s", strMsg);
+            release.setUpdateTime(new Date());
+
+            if (userInfo != null) {
+                release.setUpdateUser(userInfo.getId());
+                release.setUpdateUserName(userInfo.getFullName());
             }
 
-            release.setProductId(releaseInfo.getProductId());
-            release.setName(releaseInfo.getName());
-            release.setStartTime(releaseInfo.getStartTime());
-            release.setEndTime(releaseInfo.getEndTime());
-            release.setRemark(releaseInfo.getRemark());
-
-            if(releaseInfo.getUpdateUser() != null){
-                User user = getUserById(releaseInfo.getUpdateUser());
-                if(user != null) {
-                    release.setCreateUser(user.getId());
-                    release.setCreateUserName(user.getFullName());
-                }
-            }
-
-            int flag = 0;
             try {
                 // Save or update
                 releaseRep.saveAndFlush(release);
-                if (id == null) {
-                    flag++;
-                }
-                flag++;
+                result = new Result(strMsg);
             } catch (Exception e) {
                 e.printStackTrace();
-                return new Result("200110", "Release info cannot be saved");
+                if (e.getMessage().contains("release_productid_name")) {
+                    result = new Result("000123", "Release Name is duplicated. Name = " + releaseInfo.getName());
+                } else {
+                    result = new Result("000102", "Exception happened while operation on " + strMsg);
+                }
             }
-
-            if (flag == 1) {
-                result = new Result("Release Updated");
-            } else if (flag == 2) {
-                result = new Result("Release Added");
-            } else {
-                return new Result("000002", "Error at flag" + flag);
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("000102", "Edit/Add Release error");
+            return new Result("000002", strMsg + " Exception! " + e.getMessage());
         }
+
+        logger.trace("ReleaseServiceImpl.updateRelease() Exit");
         return result;
     }
 
@@ -177,20 +177,11 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     private Result verifyInfo(Release releaseInfo) {
 
-        if (releaseInfo.getName() == null) {
+        if (StringUtil.isEmpty(releaseInfo.getName())) {
             return new Result("000101", "Name cannot be empty");
         }
-        if (releaseInfo.getProductId() == null) {
+        if (CommonUtil.isEmpty(releaseInfo.getProductId())) {
             return new Result("000101", "Product Id cannot be empty");
-        }
-
-        List<String> allNames = releaseRep.getAllNamesByProductId(releaseInfo.getProductId());
-        if (allNames != null && !allNames.isEmpty()) {
-            for (String name : allNames) {
-                if (releaseInfo.getName().equalsIgnoreCase(name)) {
-                    return new Result("000123", "Release name already exists");
-                }
-            }
         }
 
         return new Result("Info verified");
