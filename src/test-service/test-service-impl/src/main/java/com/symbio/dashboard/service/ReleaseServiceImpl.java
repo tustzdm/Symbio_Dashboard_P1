@@ -15,8 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -166,6 +164,15 @@ public class ReleaseServiceImpl implements ReleaseService {
             }
         }
         return new Result("Release Removed");
+    }
+
+    @Override
+    public Result getReleaseUiInfo(Integer userId, String locale, Integer uiInfo, Integer id) {
+        Result result = releaseDao.getReleaseUiInfo(userId, locale, uiInfo, id);
+        if (result.hasError()) {
+            logger.info(String.format("ec:%s, em:%s", result.getEc(), result.getEm()));
+        }
+        return result;
     }
 
     private Result verifyInfo(Release releaseInfo) {

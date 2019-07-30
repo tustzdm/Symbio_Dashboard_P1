@@ -95,4 +95,24 @@ public class ReleaseController extends BaseController {
         }
         return result;
     }
+
+    @RequestMapping("/getReleaseUiInfo")
+    public Result getReleaseUiInfo(@RequestParam(value = "token") String token,
+                                   @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                   @RequestParam(value = "uiInfo", required = false, defaultValue = "1") Integer uiInfo,
+                                   @RequestParam(value = "id") Integer id) {
+        Result result;
+        Integer userId = 0;
+        try {
+            result = releaseService.getReleaseUiInfo(userId, locale, uiInfo, id);
+            if (result.hasError()) {
+                return result;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return getResult("000102", "Release UI Info");
+        }
+
+        return result;
+    }
 }

@@ -104,7 +104,6 @@ public class TestSetServiceImpl implements TestSetService {
                 }
             }
 
-            testsetDao.getReleaseAndProductNames(testSetInfo.getReleaseId());
             testSet.setReleaseId(testSetInfo.getReleaseId());
             testSet.setName(testSetInfo.getName());
             testSet.setType(testSetInfo.getType());

@@ -16,4 +16,6 @@ public interface ReleaseService {
     Result updateRelease(Release release);
 
     Result removeRelease(Integer id);
+
+    Result getReleaseUiInfo(Integer userId, String locale, Integer uiInfo, Integer id);
 }

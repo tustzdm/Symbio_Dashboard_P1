@@ -1,18 +1,20 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.data.repository.*;
+import com.symbio.dashboard.data.repository.ReleaseRep;
+import com.symbio.dashboard.data.repository.SysListSettingRep;
+import com.symbio.dashboard.data.repository.UiInfoRep;
+import com.symbio.dashboard.data.repository.UserRep;
 import com.symbio.dashboard.dto.CommonListDTO;
+import com.symbio.dashboard.dto.ReleaseUiDTO;
+import com.symbio.dashboard.enums.DictionaryType;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
-import com.symbio.dashboard.model.Product;
-import com.symbio.dashboard.model.Release;
-import com.symbio.dashboard.model.SysListSetting;
-import com.symbio.dashboard.model.User;
+import com.symbio.dashboard.enums.UIInfoPage;
+import com.symbio.dashboard.model.*;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
-import com.symbio.dashboard.util.StringUtil;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -373,6 +375,38 @@ public class ReleaseDao {
 //        }
 
         return retResult;
+    }
+
+    public Result getReleaseUiInfo(Integer userId, String locale, Integer uiInfo, Integer id) {
+        logger.trace("ReleaseDao.getReleaseUiInfo() Enter");
+        Result result;
+
+        try {
+            ReleaseUiDTO releaseUiDTO = new ReleaseUiDTO();
+            List<UiInfo> listUiInfo = new ArrayList<>();
+            if (uiInfo == 1) {
+                listUiInfo = commonDao.getUIInfoByPage(UIInfoPage.Release.toString());
+            }
+            releaseUiDTO.setLocale(locale);
+            releaseUiDTO.setRole(7);
+            releaseUiDTO.setUiInfo(commonDao.getUiInfoList(locale, listUiInfo));
+
+            Release release = releaseRep.getById(id);
+            if (release == null || "".equals(release)) {
+                logger.error("Could not find product data info.");
+            } else {
+                releaseUiDTO.setData(EntityUtils.castMap(release, listUiInfo));
+            }
+
+            releaseUiDTO.setStatusList(commonDao.getDictDataByType(DictionaryType.ReleaseStatus.getType()));
+            result = new Result(releaseUiDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = new Result("000102", "Release UI Info");
+        }
+
+        logger.trace("ProductDao.getProductUiInfo() Exit");
+        return result;
     }
 
     @Data
