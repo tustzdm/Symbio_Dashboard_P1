@@ -42,6 +42,38 @@ public class Release {
     @Column(name = "remark")
     private String remark;
 
+    @Column(name = "relfld_int1")
+    private Integer relfldInt1;
+    @Column(name = "relfld_int2")
+    private Integer relfldInt2;
+    @Column(name = "relfld_int3")
+    private Integer relfldInt3;
+    @Column(name = "relfld_int4")
+    private Integer relfldInt4;
+    @Column(name = "relfld_int5")
+    private Integer relfldInt5;
+
+    @Column(name = "relfld_str1")
+    private Integer relfldStr1;
+    @Column(name = "relfld_str2")
+    private Integer relfldStr2;
+    @Column(name = "relfld_str3")
+    private Integer relfldStr3;
+    @Column(name = "relfld_str4")
+    private Integer relfldStr4;
+    @Column(name = "relfld_str5")
+    private Integer relfldStr5;
+    @Column(name = "relfld_str6")
+    private Integer relfldStr6;
+    @Column(name = "relfld_str7")
+    private Integer relfldStr7;
+    @Column(name = "relfld_str8")
+    private Integer relfldStr8;
+    @Column(name = "relfld_str9")
+    private Integer relfldStr9;
+    @Column(name = "relfld_str10")
+    private Integer relfldStr10;
+
     @Column(name = "create_time")
     private Date createTime;
 
