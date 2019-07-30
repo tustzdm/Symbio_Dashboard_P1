@@ -8,7 +8,7 @@ public enum DictionaryType {
   ProductStatus("ProductStatus"),
   ReleaseStatus("ReleaseStatus"),
   Page_Element_Setting("Page_Element_Setting"),
-  sys_list_setting("sys_list_setting"),
+  SYS_LIST_SETTING("sys_list_setting"),
   ColumnType("ColumnType");
 
   private DictionaryType(String type){

@@ -1,6 +1,7 @@
 package com.symbio.dashboard.ui.service.impl;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.model.UiInfo;
 import com.symbio.dashboard.repository.UiInfoRepository;
 import com.symbio.dashboard.ui.service.RemoveUiElementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,8 @@ public class RemoveUiElementServiceImpl implements RemoveUiElementService {
     private Result removeUiElementResult(Integer id) {
 
         try {
-            uiInfoRepository.deleteById(id);
+            UiInfo uiInfo = uiInfoRepository.getOne(id);
+            uiInfo.setDisplay(4); // delete
         } catch (Exception e) {
             e.printStackTrace();
             if (match(e.getMessage())) {

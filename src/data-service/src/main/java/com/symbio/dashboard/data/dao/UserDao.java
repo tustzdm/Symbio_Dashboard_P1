@@ -68,4 +68,13 @@ public class UserDao {
     return retUsers;
   }
 
+  /**
+   *
+   * @param id
+   * @return
+   */
+  public User getUserById(Integer id){
+    return userRep.getOne(id);
+  }
+
 }

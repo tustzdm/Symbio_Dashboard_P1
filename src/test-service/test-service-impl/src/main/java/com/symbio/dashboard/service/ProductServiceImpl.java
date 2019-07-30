@@ -2,10 +2,15 @@ package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.dao.ProductDao;
+import com.symbio.dashboard.data.dao.UserDao;
 import com.symbio.dashboard.data.repository.ProductRep;
+import com.symbio.dashboard.enums.EntityDisplay;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.Product;
+import com.symbio.dashboard.model.User;
+import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
+import com.symbio.dashboard.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +40,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductDao productDao;
     @Autowired
     private ProductRep productRep;
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public Result getProductList(Integer userId, String locale) {
@@ -82,100 +89,83 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Result updateProduct(Product productInfo) {
-        Result result;
-        Product product;
-        Integer id = productInfo.getId();
+        logger.trace("ProductServiceImpl.updateProduct() Enter");
 
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            String time = simpleDateFormat.format(date);
-            date = simpleDateFormat.parse(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Result result = null;
+        String strMsg = null;
 
         try {
+            Product product = productInfo;
+            Integer userId = product.getUpdateUser();
+            User userInfo = userDao.getUserById(userId);
+
             // If id is null, add new Product
-            if (id == null) {
+            if (BusinessUtil.isIdEmpty(productInfo.getId())) {
+                strMsg = "Add";
                 result = verifyProductInfo(productInfo);
                 if (result.hasError()) {
                     return result;
                 }
-                product = new Product(0, 1);
+                product.setStatus(0); // 0: Normal
+                product.setDisplay(EntityDisplay.SHOW.getValue());
 
-                product.setCreateTime(date);
-                product.setCreateUser(productInfo.getCreateUser());
-                product.setCreateUserName(productInfo.getCreateUserName());
-
+                product.setCreateTime(new Date());
+                if(userInfo != null) {
+                    product.setCreateUser(userInfo.getId());
+                    product.setCreateUserName(userInfo.getFullName());
+                }
             } else {
                 // Get existed Product object
-                product = productRep.getById(id);
-                if (!productInfo.getName().equalsIgnoreCase(product.getName())) {
-                    result = verifyProductInfo(productInfo);
-                    if (result.hasError()) {
-                        return result;
-                    }
+                // ToDo: fetch entity, then set the value from UI
+                // product = productRep.getById(productInfo.getId());
+                strMsg = "Update";
+
+                if(product.getDisplay() == null) {
+                    product.setDisplay(EntityDisplay.SHOW.getValue());
+                }
+                if(product.getStatus() == null) {
+                    product.setDisplay(0);
                 }
             }
+            strMsg = String.format("Product %s", strMsg);
 
-            product.setName(productInfo.getName());
-            product.setOwner(productInfo.getOwner());
-            product.setManager(productInfo.getManager());
-            product.setQaLead(productInfo.getQaLead());
-            product.setDevLead(productInfo.getDevLead());
-            product.setLogoId(productInfo.getLogoId());
-            product.setLogoUrl(productInfo.getLogoUrl());
-            product.setDescription(productInfo.getDescription());
-            product.setLocale(productInfo.getLocale());
-            product.setUpdateTime(date);
-            product.setUpdateUser(productInfo.getUpdateUser());
-            product.setUpdateUserName(productInfo.getUpdateUserName());
+            product.setUpdateTime(new Date());
+            if(userInfo != null) {
+                product.setUpdateUser(userInfo.getId());
+                product.setUpdateUserName(userInfo.getFullName());
+            }
 
-            int flag = 0;
             try {
                 // Save or update
                 productRep.saveAndFlush(product);
-                if (id == null) {
-                    flag++;
-                }
-                flag++;
+                result = new Result(strMsg);
             } catch (Exception e) {
                 e.printStackTrace();
-                return new Result("123456", "Product info cannot be saved");
+                if(e.getMessage().contains("product_name")) {
+                    result = new Result("000123", "Product Name is duplicated. Name = " + productInfo.getName());
+                } else {
+                    result = new Result("000102", "Exception happened while operation on " + strMsg);
+                }
             }
-
-            if (flag == 1) {
-                result = new Result("Product Updated");
-            } else if (flag == 2) {
-                result = new Result("Product Added");
-            } else {
-                return new Result("123456", "Error at flag" + flag);
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("100010", "Edit/Add product error");
+            return new Result("000002", strMsg + " Exception! " + e.getMessage());
         }
+
+        logger.trace("ProductServiceImpl.updateProduct() Exit");
         return result;
     }
 
     private Result verifyProductInfo(Product productInfo) {
+        Result retResult = null;
 
-        if (productInfo.getName() == null) {
-            return new Result("100010", "Value of name cannot be empty");
+        if (StringUtil.isEmpty(productInfo.getName())) {
+            retResult = new Result("100010", "Value of name cannot be empty");
         }
 
-        List<String> allNames = productRep.getAllName();
-        if (allNames != null && !allNames.isEmpty()) {
-            for (String name : allNames) {
-                if (productInfo.getName().equalsIgnoreCase(name)) {
-                    return new Result("100011", "Product name exists, please use another name");
-                }
-            }
-        }
+        retResult = new Result("Info verified");
 
-        return new Result("Info verified");
+        return retResult;
     }
 
     @Override

@@ -342,7 +342,7 @@ CREATE TABLE `product` (
   `update_user` int(10) unsigned DEFAULT NULL COMMENT 'user id updated',
   `update_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `product_name` (`name`)
+  UNIQUE KEY `unique_product_name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 Drop Table IF EXISTS `release`;

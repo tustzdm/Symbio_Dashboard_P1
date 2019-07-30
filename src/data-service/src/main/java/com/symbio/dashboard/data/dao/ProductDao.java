@@ -465,6 +465,14 @@ public class ProductDao {
         return retResult;
     }
 
+    /**
+     * 得到 Product Add/Edit 页面信息
+     * @param userId
+     * @param locale
+     * @param uiInfo
+     * @param id
+     * @return
+     */
     public Result getProductUiInfo(Integer userId, String locale, Integer uiInfo, Integer id) {
         logger.trace("ProductDao.getProductUiInfo() Enter");
         Result retResult = new Result("");
@@ -478,12 +486,16 @@ public class ProductDao {
             prodUiDto.setLocale(locale);
             prodUiDto.setRole(7);
             prodUiDto.setUiInfo(commonDao.getUiInfoList(locale, listUiInfo));
+            prodUiDto.setData(new HashMap<String, Object>());
 
-            Product product = productRep.getById(id);
-            if (product == null || "".equals(product)) {
-                logger.error("Could not find product data info.");
-            } else {
-                prodUiDto.setData(EntityUtils.castMap(product, listUiInfo));
+            if(id != null && id > 0) { // Not add
+                Product product = productRep.getById(id);
+                if (product == null || "".equals(product)) {
+                    logger.error("Could not find product data info.");
+                    prodUiDto.setData(null);
+                } else {
+                    prodUiDto.setData(EntityUtils.castMap(product, listUiInfo));
+                }
             }
 
             prodUiDto.setStatusList(commonDao.getDictDataByType(DictionaryType.ProductStatus.getType()));

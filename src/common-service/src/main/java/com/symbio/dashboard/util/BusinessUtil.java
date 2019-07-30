@@ -203,4 +203,12 @@ public class BusinessUtil {
     return bRet;
   }
 
+  public static boolean isIdEmpty(Integer id) {
+    if(id == null) {
+      return true;
+    } else {
+      return id < 1;
+    }
+  }
+
 }

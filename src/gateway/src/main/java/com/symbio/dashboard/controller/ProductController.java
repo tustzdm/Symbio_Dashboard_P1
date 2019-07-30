@@ -92,6 +92,10 @@ public class ProductController extends BaseController {
                 return result;
             }
 
+            // Set update user id
+            Integer userId = 1;
+            product.setUpdateUser(userId);
+
             result = productService.updateProduct(product);
             if (result.hasError()) {
                 return result;
@@ -163,7 +167,7 @@ public class ProductController extends BaseController {
     public Result getProductUiInfo(@RequestParam(value = "token") String token,
                                    @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                    @RequestParam(value = "uiInfo", required = false, defaultValue = "1") Integer uiInfo,
-                                   @RequestParam(value = "id") Integer id) {
+                                   @RequestParam(value = "id", required = false, defaultValue = "0") Integer id) {
         Result result;
         Integer userId = 0;
         try {
