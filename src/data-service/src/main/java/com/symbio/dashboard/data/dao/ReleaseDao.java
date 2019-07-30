@@ -55,6 +55,9 @@ public class ReleaseDao {
     @Autowired
     private SysListSettingRep sysListSettingRep;
 
+    @Autowired
+    private ProductDao productDao;
+
 
     public List<Product> getProductList() {
         Query query;
@@ -391,14 +394,18 @@ public class ReleaseDao {
             releaseUiDTO.setRole(7);
             releaseUiDTO.setUiInfo(commonDao.getUiInfoList(locale, listUiInfo));
 
-            Release release = releaseRep.getById(id);
-            if (release == null || "".equals(release)) {
-                logger.error("Could not find product data info.");
-            } else {
-                releaseUiDTO.setData(EntityUtils.castMap(release, listUiInfo));
+            if (id != null && id > 0) { // Not add
+                Release release = releaseRep.getById(id);
+                if (release == null || "".equals(release)) {
+                    logger.error("Could not find product data info.");
+                    releaseUiDTO.setData(null);
+                } else {
+                    releaseUiDTO.setData(EntityUtils.castMap(release, listUiInfo));
+                }
             }
 
             releaseUiDTO.setStatusList(commonDao.getDictDataByType(DictionaryType.ReleaseStatus.getType()));
+            releaseUiDTO.setProductName(productDao.getProductMapList());
             result = new Result(releaseUiDTO);
         } catch (Exception e) {
             e.printStackTrace();
