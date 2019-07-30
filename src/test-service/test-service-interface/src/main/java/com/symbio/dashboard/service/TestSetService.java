@@ -14,7 +14,7 @@ public interface TestSetService {
 
     Result getTestSetInfo(Integer userId, Integer id);
 
-    Result updateTestSet(TestSet testSet);
+    Result updateTestSet(Integer userId, String locale, TestSet testSet);
 
     Result removeTestSet(Integer id);
 

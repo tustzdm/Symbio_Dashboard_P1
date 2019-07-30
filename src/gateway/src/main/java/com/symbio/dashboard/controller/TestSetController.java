@@ -55,7 +55,11 @@ public class TestSetController extends BaseController {
                                 @RequestBody TestSet testSet) {
         Result result;
         try {
-            result = testSetService.updateTestSet(testSet);
+            // Set update user id
+            Integer userId = 1;
+            testSet.setUpdateUser(userId);
+
+            result = testSetService.updateTestSet(userId, locale, testSet);
             if (result.hasError()) {
                 return result;
             }

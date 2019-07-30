@@ -2,9 +2,13 @@ package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.dao.TestSetDao;
+import com.symbio.dashboard.data.dao.UserDao;
 import com.symbio.dashboard.data.repository.TestSetRep;
+import com.symbio.dashboard.enums.EntityDisplay;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.TestSet;
+import com.symbio.dashboard.model.User;
+import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +39,8 @@ public class TestSetServiceImpl implements TestSetService {
 
     @Autowired
     private TestSetDao testsetDao;
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public Result getTestSetList(Integer userId, String locale, Integer releaseId, Integer pageIndex, Integer pageSize) {
@@ -66,85 +72,71 @@ public class TestSetServiceImpl implements TestSetService {
     }
 
     @Override
-    public Result updateTestSet(TestSet testSetInfo) {
-        Result result;
-        TestSet testSet;
-        Integer id = testSetInfo.getId();
+    public Result updateTestSet(Integer userId, String locale, TestSet testSetInfo) {
+        logger.trace("TestSetServiceImpl.updateTestSet() Enter");
 
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        try {
-            String time = simpleDateFormat.format(date);
-            date = simpleDateFormat.parse(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        Result retResult = null;
+        String strMsg = null;
 
         try {
+            TestSet testSet = testSetInfo;
+            User userInfo = userDao.getUserById(userId);
+
             // If id is null, add new Product
-            if (id == null) {
-                result = verifyInfo(testSetInfo);
-                if (result.hasError()) {
-                    return result;
+            if (BusinessUtil.isIdEmpty(testSet.getId())) {
+                retResult = verifyInfo(testSetInfo);
+                if (retResult.hasError()) {
+                    return retResult;
                 }
-                testSet = new TestSet(0, 1);
+                strMsg = "Add";
+                testSet.setStatus(0); // 0: Pending
+                testSet.setDisplay(EntityDisplay.SHOW.getValue());
 
-                testSet.setCreateTime(date);
-                testSet.setCreateUser(testSetInfo.getCreateUser());
-                testSet.setCreateUserName(testSetInfo.getCreateUserName());
+                testSet.setCreateTime(new Date());
+                if(userInfo != null) {
+                    testSet.setCreateUser(userInfo.getId());
+                    testSet.setCreateUserName(userInfo.getFullName());
+                }
 
             } else {
-                // Get existed Product object
-                testSet = testSetRep.getById(id);
-                if (!testSetInfo.getName().equalsIgnoreCase(testSet.getName())) {
-                    result = verifyInfo(testSetInfo);
-                    if (result.hasError()) {
-                        return result;
-                    }
+                strMsg = "Update";
+
+                // ToDo: fetch entity, then set the value from UI
+                // testSet = testSetRep.getById(id);
+
+                if(testSet.getDisplay() == null) {
+                    testSet.setDisplay(EntityDisplay.SHOW.getValue());
+                }
+                if(testSet.getStatus() == null) {
+                    testSet.setDisplay(0);
                 }
             }
+            strMsg = String.format("TestSet %s", strMsg);
+            testSet.setUpdateTime(new Date());
+            if(userInfo != null) {
+                testSet.setUpdateUser(userInfo.getId());
+                testSet.setUpdateUserName(userInfo.getFullName());
+            }
 
-            testSet.setReleaseId(testSetInfo.getReleaseId());
-            testSet.setName(testSetInfo.getName());
-            testSet.setType(testSetInfo.getType());
-            testSet.setStartTime(testSetInfo.getStartTime());
-            testSet.setEndTime(testSetInfo.getEndTime());
-            testSet.setTestOwner(testSetInfo.getTestOwner());
-            testSet.setJiraProject(testSetInfo.getJiraProject());
-            testSet.setBugAssignee(testSetInfo.getBugAssignee());
-            testSet.setDescription(testSetInfo.getDescription());
-            testSet.setLocales(testSetInfo.getLocales());
-
-            testSet.setUpdateTime(date);
-            testSet.setUpdateUser(testSetInfo.getUpdateUser());
-            testSet.setUpdateUserName(testSetInfo.getUpdateUserName());
-
-            int flag = 0;
             try {
                 // Save or update
                 testSetRep.saveAndFlush(testSet);
-                if (id == null) {
-                    flag++;
-                }
-                flag++;
+                retResult = new Result(strMsg);
             } catch (Exception e) {
                 e.printStackTrace();
-                return new Result("200110", "TestSet info cannot be saved");
+                if(e.getMessage().contains("testset_release_name")) {
+                    retResult = new Result("000123", "TestSet Name is duplicated. Name = " + testSet.getName());
+                } else {
+                    retResult = new Result("000102", "Exception happened while operation on " + strMsg);
+                }
             }
-
-            if (flag == 1) {
-                result = new Result("TestSet Updated");
-            } else if (flag == 2) {
-                result = new Result("TestSet Added");
-            } else {
-                return new Result("000002", "Error at flag" + flag);
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("000102", "Edit/Add TestSet error");
+            retResult =  new Result("000102", strMsg + " Exception! " + e.getMessage());
         }
-        return result;
+
+        logger.trace("TestSetServiceImpl.updateTestSet() Exit");
+        return retResult;
     }
 
     @Override
@@ -170,16 +162,6 @@ public class TestSetServiceImpl implements TestSetService {
         if (testSetInfo.getReleaseId() == null) {
             return new Result("000101", "Release Id cannot be empty");
         }
-
-//        List<String> allNames = testSetRep.getAllNamesByReleaseId(testSetInfo.getReleaseId());
-//        if (allNames != null && !allNames.isEmpty()) {
-//            for (String name : allNames) {
-//                if (testSetInfo.getName().equalsIgnoreCase(name)) {
-//                    return new Result("000123", "TestSet name already exists");
-//                }
-//            }
-//        }
-
         return new Result("Info verified");
     }
 

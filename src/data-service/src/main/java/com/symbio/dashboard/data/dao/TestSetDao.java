@@ -225,7 +225,17 @@ public class TestSetDao {
                     logger.error("Could not find TestSet data info.");
                     testsetUiDto.setData(null);
                 } else {
-                    testsetUiDto.setData(EntityUtils.castMap(testset, listUiInfo));
+                    Map<String, Object> mapEntityData = EntityUtils.castMap(testset, listUiInfo);
+                    try {
+                        Release releaseInfo = releaseRep.getById(id);
+                        if(releaseInfo != null) {
+                            mapEntityData.put("productId", releaseInfo.getProductId());
+                        }
+                    } catch (Exception eR) {
+                        eR.printStackTrace();
+                        logger.error("Get Product Id Exception!!!" + eR.getMessage());
+                    }
+                    testsetUiDto.setData(mapEntityData);
                 }
             }
 
