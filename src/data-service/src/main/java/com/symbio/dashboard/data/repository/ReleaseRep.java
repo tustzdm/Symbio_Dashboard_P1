@@ -34,4 +34,10 @@ public interface ReleaseRep extends JpaRepository<Release,Integer> {
 
     @Query(value = "SELECT * FROM `release` WHERE display = 1 ORDER BY id", nativeQuery = true)
     List<Release> findAllRelease();
+
+    @Query(value = "SELECT * FROM `release` WHERE product_id = ?1 AND display = 1 ORDER BY update_time DESC", nativeQuery = true)
+    List<Release> getNavigationList(Integer productId);
+
+    @Query(value = "SELECT * FROM `release` WHERE product_id = ?1 AND display = 1 ORDER BY update_time DESC LIMIT 0,?2", nativeQuery = true)
+    List<Release> getNavigationPageList(Integer productId, Integer total);
 }

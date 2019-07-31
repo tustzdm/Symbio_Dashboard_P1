@@ -17,6 +17,7 @@ import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
 import lombok.Data;
+import org.aspectj.weaver.ast.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -251,6 +252,32 @@ public class TestSetDao {
         }
 
         logger.trace("TestSetDao.getTestSetUiInfo() Exit");
+        return retResult;
+    }
+
+    public Result getNavigationList(Integer userId, String locale, Integer releaseId, Integer total) {
+        Result retResult = null;
+
+        try {
+            String strFields = "id,name";
+            String sql = String.format("SELECT %s FROM `test_set` WHERE release_id = %d AND display = 1 ORDER BY update_time DESC", strFields, releaseId);
+            if (!BusinessUtil.isIdEmpty(total)) {
+                sql += String.format(" LIMIT 0,%d", total);
+            }
+
+            // Fetch db
+            List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+            if (CommonUtil.isEmpty(listResult)) {
+                return new Result(new ArrayList<>());
+            }
+            // Change to Map
+            List<Map<String, Object>> listRelease = EntityUtils.castMap(listResult, TestSet.class, strFields);
+            retResult = new Result(listRelease);
+        } catch (Exception e) {
+            e.printStackTrace();
+            retResult = commonDao.getResultArgs(locale, "000102", "getting TestSet navigation info");
+        }
+
         return retResult;
     }
 }

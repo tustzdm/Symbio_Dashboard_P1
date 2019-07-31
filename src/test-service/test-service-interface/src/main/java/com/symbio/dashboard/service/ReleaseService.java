@@ -18,4 +18,6 @@ public interface ReleaseService {
     Result removeRelease(Integer id);
 
     Result getReleaseUiInfo(Integer userId, String locale, Integer uiInfo, Integer id);
+
+    Result getNavigationList(Integer userId, String locale, Integer productId, Integer total);
 }

@@ -19,4 +19,6 @@ public interface TestSetService {
     Result removeTestSet(Integer id);
 
     Result getTestSetUiInfo(Integer userId, String locale, Integer uiInfo, Integer id);
+
+    Result getNavigationList(Integer userId, String locale, Integer releaseId, Integer total);
 }

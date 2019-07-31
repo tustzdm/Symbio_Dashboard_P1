@@ -425,7 +425,7 @@ public class ProductDao {
      * @param total
      * @return
      */
-    public Result getNavitionList(String locale, Integer total) {
+    public Result getNavigationList(String locale, Integer total) {
         Result retResult = new Result("");
 
         try {

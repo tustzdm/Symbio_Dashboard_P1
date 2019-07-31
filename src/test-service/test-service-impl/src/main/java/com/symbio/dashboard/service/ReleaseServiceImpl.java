@@ -1,6 +1,7 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.dao.ReleaseDao;
 import com.symbio.dashboard.data.dao.UserDao;
 import com.symbio.dashboard.data.repository.ReleaseRep;
@@ -11,14 +12,19 @@ import com.symbio.dashboard.enums.EntityDisplay;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.Release;
 import com.symbio.dashboard.model.User;
+import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
+import com.symbio.dashboard.util.EntityUtils;
 import com.symbio.dashboard.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName - ReleaseServiceImpl
@@ -50,6 +56,9 @@ public class ReleaseServiceImpl implements ReleaseService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private CommonDao commonDao;
+
     @Override
     public Result getReleaseList(Integer productId, Integer pageIndex, Integer pageSize) {
         return getReleaseList(null, Locales.EN_US.toString(), productId, pageIndex, pageSize);
@@ -62,6 +71,15 @@ public class ReleaseServiceImpl implements ReleaseService {
             logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
         }
         return retResult;
+    }
+
+    @Override
+    public Result getNavigationList(Integer userId, String locale, Integer productId, Integer total){
+        if(BusinessUtil.isIdEmpty(productId)) {
+            return commonDao.getResult("000101", "Product Id");
+        }
+
+        return releaseDao.getNavigationList(locale, productId, total);
     }
 
     @Override

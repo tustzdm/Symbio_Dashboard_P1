@@ -334,49 +334,56 @@ public class ReleaseDao {
     }
 
     /**
-     * 得到Product 导航条信息
+     * 得到 Release 导航条信息
      *
      * @param locale
      * @param total
      * @return
      */
-    public Result getNavitionList(String locale, Integer total) {
-        Result retResult = new Result("");
+    public Result getNavigationList(String locale, Integer productId, Integer total) {
+        Result retResult = null;
 
-//        try {
-//            int nFetchDataMode = 2; // 1 - Product， 2-Map
-//
-//            if (nFetchDataMode == 1) {
-//                List<Product> listRelease = null;
-//                if (total == null || total < 1) {
-//                    listRelease = productRep.findNavigationList();
-//                } else {
-//                    listRelease = productRep.findNavigationPage(total);
-//                }
-//
-//                if (CommonUtil.isEmpty(listRelease)) {
-//                    return new Result("000120", "Product Navigation");
-//                }
-//                retResult = new Result(listRelease);
-//            } else {
-//                String strFields = "id,name";
-//                String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER BY id", strFields);
-//                if (total != null && total > 0) {
-//                    sql += String.format(" LIMIT 0,%d", total);
-//                }
-//                // Fetch db
-//                List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
-//                if (CommonUtil.isEmpty(listResult)) {
-//                    return new Result("000120", "Product Navigation");
-//                }
-//                // Change to Map
-//                List<Map<String, Object>> listRelease = EntityUtils.castMap(listResult, Product.class, strFields);
-//                retResult = new Result(listRelease);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            retResult = new Result("000102", "Product Navigation");
-//        }
+        try {
+            int nFetchDataMode = 1; // 1 - Repository Access， 2 - castMap
+
+            if (nFetchDataMode == 1) {
+                List<Release> listRelease = null;
+                if (BusinessUtil.isIdEmpty(total)) {
+                    listRelease = releaseRep.getNavigationList(productId);
+                } else {
+                    listRelease = releaseRep.getNavigationPageList(productId, total);
+                }
+
+                if (CommonUtil.isEmpty(listRelease)) {
+                    return new Result(new ArrayList<>());
+                }
+
+                List<Map<String, Object>> retList = new ArrayList<>();
+                for (Release item : listRelease) {
+                    retList.add(BusinessUtil.getReleaseUIListInfo(item));
+                }
+
+                retResult = new Result(retList);
+            } else {
+                String strFields = "id,name";
+                String sql = String.format("SELECT %s FROM `release` WHERE product_id = %d AND display = 1 ORDER BY update_time DESC", strFields, productId);
+                if (!BusinessUtil.isIdEmpty(total)) {
+                    sql += String.format(" LIMIT 0,%d", total);
+                }
+
+                // Fetch db
+                List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+                if (CommonUtil.isEmpty(listResult)) {
+                    return new Result(new ArrayList<>());
+                }
+                // Change to Map
+                List<Map<String, Object>> listRelease = EntityUtils.castMap(listResult, Release.class, strFields);
+                retResult = new Result(listRelease);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            retResult = commonDao.getResultArgs(locale, "000102", "getting Release navigation info");
+        }
 
         return retResult;
     }

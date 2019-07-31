@@ -200,10 +200,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Result getNavitionList(Integer userId, String locale, Integer total){
+    public Result getNavigationList(Integer userId, String locale, Integer total){
         logger.trace("ProductServiceImpl.getNavitionList Enter. total = %d", total);
 
-        Result retResult = productDao.getNavitionList(locale, total);
+        Result retResult = productDao.getNavigationList(locale, total);
         if(retResult.hasError()) {
             logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
         }

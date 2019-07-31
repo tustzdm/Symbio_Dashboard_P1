@@ -24,7 +24,7 @@ public interface ProductService {
     // Temp
     Result getProductPageList2(Integer userId, String locale, Integer pageIndex, Integer pageSize);
 
-    Result getNavitionList(Integer userId, String locale, Integer total);
+    Result getNavigationList(Integer userId, String locale, Integer total);
 
     Result getProductUiInfo(Integer userId, String locale, Integer uiInfo, Integer id);
 

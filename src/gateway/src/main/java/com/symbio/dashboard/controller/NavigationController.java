@@ -3,6 +3,8 @@ package com.symbio.dashboard.controller;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.model.Product;
 import com.symbio.dashboard.service.ProductService;
+import com.symbio.dashboard.service.ReleaseService;
+import com.symbio.dashboard.service.TestSetService;
 import com.symbio.dashboard.test.service.ProductAuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -32,6 +34,10 @@ public class NavigationController extends BaseController {
     private ProductAuthService productAuthService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ReleaseService releaseService;
+    @Autowired
+    private TestSetService testSetService;
 
     /**
      * 得到 Product List 导航条数据
@@ -50,7 +56,7 @@ public class NavigationController extends BaseController {
         logger.trace(String.format("locale = %s, total = %d", locale, total));
 
         Integer userId = 0;
-        Result retResult = productService.getNavitionList(userId, locale, total);
+        Result retResult = productService.getNavigationList(userId, locale, total);
         if(retResult.hasError()) {
             logger.debug(String.format("Get Error Info from productService. ec=%s, em=%s", retResult.getEc(), retResult.getEm()));
         }
@@ -59,4 +65,29 @@ public class NavigationController extends BaseController {
         return retResult;
     }
 
+    @RequestMapping("/getProductList")
+    public Result getProductNavigationList(@RequestParam(value = "token") String token,
+                                           @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                           @RequestParam(value = "total", required = false, defaultValue = "") Integer total) {
+        Integer userId = 0;
+        return productService.getNavigationList(userId, locale, total);
+    }
+
+    @RequestMapping("/getReleaseList")
+    public Result getReleaseNavigationList(@RequestParam(value = "token") String token,
+                                           @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                           @RequestParam(value = "productId") Integer productId,
+                                           @RequestParam(value = "total", required = false, defaultValue = "") Integer total) {
+        Integer userId = 0;
+        return releaseService.getNavigationList(userId, locale, productId, total);
+    }
+
+    @RequestMapping("/getTestSetList")
+    public Result getTestSetNavigationList(@RequestParam(value = "token") String token,
+                                           @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                           @RequestParam(value = "releaseId") Integer releaseId,
+                                           @RequestParam(value = "total", required = false, defaultValue = "") Integer total) {
+        Integer userId = 0;
+        return testSetService.getNavigationList(userId, locale, releaseId, total);
+    }
 }

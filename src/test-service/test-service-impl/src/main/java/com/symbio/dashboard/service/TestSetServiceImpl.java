@@ -1,6 +1,7 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.dao.TestSetDao;
 import com.symbio.dashboard.data.dao.UserDao;
 import com.symbio.dashboard.data.repository.TestSetRep;
@@ -15,10 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @ClassName - TestSetServiceImpl
@@ -41,6 +39,8 @@ public class TestSetServiceImpl implements TestSetService {
     private TestSetDao testsetDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private CommonDao commonDao;
 
     @Override
     public Result getTestSetList(Integer userId, String locale, Integer releaseId, Integer pageIndex, Integer pageSize) {
@@ -172,5 +172,14 @@ public class TestSetServiceImpl implements TestSetService {
             logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
         }
         return retResult;
+    }
+
+    @Override
+    public Result getNavigationList(Integer userId, String locale, Integer releaseId, Integer total){
+        if(BusinessUtil.isIdEmpty(releaseId)) {
+            return commonDao.getResult("000101", "Product Id");
+        }
+
+        return testsetDao.getNavigationList(userId, locale, releaseId, total);
     }
 }
