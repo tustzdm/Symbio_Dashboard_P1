@@ -230,7 +230,7 @@ public class TestSetDao {
                 } else {
                     Map<String, Object> mapEntityData = EntityUtils.castMap(testset, listUiInfo);
                     try {
-                        Release releaseInfo = releaseRep.getById(id);
+                        Release releaseInfo = releaseRep.getById((Integer)mapEntityData.get("releaseId"));
                         if(releaseInfo != null) {
                             mapEntityData.put("productId", releaseInfo.getProductId());
                         }
