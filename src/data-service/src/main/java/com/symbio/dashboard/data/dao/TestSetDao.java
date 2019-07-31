@@ -4,6 +4,7 @@ import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.repository.*;
 import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.dto.TestSetUiDTO;
+import com.symbio.dashboard.entity.Progress;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.SysListSetting;
@@ -251,22 +252,5 @@ public class TestSetDao {
 
         logger.trace("TestSetDao.getTestSetUiInfo() Exit");
         return retResult;
-    }
-
-    @Data
-    public class Progress {
-        private int total;
-        private int done;
-        private String progress;
-
-        public Progress(int done, int total) {
-            this.done = done;
-            this.total = total;
-            if (total > 0) {
-                this.progress = String.format("%d%%", Integer.valueOf(done * 100 / total));
-            } else {
-                this.progress = "";
-            }
-        }
     }
 }

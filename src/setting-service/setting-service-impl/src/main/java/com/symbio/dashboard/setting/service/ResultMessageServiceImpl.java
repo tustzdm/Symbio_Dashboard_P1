@@ -1,7 +1,9 @@
 package com.symbio.dashboard.setting.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.repository.ResultMessageRep;
+import com.symbio.dashboard.entity.Message;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.ResultMessage;
 import com.symbio.dashboard.util.StringUtil;
@@ -19,8 +21,8 @@ import java.util.Map;
  * @ClassName - ResultMessageServiceImpl
  * @Author - Admin
  * @Description -
- * @Date - 2019/7/24
- * @Version 1.0
+ * @Date - 2019/7/31
+ * @Version 1.1
  */
 
 @Service
@@ -28,50 +30,9 @@ import java.util.Map;
 public class ResultMessageServiceImpl implements MessageService {
 
     private static Logger logger = LoggerFactory.getLogger(ResultMessageServiceImpl.class);
-    private static Map<String, Message> mapMessage = null;
+
     @Autowired
-    private ResultMessageRep messageRep;
-
-    private Message getMessage(ResultMessage data) {
-        return new Message(data.getCode(), data.getEnUs(), data.getZhCn(), data.getFormatter());
-    }
-
-    private Map<String, Message> getMessageMap() {
-        List<ResultMessage> listData = messageRep.getAll();
-        if(listData.isEmpty()) {
-            logger.warn("!!!WARNING!!! Result Message is empty. Please contact administrator for initialization.");
-            return null;
-        }
-
-        mapMessage = new HashMap<String, Message>();
-        for(ResultMessage item: listData) {
-            mapMessage.put(item.getCode(), getMessage(item));
-        }
-
-        return mapMessage;
-    }
-
-    private String getLocaleMessage(String locale, Message msgInfo, Object... args) {
-        String retMsg = null;
-
-        try {
-            if (locale == Locales.ZH_CN.toString()) {
-                retMsg = msgInfo.getZhCn();
-            } else {
-                retMsg = msgInfo.getEnUs();
-            }
-
-            if (!StringUtil.isEmpty(retMsg) && (retMsg.contains("%s") || retMsg.contains("%d"))
-                && args.length > 0) {
-                retMsg = String.format(retMsg, args);
-            }
-        } catch (Exception e) {
-            logger.error("ResultMessageServiceImpl.getMessage() ERROR!!!", e);
-            e.printStackTrace();
-        }
-
-        return retMsg;
-    }
+    private CommonDao commonDao;
 
     @Override
     public String getMessageEx(String code) {
@@ -85,24 +46,7 @@ public class ResultMessageServiceImpl implements MessageService {
 
     @Override
     public String getMessage(String locale, String code, Object... args) {
-        String retMsg = null;
-        if (mapMessage == null) {
-            mapMessage = getMessageMap();
-        }
-
-        if (mapMessage.isEmpty()) {
-            return null;
-        } else {
-            Message msgInfo = mapMessage.get(code);
-            if(msgInfo == null) {
-                logger.warn("Could not find message info. code === " + code);
-                System.out.println("Could not find message info. code === " + code);
-                return null;
-            }
-
-            retMsg = getLocaleMessage(locale, msgInfo, args);
-        }
-        return retMsg;
+        return commonDao.getMessage(locale, code, args );
     }
 
     @Override
@@ -119,25 +63,10 @@ public class ResultMessageServiceImpl implements MessageService {
     public Result getResult(String locale, String code, Object... args){
         String strMsg = getMessage(locale, code, args);
         if (strMsg == null || strMsg.isEmpty()) {
+            logger.error("ResultMessageServiceImpl.getResult() Get message failure! code = " + code);
             return null;
         } else {
             return new Result(code, strMsg);
         }
     }
-
-    @Data
-    private class Message {
-        public String code;
-        public String enUs;
-        public String zhCn;
-        public String formmater;
-
-        public Message(String ec, String en, String zh, String formmater){
-            this.code = ec;
-            this.enUs = en;
-            this.zhCn = zh;
-            this.formmater = formmater;
-        }
-    }
-
 }

@@ -6,8 +6,11 @@ import javax.persistence.EntityManager;
 
 import com.symbio.dashboard.data.repository.ProductRep;
 import com.symbio.dashboard.data.repository.ReleaseRep;
+import com.symbio.dashboard.data.repository.ResultMessageRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
+import com.symbio.dashboard.entity.Message;
 import com.symbio.dashboard.enums.*;
+import com.symbio.dashboard.model.ResultMessage;
 import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.UiInfo;
 import com.symbio.dashboard.model.User;
@@ -38,6 +41,12 @@ public class CommonDao {
 
   @Autowired
   private DictionaryDao dictionaryDao;
+
+  @Autowired
+  private ResultMessageRep messageRep;
+
+  public CommonDao() {
+  }
 
   /**
    * Get Mysql Table's field info except non user defined
@@ -271,7 +280,6 @@ public class CommonDao {
         strType = (String)mapItem.get(UIInfoKey.Type.getKey());
         strData = (String)mapItem.get(UIInfoKey.Data.getKey());
 
-
         // Fetch dictionay data for "list"
         if(HtmlType.SelectList.getCode().equals(strType)
                 && (StringUtil.isEmpty(strData) || "status".equalsIgnoreCase(strDBField))) {
@@ -294,4 +302,89 @@ public class CommonDao {
     return retList;
   }
 
+  // Message Map 对象
+  private static Map<String, Message> mapMessage = null;
+
+  public Result getResult(String code) {
+    return getLocalResult(Locales.EN_US.toString(), code);
+  }
+
+  public Result getResult(String code, Object... args) {
+    return getLocalResult(Locales.EN_US.toString(), code, args);
+  }
+
+  public Result getResultArgs(String locale, String code, Object... args) {
+    return getLocalResult(locale, code, args);
+  }
+
+  public String getMessage(String locale, String code, Object... args) {
+    String retMsg = null;
+    if (mapMessage == null) {
+      mapMessage = getLocalMessageMap();
+    }
+
+    if (mapMessage.isEmpty()) {
+      return null;
+    } else {
+      Message msgInfo = mapMessage.get(code);
+      if(msgInfo == null) {
+        logger.warn("Could not find message info. code === " + code);
+        System.out.println("Could not find message info. code === " + code);
+        return null;
+      }
+
+      retMsg = getLocaleMessage(locale, msgInfo, args);
+    }
+    return retMsg;
+  }
+
+  private Result getLocalResult(String locale, String code, Object... args){
+    String strMsg = getMessage(locale, code, args);
+    if (strMsg == null || strMsg.isEmpty()) {
+      return null;
+    } else {
+      return new Result(code, strMsg);
+    }
+  }
+
+  private Map<String, Message> getLocalMessageMap() {
+    List<ResultMessage> listData = messageRep.getAll();
+    if(listData.isEmpty()) {
+      logger.warn("!!!WARNING!!! Result Message is empty. Please contact administrator for initialization.");
+      return null;
+    }
+
+    mapMessage = new HashMap<String, Message>();
+    for(ResultMessage item: listData) {
+      mapMessage.put(item.getCode(), getLocalMessage(item));
+    }
+
+    return mapMessage;
+  }
+
+  private String getLocaleMessage(String locale, Message msgInfo, Object... args) {
+    String retMsg = null;
+
+    try {
+      if (locale == Locales.ZH_CN.toString()) {
+        retMsg = msgInfo.getZhCn();
+      } else {
+        retMsg = msgInfo.getEnUs();
+      }
+
+      if (!StringUtil.isEmpty(retMsg) && (retMsg.contains("%s") || retMsg.contains("%d"))
+              && args.length > 0) {
+        retMsg = String.format(retMsg, args);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error("CommonDao.getMessage() ERROR!!!", e);
+    }
+
+    return retMsg;
+  }
+
+  private Message getLocalMessage(ResultMessage data) {
+    return new Message(data.getCode(), data.getEnUs(), data.getZhCn(), data.getFormatter());
+  }
 }

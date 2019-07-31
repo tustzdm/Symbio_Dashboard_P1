@@ -7,6 +7,7 @@ import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.data.repository.UserRep;
 import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.dto.ProductUiDTO;
+import com.symbio.dashboard.entity.Progress;
 import com.symbio.dashboard.enums.DictionaryType;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
@@ -517,22 +518,5 @@ public class ProductDao {
             retList.add(BusinessUtil.getProductUIListInfo(item));
         }
         return retList;
-    }
-
-    @Data
-    public class Progress {
-        private int total;
-        private int done;
-        private String progress;
-
-        public Progress(int done, int total) {
-            this.done = done;
-            this.total = total;
-            if (total > 0) {
-                this.progress = String.format("%d%%", Integer.valueOf(done * 100 / total));
-            } else {
-                this.progress = "";
-            }
-        }
     }
 }
