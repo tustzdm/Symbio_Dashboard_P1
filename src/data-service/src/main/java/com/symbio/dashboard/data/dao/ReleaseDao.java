@@ -405,7 +405,7 @@ public class ReleaseDao {
             }
 
             releaseUiDTO.setStatusList(commonDao.getDictDataByType(DictionaryType.ReleaseStatus.getType()));
-            releaseUiDTO.setProductName(productDao.getProductMapList());
+            releaseUiDTO.setProductList(productDao.getProductMapList());
             result = new Result(releaseUiDTO);
         } catch (Exception e) {
             e.printStackTrace();

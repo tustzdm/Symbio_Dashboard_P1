@@ -28,7 +28,7 @@ public class ReleaseUiDTO implements Serializable {
     private Integer role;
     private List<Map<String, Object>> uiInfo;
     private Map<String, Object> data;
-    private List productName;
+    private List productList;
     private List<Map<String, Object>> statusList;
 
 }
