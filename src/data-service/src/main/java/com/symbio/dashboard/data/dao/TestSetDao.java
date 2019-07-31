@@ -216,7 +216,8 @@ public class TestSetDao {
             }
             testsetUiDto.setLocale(locale);
             testsetUiDto.setRole(7);
-            testsetUiDto.setUiInfo(commonDao.getUiInfoList(locale, listUiInfo));
+
+            testsetUiDto.setUiInfo(commonDao.getUiInfoList(locale, UIInfoPage.TestSet.toString(), listUiInfo));
             testsetUiDto.setData(new HashMap<String, Object>());
 
             if(id != null && id > 0) { // Not add
@@ -239,8 +240,6 @@ public class TestSetDao {
                 }
             }
 
-            testsetUiDto.setTypeList(commonDao.getDictDataByType(DictionaryType.TestSetType.getType()));
-            testsetUiDto.setStatusList(commonDao.getDictDataByType(DictionaryType.TestSetStatus.getType()));
             testsetUiDto.setUserList(commonDao.getUserUIList(listUiInfo));
             testsetUiDto.setProductList(productDao.getProductMapList());
             testsetUiDto.setReleaseList(releaseDao.getReleaseMapList());

@@ -26,4 +26,20 @@ public enum DictionaryType {
   public String toString() {
     return type;
   }
+
+  public static DictionaryType getDicType(String dicType) {
+    DictionaryType retDicType = null;
+    for (DictionaryType item : DictionaryType.values()) {
+      if(item.getType().equalsIgnoreCase(dicType)) {
+        retDicType = item;
+        break;
+      }
+    }
+
+    if(retDicType == null) {
+      throw new IllegalArgumentException("No DictionaryType enum element matches [" + dicType + "]");
+    }
+
+    return retDicType;
+  }
 }

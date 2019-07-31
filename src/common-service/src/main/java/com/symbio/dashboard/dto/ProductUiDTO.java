@@ -23,6 +23,5 @@ public class ProductUiDTO implements Serializable {
   private Integer role;
   private List<Map<String, Object>> uiInfo;
   private Map<String, Object> data;
-  private List<Map<String, Object>> statusList;
   private List<Map<String, Object>> userList;
 }

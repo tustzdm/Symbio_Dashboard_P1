@@ -392,7 +392,7 @@ public class ReleaseDao {
             }
             releaseUiDTO.setLocale(locale);
             releaseUiDTO.setRole(7);
-            releaseUiDTO.setUiInfo(commonDao.getUiInfoList(locale, listUiInfo));
+            releaseUiDTO.setUiInfo(commonDao.getUiInfoList(locale, UIInfoPage.Release.toString(), listUiInfo));
 
             if (id != null && id > 0) { // Not add
                 Release release = releaseRep.getById(id);
@@ -404,7 +404,6 @@ public class ReleaseDao {
                 }
             }
 
-            releaseUiDTO.setStatusList(commonDao.getDictDataByType(DictionaryType.ReleaseStatus.getType()));
             releaseUiDTO.setProductList(productDao.getProductMapList());
             result = new Result(releaseUiDTO);
         } catch (Exception e) {

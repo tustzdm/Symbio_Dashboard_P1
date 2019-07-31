@@ -25,7 +25,5 @@ public class TestSetUiDTO implements Serializable {
 
   private List<Map<String, Object>> productList;
   private List<Map<String, Object>> releaseList;
-  private List<Map<String, Object>> typeList;
-  private List<Map<String, Object>> statusList;
   private List<Map<String, Object>> userList;
 }

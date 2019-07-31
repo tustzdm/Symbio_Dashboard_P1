@@ -29,6 +29,5 @@ public class ReleaseUiDTO implements Serializable {
     private List<Map<String, Object>> uiInfo;
     private Map<String, Object> data;
     private List productList;
-    private List<Map<String, Object>> statusList;
 
 }

@@ -7,9 +7,7 @@ import javax.persistence.EntityManager;
 import com.symbio.dashboard.data.repository.ProductRep;
 import com.symbio.dashboard.data.repository.ReleaseRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
-import com.symbio.dashboard.enums.ColumnType;
-import com.symbio.dashboard.enums.HtmlType;
-import com.symbio.dashboard.enums.Locales;
+import com.symbio.dashboard.enums.*;
 import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.UiInfo;
 import com.symbio.dashboard.model.User;
@@ -229,31 +227,71 @@ public class CommonDao {
    * 得到 UiInfo 的Map数据
    * @return
    */
-  public List<Map<String, Object>> getUiInfoList(String locale, List<UiInfo> listUiInfo){
+  public List<Map<String, Object>> getUiInfoList(String locale, String page, List<UiInfo> listUiInfo){
     List<Map<String, Object>> retMap = new ArrayList<>();
 
     Map<String, Object> mapData = new HashMap<>();
     for(UiInfo item : listUiInfo){
       mapData = new HashMap<>();
 
-      mapData.put("key", item.getKey());
-      mapData.put("dbField", item.getDbField());
-      mapData.put("type", item.getType());
-      mapData.put("data", item.getData());
-      mapData.put("dispStatus", item.getDispStatus());
-      mapData.put("isRequired", item.getIsRequired());
-      mapData.put("isDisable", item.getIsDisable());
-      mapData.put("label", Locales.EN_US.toString().equals(locale) ? item.getEnUs() : item.getZhCn());
-      mapData.put("placeHolder", item.getPlaceHolder());
-      mapData.put("defaultValue", item.getDefaultValue());
-      mapData.put("constCondition", item.getConstCondition());
-      mapData.put("idx", item.getIdx());
+      // ToDo: [Enhancement] (Shawn) Use some function to set value by automatically
+      mapData.put(UIInfoKey.Key.getKey(), item.getKey());
+      mapData.put(UIInfoKey.DBField.getKey(), item.getDbField());
+      mapData.put(UIInfoKey.Type.getKey(), item.getType());
+      mapData.put(UIInfoKey.Data.getKey(), item.getData());
+      mapData.put(UIInfoKey.DisplayStatus.getKey(), item.getDispStatus());
+      mapData.put(UIInfoKey.Required.getKey(), item.getIsRequired());
+      mapData.put(UIInfoKey.Disable.getKey(), item.getIsDisable());
+      mapData.put(UIInfoKey.Label.getKey(), Locales.EN_US.toString().equals(locale) ? item.getEnUs() : item.getZhCn());
+      mapData.put(UIInfoKey.PlaceHolder.getKey(), item.getPlaceHolder());
+      mapData.put(UIInfoKey.DefaultValue.getKey(), item.getDefaultValue());
+      mapData.put(UIInfoKey.ConstCondition.getKey(), item.getConstCondition());
+      mapData.put(UIInfoKey.Order.getKey(), item.getIdx());
 
       retMap.add(mapData);
     }
 
-    return retMap;
+    // return retMap;
+    return buildUiInfoListData(locale, page, retMap);
   }
 
+  /**
+   * Put List data in data field
+   * @param locale
+   * @param listUiInfo
+   * @return
+   */
+  public List<Map<String, Object>> buildUiInfoListData(String locale, String page, List<Map<String, Object>> listUiInfo) {
+    List<Map<String, Object>> retList = listUiInfo;
+
+    try {
+      String strDBField, strType, strDictionayTpe, strData;
+      for(Map<String, Object> mapItem : retList) {
+        strDBField = (String)mapItem.get(UIInfoKey.DBField.getKey());
+        strType = (String)mapItem.get(UIInfoKey.Type.getKey());
+        strData = (String)mapItem.get(UIInfoKey.Data.getKey());
+
+
+        // Fetch dictionay data for "list"
+        if(HtmlType.SelectList.getCode().equals(strType)
+                && (StringUtil.isEmpty(strData) || "status".equalsIgnoreCase(strDBField))) {
+          strDictionayTpe = page + strDBField;
+          try {
+            // validation
+            DictionaryType dictType = DictionaryType.getDicType(strDictionayTpe);
+            List<Map<String, Object>> listDicMap = getDictDataByType(dictType.getType());
+            mapItem.put(UIInfoKey.Data.getKey(), listDicMap);
+          } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("buildUiInfoListData() ERROR!!!  Message = " + e.getMessage());
+          }
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return retList;
+  }
 
 }

@@ -485,7 +485,7 @@ public class ProductDao {
             }
             prodUiDto.setLocale(locale);
             prodUiDto.setRole(7);
-            prodUiDto.setUiInfo(commonDao.getUiInfoList(locale, listUiInfo));
+            prodUiDto.setUiInfo(commonDao.getUiInfoList(locale, UIInfoPage.Product.toString(), listUiInfo));
             prodUiDto.setData(new HashMap<String, Object>());
 
             if(id != null && id > 0) { // Not add
@@ -498,7 +498,6 @@ public class ProductDao {
                 }
             }
 
-            prodUiDto.setStatusList(commonDao.getDictDataByType(DictionaryType.ProductStatus.getType()));
             prodUiDto.setUserList(commonDao.getUserUIList(listUiInfo));
             retResult = new Result(prodUiDto);
         } catch (Exception e) {
