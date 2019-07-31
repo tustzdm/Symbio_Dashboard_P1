@@ -1,6 +1,7 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.data.charts.PieChart;
 import com.symbio.dashboard.data.dao.ProductDao;
 import com.symbio.dashboard.data.dao.UserDao;
 import com.symbio.dashboard.data.repository.ProductRep;
@@ -40,6 +41,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductRep productRep;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private PieChart pieChart;
 
     @Override
     public Result getProductList(Integer userId, String locale) {
@@ -222,16 +225,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Result getProductPieChart(Integer userId, String locale, Integer... productId) {
 
-        Result result;
-
+        Map<String, Object> map;
         try {
-
+            map = pieChart.getProductPieChartInfo(userId, locale);
         } catch (Exception e) {
             e.printStackTrace();
+            return new Result("", "");
         }
-
-
-        return null;
+        return new Result(map);
     }
 
 }

@@ -1,11 +1,6 @@
 package com.symbio.dashboard.data.dao;
 
-import java.util.*;
-
-import javax.persistence.EntityManager;
-
-import com.symbio.dashboard.data.repository.ProductRep;
-import com.symbio.dashboard.data.repository.ReleaseRep;
+import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.repository.ResultMessageRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.entity.Message;
@@ -20,66 +15,30 @@ import com.symbio.dashboard.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.symbio.dashboard.Result;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 @Repository
 public class CommonDao {
 
   private static Logger logger = LoggerFactory.getLogger(CommonDao.class);
-
+    // Message Map 对象
+    private static Map<String, Message> mapMessage = null;
   @Autowired
   private EntityManager entityManager;
-
   @Autowired
   private UserDao userDao;
-
   @Autowired
   private UiInfoRep uiInfoRep;
-
   @Autowired
   private DictionaryDao dictionaryDao;
-
   @Autowired
   private ResultMessageRep messageRep;
 
   public CommonDao() {
-  }
-
-  /**
-   * Get Mysql Table's field info except non user defined
-   * 得到Table下用户可定义的字段列表
-   * @param tableName
-   * @return
-   */
-  public Result getDescField(String tableName) {
-
-    logger.trace("CommonDao - getDescField() Enter. tableName = " + tableName);
-    Result retResult = null;
-    try {
-      String strSql = String.format("DESC `%s`", tableName);
-      List<Object[]> listData = this.entityManager.createNativeQuery(strSql).getResultList();
-
-      String strField = null;
-      StringBuffer sb = new StringBuffer();
-      List<String> listFields = new ArrayList<String>();
-      for (Object[] item : listData) {
-        strField = item[0].toString();
-        if (BusinessUtil.isUserDefinedField(strField)) {
-          listFields.add(strField);
-        }
-      }
-      retResult = new Result(listFields);
-    } catch (Exception e) {
-      e.printStackTrace();
-      retResult = new Result("40001",
-              String.format("Invoke getDescField() Exception!!! Table=[%s], Message = [%s]", tableName, e.getMessage()));
-    }
-
-    logger.trace("CommonDao - getDescField() Exit");
-    return retResult;
   }
 
   /**
@@ -136,7 +95,42 @@ public class CommonDao {
     return dbFields;
   }
 
-  /**
+    /**
+     * Get Mysql Table's field info except non user defined
+     * 得到Table下用户可定义的字段列表
+     *
+     * @param tableName
+     * @return
+     */
+    public Result getDescField(String tableName) {
+
+        logger.trace("CommonDao - getDescField() Enter. tableName = " + tableName);
+        Result retResult = null;
+        try {
+            String strSql = String.format("DESC `%s`", tableName);
+            List<Object[]> listData = this.entityManager.createNativeQuery(strSql).getResultList();
+
+            String strField = null;
+            StringBuffer sb = new StringBuffer();
+            List<String> listFields = new ArrayList<String>();
+            for (Object[] item : listData) {
+                strField = item[0].toString();
+                if (BusinessUtil.isUserDefinedField(strField)) {
+                    listFields.add(strField);
+                }
+            }
+            retResult = new Result(listFields);
+        } catch (Exception e) {
+            e.printStackTrace();
+            retResult = new Result("40001",
+                    String.format("Invoke getDescField() Exception!!! Table=[%s], Message = [%s]", tableName, e.getMessage()));
+        }
+
+        logger.trace("CommonDao - getDescField() Exit");
+        return retResult;
+    }
+
+    /**
    * 将 User字段的 user信息转成UserMap，以便后面直接替换User字段为User Map信息
    * @param data
    * @param listUserFields
@@ -301,9 +295,6 @@ public class CommonDao {
 
     return retList;
   }
-
-  // Message Map 对象
-  private static Map<String, Message> mapMessage = null;
 
   public Result getResult(String code) {
     return getLocalResult(Locales.EN_US.toString(), code);
