@@ -9,16 +9,23 @@
       { required: item.isRequired == 1, message: `Please input ${item.key}`, trigger: 'blur' }
     ]" :key="item.id" :label="item.label" :prop="item.key">
                 <el-col :span="15">
-                    <!-- <input v-if="['text','Number'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"> -->
+                    
                     <el-input v-model="product[item.key]" maxlength="30" v-if="['text','Number','Text'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"></el-input>
                     <select v-if="['list','SelectList'].indexOf(item.type) >= 0" v-model="product[item.key]">
-                        <option v-for="item in statusList" :value="item.code" :key="item.id">{{item.value}}</option>
-                        <!-- <option :value="1">1</option> -->
+                        <option v-for="option in item.data" :value="option.code" :key="option.id">{{option.value}}</option>
+                    </select>
+                    <select v-if="['productlist'].indexOf(item.type) >= 0" v-model="product.productId">
+                        <option v-for="item in fatherProductList" :value="item.id" :key="item.id">{{item.name}}</option>
+                    </select>
+                    <select v-if="['releaselist'].indexOf(item.type) >= 0" v-model="product.releaseId">
+                        <option v-for="item in fatherReleaseList" :value="item.id" :key="item.id">{{item.name}}</option>
                     </select>
                     <select v-if="['user','User'].indexOf(item.type) >= 0" v-model="product[tranformStr(item.dbField)]">
                         <option :value="user.id" v-for="user in userList">{{user.fullName}}</option>
                     </select>
-                    <el-date-picker v-model="product[item.key]" v-if="item.type === 'DateTime'" placeholder="Choose Date"></el-date-picker>
+                    <input type="text" name="" id="" v-if="item.type === 'calender'">
+                    <p  v-if="item.type === 'calender'">sdssssssssssssssssssss</p>
+                    <el-date-picker v-model="product[item.key]" v-if="item.type === 'calendar'" placeholder="Choose Date"></el-date-picker>
                     <el-input type="textarea" v-model="product[item.key]" :autosize="{ minRows: 4}" v-if="item.type == 'textarea'" :maxlength="JSON.parse(item.constCondition).maxLength" show-word-limit></el-input>
                 </el-col>
             </el-form-item>
@@ -42,11 +49,12 @@ export default {
         return {
             time: '',
             uiList: '',
-            statusList: '',
             id: '',
             userList: '',
             editPageType: '',
-            product:{}
+            product:{},//contaniner of product release testset;
+            fatherReleaseList:'',
+            fatherProductList:''
         }
     },
     created() {
@@ -55,11 +63,22 @@ export default {
         this.Fetch(`/testmgmt/get${this.editPageType}UiInfo?token=1&uiInfo=1&id=${this.id}`, { //将所有的数据集合到一个借口里了，id对应Product或者release的值
             method: "GET"
         }).then(res => {
+
+            console.log('starting.....');
             console.log(res.cd);
-            this.statusList = res.cd.statusList;
+
             this.userList = res.cd.userList;
-            this.uiList = res.cd.uiInfo;      
-            this.product = res.cd.data;   
+            console.log(this.userList);    
+
+            this.uiList = res.cd.uiInfo;  
+            console.log(this.uiList);    
+
+            this.product = res.cd.data;
+            console.log(this.product);  
+
+            this.fatherReleaseList = res.cd.releaseList;
+            this.fatherProductList = res.cd.productList;
+            
         });
 
         // this.Fetch(`/ui/getUiInfoList?token=111&page=product`, {
@@ -83,9 +102,6 @@ export default {
             //     this.userList[fullName].id =this.userList.id;
             // }
         // });
-
-    },
-    mounted() {
 
     },
     methods: {

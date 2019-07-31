@@ -3,10 +3,11 @@
     <el-card class="manage-tabel" shadow="never">
         <!-- <el-table :data="tableData"> -->
         <el-table :data="productList">
+            <p>{{productList}}</p>
             <el-table-column prop="name" label="Name" :width="0.5*tabelWidth">
                 <template slot-scope="scope">
                     <div>
-                        <router-link :to="{ name: 'releaseInfo', params: { releaseName: scope.row.name }}">{{scope.row.name}}</router-link>
+                        <router-link :to="{ name: 'releaseInfo', params: { releaseName: scope.row.name ,productId:productId, releaseId:scope.row.id}}">{{scope.row.name}}</router-link>
                     </div>
                     <div>{{scope.row.description}}</div>
                 </template>
@@ -49,11 +50,11 @@ export default {
             productList: '',
             trIndex: '',
             tableData: '',
-            fatherId: ''
+            productId: ''
         }
     },
     created() {
-        this.fatherId = this.$route.params.productId;
+        this.productId = this.$route.params.productId;
         this.getProductList();
     },
     mounted() {
@@ -74,7 +75,7 @@ export default {
     components: {},
     methods: {
         getProductList() {
-            this.Fetch(`/testmgmt/getReleaseList?token=1&productId=${this.fatherId}`, {
+            this.Fetch(`/testmgmt/getReleaseList?token=1&productId=${this.productId}`, {
                 method: "GET"
             }).then(res => {
                 console.log(res);
@@ -96,7 +97,7 @@ export default {
                 path: 'editproject',
                 name: 'editproject',
                 params: {
-                    id: this.productList[this.trIndex].id, //Pass the tr data to next router
+                    id: this.productList[this.trIndex].id, //Pass the releaseId to next router
                     editPageType: 'Release'
                 }
             })
@@ -109,7 +110,7 @@ export default {
                 cancelButtonText: 'Cancel',
                 type: 'warning'
             }).then(() => {
-                this.$axios.post(`/testmgmt/removeProduct?token=111&id=${this.productList[this.trIndex].id}`).then(res => {
+                this.$axios.post(`/testmgmt/removeRelease?token=111&id=${this.productList[this.trIndex].id}`).then(res => {
                     // success callback
                     console.log(res);
                     var ec = res.data.ec;

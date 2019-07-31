@@ -11,14 +11,19 @@
                 <el-col :span="15">
                     <!-- <input v-if="['text','Number'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"> -->
                     <el-input v-model="product[item.key]" maxlength="30" v-if="['text','Number','Text'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"></el-input>
-                    <select v-if="['list','SelectList'].indexOf(item.type) >= 0" v-model="product[item.dbField]">
-                        <option v-for="item in statusList" :value="item.code" :key="item.id">{{item.value}}</option>
-                        <!-- <option value="1">1</option> -->
+                    <select v-if="['list','SelectList'].indexOf(item.type) >= 0" v-model="product[item.key]">
+                        <option v-for="option in item.data" :value="option.code" :key="option.id">{{option.value}}</option>
+                    </select>
+                    <select v-if="['productlist'].indexOf(item.type) >= 0" v-model="product.productId">
+                        <option v-for="item in fatherProductList" :value="item.id" :key="item.id">{{item.name}}</option>
+                    </select>
+                    <select v-if="['releaselist'].indexOf(item.type) >= 0" v-model="product.releaseId">
+                        <option v-for="item in fatherReleaseList" :value="item.id" :key="item.id">{{item.name}}</option>
                     </select>
                     <select v-if="['user','User'].indexOf(item.type) >= 0" v-model="product[tranformStr(item.dbField)]">
                         <option :value="user.id" v-for="user in userList">{{user.fullName}}</option>
                     </select>
-                    <el-date-picker v-model="product[item.key]" v-if="item.type === 'DateTime'" placeholder="Choose Date"></el-date-picker>
+                    <el-date-picker v-model="product[item.key]" v-if="item.type === 'calendar'" placeholder="Choose Date"></el-date-picker>
                     <el-input type="textarea" v-model="product[item.key]" :autosize="{ minRows: 4}" v-if="item.type == 'textarea'" :maxlength="JSON.parse(item.constCondition).maxLength" show-word-limit></el-input>
                 </el-col>
             </el-form-item>
@@ -47,23 +52,31 @@ export default {
             time: '',
             uploadUrl: uploadUrl,
             uiList: '',
-            statusList: '',
             product: {},
             userList: '',
             pageType: '',
-            fatherId: ''
+            fatherReleaseList: '',
+            fatherProductList: '',
+            fatherProductId: '',
+            fatherReleaseId:''
         }
     },
     created() {
         this.pageType = this.$route.params.pageType;
+        this.fatherProductId = this.$route.params.productId;
+        this.fatherReleaseId = this.$route.params.releaseId;
+        alert(this.pageType);
 
         this.Fetch(`/testmgmt/get${this.pageType}UiInfo?token=1&uiInfo=1&id=`, { //将所有的数据集合到一个借口里了，uiInfod对应pageType,id对应Product或者release的值
             method: "GET"
         }).then(res => {
             console.log(res.cd);
-            this.statusList = res.cd.statusList;
             this.userList = res.cd.userList;
-            this.uiList = res.cd.uiInfo;      
+            this.uiList = res.cd.uiInfo;
+            this.product.productId = this.fatherProductId; //add release时带的productID   
+             this.product.releaseId = this.fatherReleaseId; //add release时带的productID     
+            this.fatherReleaseList = res.cd.releaseList;
+            this.fatherProductList = res.cd.productList;
         });
     },
     mounted() {
@@ -77,13 +90,7 @@ export default {
             return (locale == 'en_US' || typeof locale == 'undefined') ? "Please input " + msg : "请输入" + msg;
         },
         onSubmit() {
-            alert(this.fatherId);
             let url = `/testmgmt/update${this.pageType}?token=111`;
-            if (this.pageType == 'Release') {
-                this.product.productId = this.fatherId;
-                // url = `/testmgmt/update${this.pageType}?token=111&productId=${this.fatherId}`
-                // alert(url)
-            }
             this.$axios.post(url, this.product).then(res => {
                 // success callback
                 console.log(this.product);

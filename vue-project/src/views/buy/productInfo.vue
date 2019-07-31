@@ -1,6 +1,6 @@
 <template>
 <div class="buy-root" style="width:85%;margin-left:7.5%">
-    <dir>asdfsadfljsaldkfjlk</dir>
+
     <div class="manage-charts">
         <div class="chartContainer" style="text-align:center">
             <div style="display:inline-block">
@@ -44,7 +44,7 @@ export default {
         return {
             pie: getPie(),
             rect: getRect(),
-            fatherId:''
+            productId:''
         }
     },
     components: {
@@ -52,7 +52,7 @@ export default {
         chart: ECharts
     },
     created(){
-        this.fatherId =this.$route.params.productId;
+        this.productId =this.$route.params.productId;
     },
     mounted() {},
     methods: {
@@ -67,7 +67,7 @@ export default {
                 name: 'addproject',
                 params: {
                     pageType: 'Release',
-                     fatherId: this.fatherId
+                    productId: this.productId
                 }
             })
         }

@@ -21,9 +21,15 @@
             <tr class="tableBody" v-for="items in tableData">
                 <td v-for="(item,index) in items" v-if="['page','label','dispStatus','version','validation','display'].indexOf(index) === -1">
                     <p v-if="['isRequired', 'isDisable'].indexOf(index) == -1">{{item}}</p>
-                    <el-switch key="dsfg" :model="item" v-if="['isRequired', 'isDisable'].indexOf(index) != -1" disabled active-color="#13ce66" inactive-color="gray" active-value=1 inactive-value=0>
-                    </el-switch>
-                    <!-- <p v-if="index == 'constCondition'">{{JSON.parse(item.constCondition).maxLength}}</p> -->
+                    <!-- <el-switch key="dsfg" :model="item" v-if="['isRequired', 'isDisable'].indexOf(index) != -1" disabled active-color="#13ce66" inactive-color="gray" active-value='1' inactive-value='0'>
+                    </el-switch>  -->
+                    <!-- <template v-if="['isRequired', 'isDisable'].indexOf(index) != -1" slot-scope="scope">
+                        <el-switch key="dsfg" :model="scope.row.item"  disabled active-color="#13ce66" inactive-color="gray" active-value='1' inactive-value='0'>
+                    </el-switch> 
+                    </template> -->
+                    <input v-if="['isRequired', 'isDisable'].indexOf(index) != -1" :checked="item==1" disabled='true' type="checkbox">
+                    <!-- <p v-if="['isRequired', 'isDisable'].indexOf(index) != -1">{{item}}</p> -->
+                    <!-- <p v-if="index == 'constCondition'">{{JSON.par se(item.constCondition).maxLength}}</p> -->
                 </td>
                 <td :formId="items.id">
                     <el-button @click="editRouter()" :formId="items.id" class="editDeleteBtn" icon="el-icon-edit" circle></el-button>
@@ -44,7 +50,8 @@ export default {
             pageList: [],
             tableData: [],
             page: '',
-            trIndex: '1'
+            trIndex: '1',
+            tf: '1'
         }
     },
     created() {
@@ -79,7 +86,7 @@ export default {
 
     },
     methods: {
-        getTableData(){
+        getTableData() {
             this.Fetch(`/ui/getUiInfoList?token=111&page=${this.page}`, {
                 method: "GET"
             }).then(data => {
@@ -98,7 +105,7 @@ export default {
         },
         editRouter() {
             this.returnTrIndex();
-            
+
             this.$router.push({
                 path: 'edit',
                 name: 'edit',
@@ -131,12 +138,12 @@ export default {
                 cancelButtonText: 'Cancel',
                 type: 'warning'
             }).then(() => {
-                 this.$axios.post(`/ui/removeUiElement?token=111&id=${this.tableData[this.trIndex].id}`).then(res => {
+                this.$axios.post(`/ui/removeUiElement?token=111&id=${this.tableData[this.trIndex].id}`).then(res => {
                     // success callback
                     console.log(res);
                     var ec = res.data.ec;
                     if (ec != '0') {
-                        alert(res.dat.ec + ", " + res.data.em);//弹出错误
+                        alert(res.dat.ec + ", " + res.data.em); //弹出错误
                     } else {
                         this.$message.success("Delete Sucess！");
                         this.getTableData();
@@ -152,6 +159,16 @@ export default {
 </script>
 
 <style scoped>
+input[type='checkbox'] {
+    width: 20px;
+    height: 20px;
+
+}
+
+input[type="checkbox"]:checked {
+    background-color: aquamarine;
+}
+
 .main {
     height: 600px;
 }
@@ -172,7 +189,8 @@ export default {
 .chooseArea .chooseN {
     float: right;
 }
-td{
+
+td {
     width: 7%
 }
 </style>

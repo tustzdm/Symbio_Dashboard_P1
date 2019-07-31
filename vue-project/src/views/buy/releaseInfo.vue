@@ -43,7 +43,8 @@ export default {
         return {
             pie: getPie(),
             rect: getRect(),
-            fatherId:''
+            productId:'',
+            releaseId:''
         }
     },
     components: {
@@ -54,7 +55,8 @@ export default {
          
     },
     created(){
-        this.fatherId =this.$route.params.productId;
+        this.productId =this.$route.params.productId;
+        this.releaseId =this.$route.params.releaseId;
     },
     methods: {
         initProjet() {
@@ -67,8 +69,9 @@ export default {
                 path: '/addproject/index',
                 name: 'addproject',
                 params: {
-                    pageType: 'Tsetset',
-                    fatherId: this.fatherId
+                    pageType: 'TestSet',
+                    productId: this.productId,
+                    releaseId: this.releaseId
                 }
             })
         }

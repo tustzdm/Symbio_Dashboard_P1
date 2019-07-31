@@ -49,10 +49,12 @@ export default {
             currentPage: 1,
             productList: '',
             trIndex: '',
-            tableData:''
+            tableData:'',
+            fatherId: ''
         }
     },
     created() {
+        this.fatherId = this.$route.params.releaseId;
         this.getProductList();
     },
     mounted() {
@@ -73,7 +75,7 @@ export default {
     components: {},
     methods: {
         getProductList() {
-            this.Fetch("/testmgmt/getTestSetList?token=1&releaseId=1", {
+            this.Fetch(`/testmgmt/getTestSetList?token=1&releaseId=${this.fatherId}`, {//需要改成${this.fatherId}
                 method: "GET"
             }).then(res => {
                 console.log(res);
@@ -83,7 +85,6 @@ export default {
         },
         returnTrIndex() {
             this.trIndex = event.target.parentNode.getAttribute('formId') || event.target.getAttribute('formId');
-            alert('formId ' + this.trIndex);
             for (var i = 0; i < this.productList.length; i++) {
                 if (this.productList[i].id == this.trIndex) {
                     this.trIndex = i;
@@ -91,16 +92,13 @@ export default {
             }
         },
         editRouter() {
-            alert('editRouter');
             this.returnTrIndex();
-
-            alert('end' + this.trIndex);
             this.$router.push({
                 path: 'editproject',
                 name: 'editproject',
                 params: {
-                    tr: this.productList[this.trIndex], //Pass the tr data to next router
-                    editPageType: 'Testset'
+                    id: this.productList[this.trIndex].id, //Pass the tr data to next router
+                    editPageType: 'TestSet'
                 }
             })
         },
@@ -112,7 +110,7 @@ export default {
                 cancelButtonText: 'Cancel',
                 type: 'warning'
             }).then(() => {
-                this.$axios.post(`/testmgmt/removeProduct?token=111&id=${this.productList[this.trIndex].id}`).then(res => {
+                this.$axios.post(`/testmgmt/removeTestSet?token=111&id=${this.productList[this.trIndex].id}`).then(res => {
                     // success callback
                     console.log(res);
                     var ec = res.data.ec;
