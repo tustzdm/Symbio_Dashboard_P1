@@ -408,7 +408,9 @@ public class ReleaseDao {
                     logger.error("Could not find product data info.");
                     releaseUiDTO.setData(null);
                 } else {
-                    releaseUiDTO.setData(EntityUtils.castMap(release, listUiInfo));
+                    Map<String, Object> mapEntityData = EntityUtils.castMap(release, listUiInfo);
+                    mapEntityData.put("productId", release.getProductId());
+                    releaseUiDTO.setData(mapEntityData);
                 }
             }
 
