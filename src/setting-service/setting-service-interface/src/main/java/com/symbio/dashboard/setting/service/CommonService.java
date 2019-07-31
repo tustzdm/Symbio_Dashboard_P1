@@ -8,4 +8,7 @@ public interface CommonService {
     Result getDictionaryInfo(String type);
 
     Result getDictionaryByType(String type);
+
+    // 得到Table下用户可定义的字段列表
+    Result getUserDefinedFields(String locale, String table);
 }

@@ -152,3 +152,9 @@ CREATE TABLE `result_message` (
 -- 2019/7/26
 ALTER Table `test_set`
 ADD COLUMN `display` smallint(5) NOT NULL DEFAULT '1' COMMENT 'Display or not. 0-hide, 1-show' AFTER `status`;
+
+-- 2019/7/31
+ALTER Table `test_set`
+DROP COLUMN `testset_field_bool1`, DROP COLUMN `testset_field_bool2`, DROP COLUMN `testset_field_int1`, DROP COLUMN `testset_field_int2`, 
+DROP COLUMN `testset_field_int3`, DROP COLUMN `testset_field_int4`, DROP COLUMN `testset_field_int5`, DROP COLUMN `testset_field_str1`, 
+DROP COLUMN `testset_field_str2`, DROP COLUMN `testset_field_str3`, DROP COLUMN `testset_field_str4`, DROP COLUMN `testset_field_str5`;

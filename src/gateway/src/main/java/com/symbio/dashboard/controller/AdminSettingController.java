@@ -67,12 +67,13 @@ public class AdminSettingController extends BaseController {
 
     @RequestMapping("/getDBFields")
     public Result getDBFields(@RequestParam(value = "token") String token,
-                                @RequestParam(value = "table") String table) {
+                              @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                              @RequestParam(value = "table") String table) {
         Result result;
         try {
-            result = new Result(commonService.getUserDefinedFields(table));
+            result = commonService.getUserDefinedFields(locale, table);
             if (result.hasError()) {
-                return result;
+               logger.error(String.format("ec:%s, em:%s",result.getEc(),result.getEm()));
             }
         } catch (Exception e) {
             e.printStackTrace();

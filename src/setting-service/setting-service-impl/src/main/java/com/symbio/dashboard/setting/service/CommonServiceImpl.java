@@ -4,7 +4,9 @@ import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.repository.DictionaryRep;
 import com.symbio.dashboard.dictionary.dto.message.UiInfoPageNames;
+import com.symbio.dashboard.enums.UIInfoPage;
 import com.symbio.dashboard.model.Dictionary;
+import com.symbio.dashboard.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +37,15 @@ public class CommonServiceImpl implements CommonService {
     @Autowired
     private CommonDao commonDao;
 
+    @Autowired
+    private ResultMessageServiceImpl messageService;
+
     @Override
     public Result getDictionaryByType(String type){
 
         List<Dictionary> list = dictionaryRep.getDictDataByType(type);
         if(list == null || list.size() == 0) {
-            return new Result("10001", "Could not get data");
+            return messageService.getResultEx("000124", type);
         } else {
             return new Result(list);
         }
@@ -60,7 +65,7 @@ public class CommonServiceImpl implements CommonService {
             dictionaryList = dictionaryRep.getDictDataByType(type);
 
             if (dictionaryList == null || dictionaryList.isEmpty()) {
-                return new Result("100011", "查询失败");
+                return messageService.getResultEx("000124", type);
             }
 
             for (Dictionary d : dictionaryList) {
@@ -76,23 +81,35 @@ public class CommonServiceImpl implements CommonService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("100012", "SQL Error");
+            return messageService.getResultEx("000010");
         }
         return new Result(pageNamesList);
     }
 
-    public List<Map<String, String>> getUserDefinedFields(String table) {
-        List<Map<String, String>> retList = new ArrayList<>();
-        try {
-            Result retResult = commonDao.getDescField(table);
-            Map<String, String> map = new HashMap<String, String>();
-            //map.put("code", "");
-            //map.put("value", "(Empty)");
-            //retList.add(map);
+    /**
+     * 得到 Table 下的字段列表
+     * @param locale
+     * @param table
+     * @return
+     */
+    @Override
+    public Result getUserDefinedFields(String locale, String table) {
+        Result retResult = null;
 
-            if (retResult.isSuccess()) {
-                List<String> listFields = (List<String>) retResult.getCd();
+        try {
+            List<Map<String, String>> retList = new ArrayList<>();
+
+            String tableName = UIInfoPage.getTableName(table);
+            if(StringUtil.isEmpty(tableName)){
+                retResult = messageService.getResult(locale,"001003", table);
+                return retResult;
+            }
+
+            Result retDBFieldResult = commonDao.getDescField(tableName);
+            if (retDBFieldResult.isSuccess()) {
+                List<String> listFields = (List<String>) retDBFieldResult.getCd();
                 String strField = "";
+                Map<String, String> map = new HashMap<String, String>();
                 for (int i = 0; i < listFields.size(); i++) {
                     strField = listFields.get(i);
                     map = new HashMap<String, String>();
@@ -100,12 +117,15 @@ public class CommonServiceImpl implements CommonService {
                     map.put("value", strField);
                     retList.add(map);
                 }
+                retResult = new Result(retList);
+            } else {
+                retResult = retDBFieldResult;
             }
         } catch (Exception e) {
             logger.error("CommonService - getUserDefinedFields() Exception!!!", e);
-            retList = new ArrayList<>();
+            retResult = messageService.getResult(locale,"001001", table);
         }
 
-        return retList;
+        return retResult;
     }
 }

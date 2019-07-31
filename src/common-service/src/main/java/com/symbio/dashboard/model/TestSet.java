@@ -61,41 +61,36 @@ public class TestSet {
     @Column(name = "locales")
     private String locales;
 
-    @Column(name = "testset_field_bool1")
-    private Short testsetFieldBool1;
-
-    @Column(name = "testset_field_bool2")
-    private Short testsetFieldBool2;
-
-    @Column(name = "testset_field_int1")
-    private Integer testsetFieldInt1;
-
-    @Column(name = "testset_field_int2")
-    private Integer testsetFieldInt2;
-
-    @Column(name = "testset_field_int3")
-    private Integer testsetFieldInt3;
-
-    @Column(name = "testset_field_int4")
-    private Integer testsetFieldInt4;
-
-    @Column(name = "testset_field_int5")
-    private Integer testsetFieldInt5;
-
-    @Column(name = "testset_field_str1")
-    private String testsetFieldStr1;
-
-    @Column(name = "testset_field_str2")
-    private String testsetFieldStr2;
-
-    @Column(name = "testset_field_str3")
-    private String testsetFieldStr3;
-
-    @Column(name = "testset_field_str4")
-    private String testsetFieldStr4;
-
-    @Column(name = "testset_field_str5")
-    private String testsetFieldStr5;
+    @Column(name = "tsfield_int1")
+    private Integer tsfieldInt1;
+    @Column(name = "tsfield_int2")
+    private Integer tsfieldInt2;
+    @Column(name = "tsfield_int3")
+    private Integer tsfieldInt3;
+    @Column(name = "tsfield_int4")
+    private Integer tsfieldInt4;
+    @Column(name = "tsfield_int5")
+    private Integer tsfieldInt5;
+    @Column(name = "tsfield_str1")
+    private String tsfieldStr1;
+    @Column(name = "tsfield_str2")
+    private String tsfieldStr2;
+    @Column(name = "tsfield_str3")
+    private String tsfieldStr3;
+    @Column(name = "tsfield_str4")
+    private String tsfieldStr4;
+    @Column(name = "tsfield_str5")
+    private String tsfieldStr5;
+    @Column(name = "tsfield_str6")
+    private String tsfieldStr6;
+    @Column(name = "tsfield_str7")
+    private String tsfieldStr7;
+    @Column(name = "tsfield_str8")
+    private String tsfieldStr8;
+    @Column(name = "tsfield_str9")
+    private String tsfieldStr9;
+    @Column(name = "tsfield_str10")
+    private String tsfieldStr10;
 
     @Column(name = "create_time")
     private Date createTime;

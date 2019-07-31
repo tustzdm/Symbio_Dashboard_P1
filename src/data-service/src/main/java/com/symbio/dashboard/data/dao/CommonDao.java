@@ -43,6 +43,7 @@ public class CommonDao {
 
   /**
    * Get Mysql Table's field info except non user defined
+   * 得到Table下用户可定义的字段列表
    * @param tableName
    * @return
    */
@@ -66,7 +67,8 @@ public class CommonDao {
       retResult = new Result(listFields);
     } catch (Exception e) {
       e.printStackTrace();
-      retResult = new Result("40001", "Exception!!!" + e.getMessage());
+      retResult = new Result("40001",
+              String.format("Invoke getDescField() Exception!!! Table=[%s], Message = [%s]", tableName, e.getMessage()));
     }
 
     logger.trace("CommonDao - getDescField() Exit");
