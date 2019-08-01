@@ -1,6 +1,5 @@
 <template>
 <div class="buy-root" style="width:85%;margin-left:7.5%">
-
     <div class="manage-charts">
         <div class="chartContainer" style="text-align:center">
             <div style="display:inline-block">

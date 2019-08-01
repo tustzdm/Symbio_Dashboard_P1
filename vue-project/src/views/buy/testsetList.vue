@@ -50,11 +50,11 @@ export default {
             productList: '',
             trIndex: '',
             tableData:'',
-            fatherId: ''
+            releaseId: ''
         }
     },
     created() {
-        this.fatherId = this.$route.params.releaseId;
+        this.releaseId = this.$route.params.releaseId;
         this.getProductList();
     },
     mounted() {
@@ -75,7 +75,7 @@ export default {
     components: {},
     methods: {
         getProductList() {
-            this.Fetch(`/testmgmt/getTestSetList?token=1&releaseId=${this.fatherId}`, {//需要改成${this.fatherId}
+            this.Fetch(`/testmgmt/getTestSetList?token=1&releaseId=${this.releaseId}`, {//需要改成${this.releaseId}
                 method: "GET"
             }).then(res => {
                 console.log(res);

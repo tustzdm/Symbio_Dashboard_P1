@@ -9,7 +9,7 @@
       { required: item.isRequired == 1, message: `Please input ${item.key}`, trigger: 'blur' }
     ]" :key="item.id" :label="item.label" :prop="item.key">
                 <el-col :span="15">
-                    
+
                     <el-input v-model="product[item.key]" maxlength="30" v-if="['text','Number','Text'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"></el-input>
                     <select v-if="['list','SelectList'].indexOf(item.type) >= 0" v-model="product[item.key]">
                         <option v-for="option in item.data" :value="option.code" :key="option.id">{{option.value}}</option>
@@ -24,7 +24,7 @@
                         <option :value="user.id" v-for="user in userList">{{user.fullName}}</option>
                     </select>
                     <input type="text" name="" id="" v-if="item.type === 'calender'">
-                    <p  v-if="item.type === 'calender'">sdssssssssssssssssssss</p>
+                    <p v-if="item.type === 'calender'">sdssssssssssssssssssss</p>
                     <el-date-picker v-model="product[item.key]" v-if="item.type === 'calendar'" placeholder="Choose Date"></el-date-picker>
                     <el-input type="textarea" v-model="product[item.key]" :autosize="{ minRows: 4}" v-if="item.type == 'textarea'" :maxlength="JSON.parse(item.constCondition).maxLength" show-word-limit></el-input>
                 </el-col>
@@ -52,9 +52,9 @@ export default {
             id: '',
             userList: '',
             editPageType: '',
-            product:{},//contaniner of product release testset;
-            fatherReleaseList:'',
-            fatherProductList:''
+            product: {}, //contaniner of product release testset;
+            fatherReleaseList: '',
+            fatherProductList: ''
         }
     },
     created() {
@@ -68,17 +68,17 @@ export default {
             console.log(res.cd);
 
             this.userList = res.cd.userList;
-            console.log(this.userList);    
+            console.log(this.userList);
 
-            this.uiList = res.cd.uiInfo;  
-            console.log(this.uiList);    
+            this.uiList = res.cd.uiInfo;
+            console.log(this.uiList);
 
             this.product = res.cd.data;
-            console.log(this.product);  
+            console.log(this.product);
 
             this.fatherReleaseList = res.cd.releaseList;
             this.fatherProductList = res.cd.productList;
-            
+
         });
 
         // this.Fetch(`/ui/getUiInfoList?token=111&page=product`, {
@@ -98,10 +98,23 @@ export default {
         // }).then(res => {
         //     console.log(res.cd.cd);
         //     this.userList = res.cd.cd;
-            // for(let fullName in this.userList){
-            //     this.userList[fullName].id =this.userList.id;
-            // }
+        // for(let fullName in this.userList){
+        //     this.userList[fullName].id =this.userList.id;
+        // }
         // });
+
+    },
+    watch: {
+        'product.productId': function (val) {
+            this.Fetch(`/navigation/getReleaseList?token=1&productId=${val}`, { 
+                method: "GET"
+            }).then(res => {
+
+                console.log(res.cd);
+                this.fatherReleaseList = res.cd;
+
+            });
+        },
 
     },
     methods: {

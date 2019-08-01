@@ -9,7 +9,6 @@
       { required: item.isRequired == 1, message: `Please input ${item.key}`, trigger: 'blur' }
     ]" :key="item.id" :label="item.label+' :'" :prop="item.key">
                 <el-col :span="15">
-                    <!-- <input v-if="['text','Number'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"> -->
                     <el-input v-model="product[item.key]" maxlength="30" v-if="['text','Number','Text'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"></el-input>
                     <select v-if="['list','SelectList'].indexOf(item.type) >= 0" v-model="product[item.key]">
                         <option v-for="option in item.data" :value="option.code" :key="option.id">{{option.value}}</option>
@@ -73,11 +72,30 @@ export default {
             console.log(res.cd);
             this.userList = res.cd.userList;
             this.uiList = res.cd.uiInfo;
+            // this.product = res.cd.data;
             this.product.productId = this.fatherProductId; //add release时带的productID   
-             this.product.releaseId = this.fatherReleaseId; //add release时带的productID     
+            
+             this.product.releaseId = this.fatherReleaseId; //add release时带的productID  
+             alert(this.product.productId)   ;
+             alert(this.product.releaseId)   ;
             this.fatherReleaseList = res.cd.releaseList;
             this.fatherProductList = res.cd.productList;
         });
+    },
+    watch: {
+        product: function (val) {
+            alert('asdfasdf');
+            alert('sss'+val);
+            this.Fetch(`/navigation/getReleaseList?token=1&productId=${this.product.productId}`, { 
+                method: "GET"
+            }).then(res => {
+
+                console.log(res.cd);
+                this.fatherReleaseList = res.cd;
+
+            });
+        },
+
     },
     mounted() {
         let type = this.$route.query.type;
