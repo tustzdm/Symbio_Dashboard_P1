@@ -12,23 +12,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @ClassName - Pie
+ * @ClassName - BarChart
  * @Author - admin
  * @Description - TODO
- * @Date - 2019/7/31 14:59
+ * @Date - 2019/7/31 16:32
  * @Version 1.0
  */
 
 @Service
-public class PieChart {
+public class BarChart {
 
-    private static Logger logger = LoggerFactory.getLogger(PieChart.class);
+    private static Logger logger = LoggerFactory.getLogger(BarChart.class);
 
-    public Map getPieScrollLegendChart(Integer userId, String locale, Map<String, Object> data) {
+    public Map getBarCategoryStackChart(Integer userId, String locale, Map<String, Object> data) {
 
         Map<String, Object> map = new HashMap<>();
         try {
-            map.put("key", "PieScrollLegend");
+            map.put("key", "BarCategoryStack");
             map.put("data", data);
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,7 +40,7 @@ public class PieChart {
 
         Map<String, Object> map = new HashMap<>();
         try {
-            File file = new File("data-service/src/main/java/com/symbio/dashboard/data/json/PieScrollLegendChart.json");
+            File file = new File("data-service/src/main/java/com/symbio/dashboard/data/json/BarYCategoryStackChart.json");
             String content = FileUtil.readAsString(file);
             JSONObject jsonObject = new JSONObject(content);
             map = JSONUtil.toMap(jsonObject);
@@ -48,10 +48,5 @@ public class PieChart {
             e.printStackTrace();
         }
         return map;
-    }
-
-
-    private double getValues() {
-        return Math.round(300 + Math.random() * 700) / 10;
     }
 }

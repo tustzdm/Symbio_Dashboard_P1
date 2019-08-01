@@ -141,10 +141,9 @@ public class ProductController extends BaseController {
 
     @RequestMapping("/getProductPieChart")
     public Result getProductPieChart(@RequestParam(value = "token") String token,
-                                     @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
-                                     @RequestParam(value = "productId", required = false) Integer productId) {
+                                     @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale) {
         Integer userId = 0;
-        return productService.getProductPieChart(userId, locale, productId);
+        return productService.getProductChart(userId, locale);
     }
 
     private Result getProductListBase(String token, String locale, Integer pageIndex, Integer pageSize) {

@@ -1,0 +1,42 @@
+{
+  "legend": {
+    "data": [
+      "Tesla",
+      "Hawk",
+      "Falcon",
+      "Hermes"
+    ],
+    "orient": "vertical",
+    "top": 20,
+    "bottom": 20,
+    "right": 10,
+    "selected": -1
+  },
+  "series": {
+    "data": [
+      {
+        "name": "Tesla",
+        "value": 89.0
+      },
+      {
+        "name": "Hawk",
+        "value": 86.0
+      },
+      {
+        "name": "Falcon",
+        "value": 70.0
+      },
+      {
+        "name": "Hermes",
+        "value": 93.0
+      }
+    ],
+    "center": [
+      "40%",
+      "50%"
+    ],
+    "name": "product",
+    "radius": "55%"
+  },
+  "title": "Product Pie Chart"
+}

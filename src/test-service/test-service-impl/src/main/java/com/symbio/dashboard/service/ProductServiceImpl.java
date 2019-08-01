@@ -1,6 +1,7 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.data.charts.BarChart;
 import com.symbio.dashboard.data.charts.PieChart;
 import com.symbio.dashboard.data.dao.ProductDao;
 import com.symbio.dashboard.data.dao.UserDao;
@@ -17,9 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName - ProductServiceImpl
@@ -43,6 +42,8 @@ public class ProductServiceImpl implements ProductService {
     private UserDao userDao;
     @Autowired
     private PieChart pieChart;
+    @Autowired
+    private BarChart barChart;
 
     @Override
     public Result getProductList(Integer userId, String locale) {
@@ -223,14 +224,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Result getProductPieChart(Integer userId, String locale, Integer... productId) {
+    public Result getProductChart(Integer userId, String locale) {
 
-        Map<String, Object> map;
+        Map<String, Object> map = new HashMap<>();
+        List charts = new ArrayList();
         try {
-            map = pieChart.getProductPieChartInfo(userId, locale);
+
+            Map data = pieChart.setChartData(); //service.getReportData();
+            Map data2 = barChart.setChartData(); //service.getReportData();
+            Map pieMap = pieChart.getPieScrollLegendChart(userId, locale, data);
+            Map barMap = barChart.getBarCategoryStackChart(userId, locale, data2);
+            charts.add(pieMap);
+            charts.add(barMap);
+            map.put("charts", charts);
+
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("", "");
+            return new Result("000120", "Chart");
         }
         return new Result(map);
     }
