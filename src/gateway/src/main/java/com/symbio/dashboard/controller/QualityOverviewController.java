@@ -1,4 +1,4 @@
-package com.symbio.dashboard.report;
+package com.symbio.dashboard.controller;
 
 
 import com.symbio.dashboard.Result;
@@ -10,7 +10,6 @@ import com.symbio.dashboard.report.dro.saveUploadInformation.ListList;
 import com.symbio.dashboard.report.dro.saveUploadInformation.ListRowChart;
 import com.symbio.dashboard.report.service.QualityViewLayoutService;
 import com.symbio.dashboard.report.service.QualityViewService;
-import com.symbio.dashboard.report.service.SaveQualityViewLeyoutService;
 import com.symbio.dashboard.report.service.getQualityView.GetOverviewAuth;
 import com.symbio.dashboard.report.service.getQualityView.GetOverviewAuthImpl;
 import com.symbio.dashboard.report.service.getQualityViewLayout.GetOverviewLayoutAuth;
@@ -39,6 +38,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController //相当于@ResponseBody+@Controller
 @RequestMapping("/menu")
+@SuppressWarnings("unchecked")
 public class QualityOverviewController {
 
 
@@ -56,13 +56,6 @@ public class QualityOverviewController {
     private QualityViewLayoutService qualityViewLayout;
 
     /**
-     * 成员对象用于在前端页面布局保存时，将布局信息保存到数据库中之后，返回给前端信息
-     */
-    @Autowired
-    private SaveQualityViewLeyoutService saveQualityViewLeyout;
-
-
-    /**
      * 此方法用于调用返回总的QualityOverview类型数据，测试最终的json串
      *
      * 测试接口：
@@ -73,7 +66,7 @@ public class QualityOverviewController {
 
     @RequestMapping("/getQualityOverview")
     public Result getQualityOverview(@RequestParam(value = "token",required = false) String token,
-                                              @RequestParam(value = "locale",required = false) String locale,
+                                              @RequestParam(value = "locale",required = false, defaultValue = "en_US") String locale,
                                               @RequestParam(value = "search",required = false) Search search){
 
         //根据token获得role权限
@@ -84,13 +77,9 @@ public class QualityOverviewController {
         }
         Map<String,Integer> role = (Map<String, Integer>) result.getCd();
 
-
-        String locale1 = "zh_cn";
-        String locale2 = "en_us";
-
         Search search1 = new Search(0,new SearchCommon("","",""),null);
 
-        return qualityViewService.getQualityOverview(role,locale1,search1);
+        return qualityViewService.getQualityOverview(role, locale, search1);
     }
 
 
@@ -107,7 +96,7 @@ public class QualityOverviewController {
      */
     @RequestMapping("/getQualityViewLayout")
     public Result getQualityViewLayout(@RequestParam String token,
-                                       @RequestParam(value = "locale",required = false) String locale){
+                                       @RequestParam(value = "locale",required = false, defaultValue = "en_US") String locale){
 
         GetOverviewLayoutAuth auth = new GetOverviewLayoutAuthImpl();
         Result result = auth.getLayoutAuth(token);
@@ -115,9 +104,6 @@ public class QualityOverviewController {
             return result;
         }
 
-        if (locale == null){
-            locale = "en_us";
-        }
         return qualityViewLayout.getQualityViewLayout(locale);
     }
 
@@ -139,7 +125,7 @@ public class QualityOverviewController {
      */
     @RequestMapping("/saveQualityViewLayout")
     public Result saveQualityViewLayout(@RequestParam(value = "token") String token,
-                                        @RequestParam(value = "locale") String locale,
+                                        @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                         @RequestParam(value = "listChartCommon",required = false) List<ListChartCommon> listChartCommons,
                                         @RequestParam(value = "listChartOther",required = false) List<ListChartOther> listChartOthers,
                                         @RequestParam(value = "listRowChart",required = false) List<ListRowChart> listRowCharts,
@@ -173,7 +159,7 @@ public class QualityOverviewController {
 
 
 
-        return saveQualityViewLeyout.getSaveFeedback(locale,list,list2,list3,list4);
+        return qualityViewLayout.getSaveFeedback(locale,list,list2,list3,list4);
     }
 
 

@@ -13,11 +13,6 @@
   <dependencies>
     <dependency>
       <groupId>com.symbio</groupId>
-      <artifactId>data-service</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.symbio</groupId>
       <artifactId>setting-service-interface</artifactId>
       <version>${project.version}</version>
     </dependency>

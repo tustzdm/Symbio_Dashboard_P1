@@ -204,6 +204,13 @@ CREATE TABLE `ui_info` (
   `version` VARCHAR(45) NULL,
   `validation` SMALLINT NOT NULL COMMENT '0: false, 1: true' DEFAULT 1,
   `display` SMALLINT NOT NULL DEFAULT '1' COMMENT '1: enable, 4: removed' DEFAULT 1,
+  
+  `create_time` datetime DEFAULT NULL COMMENT 'create time',
+  `create_user` int(10) unsigned DEFAULT NULL COMMENT 'user id for creation',
+  `create_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
+  `update_user` int(10) unsigned DEFAULT NULL COMMENT 'user id updated',
+  `update_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniqe_ui_info_page_key` (`page`, `key`),
   UNIQUE KEY `uniqe_ui_info_page_dbfield` (`page`, `db_field`)

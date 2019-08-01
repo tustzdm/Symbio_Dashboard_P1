@@ -15,6 +15,7 @@ import org.json.JSONObject;
  * @Modified By:
  */
 
+@SuppressWarnings("unchecked")
 public class JSONUtil {
 
   /**

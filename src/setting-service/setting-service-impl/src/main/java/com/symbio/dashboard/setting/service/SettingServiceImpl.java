@@ -15,8 +15,5 @@ import org.springframework.stereotype.Service;
 @Service
 public class SettingServiceImpl implements SettingService {
 
-//  @Override
-//  public Result getDictionaryByType(String type){
-//    return null;
-//  }
+
 }

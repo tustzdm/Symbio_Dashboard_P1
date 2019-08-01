@@ -11,5 +11,11 @@
 
   <artifactId>bug-service-impl</artifactId>
 
-
+  <dependencies>
+    <dependency>
+      <groupId>com.symbio</groupId>
+      <artifactId>bug-service-interface</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>

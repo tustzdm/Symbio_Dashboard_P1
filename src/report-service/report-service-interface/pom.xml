@@ -11,28 +11,4 @@
 
   <artifactId>report-service-interface</artifactId>
 
-  <dependencies>
-
-    <dependency>
-      <groupId>com.symbio</groupId>
-      <artifactId>common-service</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
-    <dependency>
-      <groupId>com.alibaba</groupId>
-      <artifactId>fastjson</artifactId>
-      <version>1.2.47</version>
-    </dependency>
-
-      <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-annotations</artifactId>
-          <version>2.9.8</version>
-          <scope>compile</scope>
-      </dependency>
-
-  </dependencies>
-
 </project>

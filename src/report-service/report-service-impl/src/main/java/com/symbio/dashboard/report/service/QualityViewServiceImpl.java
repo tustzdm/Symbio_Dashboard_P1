@@ -32,10 +32,6 @@ public class QualityViewServiceImpl implements QualityViewService {
     @Override
     public Result getQualityOverview(Map<String,Integer> role, String locale, Search search) {
 
-        //1 auth
-        //2 role
-
-        //
         Result result = setQualityOverview(role,locale,search);
 
         return result;
@@ -286,7 +282,6 @@ public class QualityViewServiceImpl implements QualityViewService {
             OtherReport otherReport = new OtherReport();
             otherReport.setKey(key);
             otherReport.setData(null);
-            //TODO 错误的提示
 
             list.add(otherReport);
 

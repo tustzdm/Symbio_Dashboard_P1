@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * @ClassName - UiInfo
@@ -76,4 +77,22 @@ public class UiInfo {
 
     @Column(name = "display", nullable = false)
     private Integer display = 1;
+
+    @Column(name = "create_time")
+    private Date createTime;
+
+    @Column(name = "create_user")
+    private Integer createUser;
+
+    @Column(name = "create_user_name")
+    private String createUserName;
+
+    @Column(name = "update_time")
+    private Date updateTime;
+
+    @Column(name = "update_user")
+    private Integer updateUser;
+
+    @Column(name = "update_user_name")
+    private String updateUserName;
 }

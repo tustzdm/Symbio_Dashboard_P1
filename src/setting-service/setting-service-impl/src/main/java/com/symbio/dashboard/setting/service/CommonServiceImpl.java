@@ -3,7 +3,6 @@ package com.symbio.dashboard.setting.service;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.repository.DictionaryRep;
-import com.symbio.dashboard.dictionary.dto.message.UiInfoPageNames;
 import com.symbio.dashboard.enums.UIInfoPage;
 import com.symbio.dashboard.model.Dictionary;
 import com.symbio.dashboard.util.StringUtil;
@@ -58,7 +57,7 @@ public class CommonServiceImpl implements CommonService {
 
     private Result getDictionaryInfoResult(String type) {
         List<Dictionary> dictionaryList;
-        List<UiInfoPageNames> pageNamesList = new ArrayList<>();
+        List<Map<String, Object>> pageNamesList = new ArrayList<>();
 
         try {
 
@@ -69,14 +68,14 @@ public class CommonServiceImpl implements CommonService {
             }
 
             for (Dictionary d : dictionaryList) {
-                UiInfoPageNames uiInfoPageNames = new UiInfoPageNames();
+                Map<String, Object> mapDict = new HashMap<String, Object>();
 
-                uiInfoPageNames.setId(d.getId());
-                uiInfoPageNames.setType(d.getType());
-                uiInfoPageNames.setCode(d.getCode());
-                uiInfoPageNames.setValue(d.getValue());
+                mapDict.put("id", d.getId());
+                mapDict.put("type", d.getType());
+                mapDict.put("code", d.getCode());
+                mapDict.put("value", d.getValue());
 
-                pageNamesList.add(uiInfoPageNames);
+                pageNamesList.add(mapDict);
             }
 
         } catch (Exception e) {

@@ -45,5 +45,5 @@ public class LanguageUi {
     private String version = null;
 
     @Column(name = "validation" , nullable = false)
-    private Integer validation = 1;
+    private Integer validation;
 }

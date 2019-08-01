@@ -11,26 +11,22 @@
 
   <artifactId>test-service</artifactId>
   <packaging>pom</packaging>
-  <modules>
-    <module>test-service-interface</module>
-    <module>test-service-impl</module>
-  </modules>
-
 
   <dependencies>
     <dependency>
       <groupId>com.symbio</groupId>
       <artifactId>common-service</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
-
     <dependency>
       <groupId>com.symbio</groupId>
       <artifactId>data-service</artifactId>
       <version>${project.version}</version>
     </dependency>
-
   </dependencies>
 
-
+  <modules>
+    <module>test-service-interface</module>
+    <module>test-service-impl</module>
+  </modules>
 </project>

@@ -11,5 +11,11 @@
 
   <artifactId>file-service-impl</artifactId>
 
-
+  <dependencies>
+    <dependency>
+      <groupId>com.symbio</groupId>
+      <artifactId>file-service-interface</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 </project>

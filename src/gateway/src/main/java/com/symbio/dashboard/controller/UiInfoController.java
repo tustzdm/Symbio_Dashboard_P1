@@ -1,9 +1,10 @@
-package com.symbio.dashboard.ui;
+package com.symbio.dashboard.controller;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.common.CommonAuthService;
+import com.symbio.dashboard.model.UiInfo;
 import com.symbio.dashboard.setting.service.CommonService;
-import com.symbio.dashboard.ui.dto.upload.UiInfoUpload;
+import com.symbio.dashboard.setting.service.PageElementService;
 import com.symbio.dashboard.ui.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,6 @@ public class UiInfoController {
 
     @Autowired
     private GetUiInfoListAuthService getUiInfoListAuthService;
-    @Autowired
-    private GetUiInfoListService getUiInfoListService;
 
     @Autowired
     private CommonAuthService commonAuthService;
@@ -36,13 +35,12 @@ public class UiInfoController {
 
     @Autowired
     private UpdateUiElementAuthService updateUiElementAuthService;
-    @Autowired
-    private UpdateUiElementService updateUiElementService;
 
     @Autowired
     private RemoveUiElementAuthService removeUiElementAuthService;
+
     @Autowired
-    private RemoveUiElementService removeUiElementService;
+    private PageElementService pageElementService;
 
     /**
      * @InterfaceNumber 5.1
@@ -58,6 +56,7 @@ public class UiInfoController {
      */
     @RequestMapping("/getUiInfoList")
     public Result getUiInfoList(@RequestParam(value = "token") String token,
+                                @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                 @RequestParam(value = "page") String page) {
         Result result;
         try {
@@ -66,10 +65,10 @@ public class UiInfoController {
                 return result;
             }
 
-            UiInfoUpload uiInfoUpload = new UiInfoUpload();
-            uiInfoUpload.setPage(page);
+//            UiInfoUpload uiInfoUpload = new UiInfoUpload();
+//            uiInfoUpload.setPage(page);
 
-            result = getUiInfoListService.getUiInfoList(uiInfoUpload);
+            result = pageElementService.getUiInfoList(locale, page);
             if (!result.isSuccess()) {
                 return result;
             }
@@ -94,15 +93,18 @@ public class UiInfoController {
      * localhost:8080/ui/getUiInfoList?token=111
      */
     @RequestMapping("/updateUiElement")
-    public Result updateUiElement(@RequestBody UiInfoUpload uiInfoUpload) {
+    public Result updateUiElement(@RequestParam(value = "token") String token,
+                                  @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                  @RequestBody UiInfo data) {
         Result result;
         try {
-            result = updateUiElementAuthService.updateUiElementAuth(uiInfoUpload.getToken());
-            if (!result.isSuccess()) {
-                return result;
-            }
+//            result = updateUiElementAuthService.updateUiElementAuth(uiInfoUpload.getToken());
+//            if (!result.isSuccess()) {
+//                return result;
+//            }
 
-            result = updateUiElementService.updateUiElement(uiInfoUpload);
+            Integer userId = 1;
+            result = pageElementService.updateUiElement(userId, locale, data);
             if (!result.isSuccess()) {
                 return result;
             }
@@ -128,6 +130,7 @@ public class UiInfoController {
      */
     @RequestMapping("/removeUiElement")
     public Result removeUiElement(@RequestParam(value = "token") String token,
+                                  @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                   @RequestParam(value = "id") Integer id) {
         Result result;
         try {
@@ -136,7 +139,7 @@ public class UiInfoController {
                 return result;
             }
 
-            result = removeUiElementService.removeUiElement(id);
+            result = pageElementService.removeUiElement(locale, id);
             if (!result.isSuccess()) {
                 return result;
             }

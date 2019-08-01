@@ -18,5 +18,4 @@ public interface QualityViewService {
      */
     Result getQualityOverview(Map<String,Integer> role, String locale, Search search);
 
-
 }

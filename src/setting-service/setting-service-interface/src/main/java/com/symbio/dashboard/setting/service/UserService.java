@@ -12,6 +12,8 @@ public interface UserService {
     Result getUserListByStatus(Integer status);
 
     Result getUserInfo(String locale, Integer id);
-    Result getUserList(String locale,Integer productId);
+
+    Result getUserList(String locale, Integer productId);
+
     Result getUserListByStatus(String locale, Integer status);
 }

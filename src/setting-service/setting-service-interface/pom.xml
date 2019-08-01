@@ -10,16 +10,4 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>setting-service-interface</artifactId>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.symbio</groupId>
-      <artifactId>common-service</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.symbio</groupId>
-      <artifactId>data-service</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-  </dependencies>
 </project>

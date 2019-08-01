@@ -11,5 +11,17 @@
 
   <artifactId>monitor</artifactId>
 
+  <dependencies>
+    <dependency>
+      <groupId>com.symbio</groupId>
+      <artifactId>common-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.symbio</groupId>
+      <artifactId>data-service</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
 
 </project>
