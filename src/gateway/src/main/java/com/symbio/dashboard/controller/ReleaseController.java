@@ -118,4 +118,11 @@ public class ReleaseController extends BaseController {
 
         return result;
     }
+
+    @RequestMapping("/getReleaseChart")
+    public Result getReleaseChart(@RequestParam(value = "token") String token,
+                                  @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale) {
+        Integer userId = 0;
+        return releaseService.getReleaseChart(userId, locale);
+    }
 }

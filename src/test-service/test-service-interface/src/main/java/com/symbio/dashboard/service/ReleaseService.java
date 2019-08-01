@@ -20,4 +20,6 @@ public interface ReleaseService {
     Result getReleaseUiInfo(Integer userId, String locale, Integer uiInfo, Integer id);
 
     Result getNavigationList(Integer userId, String locale, Integer productId, Integer total);
+
+    Result getReleaseChart(Integer userId, String locale);
 }

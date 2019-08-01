@@ -139,8 +139,8 @@ public class ProductController extends BaseController {
         return getProductListBase(token, locale, pageIndex, pageSize);
     }
 
-    @RequestMapping("/getProductPieChart")
-    public Result getProductPieChart(@RequestParam(value = "token") String token,
+    @RequestMapping("/getProductChart")
+    public Result getProductChart(@RequestParam(value = "token") String token,
                                      @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale) {
         Integer userId = 0;
         return productService.getProductChart(userId, locale);

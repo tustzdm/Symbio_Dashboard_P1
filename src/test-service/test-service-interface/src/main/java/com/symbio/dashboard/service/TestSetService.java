@@ -21,4 +21,6 @@ public interface TestSetService {
     Result getTestSetUiInfo(Integer userId, String locale, Integer uiInfo, Integer id);
 
     Result getNavigationList(Integer userId, String locale, Integer releaseId, Integer total);
+
+    Result getTestSetChart(Integer userId, String locale);
 }

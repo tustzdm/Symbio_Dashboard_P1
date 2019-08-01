@@ -3,7 +3,6 @@ package com.symbio.dashboard.controller;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.model.TestSet;
 import com.symbio.dashboard.service.TestSetService;
-import com.symbio.dashboard.service.TestSetServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,5 +123,12 @@ public class TestSetController extends BaseController {
         }
 
         return result;
+    }
+
+    @RequestMapping("/getTestSetChart")
+    public Result getTestSetChart(@RequestParam(value = "token") String token,
+                                  @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale) {
+        Integer userId = 0;
+        return testSetService.getTestSetChart(userId, locale);
     }
 }

@@ -1,6 +1,8 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.data.charts.BarChart;
+import com.symbio.dashboard.data.charts.PieChart;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.dao.TestSetDao;
 import com.symbio.dashboard.data.dao.UserDao;
@@ -16,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * @ClassName - TestSetServiceImpl
@@ -41,6 +43,11 @@ public class TestSetServiceImpl implements TestSetService {
     private UserDao userDao;
     @Autowired
     private CommonDao commonDao;
+
+    @Autowired
+    private PieChart pieChart;
+    @Autowired
+    private BarChart barChart;
 
     @Override
     public Result getTestSetList(Integer userId, String locale, Integer releaseId, Integer pageIndex, Integer pageSize) {
@@ -181,5 +188,26 @@ public class TestSetServiceImpl implements TestSetService {
         }
 
         return testsetDao.getNavigationList(userId, locale, releaseId, total);
+    }
+
+    @Override
+    public Result getTestSetChart(Integer userId, String locale) {
+        Map<String, Object> map = new HashMap<>();
+        List charts = new ArrayList();
+        try {
+
+            Map data = pieChart.setChartData(); //service.getReportData();
+            Map data2 = barChart.setChartData(); //service.getReportData();
+            Map pieMap = pieChart.getPieScrollLegendChart(userId, locale, data);
+            Map barMap = barChart.getBarCategoryStackChart(userId, locale, data2);
+            charts.add(pieMap);
+            charts.add(barMap);
+            map.put("charts", charts);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("000120", "Chart");
+        }
+        return new Result(map);
     }
 }

@@ -1,6 +1,8 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.data.charts.BarChart;
+import com.symbio.dashboard.data.charts.PieChart;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.dao.ReleaseDao;
 import com.symbio.dashboard.data.dao.UserDao;
@@ -14,17 +16,13 @@ import com.symbio.dashboard.model.Release;
 import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
-import com.symbio.dashboard.util.EntityUtils;
 import com.symbio.dashboard.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName - ReleaseServiceImpl
@@ -58,6 +56,11 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Autowired
     private CommonDao commonDao;
+
+    @Autowired
+    private PieChart pieChart;
+    @Autowired
+    private BarChart barChart;
 
     @Override
     public Result getReleaseList(Integer productId, Integer pageIndex, Integer pageSize) {
@@ -191,6 +194,27 @@ public class ReleaseServiceImpl implements ReleaseService {
             logger.info(String.format("ec:%s, em:%s", result.getEc(), result.getEm()));
         }
         return result;
+    }
+
+    @Override
+    public Result getReleaseChart(Integer userId, String locale) {
+        Map<String, Object> map = new HashMap<>();
+        List charts = new ArrayList();
+        try {
+
+            Map data = pieChart.setChartData(); //service.getReportData();
+            Map data2 = barChart.setChartData(); //service.getReportData();
+            Map pieMap = pieChart.getPieScrollLegendChart(userId, locale, data);
+            Map barMap = barChart.getBarCategoryStackChart(userId, locale, data2);
+            charts.add(pieMap);
+            charts.add(barMap);
+            map.put("charts", charts);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result("000120", "Chart");
+        }
+        return new Result(map);
     }
 
     private Result verifyInfo(Release releaseInfo) {
