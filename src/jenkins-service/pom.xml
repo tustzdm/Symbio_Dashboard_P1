@@ -23,6 +23,11 @@
       <artifactId>data-service</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.offbytwo.jenkins</groupId>
+      <artifactId>jenkins-client</artifactId>
+      <version>0.3.8</version>
+    </dependency>
   </dependencies>
 
   <modules>

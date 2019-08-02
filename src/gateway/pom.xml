@@ -78,6 +78,18 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!--jenkins-->
+<!--        <dependency>-->
+<!--            <groupId>com.symbio</groupId>-->
+<!--            <artifactId>jenkins-service-interface</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>com.symbio</groupId>
+            <artifactId>jenkins-service-impl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

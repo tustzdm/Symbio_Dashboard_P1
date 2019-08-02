@@ -12,10 +12,13 @@
   <artifactId>jenkins-service-impl</artifactId>
 
   <dependencies>
+
+
     <dependency>
       <groupId>com.symbio</groupId>
       <artifactId>jenkins-service-interface</artifactId>
       <version>${project.version}</version>
     </dependency>
+
   </dependencies>
 </project>
