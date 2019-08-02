@@ -21,7 +21,7 @@
                     <!-- <el-progress :text-inside="true" :stroke-width="20" :percentage="90"></el-progress> -->
                 </template>
             </el-table-column>
-            <el-table-column label="Operation">
+            <el-table-column align="right" label="Operation">
                 <template slot-scope="scope">
                     <el-button :formId="scope.row.id" class="editDeleteBtn" @click="editRouter" icon="el-icon-edit" circle></el-button>
                     <el-button :formId="scope.row.id" class="editDeleteBtn" @click="deleteTr" type="danger" icon="el-icon-delete" circle></el-button>
@@ -128,8 +128,11 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.echarts{
+    padding:none
+}
 .el-table__row td:first-child .cell div:first-child {
-    padding-left: 60px;
+    padding-left: 70px;
     text-align: left;
 }
 
@@ -141,8 +144,8 @@ export default {
 
 .el-table__row td:first-child .cell div:last-child {
     font-family: Poppins;
-    text-align: left;
-    padding-left: 60px;
+    text-align: left; 
+    padding-left: 70px;
 }
 
 .editDeleteBtn {}
