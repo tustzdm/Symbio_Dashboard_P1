@@ -4,7 +4,7 @@
         <h2 style="width:100%;padding-left:150px">Add {{pageType}}</h2>
         <el-divider></el-divider>
         <el-form :model="product" ref="product" label-width="300px">
-            <p>{{product}}</p>
+            <!-- <p>{{product}}</p> -->
             <el-form-item v-for="item in uiList" :rules="[
       { required: item.isRequired == 1, message: `Please input ${item.key}`, trigger: 'blur' }
     ]" :key="item.id" :label="item.label+' :'" :prop="item.key">
@@ -64,7 +64,6 @@ export default {
         this.pageType = this.$route.params.pageType;
         this.fatherProductId = this.$route.params.productId;
         this.fatherReleaseId = this.$route.params.releaseId;
-        alert(this.pageType);
 
         this.Fetch(`/testmgmt/get${this.pageType}UiInfo?token=1&uiInfo=1&id=`, { //将所有的数据集合到一个借口里了，uiInfod对应pageType,id对应Product或者release的值
             method: "GET"
@@ -76,16 +75,12 @@ export default {
             this.product.productId = this.fatherProductId; //add release时带的productID   
             
              this.product.releaseId = this.fatherReleaseId; //add release时带的productID  
-             alert(this.product.productId)   ;
-             alert(this.product.releaseId)   ;
             this.fatherReleaseList = res.cd.releaseList;
             this.fatherProductList = res.cd.productList;
         });
     },
     watch: {
         product: function (val) {
-            alert('asdfasdf');
-            alert('sss'+val);
             this.Fetch(`/navigation/getReleaseList?token=1&productId=${this.product.productId}`, { 
                 method: "GET"
             }).then(res => {

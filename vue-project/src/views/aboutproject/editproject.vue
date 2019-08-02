@@ -4,7 +4,7 @@
         <h2 style="width:100%;padding-left:150px">Edit {{editPageType}}</h2>
         <el-divider></el-divider>
         <el-form :model="product" ref="product" label-width="300px">
-            <p>{{product}}</p>
+            <!-- <p>{{product}}</p> -->
             <el-form-item v-for="item in uiList" :rules="[
       { required: item.isRequired == 1, message: `Please input ${item.key}`, trigger: 'blur' }
     ]" :key="item.id" :label="item.label" :prop="item.key">

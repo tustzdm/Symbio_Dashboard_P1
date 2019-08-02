@@ -5,8 +5,8 @@
         <select v-model="page" id="" style="margin-left:20px;height:30px">
             <option v-for="item in pageList" :value="item.code">{{item.value}}</option>
         </select>
-        <el-button @click="addRouter" style="float:right;margin-right:10%;color:white;background-color:#7a85a1;heigt:27px;width:150px;border:none">
-            + Add Element
+        <el-button @click="addRouter"  style="float:right;margin-right:10%;padding:none;color:white;background-color:#7a85a1;width:150px;border:none">
+           <span style="font-family:Poppins;font-weight:bold;"> + Add Element</span>
         </el-button>
     </div>
     <table class="common-table" style="width:100%">

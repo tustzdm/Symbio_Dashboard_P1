@@ -201,7 +201,6 @@ export default {
   },
   components: {},
   mounted() {
-    this.initProjet()
     this.getTestManagerInfo()
     window.onresize = () => {
       return (() => {
@@ -218,11 +217,6 @@ export default {
     }
   },
   methods: {
-    initProjet() {
-      getProjectInfo().then(res => {
-        this.projectInfo = res.data
-      })
-    },
     getTestManagerInfo() {
       let params = {
         autoStatus: this.autoStatus,
