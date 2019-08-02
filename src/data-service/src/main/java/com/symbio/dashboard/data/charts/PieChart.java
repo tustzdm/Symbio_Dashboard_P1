@@ -28,6 +28,8 @@ public class PieChart {
 
         Map<String, Object> map = new HashMap<>();
         try {
+            File file = new File("PieScrollLegendChart.json");
+            map.put("path", file.getAbsolutePath());
             map.put("key", "PieScrollLegend");
             map.put("data", data);
         } catch (Exception e) {
