@@ -3,8 +3,6 @@ package com.symbio.dashboard.setting.service;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.dao.UserDao;
 import com.symbio.dashboard.data.repository.UiInfoRep;
-import com.symbio.dashboard.data.repository.UserRep;
-import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.UiInfo;
 import com.symbio.dashboard.model.User;
 import org.slf4j.Logger;
@@ -12,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -87,6 +84,7 @@ public class PageElementServiceImpl implements PageElementService {
         try {
             UiInfo uiInfo = uiInfoRep.getOne(id);
             uiInfo.setDisplay(4); // delete
+            uiInfoRep.saveAndFlush(uiInfo);
         } catch (Exception e) {
             e.printStackTrace();
             if (match(e.getMessage())) {
