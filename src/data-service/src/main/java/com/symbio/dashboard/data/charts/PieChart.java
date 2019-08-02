@@ -40,7 +40,7 @@ public class PieChart {
 
         Map<String, Object> map = new HashMap<>();
         try {
-            File file = new File("data-service/src/main/java/com/symbio/dashboard/data/json/PieScrollLegendChart.json");
+            File file = new File("data-service\\src\\main\\java\\com\\symbio\\dashboard\\data\\json\\PieScrollLegendChart.json");
             String content = FileUtil.readAsString(file);
             JSONObject jsonObject = new JSONObject(content);
             map = JSONUtil.toMap(jsonObject);
