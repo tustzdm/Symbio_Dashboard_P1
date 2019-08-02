@@ -28,7 +28,7 @@ public class PieChart {
 
         Map<String, Object> map = new HashMap<>();
         try {
-            String realPath = PieChart.class.getResource("").getFile();
+            String realPath = PieChart.class.getResource("").getPath();
             File file = new File(System.getProperty("user.dir"));
             File file2 = new File(realPath);
             map.put("path", file.getAbsolutePath());
@@ -45,13 +45,13 @@ public class PieChart {
 
         Map<String, Object> map = new HashMap<>();
         try {
-            System.out.println(System.getProperty("user.dir"));
-            String realPath = PieChart.class.getResource("").getFile();
-            File file = new File(realPath);
-            System.out.println(file.getParent() + "/json/PieScrollLegendChart.json");
+//            System.out.println(System.getProperty("user.dir"));
+            String realPath = PieChart.class.getResource("").getPath();
+            File path = new File(realPath);
+//            System.out.println(f.getParent() + "/json/PieScrollLegendChart.json");
 
 //            File file = new File(System.getProperty("user.dir") + "/data-service/src/main/java/com/symbio/dashboard/data/json/PieScrollLegendChart.json");
-//            File file = new File(System.getProperty("user.dir") + "/com/symbio/dashboard/data/json/PieScrollLegendChart.json");
+            File file = new File(path.getParent() + "/json/PieScrollLegendChart.json");
             String content = FileUtil.readAsString(file);
             JSONObject jsonObject = new JSONObject(content);
             map = JSONUtil.toMap(jsonObject);
