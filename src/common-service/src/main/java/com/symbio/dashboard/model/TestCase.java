@@ -115,8 +115,8 @@ public class TestCase {
     @Column(name = "create_time")
     private Date createTime;
 
-    @Column(name = "create_user")
-    private Integer createUser;
+    @Column(name = "create_user_id")
+    private Integer createUserId;
 
     @Column(name = "create_user_name")
     private String createUserName;
@@ -124,8 +124,8 @@ public class TestCase {
     @Column(name = "update_time")
     private Date updateTime;
 
-    @Column(name = "update_user")
-    private Integer updateUser;
+    @Column(name = "update_user_id")
+    private Integer updateUserId;
 
     @Column(name = "update_user_name")
     private String updateUserName;
