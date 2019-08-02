@@ -498,25 +498,25 @@ CREATE TABLE `test_run` (
   `run_engineer_id` int(10) unsigned NOT NULL COMMENT 'user id',
   `run_qa_id` int(10) unsigned NOT NULL COMMENT 'user id',
   `run_tep_id` int(10) unsigned NOT NULL COMMENT 'TEP id',
-
-  `testrun_field_bool1` smallint(5) DEFAULT NULL COMMENT 'TestRun field bool. 1-true,0-false',
-  `testrun_field_bool2` smallint(5) DEFAULT NULL COMMENT 'TestRun field bool. 1-true,0-false',
-  `testrun_field_bool3` smallint(5) DEFAULT NULL COMMENT 'TestRun field bool. 1-true,0-false',
-  `testrun_field_int1` int(10) DEFAULT NULL COMMENT 'TestRun field int',
-  `testrun_field_int2` int(10) DEFAULT NULL COMMENT 'TestRun field int',
-  `testrun_field_int3` int(10) DEFAULT NULL COMMENT 'TestRun field int',
-  `testrun_field_int4` int(10) DEFAULT NULL COMMENT 'TestRun field int',
-  `testrun_field_int5` int(10) DEFAULT NULL COMMENT 'TestRun field int',
-  `testrun_field_str1` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
-  `testrun_field_str2` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
-  `testrun_field_str3` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
-  `testrun_field_str4` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
-  `testrun_field_str5` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
-  `testrun_field_str6` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
-  `testrun_field_str7` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
-  `testrun_field_str8` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
-  `testrun_field_str9` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
-  `testrun_field_str10` varchar(255) DEFAULT NULL COMMENT 'TestRun field string',
+ 
+  `trunfield_bool1` smallint(5) DEFAULT NULL COMMENT 'TestCase field bool. 1-true,0-false',
+  `trunfield_bool2` smallint(5) DEFAULT NULL COMMENT 'TestCase field bool. 1-true,0-false',
+  `trunfield_bool3` smallint(5) DEFAULT NULL COMMENT 'TestCase field bool. 1-true,0-false',
+  `trunfield_int1` int(10) DEFAULT NULL COMMENT 'Field int',
+  `trunfield_int2` int(10) DEFAULT NULL COMMENT 'Field int',
+  `trunfield_int3` int(10) DEFAULT NULL COMMENT 'Field int',
+  `trunfield_int4` int(10) DEFAULT NULL COMMENT 'Field int',
+  `trunfield_int5` int(10) DEFAULT NULL COMMENT 'Field int',
+  `trunfield_str1` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `trunfield_str2` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `trunfield_str3` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `trunfield_str4` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `trunfield_str5` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `trunfield_str6` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `trunfield_str7` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `trunfield_str8` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `trunfield_str9` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `trunfield_str10` varchar(255) DEFAULT NULL COMMENT 'Field string',
   
   `validation` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT '0-invalid,1-valid,4-delete,8-archived',
   
@@ -528,34 +528,32 @@ CREATE TABLE `test_run` (
   `update_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   
   PRIMARY KEY (`id`),
---  KEY `idx_test_run_testset_id` (`testset_id`),
   UNIQUE KEY `unique_testrun_testset_case_locale` (`testset_id`,`testcase_id`, `locale`, `validation`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- Test Result
 DROP TABLE IF EXISTS `test_result`;
 CREATE TABLE `test_result` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Key id',
-  
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Key id',  
   `testset_id` int(10) unsigned NOT NULL COMMENT 'FK: [test_set].id',
-  `test_run_id` int(10) unsigned NOT NULL COMMENT 'FK: [test_run].id',
+  `testrun_id` int(10) unsigned NOT NULL COMMENT 'FK: [test_run].id',
 
   `auto_run_status` int(10) unsigned DEFAULT NULL COMMENT 'Auomation Status：0-Not RUN, 1-AUTOMATION SUCCESS,2-Automation FAILURE,3-Automation SKIP,4-Automation SUCCESS WITHIN PERCENTAGE,16-Automation STARTED, 101-TestNotRequired',
   `job_weather` int(10) unsigned DEFAULT '0' COMMENT 'job status：0-unkown,1-sunny,2-cloud,3-dull,4-fog,5-rainy',
 
-  `startTime` datetime DEFAULT NULL COMMENT 'start Locale time',
-  `endTime` datetime DEFAULT NULL COMMENT 'end Locale Time',
-  `startUTCTime` datetime DEFAULT NULL COMMENT 'start Time',
-  `timezone` float DEFAULT NULL COMMENT 'Timezone',
-  `execDuration` int(10) unsigned DEFAULT NULL COMMENT 'execute duration seconds.',
+  `start_time` datetime DEFAULT NULL COMMENT 'start Locale time',
+  `end_time` datetime DEFAULT NULL COMMENT 'end Locale Time',
+  `start_utc_time` datetime DEFAULT NULL COMMENT 'start Time',
+  `time_zone` float DEFAULT NULL COMMENT 'Timezone',
+  `exec_duration` int(10) unsigned DEFAULT NULL COMMENT 'execute duration seconds.',
   `note` varchar(255) DEFAULT NULL COMMENT 'Note or Bug',
-  `exceptionDesc` varchar(8000) DEFAULT NULL COMMENT 'exception',
-  `exception` text,
-  `stacktrace` text,
+  `exception_desc` varchar(8000) DEFAULT NULL COMMENT 'exception',
+  `text_exception` text,
+  `text_stacktrace` text,
 
   `qa_status` varchar(32) DEFAULT '0' COMMENT 'Reference to dictionary.code. 0-(blank),1-pass,2-conditional pass,4-fail,5-Testing Not Required',
   `browser` int(10) unsigned DEFAULT 0 COMMENT '0-firefox,1-chrome',
-  `browsersVesion` varchar(16) DEFAULT '' COMMENT 'version of browser',
+  `browsers_vesion` varchar(16) DEFAULT '' COMMENT 'version of browser',
   `notes` varchar(255) DEFAULT '' COMMENT 'notes',
 
   `bug_report_id` int(10) unsigned DEFAULT NULL COMMENT 'bug id',
@@ -565,24 +563,24 @@ CREATE TABLE `test_result` (
   `issue_reason_id` int(10) unsigned DEFAULT NULL COMMENT 'reason id',
   `mobile_device` varchar(255) DEFAULT NULL,
 
-  `testresult_field_bool1` smallint(5) DEFAULT NULL COMMENT 'TestResult field bool. 1-true,0-false',
-  `testresult_field_bool2` smallint(5) DEFAULT NULL COMMENT 'TestResult field bool. 1-true,0-false',
-  `testresult_field_bool3` smallint(5) DEFAULT NULL COMMENT 'TestResult field bool. 1-true,0-false',
-  `testresult_field_int1` int(10) DEFAULT NULL COMMENT 'TestResult field int',
-  `testresult_field_int2` int(10) DEFAULT NULL COMMENT 'TestResult field int',
-  `testresult_field_int3` int(10) DEFAULT NULL COMMENT 'TestResult field int',
-  `testresult_field_int4` int(10) DEFAULT NULL COMMENT 'TestResult field int',
-  `testresult_field_int5` int(10) DEFAULT NULL COMMENT 'TestResult field int',
-  `testresult_field_str1` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
-  `testresult_field_str2` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
-  `testresult_field_str3` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
-  `testresult_field_str4` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
-  `testresult_field_str5` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
-  `testresult_field_str6` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
-  `testresult_field_str7` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
-  `testresult_field_str8` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
-  `testresult_field_str9` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
-  `testresult_field_str10` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `tresult_field_bool1` smallint(5) DEFAULT NULL COMMENT 'TestResult field bool. 1-true,0-false',
+  `tresult_field_bool2` smallint(5) DEFAULT NULL COMMENT 'TestResult field bool. 1-true,0-false',
+  `tresult_field_bool3` smallint(5) DEFAULT NULL COMMENT 'TestResult field bool. 1-true,0-false',
+  `tresult_field_int1` int(10) DEFAULT NULL COMMENT 'TestResult field int',
+  `tresult_field_int2` int(10) DEFAULT NULL COMMENT 'TestResult field int',
+  `tresult_field_int3` int(10) DEFAULT NULL COMMENT 'TestResult field int',
+  `tresult_field_int4` int(10) DEFAULT NULL COMMENT 'TestResult field int',
+  `tresult_field_int5` int(10) DEFAULT NULL COMMENT 'TestResult field int',
+  `tresult_field_str1` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `tresult_field_str2` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `tresult_field_str3` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `tresult_field_str4` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `tresult_field_str5` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `tresult_field_str6` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `tresult_field_str7` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `tresult_field_str8` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `tresult_field_str9` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
+  `tresult_field_str10` varchar(255) DEFAULT NULL COMMENT 'TestResult field string',
   
   `last_run_time` datetime DEFAULT NULL COMMENT 'last run time',
   `display` int(10) unsigned DEFAULT '1' COMMENT 'Display or not.0-no,1-yes',
@@ -594,7 +592,8 @@ CREATE TABLE `test_result` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
   `update_user` int(10) unsigned DEFAULT NULL COMMENT 'user id updated',
   `update_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_testresult_testset_testrun_display_validation` (`testset_id`,`testrun_id`, `display`, `validation`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 Drop Table IF EXISTS `attribute_template`;
@@ -655,7 +654,7 @@ CREATE TABLE `project_config` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Key',
   `configName` varchar(64) NOT NULL COMMENT 'Config name',
   `configValue` varchar(255) NOT NULL COMMENT 'Config item',
-  `Description` varchar(255) DEFAULT NULL COMMENT 'Config description',
+  `description` varchar(255) DEFAULT NULL COMMENT 'Config description',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_project_config_name` (`configName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -670,4 +669,150 @@ CREATE TABLE `result_message` (
   `formatter` varchar(255) NULL COMMENT 'Formatter for locales if needed',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_result_message_code` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- 2019/8/2
+DROP TABLE IF EXISTS `function_info`;
+CREATE TABLE `function_info` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  `name` varchar(32) NOT NULL COMMENT 'Function unique Name',
+  `fvalue` int(10) unsigned DEFAULT NULL COMMENT 'Function value',
+  `description` varchar(255) DEFAULT NULL COMMENT 'description',
+  `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Create datetime',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `function_info_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of function_info
+-- ----------------------------
+INSERT INTO `function_info` VALUES ('1', 'Edit', '1', null, '2019-08-02 09:00:00');
+INSERT INTO `function_info` VALUES ('2', 'Create', '2', null, '2019-08-02 09:00:00');
+INSERT INTO `function_info` VALUES ('3', 'Delete', '4', null, '2019-08-02 09:00:00');
+INSERT INTO `function_info` VALUES ('4', 'Copy', '8', null, '2019-08-02 09:00:00');
+INSERT INTO `function_info` VALUES ('5', 'Export', '16', null, '2019-08-02 09:00:00');
+INSERT INTO `function_info` VALUES ('6', 'Import', '32', null, '2019-08-02 09:00:00');
+INSERT INTO `function_info` VALUES ('8', 'Run', '128', null, '2019-08-02 09:00:00');
+INSERT INTO `function_info` VALUES ('9', 'Email', '256', null, '2019-08-02 09:00:00');
+
+DROP TABLE IF EXISTS `menu`;
+CREATE TABLE `menu` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  `name` varchar(32) NOT NULL COMMENT 'Name',
+  `groupName` varchar(64) DEFAULT NULL COMMENT 'Group name',
+  `logo` varchar(255) DEFAULT NULL COMMENT 'logo',
+  `url` varchar(255) DEFAULT NULL COMMENT 'url',
+  `idx` smallint(5) unsigned NOT NULL DEFAULT '99' COMMENT 'order',
+  `description` varchar(255) DEFAULT NULL COMMENT 'description',
+  `parentId` int(10) unsigned DEFAULT NULL COMMENT 'Parent Id',
+  `createTime` datetime DEFAULT NULL COMMENT 'Create Time',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Upate datetime',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_menu_name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of menu
+-- ----------------------------
+INSERT INTO `menu` VALUES ('1', 'LayOut', 'Setting', null, '', '1', null, null, '2019-08-02 17:16:42', '2019-08-02 13:35:04');
+INSERT INTO `menu` VALUES ('2', 'Page Element', 'Setting', null, '', '2', null, null, '2019-08-02 17:16:42', '2019-08-02 13:35:04');
+INSERT INTO `menu` VALUES ('3', 'PRODUCT', 'Menu', null, 'product', '11', null, null, '2019-08-02 17:16:42', '2019-08-02 13:35:09');
+INSERT INTO `menu` VALUES ('4', 'RELEASE', 'Menu', null, 'release', '12', null, null, '2019-08-02 11:50:30', '2019-08-02 10:34:39');
+INSERT INTO `menu` VALUES ('5', 'TEST RESULT', 'Menu', null, 'testresult', '13', null, null, '2019-08-02 11:50:30', '2019-08-02 11:54:10');
+INSERT INTO `menu` VALUES ('6', 'BUG', 'Menu', null, 'buglist', '14', null, null, '2019-08-02 11:50:30', '2019-08-02 13:59:27');
+INSERT INTO `menu` VALUES ('7', 'REPORT', 'Menu', null, 'report', '16', null, null, '2019-08-02 11:50:30', '2019-08-02 11:54:14');
+INSERT INTO `menu` VALUES ('8', 'ISSUE TYPE', 'Admin', null, 'issuetypelist', '60', null, null, '2019-08-02 11:50:30', '2019-08-02 14:29:08');
+INSERT INTO `menu` VALUES ('9', 'FILE INFORMATION', 'Admin', null, 'fileinfo', '62', null, null, '2019-08-02 15:39:40', '2019-08-02 14:31:48');
+INSERT INTO `menu` VALUES ('10', 'SETTING', 'Admin', '', 'setting', '64', '', null, '2019-08-02 10:31:55', '2019-08-02 10:37:17');
+INSERT INTO `menu` VALUES ('11', 'TEPLIST', 'Admin', '', 'teplist', '66', '', null, '2019-08-02 10:31:55', '2019-08-02 10:37:17');
+
+DROP TABLE IF EXISTS `test_exec_platform`;
+CREATE TABLE `test_exec_platform` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `productId` int(10) unsigned NOT NULL COMMENT 'FK: product.id',
+  `jenkinsId` int(10) unsigned NOT NULL COMMENT 'FK: jenkins_info.id',
+  `name` varchar(32) NOT NULL COMMENT 'TEP name',
+
+  `display` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'display or not. 0-hide,1-show',
+  `createTime` datetime DEFAULT NULL COMMENT 'create time',
+  `createUserId` int(10) unsigned NOT NULL COMMENT 'create user',
+  `createUserName` varchar(32) DEFAULT NULL COMMENT 'create user name',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
+  `updateUserId` int(10) unsigned DEFAULT NULL COMMENT 'update user',
+  `updateUserName` varchar(32) DEFAULT NULL COMMENT 'update user name',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_TEP_product_jenkins_id` (`productId`, `jenkinsId`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `jenkins_svr_info`;
+CREATE TABLE `jenkins_svr_info` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `url` varchar(128) DEFAULT NULL COMMENT 'jenkins url',
+  `username` varchar(32) NOT NULL COMMENT 'username',
+  `password` varchar(32) NOT NULL COMMENT 'password',
+  `jobname` varchar(64) NOT NULL COMMENT 'jobname',
+  `jobview` varchar(500) DEFAULT NULL COMMENT 'jobview',
+  `jobConfigXml` text,
+  `display` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'display or not. 0-hide,1-show',
+  `createTime` datetime DEFAULT NULL COMMENT 'create time',
+  `createUserId` int(10) unsigned NOT NULL COMMENT 'create user',
+  `createUserName` varchar(32) DEFAULT NULL COMMENT 'create user name',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
+  `updateUserId` int(10) unsigned DEFAULT NULL COMMENT 'update user',
+  `updateUserName` varchar(32) DEFAULT NULL COMMENT 'update user name',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_JSI_url_jobname` (`url`, `jobname`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `jenkins_job_parameter`;
+CREATE TABLE `jenkins_job_parameter` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `jsiId` int(10) unsigned NOT NULL COMMENT 'jenkins svr id. FK: jenkins_svr_info.id',
+  `name` varchar(32) NOT NULL COMMENT 'name',
+  `refType` varchar(32) NOT NULL COMMENT 'setting Type. 0-boolean,1-string,2-number,3-choice',
+  `description` varchar(1024) DEFAULT NULL,
+  `defaultValue` varchar(64) DEFAULT NULL,
+  `display` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '.0-not ,1-yes',
+  `createTime` datetime DEFAULT NULL COMMENT 'create time',
+  `createUserId` int(10) unsigned NOT NULL COMMENT 'create user',
+  `createUserName` varchar(32) DEFAULT NULL COMMENT 'name',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
+  `updateUserId` int(10) unsigned DEFAULT NULL COMMENT 'update user',
+  `updateUserName` varchar(32) DEFAULT NULL COMMENT 'name',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `jenkins_job_history_main`;
+CREATE TABLE `jenkins_job_history_main` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `testSetId` int(10) unsigned NOT NULL COMMENT 'FK: [test_run].testset_id',
+  `tepId` int(10) DEFAULT NULL COMMENT 'test execplat form Id. FK: test_exec_platform.id',
+  `jsiId` int(10) unsigned NOT NULL COMMENT 'jenkins svr id. FK: jenkins_svr_info.id',
+  `jobname` varchar(255) DEFAULT NULL,
+  `jobpath` varchar(500) DEFAULT NULL,
+  `jenkinsJobParameter` varchar(4096) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `buildId` int(10) DEFAULT NULL COMMENT 'buildId',
+  `parseCount` int(10) unsigned DEFAULT NULL,
+  `description` varchar(200) NOT NULL COMMENT 'description',
+  
+  `display` int(10) NOT NULL DEFAULT '1' COMMENT '.0-not，1-yes',
+  `createTime` datetime DEFAULT NULL COMMENT 'create time',
+  `createUserId` int(10) unsigned NOT NULL COMMENT 'create user',
+  `createUserName` varchar(32) DEFAULT NULL COMMENT 'name',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `jenkins_job_history_detail`;
+CREATE TABLE `jenkins_job_history_detail` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `mainId` int(10) unsigned NOT NULL COMMENT 'FK: [jenkins_job_history_main].id',  
+
+  `testSetId` int(10) unsigned NOT NULL COMMENT 'FK: [test_run].testset_id',
+  `testRunId` int(10) NOT NULL COMMENT 'Test run Id.FK: [test_run].id',
+  `testCaseId` int(10) NOT NULL COMMENT 'Test Case Id',
+  `locale` varchar(8) DEFAULT '' COMMENT 'locale EN-US',  
+  `display` int(10) NOT NULL DEFAULT '1' COMMENT '.0-not，1-yes',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
