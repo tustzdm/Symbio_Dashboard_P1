@@ -24,4 +24,7 @@ public class ProjectConst {
     public static final String REPORTFILENAME = "ReportFilename";
     public static final String TEST = "testName";
     public static final String TEST_LANG_LOCALE = "TEST_LANG_LOCALE";
+
+    public static final String PIE_SCROLL_LEGEND_CHART = "/json/PieScrollLegendChart.json";
+    public static final String BAR_Y_CATEGORY_STACK_CHART = "/json/BarYCategoryStackChart.json";
 }

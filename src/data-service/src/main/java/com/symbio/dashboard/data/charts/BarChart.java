@@ -1,5 +1,6 @@
 package com.symbio.dashboard.data.charts;
 
+import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.util.JSONUtil;
 import org.aspectj.util.FileUtil;
 import org.json.JSONObject;
@@ -40,7 +41,8 @@ public class BarChart {
 
         Map<String, Object> map = new HashMap<>();
         try {
-            File file = new File(System.getProperty("user.dir") + "\\data-service\\src\\main\\java\\com\\symbio\\dashboard\\data\\json\\BarYCategoryStackChart.json");
+            String path = PieChart.class.getResource(ProjectConst.BAR_Y_CATEGORY_STACK_CHART).getPath();
+            File file = new File(path);
             String content = FileUtil.readAsString(file);
             JSONObject jsonObject = new JSONObject(content);
             map = JSONUtil.toMap(jsonObject);

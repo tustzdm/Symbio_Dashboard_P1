@@ -1,5 +1,6 @@
 package com.symbio.dashboard.data.charts;
 
+import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.util.JSONUtil;
 import org.aspectj.util.FileUtil;
 import org.json.JSONObject;
@@ -28,11 +29,6 @@ public class PieChart {
 
         Map<String, Object> map = new HashMap<>();
         try {
-            String realPath = PieChart.class.getResource("").getPath();
-            File file = new File(System.getProperty("user.dir"));
-            File file2 = new File(realPath);
-            map.put("path", file.getAbsolutePath());
-            map.put("realPath", file2.getParent() + "/json/PieScrollLegendChart.json");
             map.put("key", "PieScrollLegend");
             map.put("data", data);
         } catch (Exception e) {
@@ -45,13 +41,8 @@ public class PieChart {
 
         Map<String, Object> map = new HashMap<>();
         try {
-//            System.out.println(System.getProperty("user.dir"));
-            String realPath = PieChart.class.getResource("").getPath();
-            File path = new File(realPath);
-//            System.out.println(f.getParent() + "/json/PieScrollLegendChart.json");
-
-//            File file = new File(System.getProperty("user.dir") + "/data-service/src/main/java/com/symbio/dashboard/data/json/PieScrollLegendChart.json");
-            File file = new File(path.getParent() + "/json/PieScrollLegendChart.json");
+            String path = PieChart.class.getResource(ProjectConst.PIE_SCROLL_LEGEND_CHART).getPath();
+            File file = new File(path);
             String content = FileUtil.readAsString(file);
             JSONObject jsonObject = new JSONObject(content);
             map = JSONUtil.toMap(jsonObject);
