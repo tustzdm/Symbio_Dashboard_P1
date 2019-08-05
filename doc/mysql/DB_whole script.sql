@@ -434,7 +434,7 @@ CREATE TABLE `test_set` (
 Drop Table IF EXISTS `test_case`;
 CREATE TABLE `test_case` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'key',
-  `product_id` int unsigned NOT NULL COMMENT 'Product Id',
+  `product_id` int unsigned NOT NULL DEFAULT '0' COMMENT 'Product Id',
   `case_id` varchar(32) NOT NULL COMMENT 'Case ID',
   `case_type` int unsigned NOT NULL DEFAULT '1' COMMENT '1-Automation,2-Manual Test,4-API Test,8-Performance Test',
   `summary` varchar(255) DEFAULT NULL COMMENT 'Case summary',
@@ -492,8 +492,12 @@ CREATE TABLE `test_run` (
   `locale` varchar(8) DEFAULT NULL COMMENT 'Locale. ex: en_US',
   `display` int(10) unsigned DEFAULT '1' COMMENT 'Display or not.0-no,1-yes',
   `description` varchar(255) DEFAULT NULL COMMENT 'Description',
- 
+  
   `run_model` int unsigned DEFAULT NULL COMMENT 'TestRun case type. 10-Automation, 11-Automated web, 12-Automated ios, 13-Automated android, 20-Manual, 30-Performance, 40-Unit',
+  
+  `status` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Last test result status. 0-Not Run/unkown',
+  `screenshot_flag` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'The flag of last test result that has screenshot or not. 0-unkown, 1-yes',
+  
   `app_path` varchar(1024) DEFAULT NULL,
   `run_engineer_id` int(10) unsigned NOT NULL COMMENT 'user id',
   `run_qa_id` int(10) unsigned NOT NULL COMMENT 'user id',
@@ -729,7 +733,7 @@ INSERT INTO `menu` VALUES ('11', 'TEPLIST', 'Admin', '', 'teplist', '66', '', nu
 DROP TABLE IF EXISTS `test_exec_platform`;
 CREATE TABLE `test_exec_platform` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `productId` int(10) unsigned NOT NULL COMMENT 'FK: product.id',
+  `productId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'FK: product.id',
   `jenkinsId` int(10) unsigned NOT NULL COMMENT 'FK: jenkins_info.id',
   `name` varchar(32) NOT NULL COMMENT 'TEP name',
 

@@ -1,16 +1,12 @@
 package com.symbio.dashboard;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * 此类为用于每次返回时的错误代码以及错误信息提示
  */
 @Data
-@NoArgsConstructor
-//@AllArgsConstructor
-public class Result {
+public class Result<T> implements java.io.Serializable {
 
     /**
      * 错误代码
@@ -25,14 +21,19 @@ public class Result {
     /**
      * 当错误代码为0时，返回相应的类型信息
      */
-    private Object cd = null;
+    private T cd = null;
+
+    public Result() {
+        this.ec = "0";
+        this.em = "";
+    }
 
     public Result(String code, String message){
         this.ec = code;
         this.em = message;
     }
 
-    public Result(Object data){
+    public Result(T data){
         this.ec = "0";
         this.em = "";
         this.cd = data;
@@ -65,7 +66,7 @@ public class Result {
      * @param cd 返回对象
      */
     @Deprecated
-    public void setCdAndRightEcAndEm(Object cd){
+    public void setCdAndRightEcAndEm(T cd){
         setEc("0");
         setEm("");
         setCd(cd);

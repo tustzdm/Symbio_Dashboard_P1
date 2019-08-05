@@ -9,7 +9,7 @@ public class ProjectConst {
     public static final String PASSWORD = "jenkins.service.password";
 
     // job name
-    public static final String JOBNAME = "Dashboard_WebAutomation_run1";
+    public static final String JOBNAME = "jenkins.service.jobname";
     // view name
     public static final String VIEWNAME = "TEP";
 

@@ -3,7 +3,7 @@ package com.symbio.dashboard.jenkins;
 import com.offbytwo.jenkins.JenkinsServer;
 import com.offbytwo.jenkins.model.Job;
 import com.symbio.dashboard.bean.JenkinsBean;
-import com.symbio.dashboard.bean.ResultData;
+import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.util.StringUtil;
 import org.slf4j.Logger;
@@ -36,9 +36,9 @@ public class JenkinsServiceImpl implements IJenkinsService {
     CommonDao commonDao;
 
     @Override
-    public ResultData<List<JenkinsBean>> getParams(String url, String username, String password, String jobName) {
+    public Result<List<JenkinsBean>> getParams(String url, String username, String password, String jobName) {
         JenkinsServer server;
-        ResultData<List<JenkinsBean>> resultData = new ResultData<>();
+        Result<List<JenkinsBean>> resultData = new Result<>();
 //        if (!StringUtils.isEmpty(jobName)) {
 //            ResultData<JenkinsServer> retData = getJenkinsServer(url, username, password);
 //            if (retData.isExecuteSuccess()) {
@@ -61,10 +61,10 @@ public class JenkinsServiceImpl implements IJenkinsService {
     }
 
     @Override
-    public ResultData<String> getJobLastStatus(String url, String username, String password, String jobname,
-                                               Integer buildId) {
+    public Result<String> getJobLastStatus(String url, String username, String password, String jobname,
+                                                 Integer buildId) {
         JenkinsServer server;
-        ResultData<String> ret = new ResultData<>();
+        Result<String> ret = new Result<>();
 //        ResultData<JenkinsServer> retData = getJenkinsServer(url, username, password);
 //        if (retData.isExecuteSuccess()) {
 //            server = retData.getData();
@@ -111,22 +111,28 @@ public class JenkinsServiceImpl implements IJenkinsService {
 
     @Override
     public Job getJob(String jenkinsUrl, String username, String password, String jobName) throws IOException {
-        ResultData<JenkinsServer> jenkinsServer = getJenkinsServer(jenkinsUrl, username, password);
+        Result<JenkinsServer> jenkinsServer = getJenkinsServer(jenkinsUrl, username, password);
         if(jenkinsServer.hasError()) {
-            log.error(jenkinsServer.getEc(),jenkinsServer.getEm());
+            log.error(String.format("Ec:%s, Em:%s",jenkinsServer.getEc(),jenkinsServer.getEm()));
             return null;
         }
 
-        return jenkinsServer.getData().getJob(jobName);
+        JenkinsServer retJServer = jenkinsServer.getCd();
+        if(retJServer == null) {
+            log.warn("JenkinsServer is NULL!!!");
+            return null;
+        }
+
+        return retJServer.getJob(jobName);
     }
 
-    private ResultData<JenkinsServer> getJenkinsServer(String url, String username, String password) {
+    private Result<JenkinsServer> getJenkinsServer(String url, String username, String password) {
         log.info("JenkinsServiceImpl.getJenkinsServer Enter.");
 
-        ResultData<JenkinsServer> retData = new ResultData<>();
+        Result<JenkinsServer> retData = new Result<>();
         JenkinsServer server = null;
         if (StringUtil.isEmpty(url)) {
-            retData = commonDao.getResultData("000101", "jenkins url");
+            retData = commonDao.getResult("000101", "jenkins url");
         }
         try {
             if (StringUtil.isEmpty(username) || StringUtil.isEmpty(password)) {
@@ -135,14 +141,14 @@ public class JenkinsServiceImpl implements IJenkinsService {
                 server = new JenkinsServer(new URI(url), username, password);
             }
             if (!server.isRunning()) {
-                retData = commonDao.getResultData("000201");
+                retData = commonDao.getResult("000201");
             } else {
-                retData.setData(server);
+                retData.setCd(server);
             }
         } catch (URISyntaxException e) {
             e.printStackTrace();
             log.error("Wrong jenkins url", e);
-            retData = commonDao.getResultData("000102", "accessing Jenkins service");
+            retData = commonDao.getResult("000102", "accessing Jenkins service");
         }
 
         log.info("JenkinsServiceImpl.getJenkinsServer Exit");

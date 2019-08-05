@@ -1,7 +1,6 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.bean.ResultData;
 import com.symbio.dashboard.data.repository.ResultMessageRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.entity.Message;
@@ -336,27 +335,6 @@ public class CommonDao {
       return null;
     } else {
       return new Result(code, strMsg);
-    }
-  }
-
-  public ResultData getResultData(String code) {
-    return getLocalResultData(Locales.EN_US.toString(), code);
-  }
-
-  public ResultData getResultData(String code, Object... args) {
-    return getLocalResultData(Locales.EN_US.toString(), code, args);
-  }
-
-  public ResultData getResultDataArgs(String locale, String code, Object... args) {
-    return getLocalResultData(locale, code, args);
-  }
-
-  private ResultData getLocalResultData(String locale, String code, Object... args){
-    String strMsg = getMessage(locale, code, args);
-    if (strMsg == null || strMsg.isEmpty()) {
-      return null;
-    } else {
-      return new ResultData(code, strMsg);
     }
   }
 
