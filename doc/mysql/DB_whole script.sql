@@ -558,7 +558,6 @@ CREATE TABLE `test_result` (
   `qa_status` varchar(32) DEFAULT '0' COMMENT 'Reference to dictionary.code. 0-(blank),1-pass,2-conditional pass,4-fail,5-Testing Not Required',
   `browser` int(10) unsigned DEFAULT 0 COMMENT '0-firefox,1-chrome',
   `browsers_vesion` varchar(16) DEFAULT '' COMMENT 'version of browser',
-  `notes` varchar(255) DEFAULT '' COMMENT 'notes',
 
   `bug_report_id` int(10) unsigned DEFAULT NULL COMMENT 'bug id',
   `bug_report_content` varchar(1024) DEFAULT '' COMMENT 'JIRA link of bug',

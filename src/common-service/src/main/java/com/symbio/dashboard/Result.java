@@ -8,6 +8,8 @@ import lombok.Data;
 @Data
 public class Result<T> implements java.io.Serializable {
 
+    private static final long serialVersionUID = 480912760628480815L;
+
     /**
      * 错误代码
      */
@@ -70,6 +72,15 @@ public class Result<T> implements java.io.Serializable {
         setEc("0");
         setEm("");
         setCd(cd);
+    }
+
+    public String getErrorInfo() {
+        String strMsg = "";
+
+        if(hasError()) {
+            strMsg = String.format("ec = [%s], em = [%s]", this.ec, this.em);
+        }
+        return strMsg;
     }
 
 }
