@@ -6,7 +6,7 @@
             <el-table-column prop="name" label="Name" :width="0.5*tabelWidth">
                 <template slot-scope="scope">
                     <div>
-                        <router-link :to="{ name: 'productInfo', params: { productName: scope.row.name, productId:scope.row.id}}">{{scope.row.name}}</router-link>
+                        <router-link :to="{ name: 'productInfo', query: { productId:scope.row.id}}">{{scope.row.name}}</router-link>
                     </div>
                     <div>{{scope.row.description}}</div>
                 </template>
@@ -93,7 +93,7 @@ export default {
             this.$router.push({
                 path: 'editproject',
                 name: 'editproject',
-                params: {
+                query: {
                     id: this.productList[this.trIndex].id, //Pass the tr data to next router
                     editPageType: 'Product'
                 }

@@ -61,9 +61,9 @@ export default {
         }
     },
     created() {
-        this.pageType = this.$route.params.pageType;
-        this.fatherProductId = this.$route.params.productId;
-        this.fatherReleaseId = this.$route.params.releaseId;
+        this.pageType = this.$route.query.pageType;
+        this.fatherProductId = this.$route.query.productId;
+        this.fatherReleaseId = this.$route.query.releaseId;
 
         this.Fetch(`/testmgmt/get${this.pageType}UiInfo?token=1&uiInfo=1&id=`, { //将所有的数据集合到一个借口里了，uiInfod对应pageType,id对应Product或者release的值
             method: "GET"

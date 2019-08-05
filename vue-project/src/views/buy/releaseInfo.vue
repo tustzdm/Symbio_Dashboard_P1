@@ -55,8 +55,8 @@ export default {
          
     },
     created(){
-        this.productId =this.$route.params.productId;
-        this.releaseId =this.$route.params.releaseId;
+        this.productId =this.$route.query.productId;
+        this.releaseId =this.$route.query.releaseId;
     },
     methods: {
         initProjet() {
@@ -68,7 +68,7 @@ export default {
             this.$router.push({
                 path: '/addproject/index',
                 name: 'addproject',
-                params: {
+                query: {
                     pageType: 'TestSet',
                     productId: this.productId,
                     releaseId: this.releaseId

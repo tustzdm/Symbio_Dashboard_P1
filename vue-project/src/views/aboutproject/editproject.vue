@@ -58,8 +58,8 @@ export default {
         }
     },
     created() {
-        this.id = this.$route.params.id;
-        this.editPageType = this.$route.params.editPageType;
+        this.id = this.$route.query.id;
+        this.editPageType = this.$route.query.editPageType;
         this.Fetch(`/testmgmt/get${this.editPageType}UiInfo?token=1&uiInfo=1&id=${this.id}`, { //将所有的数据集合到一个借口里了，id对应Product或者release的值
             method: "GET"
         }).then(res => {

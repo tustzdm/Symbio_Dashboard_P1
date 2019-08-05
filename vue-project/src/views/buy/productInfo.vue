@@ -51,7 +51,7 @@ export default {
         chart: ECharts
     },
     created(){
-        this.productId =this.$route.params.productId;
+        this.productId =this.$route.query.productId;
     },
     mounted() {},
     methods: {
@@ -64,7 +64,7 @@ export default {
             this.$router.push({
                 path: '/addproject/index',
                 name: 'addproject',
-                params: {
+                query: {
                     pageType: 'Release',
                     productId: this.productId
                 }
