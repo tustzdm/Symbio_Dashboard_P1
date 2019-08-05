@@ -445,7 +445,7 @@ public class ProductDao {
                 retResult = new Result(listProduct);
             } else {
                 String strFields = "id,name";
-                String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER BY id", strFields);
+                String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER BY id DESC", strFields);
                 if (total != null && total > 0) {
                     sql += String.format(" LIMIT 0,%d", total);
                 }

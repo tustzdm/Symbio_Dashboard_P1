@@ -1,5 +1,6 @@
 package com.symbio.dashboard.bean;
 
+import com.symbio.dashboard.enums.Locales;
 import lombok.Data;
 
 /**
@@ -12,7 +13,7 @@ import lombok.Data;
 public class TestRunVO implements java.io.Serializable {
 	// Fix parameter
 	private String token;
-	private String locale;
+	private String locale = Locales.EN_US.toString();
 
 	// business info
 	private Integer userId;

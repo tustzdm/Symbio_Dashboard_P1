@@ -3,6 +3,7 @@ package com.symbio.dashboard.controller;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
 import com.symbio.dashboard.common.CommonAuthService;
+import com.symbio.dashboard.service.TestRunServiceImpl;
 import com.symbio.dashboard.setting.service.CommonServiceImpl;
 import com.symbio.dashboard.setting.service.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -28,18 +29,18 @@ public class ResultReviewController extends BaseController {
 
     private static Logger logger = LoggerFactory.getLogger(ResultReviewController.class);
 
+    @Autowired
+    private TestRunServiceImpl testRunService;
+
     @RequestMapping("/getList")
-    public Result getList(@RequestParam(value = "token") String token,
-                          @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale, @RequestBody TestRunVO testRun) {
+    public Result getList(@RequestBody TestRunVO testRun) {
         logger.trace("ResultReviewController.getList() Enter");
 
         Result retResult = new Result();
-        testRun.setToken(token);
-        testRun.setLocale(locale);
-
         Integer userId = 0;
         testRun.setUserId(userId);
 
+        retResult = testRunService.getTestRunList(testRun.getLocale(), testRun);
         if (retResult.hasError()) {
             logger.error(retResult.getErrorInfo());
         }
