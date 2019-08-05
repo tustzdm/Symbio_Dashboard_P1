@@ -1,6 +1,7 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
+import org.springframework.stereotype.Service;
 
 /**
  * @ClassName - TestCaseServiceImpl
@@ -9,6 +10,9 @@ import com.symbio.dashboard.Result;
  * @Date - 2019/8/1 15:21
  * @Version 1.0
  */
+
+@Service
+@SuppressWarnings("unchecked")
 public class TestCaseServiceImpl implements TestCaseService {
     @Override
     public Result getTestCaseList(Integer userId, String locale) {

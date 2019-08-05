@@ -7,6 +7,7 @@ import com.symbio.dashboard.dto.TestRunUiDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @ClassName - TestRunServiceImpl
@@ -15,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @Date - 2019/8/5
  * @Version 1.0
  */
+
+@Service
+@SuppressWarnings("unchecked")
 public class TestRunServiceImpl implements TestRunService {
 
     private static Logger logger = LoggerFactory.getLogger(TestRunServiceImpl.class);
