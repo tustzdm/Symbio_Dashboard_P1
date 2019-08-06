@@ -293,6 +293,66 @@ public class EntityUtils {
         return retMap;
     }
 
+    private static String getMapFieldKey(String strDbField) {
+        String key = strDbField;
+
+        if (strDbField.contains(".")) {
+            String[] arrFields = strDbField.split(".");
+            if (strDbField.length() == 2) {
+                key = CommonUtil.getCamelField(arrFields[1].trim());
+            }
+        } else {
+            key = CommonUtil.getCamelField(strDbField.trim());
+        }
+
+        return key;
+    }
+
+    private static List<String> getMapKeys(String[] arrFields) {
+        List<String> retList = new ArrayList<>();
+        for (int i = 0; i < arrFields.length; i++) {
+            retList.add(getMapFieldKey(arrFields[i]));
+        }
+        return retList;
+    }
+
+    /**
+     * 直接将字段转成Map 对象
+     *
+     * @param list
+     * @param fields
+     * @return
+     */
+    public static List<Map<String, Object>> castQuerytoMap(List<Object[]> list, String fields) {
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+        if (list.isEmpty() || StringUtil.isEmpty(fields)) {
+            return returnList;
+        }
+
+        try {
+            String[] arrFields = fields.split(",");
+            List<String> listKeys = getMapKeys(arrFields);
+
+            // 如果数组集合元素个数与实体类属性个数不一致则发生错误
+            if (list.size() != listKeys.size()) {
+                return returnList;
+            }
+
+            Map<String, Object> mapData;
+            for (Object[] item : list) {
+                mapData = new HashMap<String, Object>();
+                for (int i = 0; i < listKeys.size(); i++) {
+                    mapData.put(listKeys.get(i), item[i]);
+                }
+                returnList.add(mapData);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return returnList;
+    }
+
     /**
      * Check sql field and its method name
      * @param fields
