@@ -1,7 +1,10 @@
 package com.symbio.dashboard.bean;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.symbio.dashboard.enums.Locales;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Page Object
@@ -9,7 +12,11 @@ import lombok.Data;
  * @author Shawn
  * 
  */
+
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TestRunVO implements java.io.Serializable {
 	// Fix parameter
 	private String token;

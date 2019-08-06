@@ -22,7 +22,7 @@ spring:
 
 logging:
   level:
-    root: info
+    root: info #trace, debug, info, warn, error
   pattern:
     console: "%d - %msg%n" #     定义打印的日志格式
     #    dateformat: #设置日志日期格式

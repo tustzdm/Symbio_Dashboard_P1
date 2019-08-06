@@ -293,12 +293,20 @@ public class EntityUtils {
         return retMap;
     }
 
+    public static List<String> getDTOFields(List<String> data) {
+        List<String> retList = new ArrayList<>();
+        for (String field : data) {
+            retList.add(getMapFieldKey(field));
+        }
+        return retList;
+    }
+
     private static String getMapFieldKey(String strDbField) {
         String key = strDbField;
 
         if (strDbField.contains(".")) {
-            String[] arrFields = strDbField.split(".");
-            if (strDbField.length() == 2) {
+            String[] arrFields = strDbField.split("\\.");
+            if (arrFields.length == 2) {
                 key = CommonUtil.getCamelField(arrFields[1].trim());
             }
         } else {
@@ -334,7 +342,7 @@ public class EntityUtils {
             List<String> listKeys = getMapKeys(arrFields);
 
             // 如果数组集合元素个数与实体类属性个数不一致则发生错误
-            if (list.size() != listKeys.size()) {
+            if (list.get(0).length != listKeys.size()) {
                 return returnList;
             }
 
@@ -342,7 +350,7 @@ public class EntityUtils {
             for (Object[] item : list) {
                 mapData = new HashMap<String, Object>();
                 for (int i = 0; i < listKeys.size(); i++) {
-                    mapData.put(listKeys.get(i), item[i]);
+                    mapData.put(listKeys.get(i), WebUtil.getItemValue(item[i]));
                 }
                 returnList.add(mapData);
             }

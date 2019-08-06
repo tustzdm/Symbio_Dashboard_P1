@@ -93,6 +93,18 @@ public class CommonUtil {
         return listFields;
     }
 
+    public static List<String> getListByMergeString(String entityFields) {
+        List<String> listFields = new ArrayList<String>();
+
+        try {
+            String[] arrEntityFields = entityFields.split(",");
+            listFields = Arrays.asList(arrEntityFields);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listFields;
+    }
+
     public static void validateMapKey(Map<String, Object> map, List<String> listFields) throws Exception {
 
         Iterator iterMap = null;

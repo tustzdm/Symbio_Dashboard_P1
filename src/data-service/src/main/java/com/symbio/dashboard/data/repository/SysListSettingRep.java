@@ -19,6 +19,9 @@ public interface SysListSettingRep extends JpaRepository<SysListSetting, Integer
             "AND ui.`page` = ?1 ORDER by sls.idx", nativeQuery = true)
     List<SysListSetting> getEntityInfo(String pageName);
 
+    @Query(value = "SELECT * FROM sys_list_setting WHERE `name` = ?1 AND display = 1 AND is_entity = 1 ORDER by idx", nativeQuery = true)
+    List<SysListSetting> getEntityInfoNonUi(String pageName);
+
     @Query(value = "select s.* from sys_list_setting s " +
             "join ui_info u " +
             "on s.field = u.db_field " +

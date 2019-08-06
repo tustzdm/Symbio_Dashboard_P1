@@ -3,7 +3,8 @@ package com.symbio.dashboard.enums;
 public enum SystemListSetting {
   Product("product"),
   Release("release"),
-  TestSet("testset");
+  TestSet("testset"),
+  ResultReview("resultreview");
 
   private SystemListSetting(String page){
     this.page = page;

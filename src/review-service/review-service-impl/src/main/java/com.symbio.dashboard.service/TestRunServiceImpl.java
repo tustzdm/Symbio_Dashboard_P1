@@ -44,12 +44,12 @@ public class TestRunServiceImpl implements TestRunService {
         logger.trace("TestRunServiceImpl.getTestRunList() Enter");
         logger.trace(testRun.toString());
 
-        Result<TestRunUiDTO> retResult = new Result<TestRunUiDTO>();
+        Result<TestRunUiDTO> retResult;
 
         try {
             //TestRunUiDTO data = new TestRunUiDTO();
             // ToDo: Result<TestRunUiDTO> retTRDTO = testRunDAO.getList();
-            retResult = testRunDao.getList();
+            retResult = testRunDao.getList(locale, testRun);
 //            retResult.setCd(data);
         } catch (Exception e) {
             e.printStackTrace();
