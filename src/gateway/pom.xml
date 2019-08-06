@@ -77,6 +77,16 @@
             <artifactId>test-service-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.symbio</groupId>
+            <artifactId>review-service-interface</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.symbio</groupId>
+            <artifactId>review-service-impl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!--test-->
         <dependency>

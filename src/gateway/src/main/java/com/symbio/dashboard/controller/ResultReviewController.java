@@ -2,17 +2,13 @@ package com.symbio.dashboard.controller;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
-import com.symbio.dashboard.common.CommonAuthService;
 import com.symbio.dashboard.service.TestRunServiceImpl;
-import com.symbio.dashboard.setting.service.CommonServiceImpl;
-import com.symbio.dashboard.setting.service.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -39,6 +35,7 @@ public class ResultReviewController extends BaseController {
         Result retResult = new Result();
         Integer userId = 0;
         testRun.setUserId(userId);
+        retResult = testRunService.getTestRunList(testRun.getLocale(), testRun);
 
         retResult = testRunService.getTestRunList(testRun.getLocale(), testRun);
         if (retResult.hasError()) {

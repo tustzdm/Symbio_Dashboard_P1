@@ -2,10 +2,7 @@ package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
-import com.symbio.dashboard.data.dao.CommonDao;
-import com.symbio.dashboard.data.dao.ProductDao;
-import com.symbio.dashboard.data.dao.ReleaseDao;
-import com.symbio.dashboard.data.dao.TestSetDao;
+import com.symbio.dashboard.data.dao.*;
 import com.symbio.dashboard.dto.TestRunUiDTO;
 import com.symbio.dashboard.util.BusinessUtil;
 import org.slf4j.Logger;
@@ -39,6 +36,9 @@ public class TestRunServiceImpl implements TestRunService {
     @Autowired
     private TestSetDao testSetDao;
 
+    @Autowired
+    private TestRunDao testRunDao;
+
     @Override
     public Result getTestRunList(String locale, TestRunVO testRun) {
         logger.trace("TestRunServiceImpl.getTestRunList() Enter");
@@ -47,11 +47,10 @@ public class TestRunServiceImpl implements TestRunService {
         Result<TestRunUiDTO> retResult = new Result<TestRunUiDTO>();
 
         try {
-            TestRunUiDTO data = new TestRunUiDTO();
+            //TestRunUiDTO data = new TestRunUiDTO();
             // ToDo: Result<TestRunUiDTO> retTRDTO = testRunDAO.getList();
-            data = getDemoData(testRun);
-
-            retResult.setCd(data);
+            retResult = testRunDao.getList();
+//            retResult.setCd(data);
         } catch (Exception e) {
             e.printStackTrace();
             retResult = commonDao.getResultArgs(locale,"000102", "getting TestRun List");
@@ -91,7 +90,7 @@ public class TestRunServiceImpl implements TestRunService {
             }
             data.setReleaseList(listData);
         }
-        Result retTestSet = testSetDao.getNavigationList(testRun.getUserId(), testRun.getLocale(), testRun.getReleaseId(),null);
+        Result retTestSet = testSetDao.getNavigationList(testRun.getUserId(), testRun.getLocale(), data.getReleaseId(), null);
         if(retRelease.isSuccess()) {
             listData = (List<Map<String, Object>>)retTestSet.getCd();
             if(BusinessUtil.isIdEmpty(testRun.getTestSetId()) && !listData.isEmpty()) {
