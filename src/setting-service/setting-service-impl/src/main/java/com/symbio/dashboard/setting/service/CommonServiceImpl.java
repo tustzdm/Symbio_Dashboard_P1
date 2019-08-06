@@ -127,4 +127,15 @@ public class CommonServiceImpl implements CommonService {
 
         return retResult;
     }
+
+    /**
+     * Get config value
+     *
+     * @param key
+     * @return
+     */
+    public String getConfigValue(String key) {
+        String strValue = commonDao.getConfigValueByKey(key);
+        return StringUtil.isEmpty(strValue) ? "" : strValue;
+    }
 }

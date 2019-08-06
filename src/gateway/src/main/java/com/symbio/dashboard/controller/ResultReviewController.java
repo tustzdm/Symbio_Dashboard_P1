@@ -35,11 +35,10 @@ public class ResultReviewController extends BaseController {
         Result retResult = new Result();
         Integer userId = 0;
         testRun.setUserId(userId);
-        retResult = testRunService.getTestRunList(testRun.getLocale(), testRun);
-
-        retResult = testRunService.getTestRunList(testRun.getLocale(), testRun);
+//        retResult = testRunService.getTestRunList(testRun.getLocale(), testRun);
+        retResult = testRunService.getTestRunDemoList(testRun.getLocale(), testRun);
         if (retResult.hasError()) {
-            logger.error(retResult.getErrorInfo());
+            logger.error(String.format("ec = [%s], em = [%s]", retResult.getEc(), retResult.getEm()));
         }
 
         logger.trace("ResultReviewController.getList() Exit");

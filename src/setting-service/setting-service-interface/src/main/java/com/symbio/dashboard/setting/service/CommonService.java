@@ -11,4 +11,6 @@ public interface CommonService {
 
     // 得到Table下用户可定义的字段列表
     Result getUserDefinedFields(String locale, String table);
+
+    String getConfigValue(String key);
 }

@@ -74,13 +74,4 @@ public class Result<T> implements java.io.Serializable {
         setCd(cd);
     }
 
-    public String getErrorInfo() {
-        String strMsg = "";
-
-        if(hasError()) {
-            strMsg = String.format("ec = [%s], em = [%s]", this.ec, this.em);
-        }
-        return strMsg;
-    }
-
 }

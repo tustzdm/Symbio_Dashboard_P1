@@ -60,18 +60,33 @@ public class TestRunServiceImpl implements TestRunService {
         return retResult;
     }
 
+    @Override
+    public Result getTestRunDemoList(String locale, TestRunVO testRun) {
+        Result<TestRunUiDTO> retResult = new Result<TestRunUiDTO>();
+        try {
+            TestRunUiDTO data = getDemoData(testRun);
+            retResult.setCd(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            retResult = commonDao.getResultArgs(locale, "000102", "getting TestRun List");
+        }
+
+        logger.trace("TestRunServiceImpl.getTestRunList() Exit");
+        return retResult;
+    }
+
     private TestRunUiDTO getDemoData(TestRunVO testRun) {
         TestRunUiDTO data = new TestRunUiDTO();
 
         data.setProductId(testRun.getProductId());
         if(BusinessUtil.isIdEmpty(testRun.getReleaseId())) {
-            data.setReleaseId(1);
+            data.setReleaseId(0);
         } else {
             data.setReleaseId(testRun.getReleaseId());
         }
         // TestSetId
         if(BusinessUtil.isIdEmpty(testRun.getTestSetId())) {
-            data.setTestSetId(1);
+            data.setTestSetId(0);
         } else {
             data.setTestSetId(testRun.getTestSetId());
         }

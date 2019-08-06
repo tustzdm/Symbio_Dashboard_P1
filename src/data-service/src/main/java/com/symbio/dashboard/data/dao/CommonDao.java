@@ -1,14 +1,12 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.data.repository.ProjectConfigRep;
 import com.symbio.dashboard.data.repository.ResultMessageRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.entity.Message;
 import com.symbio.dashboard.enums.*;
-import com.symbio.dashboard.model.ResultMessage;
-import com.symbio.dashboard.model.SysListSetting;
-import com.symbio.dashboard.model.UiInfo;
-import com.symbio.dashboard.model.User;
+import com.symbio.dashboard.model.*;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.StringUtil;
@@ -25,8 +23,12 @@ import java.util.*;
 public class CommonDao {
 
   private static Logger logger = LoggerFactory.getLogger(CommonDao.class);
-    // Message Map 对象
-    private static Map<String, Message> mapMessage = null;
+
+  // Message Map 对象
+  private static Map<String, Message> mapMessage = null;
+  // ProjectConfig 配置项
+  private static Map<String, String> mapProjectConfig = null;
+
   @Autowired
   private EntityManager entityManager;
   @Autowired
@@ -37,6 +39,8 @@ public class CommonDao {
   private DictionaryDao dictionaryDao;
   @Autowired
   private ResultMessageRep messageRep;
+  @Autowired
+  private ProjectConfigRep projectConfigRep;
 
   public CommonDao() {
   }
@@ -371,11 +375,36 @@ public class CommonDao {
       e.printStackTrace();
       logger.error("CommonDao.getMessage() ERROR!!!", e);
     }
-
     return retMsg;
   }
 
   private Message getLocalMessage(ResultMessage data) {
     return new Message(data.getCode(), data.getEnUs(), data.getZhCn(), data.getFormatter());
+  }
+
+  /**
+   * Get config item info
+   *
+   * @param key
+   * @return
+   */
+  public String getConfigValueByKey(String key) {
+    String strValue = "";
+
+    try {
+      if (mapProjectConfig == null || mapProjectConfig.isEmpty()) {
+        mapProjectConfig = new HashMap<>();
+
+        List<ProjectConfig> listData = projectConfigRep.getAll();
+        for (ProjectConfig item : listData) {
+          mapProjectConfig.put(item.getConfigName(), item.getConfigValue());
+        }
+      }
+      strValue = mapProjectConfig.get(key);
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error("CommonDao.getConfigValueByItem() ERROR!!! " + e.getMessage());
+    }
+    return strValue;
   }
 }

@@ -3,13 +3,7 @@ package com.symbio.dashboard.constant;
 public class ProjectConst {
     // properties path
     public static final String PATH = "/jekins.properties";
-    // auth key
-    public static final String URL = "jenkins.service.url";
-    public static final String USERNAME = "jenkins.service.username";
-    public static final String PASSWORD = "jenkins.service.password";
 
-    // job name
-    public static final String JOBNAME = "jenkins.service.jobname";
     // view name
     public static final String VIEWNAME = "TEP";
 
@@ -27,4 +21,11 @@ public class ProjectConst {
 
     public static final String PIE_SCROLL_LEGEND_CHART = "/json/PieScrollLegendChart.json";
     public static final String BAR_Y_CATEGORY_STACK_CHART = "/json/BarYCategoryStackChart.json";
+
+    // Project Config Key. Refer to Table [project_config]
+    public static final String URL = "JenkinsServer.url";
+    public static final String JENKINS_PORT = "JenkinsServer.port";
+    public static final String USERNAME = "JenkinsServer.username";
+    public static final String PASSWORD = "JenkinsServer.password";
+    public static final String JOBNAME = "JenkinsServer.jobname";
 }

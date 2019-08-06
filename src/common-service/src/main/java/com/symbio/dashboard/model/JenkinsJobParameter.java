@@ -17,7 +17,7 @@ import java.util.Date;
 @Data
 @Entity
 @NoArgsConstructor
-@Table(name = "jenkins_svr_info")
+@Table(name = "jenkins_job_parameter")
 public class JenkinsJobParameter {
 
     @Id
@@ -60,5 +60,20 @@ public class JenkinsJobParameter {
 
     @Column(name = "updateUserName")
     private String updateUserName;
+
+    public String getJenkinsDefaultValue() {
+        StringBuffer sb = new StringBuffer();
+        if (null != this.defaultValue && !"".equals(this.defaultValue)) {
+            if (defaultValue.contains("\n")) {
+                String arr[] = defaultValue.split("\n");
+                for (int i = 0; i < arr.length; i++) {
+                    sb.append("<string>").append(arr[i]).append("</string>");
+                }
+            } else {
+                sb.append("<string>").append(defaultValue).append("</string>");
+            }
+        }
+        return sb.toString();
+    }
 
 }

@@ -9,4 +9,5 @@ public interface TestRunService {
 
     Result getTestRunList(String locale, TestRunVO testRun);
 
+    Result getTestRunDemoList(String locale, TestRunVO testRun);
 }

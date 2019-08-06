@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 
-/**F
+/**
  * @ClassName - ProjectConfig
  * @Author -
  * @Description - 此类是数据库[project_config]的实体类

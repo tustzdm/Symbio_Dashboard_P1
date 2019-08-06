@@ -13,11 +13,11 @@ import java.util.Map;
 @Service
 public interface IJenkinsService {
 
-    Result<List<JenkinsBean>> getParams(String url, String username, String password, String jobName);
+    Result<List<JenkinsBean>> getParams(String url, String userName, String password, String jobName);
 
-    Result<String> getJobLastStatus(String url, String username, String password, String jobName, Integer buildId);
+    Result<String> getJobLastStatus(String url, String userName, String password, String jobName, Integer buildId);
 
     void run(Job job, Map<String, String> params, Map<String, File> files);
 
-    Job getJob(String jenkinsUrl, String username, String password, String jobName) throws IOException;
+    Job getJob(String jenkinsUrl, String userName, String password, String jobName) throws IOException;
 }
