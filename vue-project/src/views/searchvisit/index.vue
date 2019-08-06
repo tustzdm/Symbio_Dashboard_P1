@@ -1,134 +1,7 @@
 <template>
 <div class="buy-root" style="width:85%;margin-left:7.5%">
     <!-- 两个部分mabage-top和(表格、翻页)，两者之间都用flex布局-->
-
-    <!--manage-top start,后面单独把manage-top写成一个组件-->
-    <el-card class="manage-top" shadow="hover" style="height:40px">
-        <div class="SiteSelect select">
-            <el-dropdown trigger="click">
-                <span class="el-dropdown-link">
-                    Site
-                    <i class="el-icon-caret-bottom el-icon--right"></i>
-                </span>
-                <el-dropdown-menu>
-                    <el-row class="demo-autocomplete">
-                        <el-col :span="12">
-                            <el-autocomplete class="inline-input" v-model="state2" :fetch-suggestions="querySearch" placeholder="Search here" :trigger-on-focus="false" @select="handleSelect" style="width:180px"></el-autocomplete>
-                        </el-col>
-                    </el-row>
-                    <el-dropdown-item>
-                        <div>
-                            <i class="el-icon-plus"></i>
-                            <span>
-                                <router-link to="/addproject/index">Add Product</router-link>
-                            </span>
-                        </div>
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                        <i class="el-icon-edit"></i>Edit Product
-                    </el-dropdown-item>
-                    <el-dropdown-item style="text-align:center;">
-                        <i class="el-icon-more-outline"></i>More
-                    </el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
-            <span class="sperate-arrow">
-                <i class="el-icon-arrow-right"></i>
-            </span>
-        </div>
-        <div class="SiteSelect select">
-            <el-dropdown trigger="click">
-                <span class="el-dropdown-link">
-                    OTP
-                    <i class="el-icon-caret-bottom el-icon--right"></i>
-                </span>
-                <el-dropdown-menu>
-                    <input class="select-search" type="text" placeholder="Search here" />
-                    <el-dropdown-item>
-                        <i class="el-icon-plus"></i>Add Release
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                        <i class="el-icon-edit"></i>Edit Releases
-                    </el-dropdown-item>
-                    <el-dropdown-item style="text-align:center;">
-                        <i class="el-icon-more-outline"></i>More
-                    </el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
-            <span class="sperate-arrow">
-                <i class="el-icon-arrow-right"></i>
-            </span>
-        </div>
-        <div class="product-select select">
-            <el-dropdown trigger="click">
-                <span class="el-dropdown-link">
-                    LLT-19753 OTP-One time payment
-                    <i class="el-icon-caret-bottom el-icon--right"></i>
-                </span>
-                <el-dropdown-menu>
-                    <input class="select-search" type="text" placeholder="Search here" />
-                    <el-dropdown-item>
-                        <i class="el-icon-plus"></i>Add Test Set
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                        <i class="el-icon-edit"></i>Edit Test Set
-                    </el-dropdown-item>
-                    <el-dropdown-item style="text-align:center;">
-                        <i class="el-icon-more-outline"></i>More
-                    </el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
-        </div>
-        <div class="product-select select">
-            <el-dropdown trigger="click">
-                <span class="el-dropdown-link">
-                    ADD
-                    <i class="el-icon-plus"></i>
-                </span>
-                <el-dropdown-menu>
-                    <el-dropdown-item>
-                        <span>
-                            <router-link to="/addproject/index">Add Product</router-link>
-                        </span>
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                        <span>
-                            <router-link to="/addversion/index">Add Release</router-link>
-                        </span>
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                        <span>
-                            <router-link to="/addcase/index">Add Testset</router-link>
-                        </span>
-                    </el-dropdown-item>
-                    <el-dropdown-item style="text-align:center;">
-                        <i class="el-icon-more-outline"></i>More
-                    </el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
-        </div>
-        <div class="manage-top-right">
-            <el-button style="background-color:#c2eaae;color:white" size="mini">Run</el-button>
-            <el-button style="background-color:rgb(190, 205, 223);color:white" size="mini">Refresh</el-button>
-            <el-button style="background-color:rgb(246, 184, 184);color:white" size="mini">Add Bug</el-button>
-            <div class="select" style="float:right; margin-right:30px">
-                <el-dropdown trigger="click">
-                    <span class="el-dropdown-link">
-                        Filter
-                        <i class="el-icon-caret-bottom el-icon--right"></i>
-                    </span>
-                    <el-dropdown-menu>
-                        <el-dropdown-item>Method</el-dropdown-item>
-                        <el-dropdown-item>Ownner</el-dropdown-item>
-                        <el-dropdown-item>Bug ID</el-dropdown-item>
-                        <el-dropdown-item>Testing Notes</el-dropdown-item>
-                        <el-dropdown-item>Notes</el-dropdown-item>
-                        <el-dropdown-item>Issue Peason</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-            </div>
-        </div>
-    </el-card>
+    <top></top>
     <!-- manage-top end -->
 
     <el-card class="caseTabel" shadow="hover" style="border:none">
@@ -183,17 +56,22 @@ export default {
         top: top
     },
     created() {
-            this.Fetch("/result/getList", {
-                method: "GET",
-                body: {
-                    "token": "123",
-                    "productId": 1,
-                    "releaseId": 108
-                }
-            }).then(res => {
-                console.log(res);
-               
-            })
+        // this.$axios.post("/result/getList",{body:{"token": "123",
+        //     "productId": 1,
+        //     "releaseId": 108}}).then(res => {
+        //           // success callback
+        //           console.log(res);
+        //           var ec = res.data.ec;
+        //           //debugger;
+        //           if (ec != '0') {
+        //               alert("Error Code:" + res.data.ec + ", Error Message:" + res.data.em);
+        //           } else {
+        //               this.$message.success("Operation Success！");
+        //               this.$router.go(-1);
+        //           }
+        //       }).catch(err => {
+        //           alert(err);
+        //       });
     },
     mounted() {
         this.getTestManagerInfo()
