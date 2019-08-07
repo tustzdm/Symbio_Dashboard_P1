@@ -138,7 +138,7 @@ public class TestRunDao {
 
 
     private TestRunUiDTO getData(TestRunUiDTO data, TestRunVO testRun) {
-        List<Map<String, Object>> listData = null;
+        List<Map<String, Object>> listData;
 
         data.setProductId(testRun.getProductId());
 

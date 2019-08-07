@@ -4,7 +4,7 @@ public enum ListColumns {
   KEY("key"),
   LABEL("label"),
   TYPE("type"),
-  FIELD("filed"),
+  FIELD("field"),
   ALIGN("align"),
   FORMAT("formatter");
 
