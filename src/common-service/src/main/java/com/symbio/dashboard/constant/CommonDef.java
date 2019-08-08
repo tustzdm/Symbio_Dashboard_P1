@@ -29,6 +29,7 @@ public class CommonDef {
         PIC_ROOT = rootDirectory;
         PIC_UPLOAD = PIC_ROOT + "/upload/";
         FILE_IMPORT = PIC_ROOT + "/import/";
+        FILE_IMPORT_TESTCASE = FILE_IMPORT + "testcase";
         FILE_EXPORT = PIC_ROOT + "/export/";
         FOLDER_DASHBOARD_ZIP_ROOT = PIC_ROOT + "/ziproot/";
         FOLDER_TESTRUN_ROOT = PIC_ROOT + "/testrunroot/";
@@ -41,6 +42,7 @@ public class CommonDef {
         createDicertoryIfNotExist(PIC_ROOT);
         createDicertoryIfNotExist(PIC_UPLOAD);
         createDicertoryIfNotExist(FILE_IMPORT);
+        createDicertoryIfNotExist(FILE_IMPORT_TESTCASE);
         createDicertoryIfNotExist(FILE_EXPORT);
         createDicertoryIfNotExist(FOLDER_DASHBOARD_ZIP_ROOT);
         createDicertoryIfNotExist(FOLDER_TESTRUN_ROOT);
@@ -161,6 +163,7 @@ public class CommonDef {
     public static String PIC_HTTP_ROOT;
     public static String PIC_HTTP_SCREENSHOT;
     public static String FILE_IMPORT;
+    public static String FILE_IMPORT_TESTCASE;
     public static String FILE_EXPORT;
     public static String PIC_LOGO_ROOT;
 

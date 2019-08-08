@@ -96,8 +96,8 @@ public class FileUploadService {
                             String fileName = file.getOriginalFilename();
                             strFileName = fileName;
                             if (!isAllowExcelExt(fileName)) {
-                                retData.setEc(ErrorConst.TESTCASE_IMPEXCEL_EXCEPTION);
-                                retData.setEm(ErrorConst.TESTCASE_IMPEXCEL_EXCEPTION_M);
+                                retData.setEc(ErrorConst.TESTCASE_IMPEXCEL_NOTSUPPORT);
+                                retData.setEm(ErrorConst.TESTCASE_IMPEXCEL_NOTSUPPORT_M);
                             } else {
                                 String path = strUploadFolder + strDateFolder;
                                 File savedir = new File(path);

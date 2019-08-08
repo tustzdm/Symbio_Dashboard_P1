@@ -196,7 +196,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Result getProductPageList2(Integer userId, String locale, Integer pageIndex, Integer pageSize) {
-        Result retResult = productDao.getProductList2(locale, pageIndex, pageSize);
+
+        Integer role = 7;
+
+        Result retResult = productDao.getProductList2(role, locale, pageIndex, pageSize);
         if(retResult.hasError()) {
             logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
         }

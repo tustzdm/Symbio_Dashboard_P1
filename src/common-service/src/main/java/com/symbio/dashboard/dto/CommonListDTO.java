@@ -22,6 +22,7 @@ public class CommonListDTO implements Serializable {
   private Integer totalRecord;
   private Integer dataType;  // 1: Array[Array], 2: Array[Map]
   private String locale;
+  private Integer role;
   private List columns;
   private List<String> fields;
   private List data;

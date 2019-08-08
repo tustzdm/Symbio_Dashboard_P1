@@ -1,6 +1,7 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.business.CommonListDTOFactory;
 import com.symbio.dashboard.data.repository.ProductRep;
 import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
@@ -373,11 +374,12 @@ public class ProductDao {
      * @param pageSize
      * @return
      */
-    public Result getProductList2(String locale, Integer pageIndex, Integer pageSize) {
+    public Result getProductList2(Integer role, String locale, Integer pageIndex, Integer pageSize) {
         logger.trace("ProductDao.getProductList2() Enter.");
         logger.trace(String.format("Args: locale = %s, pageIndex = %d, pageSize = %d", locale, pageIndex, pageSize));
 
-        CommonListDTO retProdDTO = new CommonListDTO(locale, pageIndex, pageSize);
+        CommonListDTO retProdDTO =
+                CommonListDTOFactory.createNewCommonListDTO(locale, pageIndex, pageSize);
         Result retResult = new Result(retProdDTO);
 
         List<SysListSetting> listSetting = sysListSettingRep.getEntityInfo(SystemListSetting.Product.toString());
@@ -390,7 +392,7 @@ public class ProductDao {
         if (CommonUtil.isEmpty(listColumns)) {
             return new Result("000121", "List columns info is empty");
         } else {
-            retProdDTO.setColumns(BusinessUtil.getListColumnInfo(locale, listColumns));
+            retProdDTO.setColumns(BusinessUtil.getListColumnInfo(role, locale, listColumns));
         }
 
         List<String> listFields = CommonDao.getQueryFields(listSetting);
@@ -409,8 +411,9 @@ public class ProductDao {
             CommonListDTO retProduct = (CommonListDTO) retProductResult.getCd();
             retProdDTO.setTotalRecord(retProduct.getTotalRecord());
             retProdDTO.setFields(retProduct.getFields());
-            retProduct.setDataType(retProduct.getDataType());
-            retProdDTO.setData(retProduct.getData());
+            retProdDTO.setDataType(retProduct.getDataType());
+            retProdDTO.setData(BusinessUtil.AppendOperation(role, retProduct.getData()));
+            retProdDTO.setRole(role);
             retResult = new Result(retProdDTO);
         }
 

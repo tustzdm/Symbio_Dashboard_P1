@@ -67,9 +67,9 @@ public class ResultReviewController extends BaseController {
 
     @RequestMapping("/upload")
     public Result upload(HttpServletRequest request) {
-        log.info("ResultReviewController.upload() Enter.");
-        Result<String> retsaveFile = null; //fileService.saveFile(request, "", "", false);
-        retsaveFile = fileService.saveExcel(request, CommonDef.FILE_IMPORT);
+        log.debug("ResultReviewController.upload() Enter.");
+
+        Result<String> retsaveFile = fileService.saveExcel(request, CommonDef.FILE_IMPORT_TESTCASE);
         return retsaveFile;
     }
 

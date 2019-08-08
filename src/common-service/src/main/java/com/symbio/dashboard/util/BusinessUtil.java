@@ -1,10 +1,12 @@
 package com.symbio.dashboard.util;
 
+import com.symbio.dashboard.business.CommonListDTOFactory;
 import com.symbio.dashboard.enums.ListColumns;
 import com.symbio.dashboard.enums.Locales;
-import com.symbio.dashboard.model.*;
-
-import com.symbio.dashboard.model.Dictionary;
+import com.symbio.dashboard.model.Product;
+import com.symbio.dashboard.model.Release;
+import com.symbio.dashboard.model.SysListSetting;
+import com.symbio.dashboard.model.User;
 import org.json.JSONObject;
 
 import java.util.*;
@@ -48,13 +50,29 @@ public class BusinessUtil {
     return retData;
   }
 
+  public static List AppendOperation(Integer role, List data) {
+    return data;
+  }
+
+  public static boolean hasOverReadRole(Integer role) {
+    return (role > 1) ? true : false;
+  }
+
+  public static boolean hasWriteRole(Integer role, Integer bit) {
+    return (role >> bit) > 0;
+  }
+
+  public static List<Map<String, Object>> getListColumnInfo(String locale, List<SysListSetting> listData) {
+    return getListColumnInfo(0, locale, listData);
+  }
+
   /**
    * List 的 Column Info 信息
    *
    * @param listData
    * @return
    */
-  public static List<Map<String, Object>> getListColumnInfo(String locale, List<SysListSetting> listData) {
+  public static List<Map<String, Object>> getListColumnInfo(Integer role, String locale, List<SysListSetting> listData) {
     List<Map<String, Object>> listColInfo = new ArrayList<>();
 
     try {
@@ -74,16 +92,22 @@ public class BusinessUtil {
           } else {
             mapColInfo.put(ListColumns.LABEL.getKey(), jsonLabel.get(strKeyEN));
           }
-        } catch (Exception jsonE){
+        } catch (Exception jsonE) {
           jsonE.printStackTrace();
         }
         mapColInfo.put(ListColumns.TYPE.getKey(), item.getType());
-        mapColInfo.put(ListColumns.FIELD.getKey(), WebUtil.getItemValue(item.getField()));
+        // Change field to CamelField for UI
+        mapColInfo.put(ListColumns.FIELD.getKey(), EntityUtils.getMapFieldKey(WebUtil.getItemValue(item.getField())));
+
         mapColInfo.put(ListColumns.ALIGN.getKey(), item.getAlign());
         mapColInfo.put(ListColumns.FORMAT.getKey(), WebUtil.getItemValue(item.getFormatter()));
-
         listColInfo.add(mapColInfo);
       }
+
+      if (hasOverReadRole(role)) {
+        listColInfo.add(CommonListDTOFactory.createOperationColumnInfo(locale));
+      }
+
     } catch (Exception e) {
       e.printStackTrace();
       System.out.println("BusinessUtil.getListColumnInfo() ERROR!!! " + e.getMessage());

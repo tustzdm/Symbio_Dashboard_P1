@@ -28,4 +28,7 @@ public class ProjectConst {
     public static final String USERNAME = "JenkinsServer.username";
     public static final String PASSWORD = "JenkinsServer.password";
     public static final String JOBNAME = "JenkinsServer.jobname";
+
+    public static final String COMMONLIST_COLUMNINFO_DISPLAY = "CommonList.ColumnInfo.Display";
+    public static final String COMMONLIST_DATA_FORMAT = "CommonList.dataFormat";
 }

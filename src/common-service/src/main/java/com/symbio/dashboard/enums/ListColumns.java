@@ -6,7 +6,9 @@ public enum ListColumns {
   TYPE("type"),
   FIELD("field"),
   ALIGN("align"),
-  FORMAT("formatter");
+  FORMAT("formatter"),
+  DISPLAY("display"),
+  OPERATION("operation");
 
   private ListColumns(String name){
     this.name = name;

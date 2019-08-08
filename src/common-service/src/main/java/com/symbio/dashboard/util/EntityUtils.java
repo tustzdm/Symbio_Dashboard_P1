@@ -301,7 +301,7 @@ public class EntityUtils {
         return retList;
     }
 
-    private static String getMapFieldKey(String strDbField) {
+    public static String getMapFieldKey(String strDbField) {
         String key = strDbField;
 
         if (strDbField.contains(".")) {
