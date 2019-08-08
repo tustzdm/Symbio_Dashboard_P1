@@ -5,7 +5,7 @@
         <div class="SiteSelect select">
             <el-dropdown trigger="click" @command="handleProductCommand">
                 <span class="el-dropdown-link">
-                   {{productName}}
+                    {{productName}}
                     <i class="el-icon-caret-bottom el-icon--right"></i>
                 </span>
                 <el-dropdown-menu>
@@ -51,7 +51,7 @@
                     <el-dropdown-item>
                         <i class="el-icon-edit"></i>Edit Releases
                     </el-dropdown-item> -->
-                    <el-dropdown-item v-for="item in releaseList" :class="{selected:item.id==releaseId}" :command="item.id"  :key="item.id">
+                    <el-dropdown-item v-for="item in releaseList" :class="{selected:item.id==releaseId}" :command="item.id" :key="item.id">
                         {{item.name}}
                     </el-dropdown-item>
                     <el-dropdown-item style="text-align:center;">
@@ -66,7 +66,7 @@
         <div class="product-select select">
             <el-dropdown trigger="click" @command="handleTestsetCommand">
                 <span class="el-dropdown-link">
-                     {{testSetName}}
+                    {{testSetName}}
                     <i class="el-icon-caret-bottom el-icon--right"></i>
                 </span>
                 <el-dropdown-menu>
@@ -77,7 +77,7 @@
                     <el-dropdown-item>
                         <i class="el-icon-edit"></i>Edit Test Set
                     </el-dropdown-item> -->
-                    <el-dropdown-item v-for="item in testSetList"  :class="{selected:item.id==testSetId}" :command="item.id" :key="item.id">
+                    <el-dropdown-item v-for="item in testSetList" :class="{selected:item.id==testSetId}" :command="item.id" :key="item.id">
                         {{item.name}}
                     </el-dropdown-item>
                     <el-dropdown-item style="text-align:center;">
@@ -115,6 +115,7 @@
             </el-dropdown>
         </div>
         <div class="manage-top-right">
+            <el-button @click="centerDialogVisible = true" style="background-color:gray;color:white" size="mini">import</el-button>
             <el-button style="background-color:#c2eaae;color:white" size="mini">Run</el-button>
             <el-button style="background-color:rgb(190, 205, 223);color:white" size="mini">Refresh</el-button>
             <el-button style="background-color:rgb(246, 184, 184);color:white" size="mini">Add Bug</el-button>
@@ -136,6 +137,21 @@
             </div>
         </div>
     </div>
+    <el-dialog title="Import" :visible.sync="centerDialogVisible" width="30%" center>
+        <!-- <form>
+            <input id="file" name="file" type="file" />
+            <input id="token" name="token" type="hidden" />
+        </form> -->
+        <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="upLoadUrl" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+            <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
+            <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.excel file only, less than 500m</div>
+        </el-upload>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="centerDialogVisible = false">取 消</el-button>
+            <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+        </span>
+    </el-dialog>
 </el-card>
 <!-- manage-top end -->
 </template>
@@ -145,15 +161,27 @@ export default {
     name: 'top',
     data() {
         return {
-            productName:'Product',
-            releaseName:'Release',
-            testSetName:'TestSet',
-            productId: '',
-            releaseId: '',
-            testSetId: '',
+            upLoadUrl:'/api/result/upload',
+            productName: 'Product',
+            releaseName: 'Release',
+            testSetName: 'TestSet',
+            productId: '1',
+            releaseId: '1',
+            testSetId: '4',
             productList: '',
             releaseList: '',
-            testSetList: ''
+            testSetList: '',
+
+            tableColumn: '',
+            tableData: '',
+            centerDialogVisible: false,
+            fileList: [{
+                name: 'food.jpeg',
+                url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+            }, {
+                name: 'food2.jpeg',
+                url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+            }]
         }
     },
     created() {
@@ -162,31 +190,43 @@ export default {
     mounted() {
 
     },
-    watch:{
-        productId:function (val) {
-            this.releaseName = 'Release';
-            this.testSetName = 'TestSet';
-             this.releaseId = '';
-            this.testSetId = '';
-            this.getNavgationList();
-           
-        },
-        releaseId:function (val) {
-            this.testSetName = 'TestSet';
-             this.testSetId = '';
-            this.getNavgationList();
-           
-        }
+    watch: {
+        // productId:function (val) {
+        //     this.releaseName = 'Release';
+        //     this.testSetName = 'TestSet';
+        //      this.releaseId = '';
+        //     this.testSetId = '';
+        //     this.getNavgationList();
+
+        // },
+        // releaseId:function (val) {
+        //     this.testSetName = 'TestSet';
+        //      this.testSetId = '';
+        //     this.getNavgationList();
+
+        // },
+        // testSetId:function (val) {
+        //     this.getNavgationList();        
+        // }
     },
     methods: {
         handleProductCommand(command) {
-            this.productId = command;//下拉菜单点了productList的内容时会改变productID的值
+            this.productId = command; //下拉菜单点了productList的内容时会改变productID的值
+            this.releaseName = 'Release';
+            this.testSetName = 'TestSet';
+            this.releaseId = '';
+            this.testSetId = '';
+            this.getNavgationList();
         },
-         handleReleaseCommand(command) {
+        handleReleaseCommand(command) {
             this.releaseId = command;
+            this.testSetName = 'TestSet';
+            this.testSetId = '';
+            this.getNavgationList();
         },
         handleTestsetCommand(command) {
             this.testSetId = command;
+            this.getNavgationList();
         },
         getNavgationList() {
             this.Fetch(`/result/getList`, {
@@ -203,27 +243,44 @@ export default {
                 this.releaseId = res.cd.releaseId;
                 this.testSetId = res.cd.testSetId;
                 this.productList = res.cd.productList;
-                for (let i in this.productList){ 
-                    if(this.productList[i].id == this.productId){
+                for (let i in this.productList) {
+                    if (this.productList[i].id == this.productId) {
                         this.productName = this.productList[i].name;
                     }
                 }
                 this.releaseList = res.cd.releaseList;
-                for (let i in this.releaseList){ 
-                    if(this.releaseList[i].id == this.releaseId){
+                for (let i in this.releaseList) {
+                    if (this.releaseList[i].id == this.releaseId) {
                         this.releaseName = this.releaseList[i].name;
                     }
                 }
                 this.testSetList = res.cd.testSetList;
-                for (let i in this.testSetList){ 
-                    if(this.testSetList[i].id == this.testSetId){
+                for (let i in this.testSetList) {
+                    if (this.testSetList[i].id == this.testSetId) {
                         this.testSetName = this.testSetList[i].name;
                     }
                 }
-                console.log(this.releaseList);
+                this.tableColumn = res.cd.columns;
+                this.tableData = res.cd.data;
+                console.log(this.tableData);
+                this.$emit('getTableData', res);
             }).catch(err => {
                 alert(err);
             });
+        },
+
+        //upload method
+        submitUpload() {
+            this.$refs.upload.submit();
+        },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+        },
+        uploadSuccess(){
+            alert(response);
         }
     }
 }

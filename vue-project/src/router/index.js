@@ -158,7 +158,7 @@ export const constantRouterMap = [
         ],
     },
     {
-        path: "/buy",
+        path: "/management",
         component: Layout,
         children: [
             {

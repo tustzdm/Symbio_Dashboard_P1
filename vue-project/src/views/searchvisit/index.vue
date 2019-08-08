@@ -1,13 +1,13 @@
 <template>
-<div class="buy-root" style="width:85%;margin-left:7.5%">
+<div  class="buy-root" style="width:85%;margin-left:7.5%">
     <!-- 两个部分mabage-top和(表格、翻页)，两者之间都用flex布局-->
-    <top></top>
+    <top @getTableData="getTableData($event)"></top>
     <!-- manage-top end -->
 
     <el-card class="caseTabel" shadow="hover" style="border:none">
         <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;height: 100%;background-color:rgb(240,240,240); text-align:center" :max-height="tableHeight">
             <el-table-column type="selection" width="50px"></el-table-column>
-            <el-table-column prop="autoStatus" sortable label="Status">
+            <!-- <el-table-column prop="status" sortable label="Status">
                 <template slot-scope="scope">
                     <div>
                         <div style="height:18px;width:18px;border-radius:9px;float:left;margin-left:30px" :class="{auto_pass:scope.row.autoStatus=='Pass',auto_block:scope.row.autoStatus=='NotRun',auto_failed:scope.row.autoStatus=='Failed'}"></div>
@@ -20,11 +20,12 @@
             <el-table-column prop="featureArea" label="Feature Area"></el-table-column>
             <el-table-column prop="qastatus" label="QA Status"></el-table-column>
             <el-table-column prop="locale" label="Locale"></el-table-column>
-            <el-table-column prop="screenshot" label="ScreenShot">
+            <el-table-column prop="screenshotFlag" label="ScreenShot">
                 <template slot-scope="scope">
                     <img :src="scope.row.screenshot" class="el-img-custom" />
                 </template>
-            </el-table-column>
+            </el-table-column> -->
+             <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" sortable :label="item.label"></el-table-column>
         </el-table>
     </el-card>
     <div class="fanye">
@@ -49,7 +50,8 @@ export default {
             screenHeight: '',
             dataList: [],
             pageSize: 20,
-            currentPage: 1
+            currentPage: 1,
+            tableColownms:{}
         }
     },
     components: {
@@ -74,6 +76,7 @@ export default {
         //       });
     },
     mounted() {
+        
         this.getTestManagerInfo()
         window.onresize = () => {
             return (() => {
@@ -153,6 +156,14 @@ export default {
         },
         addShow() {
             this.addPartShow = true
+        },
+        getTableData(val){
+             this.dataList = val.cd.data;
+             this.tableColownms = val.cd.columns;
+            console.log(22222);
+            console.log( this.tableColownms);
+            console.log(this.dataList)
+            console.log(222);
         }
     }
 }

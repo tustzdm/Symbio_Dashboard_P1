@@ -5,7 +5,7 @@
       <icon class="headerIcon" name="qualityOverview"></icon>
       <div class="headerTitle">Quality Overview</div>
     </router-link>
-    <router-link class="headerTestManagement headeritems" to="/buy/index">
+    <router-link class="headerTestManagement headeritems" to="/management/index">
       <icon class="headerIcon" name="testManagement"></icon>
       <div class="headerTitle">Test Management</div>
     </router-link>

@@ -9,8 +9,8 @@
             "icon": "car"
         },
         {
-            "path": "/buy",
-            "redirect": "/buy/index",
+            "path": "/management",
+            "redirect": "/management/index",
             "name": "buy",
             "component": "buy/index",
             "icon": "buy"
