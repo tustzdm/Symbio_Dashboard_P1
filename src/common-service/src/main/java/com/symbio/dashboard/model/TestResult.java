@@ -25,11 +25,11 @@ public class TestResult {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "testset_id", nullable = false)
-    private Integer testsetId;
+    @Column(name = "test_set_id", nullable = false)
+    private Integer testSetId;
 
-    @Column(name = "testrun_id", nullable = false)
-    private Integer testrunId;
+    @Column(name = "test_run_id", nullable = false)
+    private Integer testRunId;
 
     @Column(name = "auto_run_status")
     private Integer autoRunStatus;

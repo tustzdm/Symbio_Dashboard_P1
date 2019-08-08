@@ -9,6 +9,12 @@ spring:
     testWhileIdle:  true
     timeBetweenEvictionRunsMillis:  3600000
     validationQuery:  SELECT 1
+  redis:
+    host: 192.168.170.100
+    pool.max-active: 8
+    pool.max-idle: 8
+    pool.max-wait: 5000
+    timeout: 5000
   jpa:
     hibernate:
       naming:
@@ -16,13 +22,19 @@ spring:
       ddl-auto: update
     show-sql: true
     open-in-view: true
+  http:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
 
+app:
   file:
-    root: ${home}/dashboard
+    root: ${user.home}/dashboard_data
 
 logging:
   level:
     root: info #trace, debug, info, warn, error
+  file: ${user.home}/dashboard_data/logs/dashboard.log
   pattern:
     console: "%d - %msg%n" #     定义打印的日志格式
     #    dateformat: #设置日志日期格式

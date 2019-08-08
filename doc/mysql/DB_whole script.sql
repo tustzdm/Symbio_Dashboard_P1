@@ -539,8 +539,8 @@ CREATE TABLE `test_run` (
 DROP TABLE IF EXISTS `test_result`;
 CREATE TABLE `test_result` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Key id',  
-  `testset_id` int(10) unsigned NOT NULL COMMENT 'FK: [test_set].id',
-  `testrun_id` int(10) unsigned NOT NULL COMMENT 'FK: [test_run].id',
+  `test_set_id` int(10) unsigned NOT NULL COMMENT 'FK: [test_set].id',
+  `test_run_id` int(10) unsigned NOT NULL COMMENT 'FK: [test_run].id',
 
   `auto_run_status` int(10) unsigned DEFAULT NULL COMMENT 'Auomation Status：0-Not RUN, 1-AUTOMATION SUCCESS,2-Automation FAILURE,3-Automation SKIP,4-Automation SUCCESS WITHIN PERCENTAGE,16-Automation STARTED, 101-TestNotRequired',
   `job_weather` int(10) unsigned DEFAULT '0' COMMENT 'job status：0-unkown,1-sunny,2-cloud,3-dull,4-fog,5-rainy',
@@ -596,7 +596,7 @@ CREATE TABLE `test_result` (
   `update_user` int(10) unsigned DEFAULT NULL COMMENT 'user id updated',
   `update_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_testresult_testset_testrun_display_validation` (`testset_id`,`testrun_id`, `display`, `validation`)
+  UNIQUE KEY `unique_testresult_testset_testrun_display_validation` (`test_set_id`,`test_run_id`, `display`, `validation`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 Drop Table IF EXISTS `attribute_template`;
