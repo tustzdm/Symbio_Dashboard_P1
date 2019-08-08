@@ -7,17 +7,14 @@ import com.symbio.dashboard.dto.TestSetUiDTO;
 import com.symbio.dashboard.entity.Progress;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
+import com.symbio.dashboard.enums.UIInfoPage;
+import com.symbio.dashboard.model.Release;
 import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.TestSet;
-import com.symbio.dashboard.enums.DictionaryType;
-import com.symbio.dashboard.enums.UIInfoPage;
-import com.symbio.dashboard.model.*;
-
+import com.symbio.dashboard.model.UiInfo;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
-import lombok.Data;
-import org.aspectj.weaver.ast.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +113,9 @@ public class TestSetDao {
             if (dataType == ListDataType.Map) {
                 listTestSet = EntityUtils.castMap(listResult, TestSet.class, strFields);
                 List<Map<String, Object>> listReleaseInfo = mergeStaticticsData(listTestSet);
-                retListDTO.setFields(CommonUtil.getListByMergeString(strFields, "progress"));
+
+                List<String> listDBFields = CommonUtil.getListByMergeString(strFields, "progress");
+                retListDTO.setFields(EntityUtils.getDTOFields(listDBFields));
                 retListDTO.setDataType(ListDataType.Map.getDataType());
 
                 if (CommonUtil.isEmpty(listUserFields)) {

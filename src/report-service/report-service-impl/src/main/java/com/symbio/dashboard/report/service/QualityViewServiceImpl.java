@@ -23,6 +23,7 @@ import java.util.Map;
  */
 @Service
 @Data
+@SuppressWarnings("unchecked")
 public class QualityViewServiceImpl implements QualityViewService {
 
 

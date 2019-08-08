@@ -31,6 +31,7 @@ import java.util.*;
 @Service
 @Data
 @Component
+@SuppressWarnings("unchecked")
 public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
 
     @Autowired

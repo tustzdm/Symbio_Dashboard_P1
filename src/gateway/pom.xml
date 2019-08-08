@@ -21,6 +21,11 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <!-- thymeleaf模板插件 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
 
         <!-- symbio dashboard dependency -->
         <dependency>
@@ -98,6 +103,12 @@
         <dependency>
             <groupId>com.symbio</groupId>
             <artifactId>jenkins-service-impl</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.symbio</groupId>
+            <artifactId>file-service-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
 

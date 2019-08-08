@@ -22,8 +22,8 @@ public class CommonDef {
     }
 
     private void manualInitProperty() {
-        // LOGIN_ENV= "dev";
-        LOGIN_ENV = "angular_debug";
+        LOGIN_ENV = "dev";
+        // LOGIN_ENV = "angular_debug";
         COOKIE_DOMAIN = "autodash";
         USER_EXPIRE_TIME = 24 * 60;
         PIC_ROOT = rootDirectory;
@@ -47,7 +47,6 @@ public class CommonDef {
         createDicertoryIfNotExist(FOLDER_TESTRUN_BAKZIP_ROOT);
         createDicertoryIfNotExist(DIR_HTTP_SCREENSHOT);
         createDicertoryIfNotExist(PIC_LOGO_ROOT);
-
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

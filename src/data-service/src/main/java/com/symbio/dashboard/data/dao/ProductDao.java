@@ -8,7 +8,6 @@ import com.symbio.dashboard.data.repository.UserRep;
 import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.dto.ProductUiDTO;
 import com.symbio.dashboard.entity.Progress;
-import com.symbio.dashboard.enums.DictionaryType;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.enums.UIInfoPage;
@@ -20,7 +19,6 @@ import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
 import com.symbio.dashboard.util.StringUtil;
-import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -316,7 +314,9 @@ public class ProductDao {
             if (dataType == ListDataType.Map) {
                 listProduct = EntityUtils.castMap(listResult, Product.class, strFields);
                 List<Map<String, Object>> listProdInfo = mergeStaticticsData(listProduct);
-                retProduct.setFields(CommonUtil.getListByMergeString(strFields, "progress"));
+
+                List<String> listDBFields = CommonUtil.getListByMergeString(strFields, "progress");
+                retProduct.setFields(EntityUtils.getDTOFields(listDBFields));
                 retProduct.setDataType(ListDataType.Map.getDataType());
 
                 if (CommonUtil.isEmpty(listUserFields)) {
