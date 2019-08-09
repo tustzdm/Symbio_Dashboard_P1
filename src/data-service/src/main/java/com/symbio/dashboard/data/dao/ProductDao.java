@@ -9,6 +9,7 @@ import com.symbio.dashboard.data.repository.UserRep;
 import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.dto.ProductUiDTO;
 import com.symbio.dashboard.entity.Progress;
+import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.enums.UIInfoPage;
@@ -412,7 +413,7 @@ public class ProductDao {
             retProdDTO.setTotalRecord(retProduct.getTotalRecord());
             retProdDTO.setFields(retProduct.getFields());
             retProdDTO.setDataType(retProduct.getDataType());
-            retProdDTO.setData(BusinessUtil.AppendOperation(role, retProduct.getData()));
+            retProdDTO.setData(BusinessUtil.AppendOperation(EnumDef.OPERATION_TYPE.PRODUCT, role, retProduct.getData()));
             retProdDTO.setRole(role);
             retResult = new Result(retProdDTO);
         }

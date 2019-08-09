@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+@SuppressWarnings("unchecked")
 public class CommonUtil {
 
     public CommonUtil() {

@@ -435,22 +435,31 @@ Drop Table IF EXISTS `test_case`;
 CREATE TABLE `test_case` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'key',
   `product_id` int unsigned NOT NULL DEFAULT '0' COMMENT 'Product Id',
+  
   `case_id` varchar(32) NOT NULL COMMENT 'Case ID',
-  `case_type` int unsigned NOT NULL DEFAULT '1' COMMENT '1-Automation,2-Manual Test,4-API Test,8-Performance Test',
+  `case_type` int unsigned NOT NULL DEFAULT '1' COMMENT 'Case Type.1-Automation,2-Manual Test,4-API Test,8-Performance Test',
+  `support_locales` varchar(255) DEFAULT NULL COMMENT 'locales for the test case. EN_US,ZH_CN',
   `summary` varchar(255) DEFAULT NULL COMMENT 'Case summary',
   `priority` varchar(32) DEFAULT NULL COMMENT 'P0,P1,P2,P3, (blank)',
   `feature_area` varchar(255) DEFAULT NULL COMMENT 'Feature',
   `sub_feature_area` varchar(255) DEFAULT NULL COMMENT 'Sub feature',
-  `case_status` int(10) unsigned DEFAULT '0' COMMENT 'case status: 0-Normal，1-Disable, 2-Delete',
+  `detail_steps` varchar(5000) DEFAULT NULL COMMENT 'steps in detail',
+  `expected_results` varchar(5000) DEFAULT NULL COMMENT 'Expected result',
+  
+  -- Automation Case
   `class_name` varchar(255) DEFAULT NULL COMMENT 'className',
   `case_parameter` varchar(255) DEFAULT NULL COMMENT 'parameters',
   `template_id` varchar(32) NULL COMMENT 'Template ID',
-  `detail_steps` varchar(5000) DEFAULT NULL COMMENT 'steps in detail',
-  `expected_results` varchar(5000) DEFAULT NULL COMMENT 'Expected result',
-  `support_locales` varchar(255) DEFAULT NULL COMMENT 'locales for the test case. EN_US,ZH_CN',
-  `display` smallint(5) unsigned DEFAULT '1' COMMENT 'Display or not.0-no,1-yes',
+  
+  -- Manual Case
+  `notes` varchar(255) DEFAULT NULL COMMENT 'Notes',
+  `method` varchar(255) DEFAULT NULL COMMENT 'Test method',
+  
   `case_owner` varchar(32) DEFAULT NULL COMMENT 'TestCase owner',
   `description` varchar(255) DEFAULT NULL COMMENT 'Description',
+  
+  `case_status` int(10) unsigned DEFAULT '0' COMMENT 'case status: 0-Normal，1-Disable, 2-Delete',
+  `display` smallint(5) unsigned DEFAULT '1' COMMENT 'Display or not.0-no,1-yes',
   `validation` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT '0-invalid,1-valid,4-delete,8-archived',
   
   `tcfield_bool1` smallint(5) DEFAULT NULL COMMENT 'TestCase field bool. 1-true,0-false',

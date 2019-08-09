@@ -1,6 +1,8 @@
 package com.symbio.dashboard.util;
 
 import com.symbio.dashboard.business.CommonListDTOFactory;
+import com.symbio.dashboard.constant.ProjectConfigConst;
+import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.ListColumns;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.Product;
@@ -11,6 +13,7 @@ import org.json.JSONObject;
 
 import java.util.*;
 
+@SuppressWarnings("unchecked")
 public class BusinessUtil {
 
   /**
@@ -50,8 +53,18 @@ public class BusinessUtil {
     return retData;
   }
 
-  public static List AppendOperation(Integer role, List data) {
-    return data;
+  public static List AppendOperation(EnumDef.OPERATION_TYPE enumOperation, Integer role, List data) {
+    if (CommonUtil.isEmpty(data)) return data;
+
+    List<Map<String, Object>> listData = new ArrayList<>();
+    if (ProjectConfigConst.CommonList_Data_Format == 2) {
+      listData = data;
+      for (Map<String, Object> mapData : listData) {
+        mapData.put(ListColumns.OPERATION.getKey(), CommonListDTOFactory.createOperationData(role));
+      }
+    }
+
+    return listData;
   }
 
   public static boolean hasOverReadRole(Integer role) {
