@@ -27,4 +27,11 @@ public interface TestSetRep extends JpaRepository<TestSet,Integer> {
 
     @Query(value = "SELECT count(*) FROM `test_set` WHERE release_id = ?1 AND display = 1", nativeQuery = true)
     int getReleaseCount(Integer releaseId);
+
+    @Query(value = "SELECT product.id FROM product " +
+            "INNER join `release` ON `release`.product_id = product.id " +
+            "INNER join test_set ON test_set.release_id = `release`.id" +
+            "WHERE test_set.id = ?1", nativeQuery = true)
+    Integer getProductIdByTestSetId(Integer testSetId);
+
 }

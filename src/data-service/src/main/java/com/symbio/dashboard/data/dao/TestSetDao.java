@@ -279,4 +279,13 @@ public class TestSetDao {
 
         return retResult;
     }
+
+    public Integer getTestSetTypeById(Integer testSetId) {
+        TestSet data = testSetRep.getById(testSetId);
+        return (data != null) ? data.getType() : null;
+    }
+
+    public Integer getProductIdByTestSetId(Integer testSetId) {
+        return testSetRep.getProductIdByTestSetId(testSetId);
+    }
 }

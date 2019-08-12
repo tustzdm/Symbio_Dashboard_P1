@@ -396,6 +396,37 @@ public class EnumDef {
         }
     }
 
+    /**
+     * Separated by Product or not
+     */
+    public enum TEP_SEPARATED_PRODUCT implements IDictEnum {
+        YES(1, "Yes"),
+        NO(0, "No");
+
+        private int code;
+        private String value;
+
+        TEP_SEPARATED_PRODUCT(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(code);
+        }
+
+        @Override
+        public Integer getCode() {
+            return this.code;
+        }
+
+        @Override
+        public String getValue() {
+            return this.value;
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // End of New Dashboard definition
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -826,25 +857,26 @@ public class EnumDef {
         return null;
     }
 
-    public static <T extends Enum<T>> T getEnumTypeByCode(Class<T> enumType, int code) {
+    public static <T extends Enum<T>> T getEnumTypeByCode(Class<T> enumType, int code) throws Exception {
         EnumSet<T> currEnumSet = EnumSet.allOf(enumType);
         for (T item : currEnumSet) {
             try {
                 if (Integer.parseInt(item.toString()) == code) return item;
             } catch (NumberFormatException e) {
-                System.out.println(
-                        ">>>>>> ERROR!!! "
-                                + enumType.getName()
-                                + ".toString() is uncorrect.  item.code = ["
-                                + item.toString()
-                                + "]");
+                String strMsg = ">>>>>> ERROR!!! "
+                        + enumType.getName()
+                        + ".toString() is uncorrect.  item.code = ["
+                        + item.toString()
+                        + "]";
+                System.out.println(strMsg);
+                throw new Exception(strMsg);
             }
         }
 
         return null;
     }
 
-    public static <T extends Enum<T>> String getEnumTypeValueByCode(Class<T> enumType, int code) {
+    public static <T extends Enum<T>> String getEnumTypeValueByCode(Class<T> enumType, int code) throws Exception {
         T t = getEnumTypeByCode(enumType, code);
         if (t == null) return null;
 
@@ -862,6 +894,10 @@ public class EnumDef {
     }
 
     public static void main(String[] args) {
-        System.out.println(getEnumTypeValueByCode(OPERATION_TYPE.class, 1));
+        try {
+            System.out.println(getEnumTypeValueByCode(OPERATION_TYPE.class, 1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
