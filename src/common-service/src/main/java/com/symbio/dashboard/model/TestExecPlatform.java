@@ -28,11 +28,17 @@ public class TestExecPlatform {
     @Column(name = "productId", nullable = false)
     private Integer productId;
 
+    @Column(name = "testSetType", nullable = false)
+    private Integer testSetType;
+
     @Column(name = "jenkinsId", nullable = false)
     private Integer jenkinsId;
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "idx", nullable = false)
+    private Integer idx;
 
     @Column(name = "display", nullable = false)
     private Integer display;

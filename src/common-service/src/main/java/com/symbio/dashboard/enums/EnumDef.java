@@ -365,6 +365,37 @@ public class EnumDef {
         }
     }
 
+    /**
+     * Separated by Product or not
+     */
+    public enum TESTCASE_SEPARATED_PRODUCT implements IDictEnum {
+        YES(1, "Yes"),
+        NO(0, "No");
+
+        private int code;
+        private String value;
+
+        TESTCASE_SEPARATED_PRODUCT(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(code);
+        }
+
+        @Override
+        public Integer getCode() {
+            return this.code;
+        }
+
+        @Override
+        public String getValue() {
+            return this.value;
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // End of New Dashboard definition
     ///////////////////////////////////////////////////////////////////////////////////////////////////

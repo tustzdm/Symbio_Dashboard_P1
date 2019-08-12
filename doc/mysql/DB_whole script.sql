@@ -744,9 +744,10 @@ DROP TABLE IF EXISTS `test_exec_platform`;
 CREATE TABLE `test_exec_platform` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `productId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'FK: product.id',
+  `testSetType` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'FK: [test_set].type. Current: 1-Automation,2-Manual Test,4-API Test,8-Performance Test',
   `jenkinsId` int(10) unsigned NOT NULL COMMENT 'FK: jenkins_info.id',
   `name` varchar(32) NOT NULL COMMENT 'TEP name',
-
+  `idx` smallint(5) NOT NULL DEFAULT 99 COMMENT 'TEP index',
   `display` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'display or not. 0-hide,1-show',
   `createTime` datetime DEFAULT NULL COMMENT 'create time',
   `createUserId` int(10) unsigned NOT NULL COMMENT 'create user',
