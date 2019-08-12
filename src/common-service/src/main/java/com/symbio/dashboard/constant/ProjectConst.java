@@ -28,7 +28,16 @@ public class ProjectConst {
     public static final String USERNAME = "JenkinsServer.username";
     public static final String PASSWORD = "JenkinsServer.password";
     public static final String JOBNAME = "JenkinsServer.jobname";
+    // TEP
+    public static final String TEP_SPERATED_PRODUCT = "TEP_SeparatedByProduct";
 
+    // Project Config - Common List
     public static final String COMMONLIST_COLUMNINFO_DISPLAY = "CommonList.ColumnInfo.Display";
     public static final String COMMONLIST_DATA_FORMAT = "CommonList.dataFormat";
+
+    // Project Config - TestCase Import
+    public static final String TESTCASE_SPERATED_PRODUCT = "TestCase_SeparatedByProduct";
+    public static final String TESTCASE_IMP_REPLACE_SUCC = "TestCase_Import_ReplaceSuccess";
+    public static final String TESTCASE_IMP_LOCALE_DEFAULT = "TestCase_Import_Locale_Default";
+
 }

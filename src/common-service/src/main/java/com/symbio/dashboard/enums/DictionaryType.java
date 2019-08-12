@@ -11,7 +11,8 @@ public enum DictionaryType {
   SYS_LIST_SETTING("sys_list_setting"),
   ColumnType("ColumnType"),
   TestSetType("TestSetType"),
-  TestSetStatus("TestSetStatus");
+  TestSetStatus("TestSetStatus"),
+  TestRunStatus("TestRunStatus");
 
   private DictionaryType(String type){
     this.type = type;

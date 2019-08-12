@@ -144,7 +144,112 @@ public class EnumDef {
     }
 
     /**
-     *
+     * [TestSet.type]Test Set Type == [TestCase.case_type]Case Type
+     */
+    public enum TEST_SET_TYPE implements IDictEnum {
+        AUTOMATION(1, "Automation Test"),
+        MANUAL(2, "Manual Test"),
+        API(4, "API Test"),
+        PERFORMANCE(8, "Performance Test");
+
+        private Integer code;
+        private String value;
+
+        TEST_SET_TYPE(int code, String value) {
+            this.code = code;
+        }
+
+        @Override
+        public Integer getCode() {
+            return this.code;
+        }
+
+        @Override
+        public String getValue() {
+            return this.value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+    /**
+     * [TestCase.case_type]Case Type == Unknown + [TestSet.type]Test Set Type
+     */
+    public enum CASE_TYPE implements IDictEnum {
+        UNKNOWN(0, "Unknown"),
+
+        AUTOMATION(1, "Automation Test"),
+
+        MANUAL(2, "Manual Test"),
+
+        API(4, "API Test"),
+
+        PERFORMANCE(8, "Performance Test");
+
+        private Integer code;
+        private String value;
+
+        CASE_TYPE(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public Integer getCode() {
+            return this.code;
+        }
+
+        @Override
+        public String getValue() {
+            return this.value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+    /**
+     * Priority
+     */
+    public enum CASE_PRIORITY implements IDictEnum {
+        Blank(0, ""),
+        P1(1, "P1"),
+        P2(2, "P2"),
+        P3(3, "P3"),
+        P4(4, "P4"),
+        P5(5, "P5");
+
+        private Integer code;
+        private String value;
+
+        CASE_PRIORITY(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public Integer getCode() {
+            return this.code;
+        }
+
+        @Override
+        public String getValue() {
+            return this.value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+    /**
+     * Lists that support Operation
      */
     @Getter
     public enum OPERATION_TYPE implements IDictEnum {
@@ -228,6 +333,46 @@ public class EnumDef {
         return null;
     }
 
+    /**
+     * Automation Job actual status
+     */
+    public enum JENKINS_AUTO_STATUS implements IDictEnum {
+        NotRun(0, "Not Run"),
+        AutoSuccess(1, "Passed"),
+        AutoFailure(2, "Failed"),
+        AutoSkip(3, "Skipped"),
+        Waiting(4, "waiting"),
+        Running(5, "running"),
+        Error(6, "error");
+
+        private int code;
+        private String value;
+
+        JENKINS_AUTO_STATUS(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(code);
+        }
+
+        @Override
+        public Integer getCode() {
+            return this.code;
+        }
+
+        @Override
+        public String getValue() {
+            return this.value;
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    // End of New Dashboard definition
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
     public enum DICT_TYPE {
         QA_STATUS("QAStatus"),
         AUTO_STATUS("AutoStatus"),
@@ -270,20 +415,6 @@ public class EnumDef {
         }
     }
 
-    public enum DICTABLE_TYPE {
-        AutoStatus(1),
-        QAStatus(2);
-        private int id;
-
-        DICTABLE_TYPE(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return this.id;
-        }
-    }
-
     /**
      * TestCase level
      */
@@ -301,30 +432,17 @@ public class EnumDef {
         }
     }
 
-    public enum CASE_TYPE {
-        COMMON(0),
-        PATTERN1(1),
-        PATTERN2(2);
-        private int value;
 
-        CASE_TYPE(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return this.value;
-        }
-    }
 
     public enum LOCALE {
         EN_US("en", "us", "en_US"),
-        ZH_CN("zh", "cn", "zh_CN"),
+        ZH_CN("zh", "cn", "zh_CN");
 
-        ES_UN("es", "un", "es_UN"),
-        FR_CA("fr", "ca", "fr_CA"),
-        FR_FR("fr", "fr", "fr_FR"),
-        FR_UN("fr", "UN", "fr_UN"),
-        PT_BR("pt", "BR", "pt_BR");
+//        ES_UN("es", "un", "es_UN"),
+//        FR_CA("fr", "ca", "fr_CA"),
+//        FR_FR("fr", "fr", "fr_FR"),
+//        FR_UN("fr", "UN", "fr_UN"),
+//        PT_BR("pt", "BR", "pt_BR");
 
         private String language;
         private String region;
@@ -352,11 +470,6 @@ public class EnumDef {
         public String toString() {
             return value;
         }
-    }
-
-    public enum DTYPE {
-        single,
-        all;
     }
 
     public enum ENVIRONMENT_STATUS {
@@ -427,52 +540,6 @@ public class EnumDef {
 
         public int getID() {
             return this.id;
-        }
-    }
-
-    public enum AUTO_STATUS {
-        AutoSuccess(1, "Passed"),
-        AutoFailure(2, "Failed"),
-        AutoSkip(3, "Skipped"),
-        notTested(0, "Not Run"),
-        Waiting(4, "waiting"),
-        Running(5, "running"),
-        Error(6, "error");
-
-        private int id;
-        private String title;
-
-        AUTO_STATUS(int id, String title) {
-            this.id = id;
-            this.title = title;
-        }
-
-        public String getTitle() {
-            return this.title;
-        }
-
-        public int getID() {
-            return this.id;
-        }
-    }
-
-    /**
-     * Priority
-     */
-    public enum CASE_PRIORITY {
-        Blank(0),
-        P1(1),
-        P2(2),
-        P3(3);
-
-        private int value;
-
-        CASE_PRIORITY(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return this.value;
         }
     }
 

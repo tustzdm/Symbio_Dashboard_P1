@@ -443,6 +443,8 @@ CREATE TABLE `test_case` (
   `priority` varchar(32) DEFAULT NULL COMMENT 'P0,P1,P2,P3, (blank)',
   `feature_area` varchar(255) DEFAULT NULL COMMENT 'Feature',
   `sub_feature_area` varchar(255) DEFAULT NULL COMMENT 'Sub feature',
+  
+  `test_scenario` varchar(5000) DEFAULT NULL COMMENT 'Test Case Description or test scenario',
   `detail_steps` varchar(5000) DEFAULT NULL COMMENT 'steps in detail',
   `expected_results` varchar(5000) DEFAULT NULL COMMENT 'Expected result',
   
@@ -827,4 +829,20 @@ CREATE TABLE `jenkins_job_history_detail` (
   `display` int(10) NOT NULL DEFAULT '1' COMMENT '.0-not，1-yes',
   `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- 2019/8/12
+Drop Table IF EXISTS `setting_excel_import`;
+CREATE TABLE `setting_excel_import` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `productId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'FK: product.id',
+  `case_type` varchar(32) NOT NULL COMMENT 'Which type the test case belongs to. correspond to [TestSet].[type]',
+  `name` varchar(32) NOT NULL COMMENT 'Column name in excel file',
+  `field` varchar(32) NOT NULL DEFAULT '' COMMENT 'correspond to table field',
+  `idx` smallint(5) NOT NULL DEFAULT 99 COMMENT 'index for the list column',
+  `validation` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT '1-valid,0-invalid',
+  `formatter` varchar(256) DEFAULT NULL COMMENT 'Column formatter',
+  `description` varchar(255) DEFAULT NULL COMMENT 'description',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_setting_excel_import_product_casetype_name_field` (`productId`, `case_type`, `name`, `field`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
