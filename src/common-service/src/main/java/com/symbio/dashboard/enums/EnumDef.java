@@ -180,13 +180,9 @@ public class EnumDef {
      */
     public enum CASE_TYPE implements IDictEnum {
         UNKNOWN(0, "Unknown"),
-
         AUTOMATION(1, "Automation Test"),
-
         MANUAL(2, "Manual Test"),
-
         API(4, "API Test"),
-
         PERFORMANCE(8, "Performance Test");
 
         private Integer code;
