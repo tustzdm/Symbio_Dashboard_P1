@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.io.Serializable;
 
 /**
  * @ClassName - ProjectConfig
@@ -17,7 +17,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @Table(name = "project_config")
-public class ProjectConfig {
+public class ProjectConfig implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

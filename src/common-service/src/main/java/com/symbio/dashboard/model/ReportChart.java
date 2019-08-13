@@ -5,12 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
+import java.io.Serializable;
+
 /**
  * 本类是数据库report_chart的实体类
  */
@@ -20,7 +17,7 @@ import javax.persistence.GenerationType;
 @Entity //实体类
 @NoArgsConstructor //无参构造方法
 @Table(name = "report_chart" , schema = "test")
-public class ReportChart {
+public class ReportChart implements Serializable {
 
     /**
      * 主键

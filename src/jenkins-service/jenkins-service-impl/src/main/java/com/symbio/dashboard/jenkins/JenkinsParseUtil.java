@@ -115,13 +115,13 @@ public class JenkinsParseUtil {
             sb.append("<hudson.model.ParametersDefinitionProperty><parameterDefinitions>");
             for (JenkinsJobParameter param : params) {
                 if (param.getRefType().equals(JenkinsParameter.BooleanType.toString())) {
-                    sb.append("<hudson.model.BooleanTypeDefinition><name>").append(param.getName()).append("</name><description>").append(param.getDescription()).append("</description><defaultValue>").append(param.getDefaultValue()).append("</defaultValue></hudson.model.BooleanTypeDefinition>");
+                    sb.append("<hudson.model.BooleanTypeDefinition><name>").append(param.getParamName()).append("</name><description>").append(param.getDescription()).append("</description><defaultValue>").append(param.getDefaultValue()).append("</defaultValue></hudson.model.BooleanTypeDefinition>");
                 }
                 if (param.getRefType().equals(JenkinsParameter.StringType.toString())) {
-                    sb.append("<hudson.model.StringParameterDefinition><name>").append(param.getName()).append("</name><description>").append(param.getDescription()).append("</description><defaultValue>").append(param.getDefaultValue()).append("</defaultValue></hudson.model.StringParameterDefinition>");
+                    sb.append("<hudson.model.StringParameterDefinition><name>").append(param.getParamName()).append("</name><description>").append(param.getDescription()).append("</description><defaultValue>").append(param.getDefaultValue()).append("</defaultValue></hudson.model.StringParameterDefinition>");
                 }
                 if (param.getRefType().equals(JenkinsParameter.ChoiceType.toString())) {
-                    sb.append("<hudson.model.ChoiceParameterDefinition><name>").append(param.getName()).append("</name><description>").append(param.getDescription()).append("</description><choices class=\"java.util.Arrays\\$ArrayList\"><a class=\"string-array\">").append(param.getJenkinsDefaultValue()).append("</a></choices></hudson.model.ChoiceParameterDefinition>");
+                    sb.append("<hudson.model.ChoiceParameterDefinition><name>").append(param.getParamName()).append("</name><description>").append(param.getDescription()).append("</description><choices class=\"java.util.Arrays\\$ArrayList\"><a class=\"string-array\">").append(param.getJenkinsDefaultValue()).append("</a></choices></hudson.model.ChoiceParameterDefinition>");
                 }
             }
             sb.append("</parameterDefinitions></hudson.model.ParametersDefinitionProperty>");

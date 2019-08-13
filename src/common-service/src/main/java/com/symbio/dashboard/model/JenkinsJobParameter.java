@@ -4,13 +4,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @ClassName - JenkinsJobParameter
- * @Author - admin
+ * @Author - Shawn
  * @Description - jenkins_job_parameter实体类
- * @Date - 2019/8/5 15:34
+ * @Date - 2019/8/5 15:18
  * @Version 1.0
  */
 
@@ -18,7 +19,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @Table(name = "jenkins_job_parameter")
-public class JenkinsJobParameter {
+public class JenkinsJobParameter implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,21 +29,36 @@ public class JenkinsJobParameter {
     @Column(name = "jsiId", nullable = false)
     private Integer jsiId;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "paramName", nullable = false)
+    private String paramName;
 
     @Column(name = "refType", nullable = false)
     private String refType;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "choiceContent")
+    private String choiceContent;
 
     @Column(name = "defaultValue")
     private String defaultValue;
 
-    @Column(name = "display", nullable = false)
-    private Integer display;
+    @Column(name = "lastRunValue")
+    private String lastRunValue;
 
+    @Column(name = "description")
+    private String description;
+
+    // JJP default display mode. 0-not display, 1-display
+    @Column(name = "displayMode", nullable = false)
+    private Integer displayMode;
+
+    @Column(name = "idx", nullable = false)
+    private Integer idx;
+
+    // validation or not. 0-hidden ,1-show, 4-delete
+    @Column(name = "validation", nullable = false)
+    private Integer validation;
+
+    // Fix user columns
     @Column(name = "createTime")
     private Date createTime;
 

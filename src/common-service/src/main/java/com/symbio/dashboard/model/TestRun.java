@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @Table(name = "test_run")
-public class TestRun {
+public class TestRun implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

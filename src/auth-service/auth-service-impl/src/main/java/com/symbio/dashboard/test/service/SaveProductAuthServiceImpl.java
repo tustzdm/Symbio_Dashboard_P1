@@ -3,6 +3,7 @@ package com.symbio.dashboard.test.service;
 import com.symbio.dashboard.Result;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings("unchecked")
 @Service
 public class SaveProductAuthServiceImpl implements SaveProductAuthService {
 

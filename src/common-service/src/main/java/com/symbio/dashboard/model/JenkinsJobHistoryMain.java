@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @Table(name = "jenkins_job_history_main")
-public class JenkinsJobHistoryMain {
+public class JenkinsJobHistoryMain implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

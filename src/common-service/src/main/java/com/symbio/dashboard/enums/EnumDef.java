@@ -20,6 +20,35 @@ public class EnumDef {
         String toString();
     }
 
+    ///////////////////////////////////////////////////////
+    // Record relevant setting
+    ///////////////////////////////////////////////////////
+
+    /**
+     * Common Setting for ${record}.validation
+     * Same to EntityDisplay
+     */
+    @Getter
+    public enum ENTITY_VALIDATION implements IDictEnum {
+        INVALID(0, "invalid"),
+        VALID(1, "valid"),
+        DELETE(4, "removed");
+
+        private Integer code;
+        private String value;
+
+        ENTITY_VALIDATION(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+    ///////////////////////////////////////////////////////
+
     /**
      * BROWSER TYPE
      */
@@ -146,6 +175,7 @@ public class EnumDef {
     /**
      * [TestSet.type]Test Set Type == [TestCase.case_type]Case Type
      */
+    @Getter
     public enum TEST_SET_TYPE implements IDictEnum {
         AUTOMATION(1, "Automation Test"),
         MANUAL(2, "Manual Test"),
@@ -157,16 +187,7 @@ public class EnumDef {
 
         TEST_SET_TYPE(int code, String value) {
             this.code = code;
-        }
-
-        @Override
-        public Integer getCode() {
-            return this.code;
-        }
-
-        @Override
-        public String getValue() {
-            return this.value;
+            this.value = value;
         }
 
         @Override
@@ -178,6 +199,7 @@ public class EnumDef {
     /**
      * [TestCase.case_type]Case Type == Unknown + [TestSet.type]Test Set Type
      */
+    @Getter
     public enum CASE_TYPE implements IDictEnum {
         UNKNOWN(0, "Unknown"),
         AUTOMATION(1, "Automation Test"),
@@ -194,16 +216,6 @@ public class EnumDef {
         }
 
         @Override
-        public Integer getCode() {
-            return this.code;
-        }
-
-        @Override
-        public String getValue() {
-            return this.value;
-        }
-
-        @Override
         public String toString() {
             return String.valueOf(this.code);
         }
@@ -212,6 +224,7 @@ public class EnumDef {
     /**
      * Priority
      */
+    @Getter
     public enum CASE_PRIORITY implements IDictEnum {
         Blank(0, ""),
         P1(1, "P1"),
@@ -228,15 +241,6 @@ public class EnumDef {
             this.value = value;
         }
 
-        @Override
-        public Integer getCode() {
-            return this.code;
-        }
-
-        @Override
-        public String getValue() {
-            return this.value;
-        }
 
         @Override
         public String toString() {
@@ -254,39 +258,30 @@ public class EnumDef {
         TestSet(3, "Test Set"),
         TestRun(4, "Test Run");
 
-        private int id;
-        private String page;
+        private Integer code;
+        private String value;
 
-        OPERATION_TYPE(int id, String page) {
-            this.id = id;
-            this.page = page;
-        }
-
-        @Override
-        public Integer getCode() {
-            return this.id;
-        }
-
-        @Override
-        public String getValue() {
-            return this.page;
+        OPERATION_TYPE(int code, String value) {
+            this.code = code;
+            this.value = value;
         }
 
         @Override
         public String toString() {
-            return String.valueOf(this.id);
+            return String.valueOf(this.code);
         }
     }
 
     public static OPERATION_TYPE getOPERATIONTypeById(Integer id) {
         EnumSet<OPERATION_TYPE> currEnumSet = EnumSet.allOf(OPERATION_TYPE.class);
         for (OPERATION_TYPE item : currEnumSet) {
-            if (item.getId() == id) return item;
+            if (item.getCode() == id) return item;
         }
         return null;
     }
 
-    public enum MENU_TYPE {
+    @Getter
+    public enum MENU_TYPE implements IDictEnum {
         PAGE_ELEMENT(1, "Page_Element"),
         TEP_LIST(2, "teplist"),
         SETTING(3, "SETTING"),
@@ -304,27 +299,24 @@ public class EnumDef {
         //        Setting(22, "SETTING"),
         //        Teplist(24, "teplist");
 
-        private int id;
-        private String title;
+        private Integer code;
+        private String value;
 
-        MENU_TYPE(int id, String title) {
-            this.id = id;
-            this.title = title;
+        MENU_TYPE(int code, String value) {
+            this.code = code;
+            this.value = value;
         }
 
-        public String getTitle() {
-            return this.title;
-        }
-
-        public int getID() {
-            return this.id;
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
         }
     }
 
     public static MENU_TYPE getMenuById(Integer id) {
         EnumSet<MENU_TYPE> currEnumSet = EnumSet.allOf(MENU_TYPE.class);
         for (MENU_TYPE item : currEnumSet) {
-            if (item.getID() == id.intValue()) return item;
+            if (item.getCode() == id.intValue()) return item;
         }
         return null;
     }
@@ -332,6 +324,7 @@ public class EnumDef {
     /**
      * Automation Job actual status
      */
+    @Getter
     public enum JENKINS_AUTO_STATUS implements IDictEnum {
         NotRun(0, "Not Run"),
         AutoSuccess(1, "Passed"),
@@ -341,7 +334,7 @@ public class EnumDef {
         Running(5, "running"),
         Error(6, "error");
 
-        private int code;
+        private Integer code;
         private String value;
 
         JENKINS_AUTO_STATUS(int code, String value) {
@@ -353,26 +346,17 @@ public class EnumDef {
         public String toString() {
             return String.valueOf(code);
         }
-
-        @Override
-        public Integer getCode() {
-            return this.code;
-        }
-
-        @Override
-        public String getValue() {
-            return this.value;
-        }
     }
 
     /**
      * Separated by Product or not
      */
+    @Getter
     public enum TESTCASE_SEPARATED_PRODUCT implements IDictEnum {
         YES(1, "Yes"),
         NO(0, "No");
 
-        private int code;
+        private Integer code;
         private String value;
 
         TESTCASE_SEPARATED_PRODUCT(int code, String value) {
@@ -384,26 +368,17 @@ public class EnumDef {
         public String toString() {
             return String.valueOf(code);
         }
-
-        @Override
-        public Integer getCode() {
-            return this.code;
-        }
-
-        @Override
-        public String getValue() {
-            return this.value;
-        }
     }
 
     /**
      * Separated by Product or not
      */
+    @Getter
     public enum TEP_SEPARATED_PRODUCT implements IDictEnum {
         YES(1, "Yes"),
         NO(0, "No");
 
-        private int code;
+        private Integer code;
         private String value;
 
         TEP_SEPARATED_PRODUCT(int code, String value) {
@@ -414,16 +389,6 @@ public class EnumDef {
         @Override
         public String toString() {
             return String.valueOf(code);
-        }
-
-        @Override
-        public Integer getCode() {
-            return this.code;
-        }
-
-        @Override
-        public String getValue() {
-            return this.value;
         }
     }
 
@@ -615,17 +580,18 @@ public class EnumDef {
         }
     }
 
+    @Getter
     public enum QB_API_STATUS implements IDictEnum {
         UNKnown(0, ""),
         SUCCESS(1, "success"),
         LQA_FAIL(4, "LQA Failure"),
         AUTO_FAIL(5, "Auto Failure");
-        private int code;
-        private String desp;
+        private Integer code;
+        private String value;
 
-        QB_API_STATUS(int code, String desp) {
+        QB_API_STATUS(int code, String value) {
             this.code = code;
-            this.desp = desp;
+            this.value = value;
         }
 
         @Override
@@ -633,42 +599,24 @@ public class EnumDef {
             return String.valueOf(code);
         }
 
-        @Override
-        public Integer getCode() {
-            return this.code;
-        }
-
-        @Override
-        public String getValue() {
-            return this.desp;
-        }
     }
 
+    @Getter
     public enum QB_BROWSERS implements IDictEnum {
         UNKnown(0, ""),
         Firefox(1, "Firefox"),
         Chrome(2, "Chrome");
-        private int code;
-        private String desp;
+        private Integer code;
+        private String value;
 
-        QB_BROWSERS(int code, String desp) {
+        QB_BROWSERS(int code, String value) {
             this.code = code;
-            this.desp = desp;
+            this.value = value;
         }
 
         @Override
         public String toString() {
             return String.valueOf(code);
-        }
-
-        @Override
-        public Integer getCode() {
-            return this.code;
-        }
-
-        @Override
-        public String getValue() {
-            return this.desp;
         }
     }
 
@@ -680,63 +628,44 @@ public class EnumDef {
         return null;
     }
 
+    @Getter
     public enum QB_QAStatus implements IDictEnum {
         BLANK(0, ""),
         Pass(1, "pass"),
         Conditional_Pass(2, "conditional pass"),
         Fail(4, "fail"),
         TestNotReq(5, "Testing Not Required");
-        private int code;
-        private String desp;
+        private Integer code;
+        private String value;
 
-        QB_QAStatus(int code, String desp) {
+        QB_QAStatus(int code, String value) {
             this.code = code;
-            this.desp = desp;
+            this.value = value;
         }
 
         @Override
         public String toString() {
             return String.valueOf(this.code);
         }
-
-        @Override
-        public Integer getCode() {
-            return this.code;
-        }
-
-        @Override
-        public String getValue() {
-            return this.desp;
-        }
     }
 
+    @Getter
     public enum QB_AutoStatus implements IDictEnum {
         NotRun(0, ""),
         Success(1, "Automation SUCCESS"),
         Failure(2, "Automation FAILURE"),
         Skip(3, "Automation SKIP");
-        private int code;
-        private String desp;
+        private Integer code;
+        private String value;
 
-        QB_AutoStatus(int code, String desp) {
+        QB_AutoStatus(int code, String value) {
             this.code = code;
-            this.desp = desp;
+            this.value = value;
         }
 
         @Override
         public String toString() {
-            // return this.desp;
             return String.valueOf(this.code);
-        }
-
-        @Override
-        public Integer getCode() {
-            return this.code;
-        }
-
-        @Override
-        public String getValue() {
-            return this.desp;
         }
     }
 
@@ -755,15 +684,17 @@ public class EnumDef {
         return null;
     }
 
+    @Getter
     public enum QB_METHOD implements IDictEnum {
         AUTOMATION(0, "Automation"),
         MANUAL(1, "Manual");
-        private int code;
-        private String desp;
 
-        QB_METHOD(int code, String desp) {
+        private Integer code;
+        private String value;
+
+        QB_METHOD(int code, String value) {
             this.code = code;
-            this.desp = desp;
+            this.value = value;
         }
 
         @Override
@@ -771,30 +702,21 @@ public class EnumDef {
             // return this.desp;
             return String.valueOf(code);
         }
-
-        @Override
-        public Integer getCode() {
-            return this.code;
-        }
-
-        @Override
-        public String getValue() {
-            return this.desp;
-        }
     }
 
+    @Getter
     public enum QB_SKUS implements IDictEnum {
         UNKNOW(0, ""),
         SIMPLE(1, "Simple Start"),
         ESSENTIALS(2, "Essentials"),
         PLUS(3, "Plus");
 
-        private int code;
-        private String desp;
+        private Integer code;
+        private String value;
 
-        QB_SKUS(int code, String desp) {
+        QB_SKUS(int code, String value) {
             this.code = code;
-            this.desp = desp;
+            this.value = value;
         }
 
         @Override
@@ -802,15 +724,6 @@ public class EnumDef {
             return String.valueOf(code);
         }
 
-        @Override
-        public Integer getCode() {
-            return this.code;
-        }
-
-        @Override
-        public String getValue() {
-            return this.desp;
-        }
     }
 
     public static QB_METHOD getMethodByCode(int code) {
@@ -895,7 +808,16 @@ public class EnumDef {
 
     public static void main(String[] args) {
         try {
-            System.out.println(getEnumTypeValueByCode(OPERATION_TYPE.class, 1));
+            System.out.println(getEnumTypeValueByCode(ENTITY_VALIDATION.class, 1));
+
+            EnumSet<ENTITY_VALIDATION> currEnumSet = EnumSet.allOf(ENTITY_VALIDATION.class);
+            for (ENTITY_VALIDATION item : currEnumSet) {
+                try {
+                    System.out.println(String.format("code=%s, value=%s, toString=%s", item.getCode(), item.getValue(), item.toString()));
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

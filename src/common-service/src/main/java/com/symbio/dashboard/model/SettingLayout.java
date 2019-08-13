@@ -3,10 +3,10 @@ package com.symbio.dashboard.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -19,7 +19,7 @@ import java.util.Date;
 @DynamicUpdate
 @NoArgsConstructor
 @Table(name = "setting_layout")
-public class SettingLayout {
+public class SettingLayout implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**F
@@ -17,7 +18,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @Table(name = "function_info")
-public class FunctionInfo {
+public class FunctionInfo implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -783,18 +783,23 @@ DROP TABLE IF EXISTS `jenkins_job_parameter`;
 CREATE TABLE `jenkins_job_parameter` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
   `jsiId` int(10) unsigned NOT NULL COMMENT 'jenkins svr id. FK: jenkins_svr_info.id',
-  `name` varchar(32) NOT NULL COMMENT 'name',
-  `refType` varchar(32) NOT NULL COMMENT 'setting Type. 0-boolean,1-string,2-number,3-choice',
-  `description` varchar(1024) DEFAULT NULL,
+  `paramName` varchar(32) NOT NULL COMMENT 'Parameter name',
+  `refType` varchar(32) NOT NULL COMMENT 'Item Type. 0-boolean,1-string,2-number,3-choice,4-file',
+  `choiceContent` varchar(255) DEFAULT NULL COMMENT 'Choice items if refType is 3. Separated by comma',
   `defaultValue` varchar(64) DEFAULT NULL,
-  `display` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '.0-not ,1-yes',
+  `lastRunValue` varchar(64) DEFAULT NULL COMMENT 'Last item run value',
+  `description` varchar(1024) DEFAULT NULL,
+  `displayMode` smallint(10) unsigned NOT NULL DEFAULT '1' COMMENT 'JJP default display mode. 0-not display, 1-display',
+  `idx` smallint(5) NOT NULL DEFAULT 99 COMMENT 'JJP index',
+  `validation` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'validation or not. 0-hidden ,1-show, 4-delete',
   `createTime` datetime DEFAULT NULL COMMENT 'create time',
   `createUserId` int(10) unsigned NOT NULL COMMENT 'create user',
-  `createUserName` varchar(32) DEFAULT NULL COMMENT 'name',
+  `createUserName` varchar(32) DEFAULT NULL COMMENT 'create user name',
   `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
   `updateUserId` int(10) unsigned DEFAULT NULL COMMENT 'update user',
-  `updateUserName` varchar(32) DEFAULT NULL COMMENT 'name',
-  PRIMARY KEY (`id`)
+  `updateUserName` varchar(32) DEFAULT NULL COMMENT 'update user name',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_JJP_url_jobname` (`jsiId`, `paramName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `jenkins_job_history_main`;
