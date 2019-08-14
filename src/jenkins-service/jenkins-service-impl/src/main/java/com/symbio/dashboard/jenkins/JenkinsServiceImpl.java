@@ -7,13 +7,17 @@ import com.offbytwo.jenkins.model.Job;
 import com.offbytwo.jenkins.model.JobWithDetails;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.JenkinsBean;
+import com.symbio.dashboard.bean.JenkinsJobArgs;
 import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.dao.CommonDao;
+import com.symbio.dashboard.data.dao.JenkinsDao;
+import com.symbio.dashboard.dto.TEPInfoDTO;
+import com.symbio.dashboard.model.JenkinsSvrInfo;
+import com.symbio.dashboard.model.TestExecPlatform;
 import com.symbio.dashboard.util.BusinessUtil;
+import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -32,12 +36,11 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class JenkinsServiceImpl implements IJenkinsService {
 
-    //    @Autowired
-    //    ITestRunService testRunService;
+    @Autowired
+    JenkinsDao jenkinsDao;
     //    @Autowired
     //    IJenkinsJobHistoryService jenkinsJobHistoryService;
 
-    private static Logger logger = LoggerFactory.getLogger(JenkinsServiceImpl.class);
     private static Integer JENKINS_PORT = null;
 
     @Autowired
@@ -121,6 +124,10 @@ public class JenkinsServiceImpl implements IJenkinsService {
         return resultData;
     }
 
+    private Result<List<JenkinsBean>> getParams(JenkinsSvrInfo jsi) {
+        return getParams(jsi.getUrl(), jsi.getUsername(), jsi.getPassword(), jsi.getJobname());
+    }
+
     /**
      * To fix bug: build.url is fixed to http://ip:8080/
      *
@@ -140,7 +147,7 @@ public class JenkinsServiceImpl implements IJenkinsService {
     @Override
     public Result<String> getJobLastStatus(
             String url, String userName, String password, String jobName, Integer buildId) {
-        logger.trace("logger - getJobLastStatus() Enter");
+        log.trace("logger - getJobLastStatus() Enter");
         log.trace("log - getJobLastStatus() Enter");
 
         JenkinsServer server;
@@ -177,7 +184,7 @@ public class JenkinsServiceImpl implements IJenkinsService {
             retResult.setCd(strResult);
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error("JenkinsServiceImpl.getJobLastStatus() ERROR!!!" + e.getMessage());
+            log.error("JenkinsServiceImpl.getJobLastStatus() ERROR!!!" + e.getMessage());
             retResult = commonDao.getResult("300102", jobName);
         }
         return retResult;
@@ -188,12 +195,12 @@ public class JenkinsServiceImpl implements IJenkinsService {
         Map<String, String> headMap = new HashMap<>(params);
 
         Assert.notNull(job, "no Job exist to run the execution");
-        logger.info("executing job {} with params: {}", job.getName(), headMap);
+        log.info("executing job {} with params: {}", job.getName(), headMap);
 
         try {
             job.build(headMap, files);
         } catch (Exception e) {
-            logger.warn("failed to execute job on jenkins", e);
+            log.warn("failed to execute job on jenkins", e);
             throw new IllegalStateException(" can not get the job ");
         }
     }
@@ -203,13 +210,13 @@ public class JenkinsServiceImpl implements IJenkinsService {
             throws IOException {
         Result<JenkinsServer> jenkinsServer = getJenkinsServer(jenkinsUrl, userName, password);
         if (jenkinsServer.hasError()) {
-            logger.error(String.format("Ec:%s, Em:%s", jenkinsServer.getEc(), jenkinsServer.getEm()));
+            log.error(String.format("Ec:%s, Em:%s", jenkinsServer.getEc(), jenkinsServer.getEm()));
             return null;
         }
 
         JenkinsServer retJServer = jenkinsServer.getCd();
         if (retJServer == null) {
-            logger.warn("JenkinsServer is NULL!!!");
+            log.warn("JenkinsServer is NULL!!!");
             return null;
         }
 
@@ -225,7 +232,7 @@ public class JenkinsServiceImpl implements IJenkinsService {
      * @return
      */
     private Result<JenkinsServer> getJenkinsServer(String url, String userName, String password) {
-        logger.info("JenkinsServiceImpl.getJenkinsServer Enter.");
+        log.info("JenkinsServiceImpl.getJenkinsServer Enter.");
 
         Result<JenkinsServer> retData = new Result<>();
         JenkinsServer server = null;
@@ -245,11 +252,141 @@ public class JenkinsServiceImpl implements IJenkinsService {
             }
         } catch (URISyntaxException e) {
             e.printStackTrace();
-            logger.error("Wrong jenkins url", e);
+            log.error("Wrong jenkins url", e);
             retData = commonDao.getResult("000102", "accessing Jenkins service");
         }
 
-        logger.info("JenkinsServiceImpl.getJenkinsServer Exit");
+        log.info("JenkinsServiceImpl.getJenkinsServer Exit");
         return retData;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Implement of fetching TEP data for Run Job
+     *
+     * @param userId
+     * @param locale
+     * @param testSetId
+     * @return
+     */
+    @Override
+    public Result<TEPInfoDTO> getTEPInfo(Integer userId, String locale, Integer testSetId) {
+        Result<TEPInfoDTO> retTEPInfo = new Result<>();
+
+        TEPInfoDTO dtoTepInfo = new TEPInfoDTO();
+        Integer tepId = 0;
+
+        dtoTepInfo.setLocale(locale);
+        dtoTepInfo.setRole(7);
+
+
+        Result<List<TestExecPlatform>> resultListTEP = jenkinsDao.getTEPList(testSetId);
+        if (resultListTEP.hasError()) {
+            log.info(String.format("JenkinsServiceImpl.getTEPInfo() - invoke jenkinsDao.getTEPList() failure. ec = %s, em = %s",
+                    resultListTEP.getEc(), resultListTEP.getEm()));
+            return new Result(resultListTEP);
+        }
+
+        List<TestExecPlatform> listTEP = resultListTEP.getCd();
+        if (CommonUtil.isEmpty(listTEP)) {
+            return commonDao.getResult("300501");
+        }
+
+        tepId = listTEP.get(0).getId();
+        dtoTepInfo.setTepId(tepId);
+        dtoTepInfo.setNameList(getNameList(listTEP));
+
+        Result<List<JenkinsJobArgs>> resultJJA = jenkinsDao.getJobArgsInfo(locale, tepId);
+        if (resultJJA.hasError()) {
+            if (!resultJJA.getEc().equals("300503")) {
+                return new Result(resultJJA);
+            }
+
+            // Get Job args automatically
+            log.info("Need to fetch Jenkins job args automatically...");
+
+            try {
+                JenkinsSvrInfo jsi = (JenkinsSvrInfo) resultJJA.getCd();
+                saveJobArgsList(jsi);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            dtoTepInfo.setData(new ArrayList<>());
+        } else {
+            List<JenkinsJobArgs> listJJA = resultJJA.getCd();
+            dtoTepInfo.setData(getJJAListMap(listJJA));
+        }
+        retTEPInfo.setCd(dtoTepInfo);
+
+        return retTEPInfo;
+    }
+
+    private Result saveJobArgsList(JenkinsSvrInfo jsi) {
+        Result<List<JenkinsBean>> resultListJB = getParams(jsi);
+        if (resultListJB.hasError()) {
+            log.error(String.format("saveJobArgsList() ERROR!!! ec=%s, em=%s", resultListJB.getEc(), resultListJB.getEm()));
+            return new Result(resultListJB);
+        }
+
+        List<JenkinsBean> listData = resultListJB.getCd();
+        if (CommonUtil.isEmpty(listData)) {
+            log.warn(String.format("Job name[%s] has no run parameters.", jsi.getJobname()));
+            return commonDao.getResult("300504", jsi.getJobname());
+        }
+
+        log.info("parameters count = " + listData.size());
+
+        Result resultSaveJobParams = jenkinsDao.saveJobParameters(jsi.getId(), listData);
+        if (resultSaveJobParams.hasError()) {
+            return new Result(resultSaveJobParams);
+        }
+        return resultSaveJobParams;
+    }
+
+    /**
+     * Convert List<TestExecPlatform> to List<Map>
+     *
+     * @param data
+     * @return
+     */
+    private List<Map<String, Object>> getNameList(List<TestExecPlatform> data) {
+        List<Map<String, Object>> listName = new ArrayList<>();
+
+        Map<String, Object> mapItem = null;
+        for (TestExecPlatform item : data) {
+            mapItem = new HashMap<>();
+            mapItem.put("id", item.getId());
+            mapItem.put("name", item.getName());
+            listName.add(mapItem);
+        }
+        return listName;
+    }
+
+    /**
+     * Convert List<TestExecPlatform> to List<Map>
+     *
+     * @param data
+     * @return
+     */
+    private List<Map<String, Object>> getJJAListMap(List<JenkinsJobArgs> data) {
+        List<Map<String, Object>> listName = new ArrayList<>();
+
+        Map<String, Object> mapItem = null;
+        for (JenkinsJobArgs item : data) {
+            mapItem = new HashMap<>();
+            mapItem.put("name", item.getName());
+            mapItem.put("type", item.getType());
+
+            mapItem.put("defaultValue", item.getDefaultValue());
+            mapItem.put("description", item.getDescription());
+
+            if (item.getType().equals("3")) {
+                mapItem.put("choiceList", item.getChoiceList());
+            }
+            listName.add(mapItem);
+        }
+        return listName;
     }
 }

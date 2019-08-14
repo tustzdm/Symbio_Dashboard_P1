@@ -47,6 +47,29 @@ public class EnumDef {
             return String.valueOf(this.code);
         }
     }
+
+    /**
+     * Common Setting for ${record}.validation
+     * Same to EntityDisplay
+     */
+    @Getter
+    public enum ENTITY_BOOL implements IDictEnum {
+        NO(0, "false"),
+        YES(1, "true");
+
+        private Integer code;
+        private String value;
+
+        ENTITY_BOOL(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
     ///////////////////////////////////////////////////////
 
     /**

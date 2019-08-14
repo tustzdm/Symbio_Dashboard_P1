@@ -30,6 +30,16 @@ public class Result<T> implements java.io.Serializable {
         this.em = "";
     }
 
+    public Result(Result result) {
+        if (result.hasError()) {
+            this.ec = result.getEc();
+            this.em = result.getEm();
+        } else {
+            this.ec = "0";
+            this.em = "";
+        }
+    }
+
     public Result(String code, String message){
         this.ec = code;
         this.em = message;

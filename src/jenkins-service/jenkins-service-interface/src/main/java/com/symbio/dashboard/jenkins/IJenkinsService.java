@@ -3,6 +3,7 @@ package com.symbio.dashboard.jenkins;
 import com.offbytwo.jenkins.model.Job;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.JenkinsBean;
+import com.symbio.dashboard.dto.TEPInfoDTO;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -20,4 +21,7 @@ public interface IJenkinsService {
     void run(Job job, Map<String, String> params, Map<String, File> files);
 
     Job getJob(String jenkinsUrl, String userName, String password, String jobName) throws IOException;
+
+
+    Result<TEPInfoDTO> getTEPInfo(Integer userId, String locale, Integer testSetId);
 }

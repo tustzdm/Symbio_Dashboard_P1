@@ -1,5 +1,7 @@
 package com.symbio.dashboard.util;
 
+import com.symbio.dashboard.enums.EnumDef;
+
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -57,6 +59,21 @@ public class CommonUtil {
             e.printStackTrace();
         }
         return retValue;
+    }
+
+    public static boolean isTRUEStr(String data) {
+        boolean ret = false;
+
+        if (data == null) return false;
+        String chkData = data.toLowerCase().trim();
+
+        // Only 1 or 'true'
+        if (EnumDef.ENTITY_BOOL.YES.getCode().toString().equals(chkData)
+                || EnumDef.ENTITY_BOOL.YES.getValue().equals(chkData)) {
+            ret = true;
+        }
+
+        return ret;
     }
 
     public static String[] concat(String[] a, String[] b) {
