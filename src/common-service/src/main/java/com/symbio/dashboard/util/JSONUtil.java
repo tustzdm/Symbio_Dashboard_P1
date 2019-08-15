@@ -1,12 +1,12 @@
 package com.symbio.dashboard.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.*;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 /**
  * @Author: Shawn
@@ -80,7 +80,7 @@ public class JSONUtil {
    * @param map
    * @return
    */
-  public static String getPostArgByMap(Map map) {
+  public static String mapToString(Map map) {
     try {
       JSONObject orgJson = new JSONObject(map);
       return orgJson.toString();

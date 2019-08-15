@@ -4,17 +4,17 @@ import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.JenkinsBean;
 import com.symbio.dashboard.bean.JenkinsJobArgs;
 import com.symbio.dashboard.business.JenkinsJobArgsFactory;
+import com.symbio.dashboard.business.JenkinsJobHistoryFactory;
 import com.symbio.dashboard.business.JenkinsJobParameterFactory;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.constant.ProjectConst;
+import com.symbio.dashboard.data.repository.JenkinsJobHistoryMainRep;
 import com.symbio.dashboard.data.repository.JenkinsJobParameterRep;
 import com.symbio.dashboard.data.repository.JenkinsRep;
 import com.symbio.dashboard.data.repository.JenkinsServerInfoRep;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.Locales;
-import com.symbio.dashboard.model.JenkinsJobParameter;
-import com.symbio.dashboard.model.JenkinsSvrInfo;
-import com.symbio.dashboard.model.TestExecPlatform;
-import com.symbio.dashboard.model.User;
+import com.symbio.dashboard.model.*;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -23,12 +23,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("unchecked")
 @Repository
 @Slf4j
 public class JenkinsDao {
 
+    @Autowired
+    private UserDao userDao;
     @Autowired
     private CommonDao commonDao;
     @Autowired
@@ -39,6 +42,8 @@ public class JenkinsDao {
     private JenkinsServerInfoRep jsiRep;
     @Autowired
     private JenkinsJobParameterRep jjpRep;
+    @Autowired
+    private JenkinsJobHistoryMainRep jjhMainRep;
 
     /**
      * 根据 TestSetID 得到TEP List信息
@@ -111,6 +116,32 @@ public class JenkinsDao {
     }
 
     /**
+     * Get JSI info by TEP id
+     *
+     * @param locale
+     * @param tepId
+     * @return
+     */
+    public Result<JenkinsSvrInfo> getJSIByTepId(String locale, Integer tepId) {
+        Result<JenkinsSvrInfo> retResult = new Result<>();
+        try {
+            Integer jsiId = jenkinsRep.getJSIIdByTEPId(tepId);
+            if (jsiId == null) {
+                return commonDao.getResultArgs(locale, "300502", tepId);
+            }
+
+            JenkinsSvrInfo jsi = jsiRep.getById(jsiId);
+            retResult.setCd(jsi);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("JenkinsDao.getJobArgsInfo() ERROR!!! " + e.getMessage());
+            return commonDao.getExceptionArgsResult("getting Job args info");
+        }
+
+        return retResult;
+    }
+
+    /**
      * Get Job Args List Info by TEP id
      *
      * @param tepId
@@ -122,20 +153,20 @@ public class JenkinsDao {
         List<JenkinsJobArgs> retList = new ArrayList<>();
 
         try {
-            Integer jsiId = jenkinsRep.getJSIIdByTEPId(tepId);
-            if (jsiId == null) {
-                return commonDao.getResultArgs(locale, "300502", tepId);
+            // Get JSI info
+            Result<JenkinsSvrInfo> retJSI = getJSIByTepId(locale, tepId);
+            if (retJSI.hasError()) {
+                return new Result<>(retJSI);
             }
+            JenkinsSvrInfo jsi = retJSI.getCd();
 
-            JenkinsSvrInfo jsi = jsiRep.getById(jsiId);
-//            List<JenkinsJobParameter> listJJP = jenkinsRep.getJobParameter(jsi.getId());
             List<JenkinsJobParameter> listJJP = jjpRep.fetchListByJSIId(jsi.getId());
             if (CommonUtil.isEmpty(listJJP)) {
                 if (CommonUtil.isEmpty(jsi.getJobConfigXml())) {
                     String strJenkinsAutoFetch = commonDao.getConfigValueByKey(ProjectConst.JENKINS_FETCH_JOBARGS);
                     if (CommonUtil.isTRUEStr(strJenkinsAutoFetch)) {
                         log.debug("Try to fetch job args later due to the config xml is empty.");
-                        Result specResult = commonDao.getResult("300503");
+                        Result specResult = commonDao.getResult(ErrorConst.JENKINS_FETCH_JOBARGS_AUTOMATICALLY);
                         specResult.setCd(jsi);
                         return specResult;
                     }
@@ -149,16 +180,36 @@ public class JenkinsDao {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("JenkinsDao.getJobArgsInfo() ERROR!!! " + e.getMessage());
-            return commonDao.getResult("000102", "getting Job args info");
+            return commonDao.getExceptionArgsResult("getting Job args info");
         }
 
         return retResult;
     }
 
-    public Result saveJobParameters(Integer jsiId, List<JenkinsBean> listData) {
-        Result retSaveOperation = new Result();
+    /**
+     * Update job xml and job relevant parameters into db
+     *
+     * @param strJobXML
+     * @param jsiId
+     * @param listData
+     * @return
+     */
+    public Result<List<JenkinsJobArgs>> saveJobParameters(String strJobXML, Integer jsiId, List<JenkinsBean> listData) {
+        Result<List<JenkinsJobArgs>> retSaveOperation = new Result();
 
         try {
+            // Update job xml
+            if (!CommonUtil.isEmpty(strJobXML)) {
+                JenkinsSvrInfo jsi = jsiRep.getById(jsiId);
+                if (CommonUtil.isEmpty(jsi)) {
+                    return commonDao.getTableNoDataArgsResult("jenkins_svr_info", jsiId);
+                }
+
+                jsi.setJobConfigXml(strJobXML);
+                jsiRep.saveAndFlush(jsi);
+            }
+
+            List<JenkinsJobParameter> listJJP = new ArrayList<>();
             JenkinsJobParameter jjp = null;
             Integer jjpIndex = 0;
 
@@ -172,13 +223,49 @@ public class JenkinsDao {
                     jjp = JenkinsJobParameterFactory.createNewJJP(user, jsiId, item, jjpIndex++);
                     jjpRep.saveAndFlush(jjp);
                 }
+                listJJP.add(jjp);
             }
+
+            String separatedSymbol = commonDao.getConfigValueByKey(ProjectConst.JENKINS_CHOICE_SEPARATED_SYMBOL);
+            List<JenkinsJobArgs> listJJA = JenkinsJobArgsFactory.convertToJJA(listJJP, separatedSymbol);
+            retSaveOperation.setCd(listJJA);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("JenkinsDao.saveJobParameters() ERROR!!! " + e.getMessage());
+            return commonDao.getResult("300505");
         }
 
         return retSaveOperation;
     }
 
+    /**
+     * Save Job History Main Info
+     *
+     * @param userId
+     * @param locale
+     * @param testSetId
+     * @param tepId
+     * @param jsi
+     * @param map
+     * @param buildId
+     * @return
+     */
+    public Result saveNewJobHistory(Integer userId, String locale, Integer testSetId, Integer tepId, JenkinsSvrInfo jsi, Map<String, String> map, Integer buildId) {
+        Result retResult = new Result();
+
+        User user = userDao.getUserById(userId);
+        if (CommonUtil.isEmpty(user)) {
+            return commonDao.getTableNoDataArgsLocale(locale, "User", userId);
+        }
+
+        try {
+            JenkinsJobHistoryMain jobHistoryMain = JenkinsJobHistoryFactory.createNewHistoryMainInfo(user, testSetId, tepId, jsi, map, buildId);
+            jjhMainRep.saveAndFlush(jobHistoryMain);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return commonDao.getEmptyArgsLocale(locale, "saving Jenkins job history Main info");
+        }
+        return retResult;
+    }
 
 }

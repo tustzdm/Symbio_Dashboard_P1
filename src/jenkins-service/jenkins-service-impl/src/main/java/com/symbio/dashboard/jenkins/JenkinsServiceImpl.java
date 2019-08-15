@@ -8,6 +8,8 @@ import com.offbytwo.jenkins.model.JobWithDetails;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.JenkinsBean;
 import com.symbio.dashboard.bean.JenkinsJobArgs;
+import com.symbio.dashboard.business.JenkinsJobArgsFactory;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.dao.JenkinsDao;
@@ -38,13 +40,11 @@ public class JenkinsServiceImpl implements IJenkinsService {
 
     @Autowired
     JenkinsDao jenkinsDao;
-    //    @Autowired
-    //    IJenkinsJobHistoryService jenkinsJobHistoryService;
-
-    private static Integer JENKINS_PORT = null;
-
     @Autowired
     private CommonDao commonDao;
+
+    private static Integer JENKINS_PORT = null;
+    private final Integer JENKINS_PORT_8080 = 8080;
 
     private Integer getJenkinsSvrPort() {
         if (JENKINS_PORT == null) {
@@ -66,16 +66,16 @@ public class JenkinsServiceImpl implements IJenkinsService {
         Result retResult = new Result();
 
         if (StringUtil.isEmpty(url)) {
-            return commonDao.getResult("000101", "Jenkins.URL");
+            return commonDao.getEmptyArgsResult("Jenkins.URL");
         }
         if (StringUtil.isEmpty(userName)) {
-            return commonDao.getResult("000101", "Jenkins.UserName");
+            return commonDao.getEmptyArgsResult("Jenkins.UserName");
         }
         if (StringUtil.isEmpty(password)) {
-            return commonDao.getResult("000101", "Jenkins.Password");
+            return commonDao.getEmptyArgsResult("Jenkins.Password");
         }
         if (StringUtil.isEmpty(jobName)) {
-            return commonDao.getResult("000101", "Jenkins.JobName");
+            return commonDao.getEmptyArgsResult("Jenkins.JobName");
         }
 
         return retResult;
@@ -95,10 +95,10 @@ public class JenkinsServiceImpl implements IJenkinsService {
     }
 
     @Override
-    public Result<List<JenkinsBean>> getParams(
+    public Result<Map<String, Object>> getParams(
             String url, String userName, String password, String jobName) {
         JenkinsServer server;
-        Result<List<JenkinsBean>> resultData = new Result<>(new ArrayList<>());
+        Result<Map<String, Object>> resultData = new Result();
 
         Result retValidation = validation(url, userName, password, jobName);
         if (retValidation.hasError()) {
@@ -110,21 +110,27 @@ public class JenkinsServiceImpl implements IJenkinsService {
             if (retData.isSuccess()) {
                 server = retData.getCd();
             } else {
-                resultData.setEc(retData.getEc());
-                resultData.setEm(retData.getEm());
-                return resultData;
+//                resultData.setEc(retData.getEc());
+//                resultData.setEm(retData.getEm());
+                return new Result(resultData);
             }
 
             String xml = server.getJobXml(jobName);
             JenkinsParseUtil parseUtil = new JenkinsParseUtil();
-            resultData.setCd(parseUtil.parse(xml));
+
+            Map<String, Object> mapData = new HashMap<>();
+            mapData.put("jobXML", xml);
+            mapData.put("data", parseUtil.parse(xml));
+
+
+            resultData.setCd(mapData);
         } catch (IOException e) {
             resultData = commonDao.getResult("300101", jobName);
         }
         return resultData;
     }
 
-    private Result<List<JenkinsBean>> getParams(JenkinsSvrInfo jsi) {
+    private Result<Map<String, Object>> getParams(JenkinsSvrInfo jsi) {
         return getParams(jsi.getUrl(), jsi.getUsername(), jsi.getPassword(), jsi.getJobname());
     }
 
@@ -136,12 +142,22 @@ public class JenkinsServiceImpl implements IJenkinsService {
      */
     private Build getExactBuild(Build build) {
         Build newbuild = build;
-        if (getJenkinsSvrPort() != 8080) {
-            String newUrl = build.getUrl().replace("8080", getJenkinsSvrPort().toString());
+        if (getJenkinsSvrPort() != JENKINS_PORT_8080) {
+            String newUrl = build.getUrl().replace(String.valueOf(JENKINS_PORT_8080), getJenkinsSvrPort().toString());
             newbuild = new Build(build.getNumber(), newUrl);
             newbuild.setClient(build.getClient());
         }
         return newbuild;
+    }
+
+    private Job getExactJob(Job job) {
+        Job newJob = job;
+        if (getJenkinsSvrPort() != JENKINS_PORT_8080) {
+            String newUrl = job.getUrl().replace(String.valueOf(JENKINS_PORT_8080), getJenkinsSvrPort().toString());
+            newJob = new Job(job.getName(), newUrl);
+            newJob.setClient(job.getClient());
+        }
+        return newJob;
     }
 
     @Override
@@ -201,8 +217,12 @@ public class JenkinsServiceImpl implements IJenkinsService {
             job.build(headMap, files);
         } catch (Exception e) {
             log.warn("failed to execute job on jenkins", e);
-            throw new IllegalStateException(" can not get the job ");
+            throw new IllegalStateException(e);
         }
+    }
+
+    private Job getJob(JenkinsSvrInfo jsi) throws IOException {
+        return getJob(jsi.getUrl(), jsi.getUsername(), jsi.getPassword(), jsi.getJobname());
     }
 
     @Override
@@ -261,6 +281,59 @@ public class JenkinsServiceImpl implements IJenkinsService {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    public Result<String> runJob(Integer userId, String locale, Integer testSetId, Integer tepId, Map<String, String> params) {
+        Result<String> retResult = new Result<>();
+
+        // Step1 - Get JSI info
+        Result<JenkinsSvrInfo> retJSI = jenkinsDao.getJSIByTepId(locale, tepId);
+        if (retJSI.hasError()) {
+            return new Result<>(retJSI);
+        }
+        JenkinsSvrInfo jsi = retJSI.getCd();
+        Job job = null;
+        Map<String, String> mapRunArgs = null;
+        Integer nextBuildNumber = 0;
+
+        try {
+            job = this.getJob(jsi);
+            nextBuildNumber = ((JobWithDetails) job).getNextBuildNumber();
+
+            job = getExactJob(job);
+
+            // Step2 - Get job parameters
+            Result<List<JenkinsJobArgs>> retJJA = jenkinsDao.getJobArgsInfo(locale, tepId);
+            if (retJJA.hasError()) {
+                return new Result<>(retJJA);
+            }
+            List<JenkinsJobArgs> listJJA = retJJA.getCd();
+
+            String jobRunToken = commonDao.getConfigValueByKey(ProjectConst.JENKINS_JOB_TOKEN);
+            mapRunArgs = JenkinsJobArgsFactory.buildRunMap(listJJA, jobRunToken);
+
+            // Step3 - run job
+            try {
+                this.run(job, mapRunArgs, new HashMap<>());
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("runJob.run() ERROR!!! " + e.getMessage());
+                return commonDao.getResult("300506", jsi.getJobname(), e.getMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("runJob.getJob() ERROR!!! " + e.getMessage());
+            return commonDao.getExceptionArgsResult("running jenkins job. Message is : " + e.getMessage());
+        }
+
+        // Step4 - Get buildId
+        Result retSaveJobInfo = jenkinsDao.saveNewJobHistory(userId, locale, testSetId, tepId, jsi, mapRunArgs, nextBuildNumber);
+        if (retSaveJobInfo.hasError()) {
+            log.warn("Invoke jenkinsDao.saveNewJobHistory() ERROR!!! ec = %s, em = %s" + retSaveJobInfo.getEm());
+        }
+        retResult.setCd("buildId = " + nextBuildNumber);
+
+        return retResult;
+    }
 
     /**
      * Implement of fetching TEP data for Run Job
@@ -271,16 +344,16 @@ public class JenkinsServiceImpl implements IJenkinsService {
      * @return
      */
     @Override
-    public Result<TEPInfoDTO> getTEPInfo(Integer userId, String locale, Integer testSetId) {
+    public Result<TEPInfoDTO> getTEPInfo(Integer userId, String locale, Integer testSetId, Integer tepId) {
         Result<TEPInfoDTO> retTEPInfo = new Result<>();
 
         TEPInfoDTO dtoTepInfo = new TEPInfoDTO();
-        Integer tepId = 0;
+        Integer newTEPId = tepId;
 
         dtoTepInfo.setLocale(locale);
         dtoTepInfo.setRole(7);
 
-
+        // Step1 - Get TEP List
         Result<List<TestExecPlatform>> resultListTEP = jenkinsDao.getTEPList(testSetId);
         if (resultListTEP.hasError()) {
             log.info(String.format("JenkinsServiceImpl.getTEPInfo() - invoke jenkinsDao.getTEPList() failure. ec = %s, em = %s",
@@ -293,54 +366,69 @@ public class JenkinsServiceImpl implements IJenkinsService {
             return commonDao.getResult("300501");
         }
 
-        tepId = listTEP.get(0).getId();
+        if (CommonUtil.isEmpty(newTEPId)) {
+            newTEPId = listTEP.get(0).getId();
+        }
         dtoTepInfo.setTepId(tepId);
         dtoTepInfo.setNameList(getNameList(listTEP));
 
-        Result<List<JenkinsJobArgs>> resultJJA = jenkinsDao.getJobArgsInfo(locale, tepId);
+        // Step2 - Get Job args that corresponds to TEP selected
+        Result<List<JenkinsJobArgs>> resultJJA = jenkinsDao.getJobArgsInfo(locale, newTEPId);
+        List<JenkinsJobArgs> listJJA;
         if (resultJJA.hasError()) {
-            if (!resultJJA.getEc().equals("300503")) {
+            if (!resultJJA.getEc().equals(ErrorConst.JENKINS_FETCH_JOBARGS_AUTOMATICALLY)) {
                 return new Result(resultJJA);
             }
 
             // Get Job args automatically
             log.info("Need to fetch Jenkins job args automatically...");
 
-            try {
-                JenkinsSvrInfo jsi = (JenkinsSvrInfo) resultJJA.getCd();
-                saveJobArgsList(jsi);
-            } catch (Exception e) {
-                e.printStackTrace();
+            // Step 2.1 - Save Job Args data if need
+            JenkinsSvrInfo jsi = (JenkinsSvrInfo) resultJJA.getCd();
+            Result<List<JenkinsJobArgs>> retSaveJJP = saveJobArgsList(jsi);
+            if (retSaveJJP.hasError()) {
+                return new Result(retSaveJJP);
+            } else {
+                listJJA = retSaveJJP.getCd();
             }
-
-            dtoTepInfo.setData(new ArrayList<>());
         } else {
-            List<JenkinsJobArgs> listJJA = resultJJA.getCd();
-            dtoTepInfo.setData(getJJAListMap(listJJA));
+            listJJA = resultJJA.getCd();
         }
+        dtoTepInfo.setData(getJJAListMap(listJJA));
         retTEPInfo.setCd(dtoTepInfo);
 
         return retTEPInfo;
     }
 
     private Result saveJobArgsList(JenkinsSvrInfo jsi) {
-        Result<List<JenkinsBean>> resultListJB = getParams(jsi);
+        Result<Map<String, Object>> resultListJB = getParams(jsi);
         if (resultListJB.hasError()) {
             log.error(String.format("saveJobArgsList() ERROR!!! ec=%s, em=%s", resultListJB.getEc(), resultListJB.getEm()));
             return new Result(resultListJB);
         }
 
-        List<JenkinsBean> listData = resultListJB.getCd();
-        if (CommonUtil.isEmpty(listData)) {
-            log.warn(String.format("Job name[%s] has no run parameters.", jsi.getJobname()));
-            return commonDao.getResult("300504", jsi.getJobname());
-        }
+        Result<List<JenkinsJobArgs>> resultSaveJobParams = new Result<>();
+        try {
+            Map<String, Object> mapData = resultListJB.getCd();
+            String strJobXML = (String) mapData.get("jobXML");
 
-        log.info("parameters count = " + listData.size());
 
-        Result resultSaveJobParams = jenkinsDao.saveJobParameters(jsi.getId(), listData);
-        if (resultSaveJobParams.hasError()) {
-            return new Result(resultSaveJobParams);
+            List<JenkinsBean> listData = (List<JenkinsBean>) mapData.get("data");
+            if (CommonUtil.isEmpty(listData)) {
+                log.warn(String.format("Job name[%s] has no run parameters.", jsi.getJobname()));
+                return commonDao.getResult(ErrorConst.JENKINS_JOB_NO_PARAMETER, jsi.getJobname());
+            }
+
+            log.info("parameters count = " + listData.size());
+
+            resultSaveJobParams = jenkinsDao.saveJobParameters(strJobXML, jsi.getId(), listData);
+            if (resultSaveJobParams.hasError()) {
+                return new Result(resultSaveJobParams);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("JenkinsServiceImpl.saveJobArgsList() ERROR!!!" + e.getMessage());
+            return commonDao.getExceptionArgsResult("saving job parameters. name = " + jsi.getJobname());
         }
         return resultSaveJobParams;
     }

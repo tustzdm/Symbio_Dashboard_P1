@@ -17,6 +17,7 @@ public class EnumDef {
 
         String getValue();
 
+        @Override
         String toString();
     }
 
@@ -348,19 +349,19 @@ public class EnumDef {
      * Automation Job actual status
      */
     @Getter
-    public enum JENKINS_AUTO_STATUS implements IDictEnum {
-        NotRun(0, "Not Run"),
-        AutoSuccess(1, "Passed"),
-        AutoFailure(2, "Failed"),
-        AutoSkip(3, "Skipped"),
-        Waiting(4, "waiting"),
-        Running(5, "running"),
-        Error(6, "error");
+    public enum JENKINS_JOB_STATUS implements IDictEnum {
+        NOT_RUN(0, "Not Run"),
+        AUTO_SUCCESS(1, "Passed"),
+        AUTO_FAILURE(2, "Failed"),
+        AUTO_SKIP(3, "Skipped"),
+        WAITING(4, "waiting"),
+        RUNNING(5, "running"),
+        ERROR(6, "error");
 
         private Integer code;
         private String value;
 
-        JENKINS_AUTO_STATUS(int code, String value) {
+        JENKINS_JOB_STATUS(int code, String value) {
             this.code = code;
             this.value = value;
         }
@@ -414,6 +415,34 @@ public class EnumDef {
             return String.valueOf(code);
         }
     }
+
+//    /**
+//     * Jenkins job status
+//     */
+//    @Getter
+//    public enum JENKINS_JOB_STATUS implements IDictEnum {
+//
+//        NOT_RUN(0, "Not Run"),
+//        AUTO_SUCCESS(1, "Passed"),
+//        AUTO_FAILURE(2, "Failed"),
+//        AUTO_SKIP(3, "Skipped"),
+//        WAITING(4, "waiting"),
+//        RUNNING(5, "running"),
+//        ERROR(6, "error");
+//
+//        private Integer code;
+//        private String value;
+//
+//        JENKINS_JOB_STATUS(int code, String value) {
+//            this.code = code;
+//            this.value = value;
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return String.valueOf(code);
+//        }
+//    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // End of New Dashboard definition

@@ -28,6 +28,7 @@ public class ProjectConst {
     public static final String USERNAME = "JenkinsServer.username";
     public static final String PASSWORD = "JenkinsServer.password";
     public static final String JOBNAME = "JenkinsServer.jobname";
+    public static final String JENKINS_JOB_TOKEN = "JenkinsServer.buildToken";
     public static final String JENKINS_FETCH_JOBARGS = "JenkinsServer.AutoFetchJobArgs";
     public static final String JENKINS_CHOICE_SEPARATED_SYMBOL = "JenkinsServer.Choice.Separated.Symbol";
     // TEP

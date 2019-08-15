@@ -2,19 +2,17 @@ package com.symbio.dashboard.jenkins;
 
 import com.offbytwo.jenkins.model.Job;
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.bean.JenkinsBean;
 import com.symbio.dashboard.dto.TEPInfoDTO;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 @Service
 public interface IJenkinsService {
 
-    Result<List<JenkinsBean>> getParams(String url, String userName, String password, String jobName);
+    Result<Map<String, Object>> getParams(String url, String userName, String password, String jobName);
 
     Result<String> getJobLastStatus(String url, String userName, String password, String jobName, Integer buildId);
 
@@ -23,5 +21,7 @@ public interface IJenkinsService {
     Job getJob(String jenkinsUrl, String userName, String password, String jobName) throws IOException;
 
 
-    Result<TEPInfoDTO> getTEPInfo(Integer userId, String locale, Integer testSetId);
+    Result<TEPInfoDTO> getTEPInfo(Integer userId, String locale, Integer testSetId, Integer tepId);
+
+    Result<String> runJob(Integer userId, String locale, Integer testSetId, Integer tepId, Map<String, String> params);
 }

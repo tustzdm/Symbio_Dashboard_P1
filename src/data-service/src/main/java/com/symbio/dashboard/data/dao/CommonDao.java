@@ -1,6 +1,7 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.repository.ProjectConfigRep;
 import com.symbio.dashboard.data.repository.ResultMessageRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
@@ -443,4 +444,37 @@ public class CommonDao {
     }
     return strValue;
   }
+
+  // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Fix Error code function Here!
+  // ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  public Result getEmptyArgsLocale(String locale, Object... args) {
+    return getResultArgs(locale, ErrorConst.ERROR_PARAMETER_EMPTY, args);
+  }
+
+  public Result getEmptyArgsResult(Object... args) {
+    return getEmptyArgsLocale(Locales.EN_US.toString(), args);
+  }
+
+  // Without locale
+  public Result getExceptionArgsResult(Object... args) {
+    return getLocalResult(Locales.EN_US.toString(), ErrorConst.EXCEPTION, args);
+  }
+
+  /**
+   * Args: [Table Name], [id]
+   *
+   * @param args
+   * @return
+   */
+  public Result getTableNoDataArgsLocale(String locale, Object... args) {
+    return getResultArgs(locale, ErrorConst.DB_NODATA_ARGS_TABLE_ID, args);
+  }
+
+  public Result getTableNoDataArgsResult(Object... args) {
+    return getTableNoDataArgsLocale(Locales.EN_US.toString(), args);
+  }
+
+
 }
