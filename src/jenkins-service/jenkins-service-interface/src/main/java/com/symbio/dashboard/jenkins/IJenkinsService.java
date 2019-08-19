@@ -24,4 +24,5 @@ public interface IJenkinsService {
     Result<TEPInfoDTO> getTEPInfo(Integer userId, String locale, Integer testSetId, Integer tepId);
 
     Result<String> runJob(Integer userId, String locale, Integer testSetId, Integer tepId, Map<String, String> params);
+
 }

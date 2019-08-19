@@ -350,13 +350,17 @@ public class EnumDef {
      */
     @Getter
     public enum JENKINS_JOB_STATUS implements IDictEnum {
-        NOT_RUN(0, "Not Run"),
-        AUTO_SUCCESS(1, "Passed"),
-        AUTO_FAILURE(2, "Failed"),
-        AUTO_SKIP(3, "Skipped"),
-        WAITING(4, "waiting"),
-        RUNNING(5, "running"),
-        ERROR(6, "error");
+        // Pending
+        PENDING(0, ""),
+        RUNNING(1, "Running"),
+        // Result
+        AUTO_SUCCESS(2, "SUCCESS"),
+        AUTO_FAILURE(3, "FAILURE"),
+        ABORTED(4, "ABORTED"),
+
+        AUTO_SKIP(5, "Skipped"),
+        WAITING(6, "waiting"),
+        ERROR(7, "error");
 
         private Integer code;
         private String value;
@@ -370,6 +374,28 @@ public class EnumDef {
         public String toString() {
             return String.valueOf(code);
         }
+    }
+
+    /**
+     * Jenkins job is terminated or not
+     *
+     * @param enumItem
+     * @return
+     */
+    public static boolean isJenkinsEndStatus(JENKINS_JOB_STATUS enumItem) {
+        boolean bRet = false;
+
+        Integer itemCode = enumItem.getCode();
+        for (JENKINS_JOB_STATUS item : JENKINS_JOB_STATUS.values()) {
+            itemCode = item.getCode();
+
+            if (itemCode >= JENKINS_JOB_STATUS.AUTO_SUCCESS.getCode()
+                    && itemCode <= JENKINS_JOB_STATUS.ABORTED.getCode()) {
+                bRet = true;
+            }
+        }
+
+        return bRet;
     }
 
     /**
@@ -804,19 +830,36 @@ public class EnumDef {
         return ret == null ? null : ret.getValue();
     }
 
-    public static <T extends Enum<T>> T getEnumTypeBy(Class<T> enumType, int code) {
-        EnumSet<T> currEnumSet = EnumSet.allOf(enumType);
-        for (T item : currEnumSet) {
-            try {
-                if (Integer.parseInt(item.toString()) == code) return item;
-            } catch (NumberFormatException e) {
-                System.out.println(
-                        ">>>>>> ERROR!!! "
-                                + enumType.getName()
-                                + ".toString() is uncorrect.  item.code = ["
-                                + item.toString()
-                                + "]");
+    public static <T extends Enum<T>> T getEnumTypeByValue(Class<T> enumType, String value) {
+        if (value == null || value.trim().length() == 0) {
+            return null;
+        }
+
+        try {
+            EnumSet<T> currEnumSet = EnumSet.allOf(enumType);
+            String strValue = null;
+
+            for (T item : currEnumSet) {
+                try {
+                    // Reflect
+                    Method method = enumType.getMethod("getValue", new Class[]{});
+                    strValue = method.invoke(item, new Object[]{}).toString();
+                    if ((value.equals(strValue))) {
+                        return item;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println(
+                            ">>>>>> ERROR!!! "
+                                    + enumType.getName()
+                                    + ".toString() is uncorrect.  item.code = ["
+                                    + item.toString()
+                                    + "]");
+                } catch (NoSuchMethodException ex) {
+                    ex.printStackTrace();
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return null;

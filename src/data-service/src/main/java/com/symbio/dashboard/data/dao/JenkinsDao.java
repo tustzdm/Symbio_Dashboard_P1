@@ -46,6 +46,16 @@ public class JenkinsDao {
     private JenkinsJobHistoryMainRep jjhMainRep;
 
     /**
+     * Get JSI by Id
+     *
+     * @param id
+     * @return
+     */
+    public JenkinsSvrInfo getJSIById(Integer id) {
+        return jsiRep.getById(id);
+    }
+
+    /**
      * 根据 TestSetID 得到TEP List信息
      *
      * @param testSetId
@@ -266,6 +276,16 @@ public class JenkinsDao {
             return commonDao.getEmptyArgsLocale(locale, "saving Jenkins job history Main info");
         }
         return retResult;
+    }
+
+
+    public List<JenkinsJobHistoryMain> getJenkinsJobHistoryCronList() {
+        List<JenkinsJobHistoryMain> listData = jjhMainRep.getUpdateStatusCronList();
+        return listData;
+    }
+
+    public JenkinsJobHistoryMain updateJenkinsJobHistoryMain(JenkinsJobHistoryMain data) {
+        return jjhMainRep.saveAndFlush(data);
     }
 
 }
