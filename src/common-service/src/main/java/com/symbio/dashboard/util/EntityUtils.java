@@ -420,4 +420,25 @@ public class EntityUtils {
         return methodName;
     }
 
+    // Class clone
+    public static void mergeObjectBase(Object dest, Object source) {
+        Field[] fields = dest.getClass().getDeclaredFields();
+        String fieldName = null;
+
+        for (Field field : fields) {
+            fieldName = field.getName();
+
+            Object fieldValue = getFieldValueByName(fieldName, source);
+            if (!CommonUtil.isEmpty(fieldValue)) {
+                try {
+                    String setter = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+                    Method method =
+                            dest.getClass().getDeclaredMethod(setter, new Class[]{field.getType()});
+                    method.invoke(dest, new Object[]{fieldValue});
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

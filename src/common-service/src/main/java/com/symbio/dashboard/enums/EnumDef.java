@@ -421,6 +421,31 @@ public class EnumDef {
         }
     }
 
+    @Getter
+    public enum REPORT_FILE_PARSE_STATUS implements IDictEnum {
+        UNDO(0, "Undo"),
+        SUCCESS(2, "Success"),
+        EXCEPTION(3, "Exception"),
+        FAIL(4, "Fail"),
+        EXTRACT(10, "Unzip"),
+        TEST_RUN(15, "TestRun"),
+        TEST_RESULT(20, "TestResult"),
+        CLEAN(25, "Clean");
+
+        private Integer code;
+        private String value;
+
+        REPORT_FILE_PARSE_STATUS(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(code);
+        }
+    }
+
     /**
      * Separated by Product or not
      */

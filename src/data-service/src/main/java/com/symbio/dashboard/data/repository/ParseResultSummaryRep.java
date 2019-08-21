@@ -15,4 +15,8 @@ public interface ParseResultSummaryRep extends JpaRepository<ParseResultSummary,
 
     @Override
     ParseResultSummary getOne(Integer id);
+
+    ParseResultSummary getByFileName(String fileName);
+
+    List<ParseResultSummary> findByFileName(String fileName);
 }

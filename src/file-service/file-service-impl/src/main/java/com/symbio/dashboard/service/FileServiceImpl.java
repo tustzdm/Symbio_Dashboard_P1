@@ -1,5 +1,8 @@
 package com.symbio.dashboard.service;
 
+import com.symbio.dashboard.constant.CommonDef;
+import com.symbio.dashboard.util.DateUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +15,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +23,8 @@ import java.util.stream.Collectors;
  * @author Shawn
  * @since 2019-08
  */
+
+@Slf4j
 @Service
 public class FileServiceImpl implements FileService {
 
@@ -116,6 +122,27 @@ public class FileServiceImpl implements FileService {
             throw new IllegalStateException("file not found: " + destPath);
         }
         return dest.isFile();
+    }
+
+    public boolean moveFileToDirectory(String fileName, String destFolder) {
+        boolean bRet = false;
+        try {
+            File srcFile = new File(fileName);
+            File desFile = new File(destFolder);
+            FileUtils.moveFileToDirectory(srcFile, desFile, true);
+            bRet = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Invoke FileServiceImpl.moveFileToDirectory Exception!  {} --> {}",
+                    fileName, destFolder, e);
+        }
+        return bRet;
+    }
+
+    public boolean moveFileToZipBackup(String fileName) {
+        String destFolder = CommonDef.FOLDER_PATH_TESTRUN_BAKZIP_ROOT;
+        destFolder += File.separator + DateUtil.formatToYYYYMMDD(new Date());
+        return moveFileToDirectory(fileName, destFolder);
     }
 
 }

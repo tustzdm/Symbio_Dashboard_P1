@@ -1,6 +1,7 @@
 package com.symbio.dashboard.util;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.enums.EnumDef;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tools.zip.ZipEntry;
@@ -8,7 +9,9 @@ import org.apache.tools.zip.ZipFile;
 
 import java.io.*;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.zip.ZipException;
 
 @Slf4j
@@ -18,7 +21,9 @@ public class ZipUtils {
 
     private static final int CACHE_SIZE = 1024;
 
-    public static Result<Integer> unZip(String zipFilePath, String destDir, String fileName) {
+    public static Result<Map<String, Object>> unZip(String zipFilePath, String destDir, String fileName) {
+        Map<String, Object> retMap = new HashMap<>();
+
         log.info(
                 " unZip <<<	zipFilePath = "
                         + zipFilePath
@@ -26,12 +31,21 @@ public class ZipUtils {
                         + destDir
                         + " <<< fileName = "
                         + fileName);
-        Result<Integer> retResult = new Result<Integer>();
+        Result<Map<String, Object>> retResult = new Result();
         if (isAllowExt(zipFilePath)) {
             String baseName = FilenameUtils.getBaseName(fileName);
+
+
             ZipFile zipFile = null;
             try {
                 zipFile = new ZipFile(zipFilePath, CHINESE_CHARSET);
+
+                File fileReport = new File(zipFilePath);
+                if (fileReport != null && fileReport.isFile()) {
+                    retMap.put("filePath", fileReport.getAbsolutePath());
+                    retMap.put("fileName", fileReport.getName());
+                    retMap.put("fileSize", Integer.parseInt(String.valueOf(fileReport.length())));
+                }
                 Enumeration<?> emu = zipFile.getEntries();
                 BufferedInputStream bis;
                 FileOutputStream fos;
@@ -78,7 +92,11 @@ public class ZipUtils {
                 if (null != zipFile) {
                     try {
                         zipFile.close();
-                        retResult.setCd(1);
+
+                        retMap.put("fileWorkPath", destDir + baseName);
+                        retMap.put("parseStatus", EnumDef.REPORT_FILE_PARSE_STATUS.EXTRACT.getCode());
+                        retMap.put("parseCount", 1);
+                        retResult.setCd(retMap);
                     } catch (IOException e) {
                         log.info("ZipUtils unZip exception " + e);
                         retResult =
