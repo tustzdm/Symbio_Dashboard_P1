@@ -21,6 +21,20 @@ public class CommonDef {
         checkDirectories();
     }
 
+    public static final String FOLDER_NAME_ZIP_ROOT = "ziproot";
+    public static final String FOLDER_NAME_WORK_ROOT = "testrunroot";
+    public static final String FOLDER_NAME_ZIP_BACKUP = "bakzip";
+    public static final String FOLDER_NAME_IMAGE = "image";
+    public static final String FOLDER_NAME_LOG = "logo";
+
+    public static String enclosedAllFolder(String pathName) {
+        return String.format("/%s/", pathName);
+    }
+
+    public static String concatEnclosedAllFolder(String pathName, String subPathName) {
+        return String.format("/%s/%s/", pathName, subPathName);
+    }
+
     private void manualInitProperty() {
         LOGIN_ENV = "dev";
         // LOGIN_ENV = "angular_debug";
@@ -28,25 +42,25 @@ public class CommonDef {
         USER_EXPIRE_TIME = 24 * 60;
         PIC_ROOT = rootDirectory;
         PIC_UPLOAD = PIC_ROOT + "/upload/";
-        FILE_IMPORT = PIC_ROOT + "/import/";
-        FILE_IMPORT_TESTCASE = FILE_IMPORT + "testcase";
-        FILE_EXPORT = PIC_ROOT + "/export/";
-        FOLDER_DASHBOARD_ZIP_ROOT = PIC_ROOT + "/ziproot/";
-        FOLDER_TESTRUN_ROOT = PIC_ROOT + "/testrunroot/";
-        FOLDER_TESTRUN_BAKZIP_ROOT = PIC_ROOT + "/testrunroot/bakzip/";
-        DIR_HTTP_SCREENSHOT = PIC_ROOT + "/image/";
-        PIC_LOGO_ROOT = DIR_HTTP_SCREENSHOT + "logo/";
+        FOLDER_PATH_IMPORT = PIC_ROOT + "/import/";
+        FOLDER_PATH_IMPORT_TESTCASE = FOLDER_PATH_IMPORT + "testcase";
+        FOLDER_PATH_EXPORT = PIC_ROOT + "/export/";
+        FOLDER_PATH_DASHBOARD_ZIP_ROOT = PIC_ROOT + enclosedAllFolder(FOLDER_NAME_ZIP_ROOT);
+        FOLDER_PATH_TESTRUN_ROOT = PIC_ROOT + enclosedAllFolder(FOLDER_NAME_WORK_ROOT);
+        FOLDER_PATH_TESTRUN_BAKZIP_ROOT = PIC_ROOT + concatEnclosedAllFolder(FOLDER_NAME_WORK_ROOT, FOLDER_NAME_ZIP_BACKUP);
+        DIR_HTTP_SCREENSHOT = PIC_ROOT + enclosedAllFolder(FOLDER_NAME_IMAGE);
+        PIC_LOGO_ROOT = PIC_ROOT + concatEnclosedAllFolder(FOLDER_NAME_IMAGE, FOLDER_NAME_LOG);
     }
 
     private void checkDirectories() {
         createDicertoryIfNotExist(PIC_ROOT);
         createDicertoryIfNotExist(PIC_UPLOAD);
-        createDicertoryIfNotExist(FILE_IMPORT);
-        createDicertoryIfNotExist(FILE_IMPORT_TESTCASE);
-        createDicertoryIfNotExist(FILE_EXPORT);
-        createDicertoryIfNotExist(FOLDER_DASHBOARD_ZIP_ROOT);
-        createDicertoryIfNotExist(FOLDER_TESTRUN_ROOT);
-        createDicertoryIfNotExist(FOLDER_TESTRUN_BAKZIP_ROOT);
+        createDicertoryIfNotExist(FOLDER_PATH_IMPORT);
+        createDicertoryIfNotExist(FOLDER_PATH_IMPORT_TESTCASE);
+        createDicertoryIfNotExist(FOLDER_PATH_EXPORT);
+        createDicertoryIfNotExist(FOLDER_PATH_DASHBOARD_ZIP_ROOT);
+        createDicertoryIfNotExist(FOLDER_PATH_TESTRUN_ROOT);
+        createDicertoryIfNotExist(FOLDER_PATH_TESTRUN_BAKZIP_ROOT);
         createDicertoryIfNotExist(DIR_HTTP_SCREENSHOT);
         createDicertoryIfNotExist(PIC_LOGO_ROOT);
     }
@@ -106,6 +120,7 @@ public class CommonDef {
 
     public static final String JSON = "report.json";
 
+
     public static final String COMMA = ",";
 
     public static final String HORIZONTALLINE = "-";
@@ -149,9 +164,6 @@ public class CommonDef {
     public static final String ATTACHMENT = "attachment;fileName=";
     public static final String EML = ".eml";
 
-    public static final String QAHEADER = "QA ";
-    public static final String E2EHEADER = "E2E Regression ";
-
     // Use dev login method development, online using the online
     public static String LOGIN_ENV = "angular_debug";
 
@@ -162,9 +174,9 @@ public class CommonDef {
     // public static String PIC_HTTP_UPLOAD;
     public static String PIC_HTTP_ROOT;
     public static String PIC_HTTP_SCREENSHOT;
-    public static String FILE_IMPORT;
-    public static String FILE_IMPORT_TESTCASE;
-    public static String FILE_EXPORT;
+    public static String FOLDER_PATH_IMPORT;
+    public static String FOLDER_PATH_IMPORT_TESTCASE;
+    public static String FOLDER_PATH_EXPORT;
     public static String PIC_LOGO_ROOT;
 
     public static int USER_EXPIRE_TIME;
@@ -190,11 +202,11 @@ public class CommonDef {
 
     public static int TESTCASEID_SEQUENCE_INIT = 1;
 
-    public static String FOLDER_DASHBOARD_ZIP_ROOT; // FTP -> WorkDir/
-    public static String FOLDER_TESTRUN_ROOT; // TestRun/YYYYMMDDHHMMSSsss/
+    public static String FOLDER_PATH_DASHBOARD_ZIP_ROOT; // FTP -> WorkDir/
+    public static String FOLDER_PATH_TESTRUN_ROOT; // TestRun/YYYYMMDDHHMMSSsss/
     public static String DIR_HTTP_SCREENSHOT;
     public static String DASHBOARD_PROJECT_ADDRESS;
-    public static String FOLDER_TESTRUN_BAKZIP_ROOT;
+    public static String FOLDER_PATH_TESTRUN_BAKZIP_ROOT;
 
     /**
      * Repeat submit a request of the switch

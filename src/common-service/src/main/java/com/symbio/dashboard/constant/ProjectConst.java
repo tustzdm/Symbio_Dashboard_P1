@@ -31,6 +31,9 @@ public class ProjectConst {
     public static final String JENKINS_JOB_TOKEN = "JenkinsServer.buildToken";
     public static final String JENKINS_FETCH_JOBARGS = "JenkinsServer.AutoFetchJobArgs";
     public static final String JENKINS_CHOICE_SEPARATED_SYMBOL = "JenkinsServer.Choice.Separated.Symbol";
+    // unCompressed file extension
+    public static final String JENKINS_AUTOMATION_REPORT_FILEEXT = "JenkinsJob.Automation.ReportFile.Extend";
+
     // TEP
     public static final String TEP_SPERATED_PRODUCT = "TEP_SeparatedByProduct";
 

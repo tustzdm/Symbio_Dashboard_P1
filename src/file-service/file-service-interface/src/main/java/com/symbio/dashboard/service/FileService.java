@@ -18,7 +18,9 @@ public interface FileService {
 
     byte[] download(String containerName, String path);
 
-    List<String> list(String path);
+    List<String> list(String pathName);
+
+    List<String> listPath(String destPath);
 
     void delete(String path);
 

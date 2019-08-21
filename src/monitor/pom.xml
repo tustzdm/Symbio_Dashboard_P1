@@ -9,9 +9,11 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>monitor</artifactId>
+  <artifactId>dashboard.monitor</artifactId>
+  <packaging>pom</packaging>
 
   <dependencies>
+    <!-- symbio dashboard dependency -->
     <dependency>
       <groupId>com.symbio</groupId>
       <artifactId>common-service</artifactId>
@@ -22,6 +24,12 @@
       <artifactId>data-service</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.symbio</groupId>
+      <artifactId>file-service-impl</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
   </dependencies>
 
 </project>

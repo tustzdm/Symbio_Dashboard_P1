@@ -27,9 +27,9 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
-    public void upload(String uri, File file, FileExtensionEnum ext) {
+    public void upload(String path, File file, FileExtensionEnum ext) {
         try {
-            upload(uri, new FileInputStream(file), ext);
+            upload(path, new FileInputStream(file), ext);
         } catch (IOException e) {
             throw new IllegalStateException("can not read source file " + file, e);
         }
@@ -37,26 +37,26 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void upload(String uri, InputStream inputStream, FileExtensionEnum ext) {
-        String destUri = rootDirectory + "/" + uri;
-        ext.verify(destUri);
-        File dest = new File(destUri);
+    public void upload(String path, InputStream inputStream, FileExtensionEnum ext) {
+        String destpath = rootDirectory + "/" + path;
+        ext.verify(destpath);
+        File dest = new File(destpath);
         dest.getParentFile().mkdirs();
         try {
             FileUtils.copyInputStreamToFile(inputStream, dest);
         } catch (IOException e) {
-            throw new IllegalStateException("can not upload file " + destUri, e);
+            throw new IllegalStateException("can not upload file " + destpath, e);
         }
     }
 
     @Override
-    public byte[] download(String uri) {
-        String destUri = rootDirectory + "/" + uri;
-        File dest = new File(destUri);
+    public byte[] download(String path) {
+        String destpath = rootDirectory + "/" + path;
+        File dest = new File(destpath);
         try (FileInputStream input = new FileInputStream(dest)) {
             return IOUtils.toByteArray(input);
         } catch (IOException e) {
-            throw new IllegalArgumentException("can not read file " + destUri, e);
+            throw new IllegalArgumentException("can not read file " + destpath, e);
         }
     }
 
@@ -66,9 +66,14 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<String> list(String uri) {
-        String destUri = rootDirectory + "/" + uri;
-        File dest = new File(destUri);
+    public List<String> list(String pathName) {
+        String destPath = rootDirectory + "/" + pathName;
+        return listPath(destPath);
+    }
+
+    @Override
+    public List<String> listPath(String destPath) {
+        File dest = new File(destPath);
         if (dest.isFile()) {
             return Collections.emptyList();
         }
@@ -82,33 +87,33 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void delete(String uri) {
-        String destUri = rootDirectory + "/" + uri;
-        File dest = new File(destUri);
+    public void delete(String path) {
+        String destpath = rootDirectory + "/" + path;
+        File dest = new File(destpath);
         if (!dest.exists()) {
-            throw new IllegalStateException("file not found: " + destUri);
+            throw new IllegalStateException("file not found: " + destpath);
         }
         if (dest.isDirectory()) {
             final File[] children = dest.listFiles();
             if (children != null) {
                 for (File child : children) {
-                    delete(uri + "/" + child.getName());
+                    delete(path + "/" + child.getName());
                 }
             }
         }
         try {
             Files.delete(dest.toPath());
         } catch (IOException e) {
-            throw new IllegalStateException("could not delete: " + destUri, e);
+            throw new IllegalStateException("could not delete: " + destpath, e);
         }
     }
 
     @Override
-    public boolean isFile(String uri) {
-        String destUri = rootDirectory + "/" + uri;
-        File dest = new File(destUri);
+    public boolean isFile(String pathName) {
+        String destPath = rootDirectory + "/" + pathName;
+        File dest = new File(destPath);
         if (!dest.exists()) {
-            throw new IllegalStateException("file not found: " + destUri);
+            throw new IllegalStateException("file not found: " + destPath);
         }
         return dest.isFile();
     }

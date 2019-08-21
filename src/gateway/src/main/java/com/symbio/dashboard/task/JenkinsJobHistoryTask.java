@@ -1,6 +1,7 @@
 package com.symbio.dashboard.task;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.constant.CommonDef;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.jenkins.JenkinsJobHistoryServiceImpl;
 import com.symbio.dashboard.jenkins.JenkinsServiceImpl;
@@ -25,15 +26,20 @@ public class JenkinsJobHistoryTask {
     @Autowired
     JenkinsJobHistoryServiceImpl jjHService;
 
-//    @Async
-//    @Scheduled(cron = " * */10 * * * ? ")
-//    public void task1() {
-//        log.info("JenkinsJobHistoryTask.task() Enter.");
-//        try {
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    @Async
+    //@Scheduled(cron = "0 */5 * * * ? ")
+    //@Scheduled(cron = "*/5 * * * * ? ")
+    @Scheduled(cron = "0 0/30 * * * ? ")
+    public void checkAutomationReportFile() {
+        log.info("JenkinsJobHistoryTask.checkAutomationReportFile() Enter.");
+        try {
+
+            String strFolder = CommonDef.FOLDER_PATH_DASHBOARD_ZIP_ROOT;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 //
 //    @Async
 //    @Scheduled(cron = " * */10 * * * ? ")
@@ -49,7 +55,7 @@ public class JenkinsJobHistoryTask {
      * Ref: https://www.cnblogs.com/zy-l/p/9178704.html
      */
     @Async
-    @Scheduled(cron = "0 */10 * * * ? ")
+    @Scheduled(cron = "0 0 0/1 * * ? ")
     //@Scheduled(cron = "*/5 * * * * ? ")
     public void checkJenkinsJobStatus() {
         try {

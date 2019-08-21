@@ -69,7 +69,7 @@ public class ResultReviewController extends BaseController {
     public Result upload(HttpServletRequest request) {
         log.debug("ResultReviewController.upload() Enter.");
 
-        Result<String> retsaveFile = fileService.saveExcel(request, CommonDef.FILE_IMPORT_TESTCASE);
+        Result<String> retsaveFile = fileService.saveExcel(request, CommonDef.FOLDER_PATH_IMPORT_TESTCASE);
         return retsaveFile;
     }
 
@@ -87,7 +87,7 @@ public class ResultReviewController extends BaseController {
         int size = (int) file.getSize();
         System.out.println(fileName + "-->" + size);
 
-        String path = CommonDef.FILE_IMPORT;
+        String path = CommonDef.FOLDER_PATH_IMPORT;
         File dest = new File(path + "/" + fileName);
         if (!dest.getParentFile().exists()) { //判断文件父目录是否存在
             dest.getParentFile().mkdir();
@@ -115,7 +115,7 @@ public class ResultReviewController extends BaseController {
         String strFileName = "";
         boolean bUpload = false;
         //FileUploadService fileService = new FileUploadService();
-        Result<String> retSaveFile = fileService.saveExcel(request, CommonDef.FILE_IMPORT);
+        Result<String> retSaveFile = fileService.saveExcel(request, CommonDef.FOLDER_PATH_IMPORT);
         if (retSaveFile.isSuccess()) {
             strFileName = retSaveFile.getCd();
             //testCaseService.importData(cmd.getTestSetId(), strFileName);

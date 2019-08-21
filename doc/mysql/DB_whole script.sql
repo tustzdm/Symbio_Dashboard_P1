@@ -852,3 +852,26 @@ CREATE TABLE `setting_excel_import` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_setting_excel_import_product_casetype_name_field` (`productId`, `case_type`, `name`, `field`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- 2019/8/20
+DROP TABLE IF EXISTS `parse_result_summary`;
+CREATE TABLE `parse_result_summary` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  `batchNo` varchar(32) DEFAULT NULL COMMENT 'batch no',
+  `batchId` int(10) unsigned DEFAULT NULL COMMENT 'batch id',  
+  `filePath` varchar(255) DEFAULT NULL COMMENT 'File path',
+  `fileName` varchar(64) DEFAULT NULL COMMENT 'File Name',
+  `fileSize` int(10) unsigned DEFAULT NULL COMMENT 'Size of file',
+  `fileWorkPath` varchar(255) DEFAULT NULL COMMENT 'File work path',
+  `fileBackupPath` varchar(255) DEFAULT NULL COMMENT 'File backup path',
+  `parseStatus` int(10) unsigned DEFAULT NULL COMMENT 'Status。0-undo,2-Success,3-Exception,4-Fail,10-unzip,15-testrun,20-testResult,25-clean',
+  `parseCount` int(10) unsigned DEFAULT NULL COMMENT 'count',
+  `parseErrorCode` varchar(32) DEFAULT NULL COMMENT 'EC',
+  `parseErrorMsg` varchar(255) DEFAULT NULL COMMENT 'EM', 
+  `description` varchar(255) DEFAULT NULL COMMENT 'description',
+  `reportSummary` varchar(255) DEFAULT NULL COMMENT 'JSON data from report file',  
+  `receiveTime` datetime DEFAULT NULL COMMENT 'Receive Time',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Parse file info';
+

@@ -399,6 +399,29 @@ public class EnumDef {
     }
 
     /**
+     * File extension defined for Automation Report file
+     */
+    @Getter
+    public enum JENKINS_AUTO_REPORT_FILE_EXTENSION implements IDictEnum {
+        ZIP(1, "zip"),
+        TAR_GZ(2, "tar.gz"),
+        TAR(3, "tar");
+
+        private Integer code;
+        private String value;
+
+        JENKINS_AUTO_REPORT_FILE_EXTENSION(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(code);
+        }
+    }
+
+    /**
      * Separated by Product or not
      */
     @Getter

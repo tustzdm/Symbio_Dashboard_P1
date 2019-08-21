@@ -111,6 +111,11 @@
             <artifactId>file-service-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.symbio</groupId>
+            <artifactId>monitor</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
         <dependency>
