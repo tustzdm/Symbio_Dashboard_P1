@@ -146,7 +146,7 @@ public class TestRunServiceImpl implements TestRunService {
 
         // Add Test Run
         Integer id = testCase.getId();
-        TestRun testRun = testRunRep.getByTestCaseId(id);
+        TestRun testRun = testRunRep.getByTestCaseIdAndLocale(id, locale);
         TestResult testResult;
         try {
             if (testRun == null) {
@@ -191,7 +191,7 @@ public class TestRunServiceImpl implements TestRunService {
                 updatedTestCase = testCaseRep.saveAndFlush(newTC);
             } else {
                 // Check TestRun
-                TestRun tr = testRunRep.getByTestsetIdAndTestcaseId(testSetId, testCase.getId());
+                TestRun tr = testRunRep.getByTestsetIdAndTestcaseIdAndLocale(testSetId, testCase.getId(), trLocale);
                 result = saveNewTestRunInfo(testSetId, testCase, trLocale);
                 if (result.hasError()) {
                     return result;
