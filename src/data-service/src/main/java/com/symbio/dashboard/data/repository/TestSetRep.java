@@ -5,9 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface TestSetRep extends JpaRepository<TestSet,Integer> {
 
     @Query(value = "select * from test_set ts where ts.release_id=?1 order by ts.update_time desc",nativeQuery = true)
@@ -33,5 +35,8 @@ public interface TestSetRep extends JpaRepository<TestSet,Integer> {
             "INNER join test_set ON test_set.release_id = `release`.id" +
             "WHERE test_set.id = ?1", nativeQuery = true)
     Integer getProductIdByTestSetId(Integer testSetId);
+
+    @Query(value = "SELECT `type` FROM `test_set` WHERE id = ?1", nativeQuery = true)
+    Integer getTypeById(Integer id);
 
 }

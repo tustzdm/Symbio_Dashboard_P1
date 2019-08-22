@@ -43,7 +43,7 @@ public class CommonDef {
         PIC_ROOT = rootDirectory;
         PIC_UPLOAD = PIC_ROOT + "/upload/";
         FOLDER_PATH_IMPORT = PIC_ROOT + "/import/";
-        FOLDER_PATH_IMPORT_TESTCASE = FOLDER_PATH_IMPORT + "testcase";
+        FOLDER_PATH_IMPORT_TESTCASE = FOLDER_PATH_IMPORT + "testcase/";
         FOLDER_PATH_EXPORT = PIC_ROOT + "/export/";
         FOLDER_PATH_DASHBOARD_ZIP_ROOT = PIC_ROOT + enclosedAllFolder(FOLDER_NAME_ZIP_ROOT);
         FOLDER_PATH_TESTRUN_ROOT = PIC_ROOT + enclosedAllFolder(FOLDER_NAME_WORK_ROOT);

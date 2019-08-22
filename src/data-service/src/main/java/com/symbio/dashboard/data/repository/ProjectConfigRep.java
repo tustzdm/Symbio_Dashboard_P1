@@ -14,4 +14,7 @@ public interface ProjectConfigRep extends JpaRepository<ProjectConfig, Integer> 
 
     @Query(value = "SELECT * FROM project_config ORDER BY id", nativeQuery = true)
     List<ProjectConfig> getAll();
+
+    @Query(value = "SELECT configValue from project_config where configName = 'TEP_SeparatedByProduct'", nativeQuery = true)
+    String getSeparatedByProduct();
 }

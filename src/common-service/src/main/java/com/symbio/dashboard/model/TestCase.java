@@ -1,5 +1,6 @@
 package com.symbio.dashboard.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.Date;
 @Data
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "test_case")
 public class TestCase implements Serializable {
 
@@ -53,6 +55,13 @@ public class TestCase implements Serializable {
 
     @Column(name = "template_id")
     private String templateId;
+
+    @Column(name = "test_scenario")
+    private String testScenario;
+    @Column(name = "notes")
+    private String notes;
+    @Column(name = "method")
+    private String method;
 
     @Column(name = "detail_steps")
     private String detailSteps;

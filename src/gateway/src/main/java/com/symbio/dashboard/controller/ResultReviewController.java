@@ -52,6 +52,7 @@ public class ResultReviewController extends BaseController {
             }
 
             retResult = testRunService.getTestRunList(testRun.getLocale(), testRun);
+//            retResult = testRunService.importExcel(1,);
 
             if (retResult.hasError()) {
                 log.error(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
@@ -59,7 +60,6 @@ public class ResultReviewController extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         log.trace("ResultReviewController.getList() Exit");
         return retResult;
@@ -126,4 +126,25 @@ public class ResultReviewController extends BaseController {
         return retResult;
     }
 
+    @RequestMapping("/importExcel")
+    public Result importExcel(@RequestParam(value = "testSetId") Integer testSetId,
+                              @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                              @RequestParam(value = "fileName") String fileName) {
+        log.trace("ResultReviewController.importExcel() Enter");
+
+        Result retResult = new Result();
+        try {
+
+            retResult = testRunService.importExcel(locale, testSetId, fileName);
+
+            if (retResult.hasError()) {
+                log.error(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        log.trace("ResultReviewController.importExcel() Exit");
+        return retResult;
+    }
 }

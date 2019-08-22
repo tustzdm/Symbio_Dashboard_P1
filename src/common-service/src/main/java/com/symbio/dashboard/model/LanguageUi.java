@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * 此类是数据库language_ui的实体类
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Setter
 @Table(name = "language_ui")
 @Entity
-public class LanguageUi {
+public class LanguageUi implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

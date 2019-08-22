@@ -2,14 +2,27 @@ package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
+import com.symbio.dashboard.business.TestCaseFactory;
+import com.symbio.dashboard.business.TestRunFactory;
+import com.symbio.dashboard.constant.CommonDef;
+import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.dao.*;
+import com.symbio.dashboard.data.repository.TestCaseRep;
+import com.symbio.dashboard.data.repository.TestRunRep;
+import com.symbio.dashboard.data.repository.TestSetRep;
+import com.symbio.dashboard.dto.TestRunExcelDTO;
 import com.symbio.dashboard.dto.TestRunUiDTO;
+import com.symbio.dashboard.enums.EnumDef;
+import com.symbio.dashboard.enums.Locales;
+import com.symbio.dashboard.model.TestCase;
+import com.symbio.dashboard.model.TestRun;
 import com.symbio.dashboard.util.BusinessUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.symbio.dashboard.util.ExcelReadUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,10 +35,9 @@ import java.util.Map;
  */
 
 @Service
+@Slf4j
 @SuppressWarnings("unchecked")
 public class TestRunServiceImpl implements TestRunService {
-
-    private static Logger logger = LoggerFactory.getLogger(TestRunServiceImpl.class);
 
     @Autowired
     private CommonDao commonDao;
@@ -35,14 +47,22 @@ public class TestRunServiceImpl implements TestRunService {
     private ReleaseDao releaseDao;
     @Autowired
     private TestSetDao testSetDao;
-
     @Autowired
     private TestRunDao testRunDao;
+    @Autowired
+    private TestCaseRep testCaseRep;
+    @Autowired
+    private TestSetRep testSetRep;
+    @Autowired
+    private TestRunRep testRunRep;
+    @Autowired
+    private ExcelImportDao excelImportDao;
+
 
     @Override
     public Result getTestRunList(String locale, TestRunVO testRun) {
-        logger.trace("TestRunServiceImpl.getTestRunList() Enter");
-        logger.trace(testRun.toString());
+        log.trace("TestRunServiceImpl.getTestRunList() Enter");
+        log.trace(testRun.toString());
 
         Result<TestRunUiDTO> retResult;
 
@@ -55,8 +75,8 @@ public class TestRunServiceImpl implements TestRunService {
             e.printStackTrace();
             retResult = commonDao.getResultArgs(locale,"000102", "getting TestRun List");
         }
-        
-        logger.trace("TestRunServiceImpl.getTestRunList() Exit");
+
+        log.trace("TestRunServiceImpl.getTestRunList() Exit");
         return retResult;
     }
 
@@ -71,8 +91,135 @@ public class TestRunServiceImpl implements TestRunService {
             retResult = commonDao.getResultArgs(locale, "000102", "getting TestRun List");
         }
 
-        logger.trace("TestRunServiceImpl.getTestRunList() Exit");
+        log.trace("TestRunServiceImpl.getTestRunList() Exit");
         return retResult;
+    }
+
+    @Override
+    public Result importExcel(String locale, Integer testSetId, String fileName) {
+        Result<List<Map<String, String>>> headerResult;
+        Result<List<TestRunExcelDTO>> importResult;
+        ExcelReadUtil excelReadUtil = new ExcelReadUtil();
+        // 1. Get Excel head settings
+        headerResult = excelImportDao.getExcelHeadSetting(locale, testSetId);
+        if (headerResult.hasError()) {
+            return headerResult;
+        }
+
+        // 2. Get Test case info from excel - List
+        List<Map<String, String>> listNameField = headerResult.getCd();
+        String newFileName = CommonDef.FOLDER_PATH_IMPORT_TESTCASE + fileName;
+        importResult = excelReadUtil.read(newFileName, listNameField);
+        if (importResult.hasError()) {
+            return importResult;
+        }
+
+        // 3. Update Test case
+        List<TestRunExcelDTO> listTestCase = importResult.getCd();
+        if (listTestCase == null || listTestCase.isEmpty()) {
+            log.info("TestCase is null or empty");
+            return commonDao.getResult("300302");
+        }
+
+        // 4. Update Test Run
+        Result resUpdateTC = updateTestCase(testSetId, listTestCase);
+        if (resUpdateTC.hasError()) {
+            log.info("TestCase add or update failed");
+            return resUpdateTC;
+        }
+
+        return importResult;
+    }
+
+    @Override
+    public Result updateTestRun(Integer userId, String locale, TestRun testRun) {
+        return null;
+    }
+
+    private Result updateTestRunInfo(Integer testSetId, TestCase testCase, String locale) {
+
+        // Add Test Run
+        Integer id = testCase.getId();
+        TestRun testRun = testRunRep.getByTestCaseId(id);
+        if (testRun == null) {
+            testRun = TestRunFactory.createNewTestRun(testCase, testSetId, locale);
+        }
+        testRun = testRunRep.saveAndFlush(testRun);
+
+        return new Result(testRun);
+    }
+
+    private Result<List<TestRunExcelDTO>> updateTestCase(Integer testSetId, List<TestRunExcelDTO> listTestCase) {
+        Result result = new Result();
+        TestCase testCase;
+        TestCase updatedTestCase = new TestCase();
+        List<TestCase> testCaseList = new ArrayList<>();
+
+        Integer caseType = testSetRep.getTypeById(testSetId);
+        TestCase newTC = null;
+        String trLocale = null;
+        for (TestRunExcelDTO item : listTestCase) {
+            TestCase t = item.getTestCase();
+            trLocale = item.getLocale();
+            String caseId = t.getCaseId();
+
+            testCase = testCaseRep.getByCaseIdAndCaseType(caseId, caseType);
+            if (testCase == null) {
+                // Add new test case
+                newTC = TestCaseFactory.createNewTestCaseByExcel(caseType, t);
+                updatedTestCase = testCaseRep.saveAndFlush(newTC);
+            } else {
+                // Check TestRun
+                TestRun tr = testRunRep.getByTestsetIdAndTestcaseId(testSetId, testCase.getId());
+                if (tr == null) {
+                    // insert
+                    result = updateTestRunInfo(testSetId, testCase, trLocale);
+                    if (result.hasError()) {
+                        return result;
+                    }
+                }
+
+                String replaceTestRunFlag = commonDao.getConfigValueByKey(ProjectConst.TESTCASE_IMP_REPLACE_SUCC);
+                try {
+                    EnumDef.TESTCASE_IMP_REPLACE_SUCC enumItem = EnumDef.getEnumTypeByCode(EnumDef.TESTCASE_IMP_REPLACE_SUCC.class, Integer.parseInt(replaceTestRunFlag));
+                    switch (enumItem) {
+                        case IGNORE:
+                            updatedTestCase = null;
+                            break;
+                        case UPDATETC:
+                            newTC = TestCaseFactory.mergeTestCaseByExcel(testCase, t);
+                            updatedTestCase = testCaseRep.saveAndFlush(newTC);
+                            break;
+                        case BOTHUPDATE:
+                            newTC = TestCaseFactory.mergeTestCaseByExcel(testCase, t);
+
+                            updatedTestCase = testCaseRep.saveAndFlush(newTC);
+
+                            if (tr != null) {
+                                result = updateTestRunInfo(testSetId, updatedTestCase, trLocale);
+                                if (result.hasError()) {
+                                    return result;
+                                }
+                            }
+                            break;
+                    }
+                } catch (Exception e) {
+                    String strMsg = commonDao.getMessage(Locales.EN_US.toString(), "000015", "EnumDef.TESTCASE_IMP_REPLACE_SUCC", replaceTestRunFlag);
+                    log.error(e.getMessage());
+                    log.error(strMsg);
+
+                    result.setEc("000015");
+                    result.setEm(strMsg);
+                    return result;
+                }
+            }
+
+            if (updatedTestCase != null) {
+                testCaseList.add(updatedTestCase);
+            }
+        }
+
+        return new Result(testCaseList);
     }
 
     private TestRunUiDTO getDemoData(TestRunVO testRun) {

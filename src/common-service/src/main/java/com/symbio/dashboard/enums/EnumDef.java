@@ -518,6 +518,65 @@ public class EnumDef {
 //        }
 //    }
 
+    /**
+     * @Author - Danny
+     * @Description - Whether replace respective result in success of test run while importing test case
+     * @Date - 2019/8/13
+     * @Param -
+     * @return
+     */
+    public enum TESTCASE_IMP_REPLACE_SUCC implements IDictEnum {
+        UPDATETC(2, "Update Test Case Only"),
+        BOTHUPDATE(1, "Update Test Case and Test Run"),
+        IGNORE(0, "Neither update");
+
+        private int code;
+        private String value;
+
+        TESTCASE_IMP_REPLACE_SUCC(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(code);
+        }
+
+        @Override
+        public Integer getCode() {
+            return this.code;
+        }
+
+        @Override
+        public String getValue() {
+            return this.value;
+        }
+    }
+
+    @Getter
+    public enum TEST_RUN_STATUS implements IDictEnum {
+        NOT_RUN(0, "Not run"),
+        SUCCESS(1, "Success"),
+        FAIL(4, "Fail"),
+        SKIP(5, "Skip")
+        // ....  Manual Status, API status, Performance status
+        ;
+
+        private Integer code;
+        private String value;
+
+        TEST_RUN_STATUS(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // End of New Dashboard definition
     ///////////////////////////////////////////////////////////////////////////////////////////////////

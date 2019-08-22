@@ -8,16 +8,20 @@ public class TestCaseUtil {
 
     public static final String PRIORITY = "Test Priority";
     public static final String TRPRIORITY = "Priority";
-    public static final String CASEID = "ID";
-    public static final String SUBFEATUREAREA = "Domain / Subdomain";
-    public static final String FEATUREAREA = "Section Hierarchy";
-    public static final String SUMMARY = "Title";
+    public static final String CASEID = "Case ID";
+    public static final String SUBFEATUREAREA = "Feature SubArea";
+    public static final String FEATUREAREA = "Feature Area";
+    public static final String SUMMARY = "Summary";
     public static final String DETAILEDSTEPS = "Steps";
     public static final String OWNER = "Automation owner";
     public static final String CLASSNAME = "Class Name";
     public static final String LOCALES = "Locale";
     public static final String ENVIRONMENT = "Environment";
     public static final String ACTRUALTESTERNAME = "Actual Tester";
+    public static final String ID = "Id";
+    public static final String CASETYPE = "Case Type";
+    public static final String PRODUCTID = "Product Id";
+    public static final String VALIDATION = "Validation";
 
     private static final long serialVersionUID = -21775206532700122L;
 
