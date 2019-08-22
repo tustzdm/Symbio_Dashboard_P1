@@ -556,7 +556,7 @@ public class EnumDef {
 
     @Getter
     public enum TEST_RUN_STATUS implements IDictEnum {
-        NOT_RUN(0, "Not run"),
+        NOT_RUN(0, "Not Run"),
         SUCCESS(1, "Success"),
         FAIL(4, "Fail"),
         SKIP(5, "Skip")
@@ -567,6 +567,32 @@ public class EnumDef {
         private String value;
 
         TEST_RUN_STATUS(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+    @Getter
+    public enum TEST_RESULT_STATUS implements IDictEnum {
+        NOT_RUN(0, "Not Run"),
+        AUTOMATION_SUCCESS(1, "Automation Success"),
+        AUTOMATION_FAIL(2, "Automation Fail"),
+        AUTOMATION_SKIP(3, "Automation Skip"),
+        AUTOMATION_SUCCESS_WITHIN_PERCENTAGE(4, "Automation Success with Percentage"),
+        AUTOMATION_STARTED(16, "Automation Started"),
+        TEST_NOT_REQUIRED(101, "Test Not Required")
+        // ....  Manual Status, API status, Performance status
+        ;
+
+        private Integer code;
+        private String value;
+
+        TEST_RESULT_STATUS(int code, String value) {
             this.code = code;
             this.value = value;
         }

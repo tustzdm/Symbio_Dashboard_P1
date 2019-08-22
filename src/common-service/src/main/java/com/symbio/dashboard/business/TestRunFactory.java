@@ -41,7 +41,7 @@ public class TestRunFactory {
         if (CommonUtil.isEmpty(locale)) {
             testRun.setLocale(Locales.EN_US.toString());
         } else {
-            testRun.setLocale(tc.getSupportLocales());
+            testRun.setLocale(locale);
         }
         testRun.setCreateTime(new Date());
         return testRun;

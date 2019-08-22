@@ -3,11 +3,13 @@ package com.symbio.dashboard.service;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
 import com.symbio.dashboard.business.TestCaseFactory;
+import com.symbio.dashboard.business.TestResultFactory;
 import com.symbio.dashboard.business.TestRunFactory;
 import com.symbio.dashboard.constant.CommonDef;
 import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.dao.*;
 import com.symbio.dashboard.data.repository.TestCaseRep;
+import com.symbio.dashboard.data.repository.TestResultRep;
 import com.symbio.dashboard.data.repository.TestRunRep;
 import com.symbio.dashboard.data.repository.TestSetRep;
 import com.symbio.dashboard.dto.TestRunExcelDTO;
@@ -15,6 +17,7 @@ import com.symbio.dashboard.dto.TestRunUiDTO;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.TestCase;
+import com.symbio.dashboard.model.TestResult;
 import com.symbio.dashboard.model.TestRun;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.ExcelReadUtil;
@@ -57,6 +60,8 @@ public class TestRunServiceImpl implements TestRunService {
     private TestRunRep testRunRep;
     @Autowired
     private ExcelImportDao excelImportDao;
+    @Autowired
+    private TestResultRep testResultRep;
 
 
     @Override
@@ -136,15 +141,18 @@ public class TestRunServiceImpl implements TestRunService {
         return null;
     }
 
-    private Result updateTestRunInfo(Integer testSetId, TestCase testCase, String locale) {
+    private Result<TestRun> saveNewTestRunInfo(Integer testSetId, TestCase testCase, String locale) {
 
         // Add Test Run
         Integer id = testCase.getId();
         TestRun testRun = testRunRep.getByTestCaseId(id);
         if (testRun == null) {
             testRun = TestRunFactory.createNewTestRun(testCase, testSetId, locale);
+            testRun = testRunRep.saveAndFlush(testRun);
+
+            TestResult testResult = TestResultFactory.createNewTestResult(testSetId, testRun.getId());
+            testResultRep.saveAndFlush(testResult);
         }
-        testRun = testRunRep.saveAndFlush(testRun);
 
         return new Result(testRun);
     }
@@ -173,7 +181,7 @@ public class TestRunServiceImpl implements TestRunService {
                 TestRun tr = testRunRep.getByTestsetIdAndTestcaseId(testSetId, testCase.getId());
                 if (tr == null) {
                     // insert
-                    result = updateTestRunInfo(testSetId, testCase, trLocale);
+                    result = saveNewTestRunInfo(testSetId, testCase, trLocale);
                     if (result.hasError()) {
                         return result;
                     }
@@ -196,7 +204,7 @@ public class TestRunServiceImpl implements TestRunService {
                             updatedTestCase = testCaseRep.saveAndFlush(newTC);
 
                             if (tr != null) {
-                                result = updateTestRunInfo(testSetId, updatedTestCase, trLocale);
+                                result = saveNewTestRunInfo(testSetId, updatedTestCase, trLocale);
                                 if (result.hasError()) {
                                     return result;
                                 }

@@ -1,5 +1,6 @@
 package com.symbio.dashboard.business;
 
+import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.model.TestCase;
 import com.symbio.dashboard.model.TestResult;
 import com.symbio.dashboard.model.User;
@@ -57,4 +58,17 @@ public class TestResultFactory {
 //        testResult.setUpdateUserName(user.getNickName());
 //        return testResult;
 //    }
+
+    public static TestResult createNewTestResult(Integer testSetId, Integer testRunId) {
+
+        TestResult testResult = new TestResult();
+
+        testResult.setTestSetId(testSetId);
+        testResult.setTestRunId(testRunId);
+        testResult.setAutoRunStatus(EnumDef.TEST_RUN_STATUS.NOT_RUN.getCode());
+        testResult.setValidation(EnumDef.ENTITY_VALIDATION.VALID.getCode());
+        testResult.setCreateTime(new Date());
+
+        return testResult;
+    }
 }
