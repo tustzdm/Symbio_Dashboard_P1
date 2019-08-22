@@ -20,6 +20,7 @@ import com.symbio.dashboard.model.TestCase;
 import com.symbio.dashboard.model.TestResult;
 import com.symbio.dashboard.model.TestRun;
 import com.symbio.dashboard.util.BusinessUtil;
+import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.ExcelReadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,12 +147,24 @@ public class TestRunServiceImpl implements TestRunService {
         // Add Test Run
         Integer id = testCase.getId();
         TestRun testRun = testRunRep.getByTestCaseId(id);
-        if (testRun == null) {
-            testRun = TestRunFactory.createNewTestRun(testCase, testSetId, locale);
-            testRun = testRunRep.saveAndFlush(testRun);
+        TestResult testResult;
+        try {
+            if (testRun == null) {
+                testRun = TestRunFactory.createNewTestRun(testCase, testSetId, locale);
+                testRun = testRunRep.saveAndFlush(testRun);
 
-            TestResult testResult = TestResultFactory.createNewTestResult(testSetId, testRun.getId());
-            testResultRep.saveAndFlush(testResult);
+                testResult = TestResultFactory.createNewTestResult(testSetId, testRun.getId());
+                testResultRep.saveAndFlush(testResult);
+            } else {
+                testResult = testResultRep.getByTestRunId(testRun.getId());
+                if (CommonUtil.isEmpty(testResult)) {
+                    testResult = TestResultFactory.createNewTestResult(testSetId, testRun.getId());
+                    testResultRep.saveAndFlush(testResult);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result<>("000017", "DB save failure");
         }
 
         return new Result(testRun);
@@ -179,12 +192,9 @@ public class TestRunServiceImpl implements TestRunService {
             } else {
                 // Check TestRun
                 TestRun tr = testRunRep.getByTestsetIdAndTestcaseId(testSetId, testCase.getId());
-                if (tr == null) {
-                    // insert
-                    result = saveNewTestRunInfo(testSetId, testCase, trLocale);
-                    if (result.hasError()) {
-                        return result;
-                    }
+                result = saveNewTestRunInfo(testSetId, testCase, trLocale);
+                if (result.hasError()) {
+                    return result;
                 }
 
                 String replaceTestRunFlag = commonDao.getConfigValueByKey(ProjectConst.TESTCASE_IMP_REPLACE_SUCC);

@@ -45,5 +45,7 @@ public class ProjectConst {
     public static final String TESTCASE_SPERATED_PRODUCT = "TestCase_SeparatedByProduct";
     public static final String TESTCASE_IMP_REPLACE_SUCC = "TestCase_Import_ReplaceSuccess";
     public static final String TESTCASE_IMP_LOCALE_DEFAULT = "TestCase_Import_Locale_Default";
+    public static final String TESTCASE_IMP_FIELD_CASE_ID = "caseId";
+
 
 }

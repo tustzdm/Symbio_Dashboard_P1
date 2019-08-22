@@ -3,6 +3,7 @@ package com.symbio.dashboard.util;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.business.TestCaseUtil;
 import com.symbio.dashboard.constant.ErrorConst;
+import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.dto.TestRunExcelDTO;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.TestCase;
@@ -613,9 +614,12 @@ public class ExcelReadUtil {
                     if ("locale".equalsIgnoreCase(cellValue)) {
                         heads.put(c, "locale");
                     }
-
                 } else {
                     String strField = heads.get(c);
+                    if (ProjectConst.TESTCASE_IMP_FIELD_CASE_ID.equals(strField) && CommonUtil.isEmpty(cellValue)) {
+                        testCase = null;
+                        break;
+                    }
 
                     if (!"locale".equals(strField) && !CommonUtil.isEmpty(heads.get(c))) {
                         try {

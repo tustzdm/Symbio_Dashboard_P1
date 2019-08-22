@@ -3,9 +3,11 @@ package com.symbio.dashboard.controller;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
 import com.symbio.dashboard.constant.CommonDef;
+import com.symbio.dashboard.dto.TestRunExcelDTO;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.service.FileUploadService;
 import com.symbio.dashboard.service.TestRunService;
+import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.StringUtil;
 import com.symbio.dashboard.validator.ImpTestCaseValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @ClassName - ResultReviewController
@@ -132,14 +135,20 @@ public class ResultReviewController extends BaseController {
                               @RequestParam(value = "fileName") String fileName) {
         log.trace("ResultReviewController.importExcel() Enter");
 
-        Result retResult = new Result();
+        Result<String> retResult = new Result();
         try {
-
-            retResult = testRunService.importExcel(locale, testSetId, fileName);
+            Result<List<TestRunExcelDTO>> resultImportExcel = testRunService.importExcel(locale, testSetId, fileName);
 
             if (retResult.hasError()) {
                 log.error(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
             }
+            Integer nTestRunCount = 0;
+            List<TestRunExcelDTO> listTestRun = resultImportExcel.getCd();
+
+            if (!CommonUtil.isEmpty(listTestRun)) {
+                nTestRunCount = listTestRun.size();
+            }
+            retResult.setCd(String.format("Test Run count: " + nTestRunCount));
         } catch (Exception e) {
             e.printStackTrace();
         }
