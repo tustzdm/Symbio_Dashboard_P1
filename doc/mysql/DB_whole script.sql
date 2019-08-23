@@ -875,3 +875,45 @@ CREATE TABLE `parse_result_summary` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Parse file info';
 
+-- 2019/8/22
+DROP TABLE IF EXISTS `jenkins_label_info`;
+CREATE TABLE `jenkins_label_info` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK: Label ID',
+  `jjhMainId` int(10) unsigned NOT NULL COMMENT 'FK:[jenkins_job_history_main].id',  
+  `name` varchar(64) DEFAULT NULL COMMENT 'Label name',
+  `labelFormat` varchar(32) DEFAULT '' COMMENT 'Label format',
+  `labelStatus` int(10) DEFAULT '0' COMMENT 'status',
+  `testRunCount` int(10) unsigned DEFAULT '0' COMMENT 'Count of this test set TestRuns',
+  `locales` varchar(255) DEFAULT NULL,  
+  `startTime` datetime DEFAULT NULL,
+  `endTime` datetime DEFAULT NULL,  
+  `description` varchar(255) DEFAULT NULL,
+  `display` int(10) unsigned DEFAULT '1' COMMENT 'display or not. 0-hide,1-show',
+  `createTime` datetime DEFAULT NULL COMMENT 'create time',
+  `createUserId` int(10) unsigned DEFAULT NULL COMMENT 'create user',
+  `createUserName` varchar(32) DEFAULT NULL COMMENT 'create user name',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
+  `updateUserId` int(10) unsigned DEFAULT NULL COMMENT 'update user',
+  `updateUserName` varchar(32) DEFAULT NULL COMMENT 'update user name',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Label info for jenkins job trigger';
+
+DROP TABLE IF EXISTS `relation_test_case_method`;
+CREATE TABLE `relation_test_case_method` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  `testCaseId` int(10) unsigned NOT NULL COMMENT 'FK:[test_case].id',  
+  `packageInfo` varchar(64) DEFAULT NULL,
+  `className` varchar(64) DEFAULT NULL,
+  `methodName` varchar(64) DEFAULT NULL,
+  `srcFile` varchar(255) DEFAULT NULL,
+  `locales` varchar(64) DEFAULT NULL,
+  `display` int(10) unsigned DEFAULT '1' COMMENT 'display or not. 0-hide,1-show',
+  `createTime` datetime DEFAULT NULL COMMENT 'create time',
+  `createUserId` int(10) unsigned DEFAULT NULL COMMENT 'create user',
+  `createUserName` varchar(32) DEFAULT NULL COMMENT 'create user name',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
+  `updateUserId` int(10) unsigned DEFAULT NULL COMMENT 'update user',
+  `updateUserName` varchar(32) DEFAULT NULL COMMENT 'update user name',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_test_case_id_method_name` (`packageInfo`, `className`, `methodName`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Relationship for method and test case id';

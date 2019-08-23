@@ -1,6 +1,8 @@
 package com.symbio.dashboard.service;
 
+import com.symbio.dashboard.Result;
 import com.symbio.dashboard.constant.CommonDef;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@SuppressWarnings("unchecked")
 public class FileServiceImpl implements FileService {
 
     @Value("${app.file.root}")
@@ -139,10 +142,18 @@ public class FileServiceImpl implements FileService {
         return bRet;
     }
 
-    public boolean moveFileToZipBackup(String fileName) {
+    public Result<String> moveFileToZipBackup(String fileName) {
+        Result<String> retResult = new Result();
         String destFolder = CommonDef.FOLDER_PATH_TESTRUN_BAKZIP_ROOT;
         destFolder += File.separator + DateUtil.formatToYYYYMMDD(new Date());
-        return moveFileToDirectory(fileName, destFolder);
+        boolean bMove = moveFileToDirectory(fileName, destFolder);
+        if (bMove) {
+            retResult.setCd(destFolder);
+        } else {
+            return new Result(ErrorConst.PARSE_REPORT_MOVE_DIRECOTRY, ErrorConst.PARSE_REPORT_MOVE_DIRECOTRY_M);
+        }
+
+        return retResult;
     }
 
 }

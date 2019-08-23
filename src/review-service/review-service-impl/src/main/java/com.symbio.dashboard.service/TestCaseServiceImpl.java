@@ -1,16 +1,18 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
  * @ClassName - TestCaseServiceImpl
  * @Author - admin
- * @Description - TODO
+ * @Description
  * @Date - 2019/8/1 15:21
  * @Version 1.0
  */
 
+@Slf4j
 @Service
 @SuppressWarnings("unchecked")
 public class TestCaseServiceImpl implements TestCaseService {

@@ -34,6 +34,12 @@ public class ProjectConst {
     // unCompressed file extension
     public static final String JENKINS_AUTOMATION_REPORT_FILEEXT = "JenkinsJob.Automation.ReportFile.Extend";
 
+    public static final String JENKINS_AUTOMATION_REPORT_FORMAT = "Jenkins.Automation.ReportFile.Format";
+    public static final String JENKINS_AUTOMATION_REPORT_HAS_TCID = "Jenkins.Automation.ReportFile.HasTestCaseId";
+    public static final String JENKINS_AUTOMATION_REPORT_HAS_LOCALE = "Jenkins.Automation.ReportFile.HasLocale";
+    public static final String JENKINS_AUTOMATION_COMPRESS_FILE_HAS_LOCALE = "Jenkins.Automation.CompressFile.HasLocale";
+    public static final String JENKINS_AUTOMATION_PARSER_LOCALE_DEFAULT = "Jenkins.Automation.ParseLocale.Default";
+
     // TEP
     public static final String TEP_SPERATED_PRODUCT = "TEP_SeparatedByProduct";
 

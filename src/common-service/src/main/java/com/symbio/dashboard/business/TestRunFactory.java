@@ -1,5 +1,6 @@
 package com.symbio.dashboard.business;
 
+import com.symbio.dashboard.constant.CommonDef;
 import com.symbio.dashboard.enums.EntityDisplay;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.Locales;
@@ -9,6 +10,7 @@ import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.StringUtil;
 
 import java.util.Date;
+import java.util.Map;
 
 public class TestRunFactory {
 
@@ -45,5 +47,23 @@ public class TestRunFactory {
         }
         testRun.setCreateTime(new Date());
         return testRun;
+    }
+
+    public static String getTestLocale(Map<String, String> config) {
+        if (config == null) {
+            return Locales.EN_US.toString();
+        }
+        String language = config.get(CommonDef.MOBILEAPPLANGUAGE);
+        if (CommonUtil.isEmpty(language)) {
+            language = "en";
+        }
+        if (language.contains("_")) {
+            return language;
+        }
+        String locale = config.get(CommonDef.MOBILEAPPLOCALE);
+        if (CommonUtil.isEmpty(locale)) {
+            locale = "US";
+        }
+        return language + "_" + locale;
     }
 }

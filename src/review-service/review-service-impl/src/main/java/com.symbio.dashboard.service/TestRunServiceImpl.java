@@ -38,8 +38,8 @@ import java.util.Map;
  * @Version 1.0
  */
 
-@Service
 @Slf4j
+@Service
 @SuppressWarnings("unchecked")
 public class TestRunServiceImpl implements TestRunService {
 
@@ -63,7 +63,6 @@ public class TestRunServiceImpl implements TestRunService {
     private ExcelImportDao excelImportDao;
     @Autowired
     private TestResultRep testResultRep;
-
 
     @Override
     public Result getTestRunList(String locale, TestRunVO testRun) {

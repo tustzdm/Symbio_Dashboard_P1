@@ -278,7 +278,6 @@ public class JenkinsDao {
         return retResult;
     }
 
-
     public List<JenkinsJobHistoryMain> getJenkinsJobHistoryCronList() {
         List<JenkinsJobHistoryMain> listData = jjhMainRep.getUpdateStatusCronList();
         return listData;

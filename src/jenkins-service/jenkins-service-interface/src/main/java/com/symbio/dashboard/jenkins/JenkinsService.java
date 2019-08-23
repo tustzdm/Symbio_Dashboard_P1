@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Map;
 
 @Service
-public interface IJenkinsService {
+public interface JenkinsService {
 
     Result<Map<String, Object>> getParams(String url, String userName, String password, String jobName);
 

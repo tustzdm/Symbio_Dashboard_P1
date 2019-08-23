@@ -35,6 +35,10 @@ public class CommonDef {
         return String.format("/%s/%s/", pathName, subPathName);
     }
 
+    public static String getReportFileAbsolutPath(String strWorkPath) {
+        return String.format("%s/%s/%s", strWorkPath, Runtime_REPORTER, JSON);
+    }
+
     private void manualInitProperty() {
         LOGIN_ENV = "dev";
         // LOGIN_ENV = "angular_debug";
@@ -72,6 +76,7 @@ public class CommonDef {
             file.mkdirs();
         }
     }
+
 
     public static final long TIME_SETTING = 30 * 60 * 1000;
 
@@ -114,12 +119,13 @@ public class CommonDef {
 
     public static final String DOUBLEQUOTA = "\"";
 
+    public static final String Runtime_REPORTER = "RuntimeReporter/";
+
     public static final String SCREENSHOTS = "screenshots/";
 
     public static final String SOURCES = "sources/";
 
     public static final String JSON = "report.json";
-
 
     public static final String COMMA = ",";
 

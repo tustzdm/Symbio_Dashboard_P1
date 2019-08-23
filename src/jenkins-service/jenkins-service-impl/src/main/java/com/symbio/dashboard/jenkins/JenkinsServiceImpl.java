@@ -36,7 +36,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @SuppressWarnings("unchecked")
-public class JenkinsServiceImpl implements IJenkinsService {
+public class JenkinsServiceImpl implements JenkinsService {
 
     @Autowired
     JenkinsDao jenkinsDao;
