@@ -35,10 +35,7 @@ public class TestRunFactory {
         testRun.setDisplay(EntityDisplay.SHOW.getValue());
         testRun.setValidation(EnumDef.ENTITY_VALIDATION.VALID.getCode());
         testRun.setStatus(EnumDef.TEST_RUN_STATUS.NOT_RUN.getCode());
-        testRun.setRunEngineerId(10);
-        testRun.setRunQaId(6);
-        testRun.setRunTepId(7);
-        testRun.setScreenshot_flag(0);
+        testRun.setScreenshot_flag(EnumDef.SCRREN_FLAG_STATUS.UNKNOWN.getCode());
 
         if (CommonUtil.isEmpty(locale)) {
             testRun.setLocale(Locales.EN_US.toString());

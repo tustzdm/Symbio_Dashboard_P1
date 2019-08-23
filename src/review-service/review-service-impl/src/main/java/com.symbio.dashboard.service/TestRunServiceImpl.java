@@ -189,11 +189,25 @@ public class TestRunServiceImpl implements TestRunService {
                 newTC = TestCaseFactory.createNewTestCaseByExcel(caseType, t);
                 updatedTestCase = testCaseRep.saveAndFlush(newTC);
             } else {
+                TestRun tr = null;
                 // Check TestRun
-                TestRun tr = testRunRep.getByTestsetIdAndTestcaseIdAndLocale(testSetId, testCase.getId(), trLocale);
-                result = saveNewTestRunInfo(testSetId, testCase, trLocale);
-                if (result.hasError()) {
-                    return result;
+                if (trLocale.contains(",")) {
+                    String locale;
+                    String[] locales = trLocale.split(",");
+                    for (String loc : locales) {
+                        locale = loc.trim();
+                        tr = testRunRep.getByTestsetIdAndTestcaseIdAndLocale(testSetId, testCase.getId(), locale);
+                        result = saveNewTestRunInfo(testSetId, testCase, locale);
+                        if (result.hasError()) {
+                            return result;
+                        }
+                    }
+                } else {
+                    tr = testRunRep.getByTestsetIdAndTestcaseIdAndLocale(testSetId, testCase.getId(), trLocale);
+                    result = saveNewTestRunInfo(testSetId, testCase, trLocale);
+                    if (result.hasError()) {
+                        return result;
+                    }
                 }
 
                 String replaceTestRunFlag = commonDao.getConfigValueByKey(ProjectConst.TESTCASE_IMP_REPLACE_SUCC);
@@ -213,6 +227,17 @@ public class TestRunServiceImpl implements TestRunService {
                             updatedTestCase = testCaseRep.saveAndFlush(newTC);
 
                             if (tr != null) {
+                                if (trLocale.contains(",")) {
+                                    String locale;
+                                    String[] locales = trLocale.split(",");
+                                    for (String loc : locales) {
+                                        locale = loc.trim();
+                                        result = saveNewTestRunInfo(testSetId, testCase, locale);
+                                        if (result.hasError()) {
+                                            return result;
+                                        }
+                                    }
+                                }
                                 result = saveNewTestRunInfo(testSetId, updatedTestCase, trLocale);
                                 if (result.hasError()) {
                                     return result;

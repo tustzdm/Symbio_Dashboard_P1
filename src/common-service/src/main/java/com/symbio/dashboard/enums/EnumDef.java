@@ -603,6 +603,25 @@ public class EnumDef {
         }
     }
 
+    @Getter
+    public enum SCRREN_FLAG_STATUS implements IDictEnum {
+        UNKNOWN(0, "No"),
+        YES(1, "Yes");
+
+        private Integer code;
+        private String value;
+
+        SCRREN_FLAG_STATUS(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // End of New Dashboard definition
     ///////////////////////////////////////////////////////////////////////////////////////////////////

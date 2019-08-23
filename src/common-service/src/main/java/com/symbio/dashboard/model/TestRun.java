@@ -53,13 +53,13 @@ public class TestRun implements Serializable {
     @Column(name = "app_path")
     private String appPath;
 
-    @Column(name = "run_engineer_id", nullable = false)
+    @Column(name = "run_engineer_id")
     private Integer runEngineerId;
 
-    @Column(name = "run_qa_id", nullable = false)
+    @Column(name = "run_qa_id")
     private Integer runQaId;
 
-    @Column(name = "run_tep_id", nullable = false)
+    @Column(name = "run_tep_id")
     private Integer runTepId;
 
     @Column(name = "trunfield_bool1")
