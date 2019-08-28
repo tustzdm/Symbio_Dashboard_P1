@@ -510,9 +510,9 @@ CREATE TABLE `test_run` (
   `screenshot_flag` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'The flag of last test result that has screenshot or not. 0-unkown, 1-yes',
   
   `app_path` varchar(1024) DEFAULT NULL,
-  `run_engineer_id` int(10) unsigned NOT NULL COMMENT 'user id',
-  `run_qa_id` int(10) unsigned NOT NULL COMMENT 'user id',
-  `run_tep_id` int(10) unsigned NOT NULL COMMENT 'TEP id',
+  `run_engineer_id` int(10) unsigned DEFAULT NULL COMMENT 'user id',
+  `run_qa_id` int(10) unsigned DEFAULT NULL COMMENT 'user id',
+  `run_tep_id` int(10) unsigned DEFAULT NULL COMMENT 'TEP id',
  
   `trunfield_bool1` smallint(5) DEFAULT NULL COMMENT 'TestCase field bool. 1-true,0-false',
   `trunfield_bool2` smallint(5) DEFAULT NULL COMMENT 'TestCase field bool. 1-true,0-false',
@@ -917,3 +917,82 @@ CREATE TABLE `relation_test_case_method` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_test_case_id_method_name` (`packageInfo`, `className`, `methodName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Relationship for method and test case id';
+
+-- 2019/8/23
+DROP TABLE IF EXISTS `issue_category`;
+CREATE TABLE `issue_category` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK id',
+  `product_id` int(10) unsigned NOT NULL COMMENT 'FK:[product].id. 0:common, Non_zero: private',
+  `case_type` int(10) unsigned NOT NULL COMMENT 'FK:[test_case].case_type.1-Automation,2-Manual Test,4-API Test,8-Performance Test',
+  `category` varchar(64) DEFAULT NULL COMMENT 'Name of issue category',
+  `idx` smallint(5) unsigned NOT NULL COMMENT 'List order',
+  `description` varchar(255) DEFAULT NULL COMMENT 'Description',
+  `createTime` datetime DEFAULT NULL COMMENT 'Create time',
+  `createUserId` int(10) unsigned DEFAULT NULL COMMENT 'create user',
+  `createUserName` varchar(32) DEFAULT NULL COMMENT 'create user name',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_issue_category` (`product_id`,`case_type`,`category`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Issue category';
+
+DROP TABLE IF EXISTS `issue_reason`;
+CREATE TABLE `issue_reason` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK id',
+  `issue_category_id` int(10) unsigned NOT NULL COMMENT 'FK:[issue_category].id',
+  `reason` varchar(3000) DEFAULT NULL,
+	`issue_level` smallint(5) unsigned DEFAULT NULL COMMENT 'Bug level for this issue.',
+  `idx` smallint(5) unsigned NOT NULL COMMENT 'Reason order',
+  `description` varchar(255) DEFAULT NULL COMMENT 'Description',
+  `createTime` datetime DEFAULT NULL COMMENT 'Create time',
+  `createUserId` int(10) unsigned DEFAULT NULL COMMENT 'Create user',
+  `createUserName` varchar(32) DEFAULT NULL COMMENT 'Create user name',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Issue reason';
+
+-- 2019/8/26
+DROP TABLE IF EXISTS `screen_shot`;
+CREATE TABLE `screen_shot` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  `testRunId` int(10) unsigned NOT NULL COMMENT 'FK: [test_run].id',
+  `status` int(10) unsigned DEFAULT NULL COMMENT 'status. 0-unReviewed,1-pass,4-fail',
+  `step` int(10) unsigned DEFAULT '0' COMMENT 'index of ss in the report file. 1,2,3....',
+  `source` varchar(128) DEFAULT NULL COMMENT 'filename. sources/GUID.source.txt',
+  `image` varchar(128) DEFAULT NULL COMMENT 'filename. screenshots/GUID.png',
+  `message` varchar(255) DEFAULT NULL,
+  `httpFilePath` varchar(255) DEFAULT NULL COMMENT '/imgs/restrun/2016-05-23/....png',
+  `sourceFilePath` varchar(255) DEFAULT NULL COMMENT 'File path',
+  `sourceFileName` varchar(255) DEFAULT NULL,
+  `sourceFileOriginalName` varchar(128) DEFAULT NULL COMMENT 'File name',
+  `sourceFileSize` int(10) unsigned DEFAULT NULL COMMENT 'file size',
+  `originalName` varchar(128) DEFAULT NULL COMMENT '文件名',
+  `filePath` varchar(255) DEFAULT NULL COMMENT '文件路径',
+  `fileName` varchar(64) DEFAULT NULL COMMENT '文件名',
+  `fileSize` int(10) unsigned DEFAULT NULL COMMENT '照片大小，单位：字节',
+  `thumbnailFilePath` varchar(255) DEFAULT NULL COMMENT 'thumbnail file path',
+  `thumbnailFileName` varchar(64) DEFAULT NULL COMMENT 'thumbnail file name',
+  `thumbnailFileSize` int(10) unsigned DEFAULT NULL COMMENT 'thumbnail file size',
+  `description` varchar(255) DEFAULT NULL COMMENT 'Description',
+  `jiraTicketId` varchar(32) DEFAULT NULL,
+  `jiraTicket` varchar(3000) DEFAULT NULL,
+  `qaComment` varchar(3000) DEFAULT NULL,
+
+  `ssfield_int1` int(10) DEFAULT NULL COMMENT 'Field int',
+  `ssfield_int2` int(10) DEFAULT NULL COMMENT 'Field int',
+  `ssfield_int3` int(10) DEFAULT NULL COMMENT 'Field int',
+  `ssfield_int4` int(10) DEFAULT NULL COMMENT 'Field int',
+  `ssfield_int5` int(10) DEFAULT NULL COMMENT 'Field int',
+  `ssfield_str1` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `ssfield_str2` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `ssfield_str3` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `ssfield_str4` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `ssfield_str5` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `ssfield_review1` varchar(3000) DEFAULT NULL COMMENT 'Field string',
+  `ssfield_review2` varchar(3000) DEFAULT NULL COMMENT 'Field string',
+  `ssfield_review3` varchar(3000) DEFAULT NULL COMMENT 'Field string',
+
+  `createTime` datetime DEFAULT NULL COMMENT 'Create time',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time', 
+  PRIMARY KEY (`id`),
+  KEY `unique_screen_shot_testrunid_step` (`testRunId`, `step`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

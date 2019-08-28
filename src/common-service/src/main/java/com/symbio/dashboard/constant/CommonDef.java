@@ -15,6 +15,9 @@ public class CommonDef {
     @Value("${app.file.root}")
     private String rootDirectory;
 
+    @Value("${app.ui.path}")
+    private String uiUploadImgDirectory;
+
     @PostConstruct
     public void setProjectConfigService() {
         manualInitProperty();
@@ -52,8 +55,12 @@ public class CommonDef {
         FOLDER_PATH_DASHBOARD_ZIP_ROOT = PIC_ROOT + enclosedAllFolder(FOLDER_NAME_ZIP_ROOT);
         FOLDER_PATH_TESTRUN_ROOT = PIC_ROOT + enclosedAllFolder(FOLDER_NAME_WORK_ROOT);
         FOLDER_PATH_TESTRUN_BAKZIP_ROOT = PIC_ROOT + concatEnclosedAllFolder(FOLDER_NAME_WORK_ROOT, FOLDER_NAME_ZIP_BACKUP);
-        DIR_HTTP_SCREENSHOT = PIC_ROOT + enclosedAllFolder(FOLDER_NAME_IMAGE);
-        PIC_LOGO_ROOT = PIC_ROOT + concatEnclosedAllFolder(FOLDER_NAME_IMAGE, FOLDER_NAME_LOG);
+
+        // DIR_HTTP_SCREENSHOT = PIC_ROOT + enclosedAllFolder(FOLDER_NAME_IMAGE);
+        // PIC_LOGO_ROOT = PIC_ROOT + concatEnclosedAllFolder(FOLDER_NAME_IMAGE, FOLDER_NAME_LOG);
+        FOLDER_NAME_SCREENSHOT = "mock" + enclosedAllFolder(FOLDER_NAME_IMAGE);
+        DIR_HTTP_SCREENSHOT = uiUploadImgDirectory + enclosedAllFolder(FOLDER_NAME_IMAGE);
+        PIC_LOGO_ROOT = uiUploadImgDirectory + concatEnclosedAllFolder(FOLDER_NAME_IMAGE, FOLDER_NAME_LOG);
     }
 
     private void checkDirectories() {
@@ -139,8 +146,9 @@ public class CommonDef {
 
     public static final String DASHBOARD = "dashboard";
 
-    public static final String SCREENSHOT = "screenshot";
-
+    // Same to report.json
+    public static final String SCREENSHOT = "screenshots";
+    public static final String SOURCE = "source";
     public static final String THUMBNAIL = "thumbnail";
 
     public static final String LOGO = "logo/";
@@ -211,6 +219,7 @@ public class CommonDef {
     public static String FOLDER_PATH_DASHBOARD_ZIP_ROOT; // FTP -> WorkDir/
     public static String FOLDER_PATH_TESTRUN_ROOT; // TestRun/YYYYMMDDHHMMSSsss/
     public static String DIR_HTTP_SCREENSHOT;
+    public static String FOLDER_NAME_SCREENSHOT;
     public static String DASHBOARD_PROJECT_ADDRESS;
     public static String FOLDER_PATH_TESTRUN_BAKZIP_ROOT;
 

@@ -3,8 +3,8 @@ package com.symbio.dashboard.test.service;
 import com.symbio.dashboard.Result;
 import org.springframework.stereotype.Service;
 
-
 @Service
+@SuppressWarnings("unchecked")
 public class GetReleaseListAuthServiceImpl implements GetReleaseListAuthService {
     @Override
     public Result getReleaseList(String token) {

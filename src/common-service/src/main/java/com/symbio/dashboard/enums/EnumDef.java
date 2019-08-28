@@ -430,7 +430,8 @@ public class EnumDef {
         EXTRACT(10, "Unzip"),
         TEST_RUN(15, "TestRun"),
         TEST_RESULT(20, "TestResult"),
-        CLEAN(25, "Clean");
+        CLEAN(25, "Clean"),
+        ACHIEVED(30, "Achieved");
 
         private Integer code;
         private String value;
@@ -578,14 +579,40 @@ public class EnumDef {
     }
 
     @Getter
+    public enum JENKINS_REPORT_FILE_STATUS implements IDictEnum {
+        UN_KNOWN(0, "Unknown"),
+        SUCCESS(1, "Passed"),
+        FAIL(4, "Failed"),
+        SKIP(5, "Skipped");
+
+        private Integer code;
+        private String value;
+
+        JENKINS_REPORT_FILE_STATUS(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+    @Getter
     public enum TEST_RESULT_STATUS implements IDictEnum {
         NOT_RUN(0, "Not Run"),
         AUTOMATION_SUCCESS(1, "Automation Success"),
-        AUTOMATION_FAIL(2, "Automation Fail"),
-        AUTOMATION_SKIP(3, "Automation Skip"),
-        AUTOMATION_SUCCESS_WITHIN_PERCENTAGE(4, "Automation Success with Percentage"),
-        AUTOMATION_STARTED(16, "Automation Started"),
-        TEST_NOT_REQUIRED(101, "Test Not Required")
+        AUTOMATION_FAIL(4, "Automation Fail"),
+        AUTOMATION_SKIP(5, "Automation Skip"),
+        AUTOMATION_SUCCESS_WITHIN_PERCENTAGE(6, "Automation Success with Percentage"),
+        AUTOMATION_STARTED(8, "Automation Started"),
+
+        QA_CONDITION_PASS(11, "conditional pass"),
+        QA_TEST_NOT_REQUIRED(10, "Test Not Required"),
+        QA_SUPPORT(12, "QA Support"),
+        QA_LQA_SUPPORT(13, "LQA Support"),
+        QA_IQA_SUPPORT(14, "IQA Support")
         // ....  Manual Status, API status, Performance status
         ;
 
@@ -604,14 +631,37 @@ public class EnumDef {
     }
 
     @Getter
-    public enum SCRREN_FLAG_STATUS implements IDictEnum {
+    public enum SCREEN_FLAG_STATUS implements IDictEnum {
         UNKNOWN(0, "No"),
         YES(1, "Yes");
 
         private Integer code;
         private String value;
 
-        SCRREN_FLAG_STATUS(int code, String value) {
+        SCREEN_FLAG_STATUS(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+    @Getter
+    public enum TEST_RESULT_QA_STATUS implements IDictEnum {
+        UN_KNOWN(0, "Unknown"),
+        PASS(1, "Pass"),
+        FAIL(4, "Fail"),
+        CONDITION_PASS(11, "conditional pass"),
+        TNR(10, "Testing Not Required"),
+        QA_SUPPORT(12, "QA Support");
+
+        private Integer code;
+        private String value;
+
+        TEST_RESULT_QA_STATUS(int code, String value) {
             this.code = code;
             this.value = value;
         }
@@ -651,22 +701,7 @@ public class EnumDef {
         }
     }
 
-    public enum QA_ERRORTYPE {
-        COND_PASS("conditional pass"),
-        FAIL("fail"),
-        TNR("Testing Not Required"),
-        LQA_SUPPORT("LQA Support");
-        private String type;
 
-        QA_ERRORTYPE(String type) {
-            this.type = type;
-        }
-
-        @Override
-        public String toString() {
-            return type;
-        }
-    }
 
     /**
      * TestCase level

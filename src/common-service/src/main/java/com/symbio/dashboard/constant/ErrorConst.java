@@ -57,6 +57,10 @@ public class ErrorConst {
         return String.format("%s %s ec = %s, em = %s", function, LOG_SYMBOL_WARNING, result.getEc(), result.getEm());
     }
 
+    public static String getWarningLogMsg(String function, String msg) {
+        return String.format("%s %s %s", function, LOG_SYMBOL_WARNING, msg);
+    }
+
     public static String getExceptionLogMsg(String function, Exception e) {
         return String.format("Invoke %s %s ErrorMsg: %s", function, LOG_SYMBOL_EXCEPTION, e.getMessage());
     }

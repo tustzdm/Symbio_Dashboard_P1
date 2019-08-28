@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface TestSetRep extends JpaRepository<TestSet,Integer> {
@@ -38,5 +39,10 @@ public interface TestSetRep extends JpaRepository<TestSet,Integer> {
 
     @Query(value = "SELECT `type` FROM `test_set` WHERE id = ?1", nativeQuery = true)
     Integer getTypeById(Integer id);
+
+    @Query(value = "SELECT product.id as productId, `release`.id as releaseId,test_set.id as testSetId, test_set.type as caseType FROM product" +
+            " INNER JOIN `release` on `release`.product_id = product.id INNER JOIN test_set on test_set.release_id = `release`.id" +
+            " WHERE test_set.id = ?1", nativeQuery = true)
+    Map<String, Object> getKeyInfoByTestSetId(Integer id);
 
 }

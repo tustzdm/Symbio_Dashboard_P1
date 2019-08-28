@@ -35,6 +35,7 @@ import java.util.List;
 @RequestMapping("/result")
 @RestController
 @Slf4j
+@SuppressWarnings("unchecked")
 public class ResultReviewController extends BaseController {
 
     @Autowired

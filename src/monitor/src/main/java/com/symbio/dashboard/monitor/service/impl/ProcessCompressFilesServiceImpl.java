@@ -13,6 +13,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@SuppressWarnings("unchecked")
 public class ProcessCompressFilesServiceImpl {
 
     @Autowired

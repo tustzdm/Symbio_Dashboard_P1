@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.zip.ZipException;
 
 @Slf4j
+@SuppressWarnings("unchecked")
 public class ZipUtils {
 
     private static final String CHINESE_CHARSET = "GBK";

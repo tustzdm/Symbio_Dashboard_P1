@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
+@SuppressWarnings("unchecked")
 public class ProductAuthServiceImpl implements ProductAuthService {
     @Override
     public Result getProductListAuth(String token) {

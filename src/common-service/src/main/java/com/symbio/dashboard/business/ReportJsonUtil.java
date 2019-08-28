@@ -4,7 +4,7 @@ import com.symbio.dashboard.model.json.TestMethods;
 
 public class ReportJsonUtil {
 
-    public static Integer getTestCaseId(TestMethods testMethod) {
+    public static String getTestCaseId(TestMethods testMethod) {
         return null;
     }
 }

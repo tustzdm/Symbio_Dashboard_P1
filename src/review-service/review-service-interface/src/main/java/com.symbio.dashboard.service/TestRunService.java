@@ -15,4 +15,6 @@ public interface TestRunService {
     Result importExcel(String locale, Integer testSetId, String fileName);
 
     Result updateTestRun(Integer userId, String locale, TestRun testRun);
+
+    TestRun getTestRunByReportFileInfo(Integer testSetId, String strTestCaseId, String locale);
 }

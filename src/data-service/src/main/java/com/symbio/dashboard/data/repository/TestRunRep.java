@@ -21,5 +21,5 @@ public interface TestRunRep extends JpaRepository<TestRun, Integer> {
     List<TestRun> getByTestsetIdAndTestcaseId(Integer testSetId, Integer testCaseId);
 
     @Query(value = "SELECT * FROM test_run WHERE testset_id = ?1 AND testcase_id = ?2 AND locale = ?3 AND display = 1", nativeQuery = true)
-    TestRun getByTestsetIdAndTestcaseIdAndLocale(Integer testSetId, Integer testCaseId, String locale);
+    TestRun getByTestSetIdAndTestCaseIdAndLocale(Integer testSetId, Integer testCaseId, String locale);
 }

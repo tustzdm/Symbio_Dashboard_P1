@@ -96,30 +96,29 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void delete(String path) {
-        String destpath = rootDirectory + "/" + path;
-        File dest = new File(destpath);
+    public void delete(String destPath) {
+        File dest = new File(destPath);
         if (!dest.exists()) {
-            throw new IllegalStateException("file not found: " + destpath);
+            throw new IllegalStateException("file not found: " + destPath);
         }
         if (dest.isDirectory()) {
             final File[] children = dest.listFiles();
             if (children != null) {
                 for (File child : children) {
-                    delete(path + "/" + child.getName());
+                    delete(destPath + "/" + child.getName());
                 }
             }
         }
         try {
             Files.delete(dest.toPath());
         } catch (IOException e) {
-            throw new IllegalStateException("could not delete: " + destpath, e);
+            throw new IllegalStateException("could not delete: " + destPath, e);
         }
     }
 
     @Override
-    public boolean isFile(String pathName) {
-        String destPath = rootDirectory + "/" + pathName;
+    public boolean isFile(String destPath) {
+        //String destPath = rootDirectory + "/" + pathName;
         File dest = new File(destPath);
         if (!dest.exists()) {
             throw new IllegalStateException("file not found: " + destPath);
@@ -128,16 +127,26 @@ public class FileServiceImpl implements FileService {
     }
 
     public boolean moveFileToDirectory(String fileName, String destFolder) {
+        return moveFileToDirectoryEx(fileName, destFolder, true);
+    }
+
+    public boolean moveFileToDirectoryEx(String fileName, String destFolder, boolean bReplace) {
         boolean bRet = false;
+        String strDestFileName = "";
         try {
             File srcFile = new File(fileName);
             File desFile = new File(destFolder);
+            strDestFileName = destFolder + File.separator + srcFile.getName();
             FileUtils.moveFileToDirectory(srcFile, desFile, true);
             bRet = true;
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("Invoke FileServiceImpl.moveFileToDirectory Exception!  {} --> {}",
-                    fileName, destFolder, e);
+            if (bReplace && e.getMessage().contains("already exists")) {
+                delete(strDestFileName);
+                return moveFileToDirectoryEx(fileName, destFolder, false);
+            } else {
+                e.printStackTrace();
+                log.error("Invoke FileServiceImpl.moveFileToDirectory Exception!  {} --> {}", fileName, destFolder, e);
+            }
         }
         return bRet;
     }

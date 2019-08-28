@@ -3,6 +3,7 @@ package com.symbio.dashboard.third;
 import java.io.*;
 import java.nio.ByteBuffer;
 
+@SuppressWarnings("unchecked")
 public abstract class CharacterDecoder {
     public CharacterDecoder() {
     }

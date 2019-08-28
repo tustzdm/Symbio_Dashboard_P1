@@ -32,6 +32,8 @@ spring:
 app:
   file:
     root: ${user.home}/db_phase1
+  ui:
+    path: /home/shawn/vue/public/mock
 
 logging:
   level:

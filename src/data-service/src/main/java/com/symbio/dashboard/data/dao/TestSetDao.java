@@ -1,6 +1,7 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.repository.*;
 import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.dto.TestSetUiDTO;
@@ -287,5 +288,34 @@ public class TestSetDao {
 
     public Integer getProductIdByTestSetId(Integer testSetId) {
         return testSetRep.getProductIdByTestSetId(testSetId);
+    }
+
+
+    /**
+     * Get Key Info by TestSetId
+     *
+     * @param testSetId
+     * @return
+     */
+    public Map<String, Object> getKeyInfoByTestSetId(Integer testSetId) {
+        try {
+            String sql = String.format(
+                    "SELECT product.id as productId, `release`.id as releaseId, test_set.id as testSetId, test_set.type as caseType FROM product "
+                            + "INNER join `release` on `release`.product_id = product.id "
+                            + "INNER join test_set on test_set.release_id = `release`.id "
+                            + "WHERE test_set.id = %d", testSetId);
+            List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+            List<Map<String, Object>> listData = EntityUtils.castQuerytoMap(listResult, "productId,releaseId,testSetId,caseType");
+            if (CommonUtil.isEmpty(listData)) {
+                return null;
+            } else {
+                return listData.get(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(ErrorConst.getExceptionLogMsg("invoking TestSetDao.getKeyInfoByTestSetId()", e));
+        }
+
+        return null;
     }
 }

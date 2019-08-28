@@ -17,10 +17,9 @@ import java.util.List;
 
 public class ImageSizer {
     public static final MediaTracker tracker =
-            new MediaTracker(
-                    new Component() {
-                        private static final long serialVersionUID = 1234162663955668507L;
-                    });
+            new MediaTracker(new Component() {
+                private static final long serialVersionUID = 1234162663955668507L;
+            });
 
     /**
      * @param originalFile

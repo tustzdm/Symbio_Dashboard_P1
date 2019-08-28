@@ -65,6 +65,17 @@ public class TestRunServiceImpl implements TestRunService {
     private TestResultRep testResultRep;
 
     @Override
+    public TestRun getTestRunByReportFileInfo(Integer testSetId, String strTestCaseId, String locale) {
+        Integer testCaseId = Integer.parseInt(strTestCaseId);
+        if (testCaseId > 0) {
+            return testRunRep.getByTestSetIdAndTestCaseIdAndLocale(testSetId, testCaseId, locale);
+        } else {
+            log.warn("TestRunServiceImpl.getTestRunByReportFileInfo() WARNING!!! TestSetId is illegal. strTestCaseId = " + strTestCaseId);
+            return null;
+        }
+    }
+
+    @Override
     public Result getTestRunList(String locale, TestRunVO testRun) {
         log.trace("TestRunServiceImpl.getTestRunList() Enter");
         log.trace(testRun.toString());
@@ -196,14 +207,14 @@ public class TestRunServiceImpl implements TestRunService {
                     String[] locales = trLocale.split(",");
                     for (String loc : locales) {
                         locale = loc.trim();
-                        tr = testRunRep.getByTestsetIdAndTestcaseIdAndLocale(testSetId, testCase.getId(), locale);
+                        tr = testRunRep.getByTestSetIdAndTestCaseIdAndLocale(testSetId, testCase.getId(), locale);
                         result = saveNewTestRunInfo(testSetId, testCase, locale);
                         if (result.hasError()) {
                             return result;
                         }
                     }
                 } else {
-                    tr = testRunRep.getByTestsetIdAndTestcaseIdAndLocale(testSetId, testCase.getId(), trLocale);
+                    tr = testRunRep.getByTestSetIdAndTestCaseIdAndLocale(testSetId, testCase.getId(), trLocale);
                     result = saveNewTestRunInfo(testSetId, testCase, trLocale);
                     if (result.hasError()) {
                         return result;

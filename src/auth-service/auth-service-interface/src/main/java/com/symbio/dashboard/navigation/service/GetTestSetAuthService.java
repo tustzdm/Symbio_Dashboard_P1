@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface GetTestSetAuthService {
-    Result getTestSetAuth(String token);
+    Result<String> getTestSetAuth(String token);
 }

@@ -11,19 +11,17 @@ import com.symbio.dashboard.model.*;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.*;
 
+@Slf4j
 @SuppressWarnings("unchecked")
 @Repository
 public class CommonDao {
-
-  private static Logger logger = LoggerFactory.getLogger(CommonDao.class);
 
   // Message Map 对象
   private static Map<String, Message> mapMessage = null;
@@ -136,42 +134,42 @@ public class CommonDao {
     return dbFields;
   }
 
-    /**
-     * Get Mysql Table's field info except non user defined
-     * 得到Table下用户可定义的字段列表
-     *
-     * @param tableName
-     * @return
-     */
-    public Result getDescField(String tableName) {
+  /**
+   * Get Mysql Table's field info except non user defined
+   * 得到Table下用户可定义的字段列表
+   *
+   * @param tableName
+   * @return
+   */
+  public Result getDescField(String tableName) {
 
-        logger.trace("CommonDao - getDescField() Enter. tableName = " + tableName);
-        Result retResult = null;
-        try {
-            String strSql = String.format("DESC `%s`", tableName);
-            List<Object[]> listData = this.entityManager.createNativeQuery(strSql).getResultList();
+    log.trace("CommonDao - getDescField() Enter. tableName = " + tableName);
+    Result retResult = null;
+    try {
+      String strSql = String.format("DESC `%s`", tableName);
+      List<Object[]> listData = this.entityManager.createNativeQuery(strSql).getResultList();
 
-            String strField = null;
-            StringBuffer sb = new StringBuffer();
-            List<String> listFields = new ArrayList<String>();
-            for (Object[] item : listData) {
-                strField = item[0].toString();
-                if (BusinessUtil.isUserDefinedField(strField)) {
-                    listFields.add(strField);
-                }
-            }
-            retResult = new Result(listFields);
-        } catch (Exception e) {
-            e.printStackTrace();
-            retResult = new Result("40001",
-                    String.format("Invoke getDescField() Exception!!! Table=[%s], Message = [%s]", tableName, e.getMessage()));
+      String strField = null;
+      StringBuffer sb = new StringBuffer();
+      List<String> listFields = new ArrayList<String>();
+      for (Object[] item : listData) {
+        strField = item[0].toString();
+        if (BusinessUtil.isUserDefinedField(strField)) {
+          listFields.add(strField);
         }
-
-        logger.trace("CommonDao - getDescField() Exit");
-        return retResult;
+      }
+      retResult = new Result(listFields);
+    } catch (Exception e) {
+      e.printStackTrace();
+      retResult = new Result("40001",
+              String.format("Invoke getDescField() Exception!!! Table=[%s], Message = [%s]", tableName, e.getMessage()));
     }
 
-    /**
+    log.trace("CommonDao - getDescField() Exit");
+    return retResult;
+  }
+
+  /**
    * 将 User字段的 user信息转成UserMap，以便后面直接替换User字段为User Map信息
    * @param data
    * @param listUserFields
@@ -217,7 +215,7 @@ public class CommonDao {
       retList = BusinessUtil.ReplaceUserShortInfo(data, listUserFields, mapUsers);
     } catch (Exception e) {
       e.printStackTrace();
-      logger.error(e.getMessage());
+      log.error(e.getMessage());
     }
 
     return retList;
@@ -326,7 +324,7 @@ public class CommonDao {
             mapItem.put(UIInfoKey.Data.getKey(), listDicMap);
           } catch (Exception e) {
             e.printStackTrace();
-            logger.error("buildUiInfoListData() ERROR!!!  Message = " + e.getMessage());
+            log.error("buildUiInfoListData() ERROR!!!  Message = " + e.getMessage());
           }
         }
       }
@@ -360,7 +358,7 @@ public class CommonDao {
     } else {
       Message msgInfo = mapMessage.get(code);
       if(msgInfo == null) {
-        logger.warn("Could not find message info. code === " + code);
+        log.warn("Could not find message info. code === " + code);
         System.out.println("Could not find message info. code === " + code);
         return null;
       }
@@ -382,7 +380,7 @@ public class CommonDao {
   private Map<String, Message> getLocalMessageMap() {
     List<ResultMessage> listData = messageRep.getAll();
     if(listData.isEmpty()) {
-      logger.warn("!!!WARNING!!! Result Message is empty. Please contact administrator for initialization.");
+      log.warn("!!!WARNING!!! Result Message is empty. Please contact administrator for initialization.");
       return null;
     }
 
@@ -410,7 +408,7 @@ public class CommonDao {
       }
     } catch (Exception e) {
       e.printStackTrace();
-      logger.error("CommonDao.getMessage() ERROR!!!", e);
+      log.error("CommonDao.getMessage() ERROR!!!", e);
     }
     return retMsg;
   }
@@ -440,7 +438,7 @@ public class CommonDao {
       strValue = mapProjectConfig.get(key);
     } catch (Exception e) {
       e.printStackTrace();
-      logger.error("CommonDao.getConfigValueByItem() ERROR!!! " + e.getMessage());
+      log.error("CommonDao.getConfigValueByItem() ERROR!!! " + e.getMessage());
     }
     return strValue;
   }

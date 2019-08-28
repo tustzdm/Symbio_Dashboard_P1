@@ -3,6 +3,7 @@ package com.symbio.dashboard.monitor.service.impl;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.business.ParseResultSummaryFactory;
 import com.symbio.dashboard.constant.CommonDef;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.model.ParseResultSummary;
@@ -22,6 +23,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@SuppressWarnings("unchecked")
 public class MonitorServiceImpl implements MonitorService {
 
     @Autowired
@@ -37,6 +39,8 @@ public class MonitorServiceImpl implements MonitorService {
     private ProcessCompressFilesServiceImpl processComFileService;
     @Autowired
     private ProcessTestRunServiceImpl processTestRunService;
+    @Autowired
+    private ProcessMiscellaneousServiceImpl processMiscService;
 
     @Autowired
     private AutomationReportFileServiceImpl reportFileService;
@@ -149,7 +153,23 @@ public class MonitorServiceImpl implements MonitorService {
             parseResultSumService.updateParseResultSummary(prs);
 
             // Step3 - Update Test Result
-            processTestRunService.processTestRun(prs, fileData);
+            Result<String> resultProcess = processTestRunService.processTestRun(prs, fileData);
+            if (resultProcess.hasError()) {
+                log.error(ErrorConst.getErrorLogMsg("processTestRunService.processTestRun()", resultProcess));
+                updatePRSErrorInfo(prs, resultProcess);
+                return new Result(resultProcess);
+            }
+
+            // Step4 - Remove directories
+            prs.setParseStatus(EnumDef.REPORT_FILE_PARSE_STATUS.CLEAN.getCode());
+            prs = ParseResultSummaryFactory.clearParseErrorInfo(prs);
+            parseResultSumService.updateParseResultSummary(prs);
+
+            Result resultCleanZipFolder = processMiscService.cleanZipFolder(prs);
+            if (resultCleanZipFolder.hasError()) {
+                log.warn(ErrorConst.getErrorLogMsg("processTestRunService.processTestRun()", resultCleanZipFolder));
+                updatePRSErrorInfo(prs, resultCleanZipFolder);
+            }
 
             retResult.setCd(true);
         } catch (Exception e) {

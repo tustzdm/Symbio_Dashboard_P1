@@ -2,6 +2,8 @@ package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
+import com.symbio.dashboard.constant.ErrorConst;
+import com.symbio.dashboard.data.repository.ScreenShotRep;
 import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.TestRunRep;
 import com.symbio.dashboard.dto.TestRunUiDTO;
@@ -12,8 +14,6 @@ import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * @ClassName - TestRunDao
  * @Author - admin
- * @Description - TODO
+ * @Description
  * @Date - 2019/8/5 16:53
  * @Version 1.0
  */
@@ -35,8 +35,6 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class TestRunDao {
 
-    private static Logger logger = LoggerFactory.getLogger(TestSetDao.class);
-
     @PersistenceContext
     private EntityManager entityManager;
     @Autowired
@@ -45,6 +43,8 @@ public class TestRunDao {
     private CommonDao commonDao;
     @Autowired
     private TestRunRep testRunRep;
+    @Autowired
+    private ScreenShotRep screenshotRep;
     @Autowired
     private ProductDao productDao;
     @Autowired
@@ -65,7 +65,7 @@ public class TestRunDao {
 
         List<String> listFields = CommonDao.getQueryFieldsEx(listSetting);
         if (CommonUtil.isEmpty(listFields)) {
-            logger.debug("There is no field to query");
+            log.debug("There is no field to query");
             return retResult;
         }
 
@@ -129,7 +129,7 @@ public class TestRunDao {
             retResult = new Result(testRunUiDTO);
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("Exception happened while invoking ProductDao.getProductInfoByField()", e);
+            log.error("Exception happened while invoking ProductDao.getProductInfoByField()", e);
             retResult = new Result("000002", e.getMessage());
         }
 
@@ -181,6 +181,15 @@ public class TestRunDao {
         }
 
         return data;
+    }
+
+    public void removeScreenShotByTestRunId(Integer testRunId) {
+        try {
+            screenshotRep.deleteByTestRunId(testRunId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.warn(ErrorConst.getExceptionLogMsg("TestRunDao.removeScreenShotByTestRunId()", e));
+        }
     }
 }
 
