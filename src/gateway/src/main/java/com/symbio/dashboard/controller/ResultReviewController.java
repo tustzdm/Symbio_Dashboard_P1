@@ -6,6 +6,7 @@ import com.symbio.dashboard.constant.CommonDef;
 import com.symbio.dashboard.dto.TestRunExcelDTO;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.service.FileUploadService;
+import com.symbio.dashboard.service.IssueService;
 import com.symbio.dashboard.service.TestRunService;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.StringUtil;
@@ -42,6 +43,8 @@ public class ResultReviewController extends BaseController {
     private TestRunService testRunService;
     @Autowired
     private FileUploadService fileService;
+    @Autowired
+    private IssueService issueService;
 
     @RequestMapping("/getList")
     public Result getList(@RequestBody TestRunVO testRun) {
@@ -74,6 +77,7 @@ public class ResultReviewController extends BaseController {
         log.debug("ResultReviewController.upload() Enter.");
 
         Result<String> retsaveFile = fileService.saveExcel(request, CommonDef.FOLDER_PATH_IMPORT_TESTCASE);
+
         return retsaveFile;
     }
 
@@ -155,6 +159,30 @@ public class ResultReviewController extends BaseController {
         }
 
         log.trace("ResultReviewController.importExcel() Exit");
+        return retResult;
+    }
+
+    @RequestMapping("/addProductIssue")
+    public Result addProductIssue(@RequestParam(value = "productId") Integer productId) {
+        log.trace("ResultReviewController.addBug() Enter");
+        Result<String> retResult = new Result();
+
+        if (productId != 0) {
+            retResult = issueService.addProductIssue(productId);
+        }
+
+        return retResult;
+    }
+
+    @RequestMapping("/addNewCategory")
+    public Result addNewCategory(@RequestParam(value = "productId") Integer productId) {
+        log.trace("ResultReviewController.addBug() Enter");
+        Result<String> retResult = new Result();
+
+        if (productId != 0) {
+
+        }
+
         return retResult;
     }
 }
