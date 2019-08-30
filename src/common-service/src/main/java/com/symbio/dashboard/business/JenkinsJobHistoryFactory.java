@@ -12,10 +12,11 @@ import java.util.Map;
 
 public class JenkinsJobHistoryFactory {
 
-    public static JenkinsJobHistoryMain createNewHistoryMainInfo(User user, Integer testSetId, Integer tepId, JenkinsSvrInfo jsi, Map<String, String> map, Integer buildId) {
+    public static JenkinsJobHistoryMain createNewHistoryMainInfo(User user, Integer testSetId, Integer testRunId, Integer tepId, JenkinsSvrInfo jsi, Map<String, String> map, Integer buildId) {
         JenkinsJobHistoryMain data = new JenkinsJobHistoryMain();
 
         data.setTestSetId(testSetId);
+        data.setTestRunId(testRunId);
         data.setTepId(tepId);
         data.setJsiId(jsi.getId());
         data.setJobname(jsi.getJobname());

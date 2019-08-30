@@ -89,10 +89,16 @@ public class TestResultServiceImpl implements TestResultService {
             Integer nDiffSecs = DateUtil.getDifferSeconds(testResult.getStartTime(), testResult.getEndTime());
             testResult.setExecDuration(nDiffSecs);
             testResult.setTimeZone(TimeConverterUtil.getUTCTimeZone(testMethod.getStartTime()));
+            testResult.setScreenShotFlag(EnumDef.ENTITY_BOOL.NO.getCode());
 
             TestResult updTR = testResultDao.updateTestResult(testResult);
 
             processScreenShot(prs, tr, testMethod.getLogs(), dtoFilePathInfo);
+
+            if (testMethod.getLogs().size() > 0) {
+                updTR.setScreenShotFlag(EnumDef.ENTITY_BOOL.YES.getCode());
+                updTR = testResultDao.updateTestResult(testResult);
+            }
 
             retResult.setCd(updTR);
         } catch (Exception e) {
@@ -270,6 +276,19 @@ public class TestResultServiceImpl implements TestResultService {
         }
 
         return retResult;
+    }
+
+    @Override
+    public Result<FilePathDTO> getFilePathDTOByInfo(TestRun testRun) {
+        if (CommonUtil.isEmpty(testRun)) {
+            return commonDao.getFuncArgsMissingResult("TestResultServiceImpl.getFilePathDTOByInfo()", "TestRun");
+        }
+
+        Integer testSetId = testRun.getTestsetId();
+        String testCaseId = testRun.getTestcaseId().toString();
+        String locale = testRun.getLocale();
+
+        return this.getFilePathDTOByInfo(testSetId, testCaseId, locale);
     }
 
     private Integer getIntValue(Map<String, Object> map, String key) {

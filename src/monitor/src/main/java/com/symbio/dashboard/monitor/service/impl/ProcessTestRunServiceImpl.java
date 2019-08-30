@@ -13,12 +13,14 @@ import com.symbio.dashboard.model.*;
 import com.symbio.dashboard.model.json.ReportJson;
 import com.symbio.dashboard.model.json.TestMethods;
 import com.symbio.dashboard.service.*;
+import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -48,41 +50,81 @@ public class ProcessTestRunServiceImpl {
 
         Result<String> retResult = new Result<>();
 
-        // Step1 - Get JobHistoryMainInfo
-        Result<JenkinsJobHistoryMain> resultLabelInfo = reportFileService.getJobInfoFromZipName(prs.getFileName());
-        if (resultLabelInfo.hasError()) {
-            log.error(ErrorConst.getErrorLogMsg(functionName, resultLabelInfo));
-            return new Result(resultLabelInfo);
+        // Validation
+        if (CommonUtil.isEmpty(jsonReport)) {
+            return commonDao.getFuncArgsMissingResult("ReportJson", functionName);
+        }
+        if (CommonUtil.isEmpty(prs)) {
+            return commonDao.getFuncArgsMissingResult("ParseResultSummary", functionName);
         }
 
-        JenkinsJobHistoryMain jjHMain = resultLabelInfo.getCd();
-        Integer nTestSetId = jjHMain.getTestSetId();
-
-        String strTestCaseId;
-        String locale;
+        Integer nTestSetId = 0;
+        String strTestCaseId = "";
+        String locale = "";
         TestRun testRun = null;
 
-        // Step2 - Parse TestMethod
+        // Step1 - Get initial status
         List<TestMethods> listTestMethod = jsonReport.getTestMethods();
-
         Integer nTestMethodCount = listTestMethod.size();
         boolean bOnlyOneTestRun = (nTestMethodCount == 1);
+        Integer nReportFileHasTRunId = EnumDef.LOGIC_INTEGER.UN_KNOWN.getCode();
+        if (bOnlyOneTestRun) { // Only one test run's file has test run id
+            boolean bHasTRunIdSetting = commonDao.isProjectConfigSettingTrue(ProjectConst.JENKINS_AUTOMATION_REPORT_HAS_TESTRUN_ID);
+            nReportFileHasTRunId = bHasTRunIdSetting ? EnumDef.LOGIC_INTEGER.TRUE.getCode() : EnumDef.LOGIC_INTEGER.FALSE.getCode();
+        }
+
+        // Step2 - Get JobHistoryMainInfo
+        if (nReportFileHasTRunId == EnumDef.LOGIC_INTEGER.TRUE.getCode()) {
+            Result<Map<String, Object>> resultReportFileInfo = reportFileService.getMapByReportFileName(prs.getFileName());
+            if (resultReportFileInfo.hasError()) {
+                log.error(ErrorConst.getErrorLogMsg("reportFileService.getMapByReportFileName()", resultReportFileInfo));
+                return new Result(resultReportFileInfo);
+            }
+            Map<String, Object> mapData = resultReportFileInfo.getCd();
+            Integer testRunId = (Integer) mapData.get("testRunId");
+            if (BusinessUtil.isIdEmpty(testRunId)) {
+                return commonDao.getResult("500109", prs.getFileName());
+            }
+
+            testRun = testRunService.getTestRunById(testRunId);
+            if (CommonUtil.isEmpty(testRun)) {
+                return commonDao.getTableNoDataArgsResult("TestRun", testRunId);
+            }
+        } else {
+            Result<JenkinsJobHistoryMain> resultLabelInfo =
+                    reportFileService.getJobInfoFromZipName(prs.getFileName());
+            if (resultLabelInfo.hasError()) {
+                log.error(ErrorConst.getErrorLogMsg(functionName, resultLabelInfo));
+                return new Result(resultLabelInfo);
+            }
+
+            JenkinsJobHistoryMain jjHMain = resultLabelInfo.getCd();
+            nTestSetId = jjHMain.getTestSetId();
+        }
+
+        // Step3 - Parse TestMethod
         Integer nUpdateTestResultCount = 0;
         FilePathDTO dtoFilePathInfo = new FilePathDTO();
-        for (TestMethods testMethod : listTestMethod) {
-            // Get TestCaseId and Local info for each Test Run
-            strTestCaseId = getTestCaseId(testMethod);
-            locale = getLocale(testMethod);
 
-            testRun = testRunService.getTestRunByReportFileInfo(nTestSetId, strTestCaseId, locale);
-            if (CommonUtil.isEmpty(testRun)) {
-                String strMsg = String.format("Could not find Test Run data. TestSetId = %d, TestCaseId = %s, locale = %s",
-                        nTestSetId, strTestCaseId, locale);
-                log.warn(strMsg);
-                if (bOnlyOneTestRun) {
-                    return commonDao.getResult("500107", nTestSetId, strTestCaseId, locale);
+        for (TestMethods testMethod : listTestMethod) {
+            // If not been set
+            if (nReportFileHasTRunId != EnumDef.LOGIC_INTEGER.TRUE.getCode()) {
+                // Get TestCaseId and Local info for each Test Run
+                strTestCaseId = getTestCaseId(testMethod);
+                locale = getLocale(testMethod);
+                testRun = testRunService.getTestRunByReportFileInfo(nTestSetId, strTestCaseId, locale);
+
+                if (CommonUtil.isEmpty(testRun)) {
+                    String strMsg = String.format("Could not find Test Run data. TestSetId = %d, TestCaseId = %s, locale = %s",
+                            nTestSetId, strTestCaseId, locale);
+                    log.warn(strMsg);
+                    if (bOnlyOneTestRun) {
+                        return commonDao.getResult("500107", nTestSetId, strTestCaseId, locale);
+                    }
                 }
-            } else {
+            }
+
+            if (!CommonUtil.isEmpty(testRun)) {
                 String strRunStatus = testMethod.getStatus();
                 Result<Boolean> retNeedUpdateTR = isUpdateTestRunValidation(testRun, strRunStatus);
                 if (retNeedUpdateTR.hasError()) {
@@ -98,7 +140,7 @@ public class ProcessTestRunServiceImpl {
                     continue;
                 }
 
-                Result<FilePathDTO> resultFileDTO = testResultSevice.getFilePathDTOByInfo(nTestSetId, strTestCaseId, locale);
+                Result<FilePathDTO> resultFileDTO = testResultSevice.getFilePathDTOByInfo(testRun);
                 if (resultFileDTO.hasError()) {
                     log.warn(ErrorConst.getWarningLogMsg(functionName, resultFileDTO));
                     if (bOnlyOneTestRun) {
@@ -118,7 +160,10 @@ public class ProcessTestRunServiceImpl {
                 }
 
                 // Sync up Test Run status with TestResult status
-                // ToDo: Sync up Test Run status with TestResult status
+                TestResult tr = resultTR.getCd();
+                testRun.setStatus(tr.getAutoRunStatus());
+                testRun.setScreenshotFlag(tr.getScreenShotFlag());
+                testRunService.updateTestRun(testRun);
 
                 nUpdateTestResultCount++;
             }
@@ -128,7 +173,6 @@ public class ProcessTestRunServiceImpl {
 
         return retResult;
     }
-
 
     /**
      * Logic check for QA status for update or not

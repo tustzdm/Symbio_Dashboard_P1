@@ -37,6 +37,8 @@ public class TestResult implements Serializable {
 
     @Column(name = "job_weather")
     private Integer jobWeather;
+    @Column(name = "screen_shot_flag")
+    private Integer screenShotFlag;
 
     @Column(name = "start_time")
     private Date startTime;

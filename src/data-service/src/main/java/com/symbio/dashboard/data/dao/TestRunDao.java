@@ -10,6 +10,7 @@ import com.symbio.dashboard.dto.TestRunUiDTO;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.SysListSetting;
+import com.symbio.dashboard.model.TestRun;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
@@ -190,6 +191,10 @@ public class TestRunDao {
             e.printStackTrace();
             log.warn(ErrorConst.getExceptionLogMsg("TestRunDao.removeScreenShotByTestRunId()", e));
         }
+    }
+
+    public TestRun getTestRunById(Integer id) {
+        return testRunRep.getById(id);
     }
 }
 

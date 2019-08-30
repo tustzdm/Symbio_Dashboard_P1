@@ -14,6 +14,7 @@ import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.dao.JenkinsDao;
 import com.symbio.dashboard.dto.TEPInfoDTO;
+import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.model.JenkinsSvrInfo;
 import com.symbio.dashboard.model.TestExecPlatform;
 import com.symbio.dashboard.util.BusinessUtil;
@@ -282,7 +283,26 @@ public class JenkinsServiceImpl implements JenkinsService {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
-    public Result<String> runJob(Integer userId, String locale, Integer testSetId, Integer tepId, Map<String, String> params) {
+    public Result<String> runJob(Integer runCaseType, Map<String, String> params) {
+
+        if (runCaseType != EnumDef.CASE_TYPE.AUTOMATION.getCode()) {
+            log.warn("Do not support this runCaseType: " + runCaseType);
+            return commonDao.getResult("");
+        }
+
+        Result<String> retResult = new Result<>();
+
+        Map<String, String> mapData = params;
+        Integer userId = Integer.parseInt(mapData.get("userId"));
+        String locale = mapData.get("locale");
+        Integer testRunId = Integer.parseInt(mapData.get("testRunId"));
+        Integer tepId = Integer.parseInt(mapData.get("tepId"));
+
+        return this.runJob(userId, locale, null, testRunId, tepId, mapData);
+    }
+
+    @Override
+    public Result<String> runJob(Integer userId, String locale, Integer testSetId, Integer testRunId, Integer tepId, Map<String, String> params) {
         Result<String> retResult = new Result<>();
 
         // Step1 - Get JSI info
@@ -326,7 +346,7 @@ public class JenkinsServiceImpl implements JenkinsService {
         }
 
         // Step4 - Get buildId
-        Result retSaveJobInfo = jenkinsDao.saveNewJobHistory(userId, locale, testSetId, tepId, jsi, mapRunArgs, nextBuildNumber);
+        Result retSaveJobInfo = jenkinsDao.saveNewJobHistory(userId, locale, testSetId, testRunId, tepId, jsi, mapRunArgs, nextBuildNumber);
         if (retSaveJobInfo.hasError()) {
             log.warn("Invoke jenkinsDao.saveNewJobHistory() ERROR!!! ec = %s, em = %s" + retSaveJobInfo.getEm());
         }

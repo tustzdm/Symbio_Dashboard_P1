@@ -464,6 +464,10 @@ public class CommonDao {
     return getLocalResult(Locales.EN_US.toString(), ErrorConst.EXCEPTION, args);
   }
 
+  public Result getFuncArgsMissingResult(Object... args) {
+    return getLocalResult(Locales.EN_US.toString(), ErrorConst.MISSING_FUNCTION_PARAMETER, args);
+  }
+
   /**
    * Args: [Table Name], [id]
    *

@@ -26,8 +26,10 @@ public class JenkinsJobHistoryMain implements Serializable {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "testSetId", nullable = false)
+    @Column(name = "testSetId")
     private Integer testSetId;
+    @Column(name = "testRunId")
+    private Integer testRunId;
 
     @Column(name = "tepId")
     private Integer tepId;

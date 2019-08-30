@@ -73,6 +73,30 @@ public class EnumDef {
     }
     ///////////////////////////////////////////////////////
 
+    ///////////////////////////////////////////////////////
+    // Logic relevant setting
+    ///////////////////////////////////////////////////////
+    @Getter
+    public enum LOGIC_INTEGER implements IDictEnum {
+        UN_KNOWN(-1, "UnKnown"),
+        FALSE(0, "false"),
+        TRUE(1, "true");
+
+        private Integer code;
+        private String value;
+
+        LOGIC_INTEGER(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+    ///////////////////////////////////////////////////////
+
     /**
      * BROWSER TYPE
      */

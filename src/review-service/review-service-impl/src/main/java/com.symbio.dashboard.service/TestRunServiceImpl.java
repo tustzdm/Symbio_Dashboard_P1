@@ -65,6 +65,12 @@ public class TestRunServiceImpl implements TestRunService {
     private TestResultRep testResultRep;
 
     @Override
+    public TestRun getTestRunById(Integer id) {
+        return testRunDao.getTestRunById(id);
+    }
+
+
+    @Override
     public TestRun getTestRunByReportFileInfo(Integer testSetId, String strTestCaseId, String locale) {
         Integer testCaseId = Integer.parseInt(strTestCaseId);
         if (testCaseId > 0) {
@@ -150,6 +156,11 @@ public class TestRunServiceImpl implements TestRunService {
     @Override
     public Result updateTestRun(Integer userId, String locale, TestRun testRun) {
         return null;
+    }
+
+    @Override
+    public TestRun updateTestRun(TestRun testRun) {
+        return testRunRep.saveAndFlush(testRun);
     }
 
     private Result<TestRun> saveNewTestRunInfo(Integer testSetId, TestCase testCase, String locale) {

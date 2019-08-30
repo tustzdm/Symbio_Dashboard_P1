@@ -9,6 +9,7 @@ public class ErrorConst {
     public final static String EXCEPTION = "000004";
     public final static String DB_NODATA_ARGS_TABLE_ID = "000016";
     public final static String ERROR_PARAMETER_EMPTY = "000101";
+    public final static String MISSING_FUNCTION_PARAMETER = "000019";
 
     public final static String JENKINS_FETCH_JOBARGS_AUTOMATICALLY = "300503";
     public final static String JENKINS_JOB_NO_PARAMETER = "300504";

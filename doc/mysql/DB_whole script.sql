@@ -555,6 +555,7 @@ CREATE TABLE `test_result` (
 
   `auto_run_status` int(10) unsigned DEFAULT NULL COMMENT 'Auomation Status：0-Not RUN, 1-AUTOMATION SUCCESS,2-Automation FAILURE,3-Automation SKIP,4-Automation SUCCESS WITHIN PERCENTAGE,16-Automation STARTED, 101-TestNotRequired',
   `job_weather` int(10) unsigned DEFAULT '0' COMMENT 'job status：0-unkown,1-sunny,2-cloud,3-dull,4-fog,5-rainy',
+  `screen_shot_flag` smallint(5) DEFAULT '0' COMMENT 'Has screenshot info or not. 0-false, 1-true',
 
   `start_time` datetime DEFAULT NULL COMMENT 'start Locale time',
   `end_time` datetime DEFAULT NULL COMMENT 'end Locale Time',
@@ -805,7 +806,8 @@ CREATE TABLE `jenkins_job_parameter` (
 DROP TABLE IF EXISTS `jenkins_job_history_main`;
 CREATE TABLE `jenkins_job_history_main` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `testSetId` int(10) unsigned NOT NULL COMMENT 'FK: [test_run].testset_id',
+  `testSetId` int(10) unsigned DEFAULT NULL COMMENT 'FK: [test_run].testset_id. In the case report json file has caseId and locale',
+  `testRunId` int(10) unsigned DEFAULT NULL COMMENT 'FK: [test_run].id. In the case report json file does not have caseId and locale info',
   `tepId` int(10) DEFAULT NULL COMMENT 'test execplat form Id. FK: test_exec_platform.id',
   `jsiId` int(10) unsigned NOT NULL COMMENT 'jenkins svr id. FK: jenkins_svr_info.id',
   `jobname` varchar(255) DEFAULT NULL,

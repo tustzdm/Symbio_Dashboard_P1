@@ -39,6 +39,7 @@ public class ProjectConst {
     public static final String JENKINS_AUTOMATION_REPORT_HAS_LOCALE = "Jenkins.Automation.ReportFile.HasLocale";
     public static final String JENKINS_AUTOMATION_COMPRESS_FILE_HAS_LOCALE = "Jenkins.Automation.CompressFile.HasLocale";
     public static final String JENKINS_AUTOMATION_PARSER_LOCALE_DEFAULT = "Jenkins.Automation.ParseLocale.Default";
+    public static final String JENKINS_AUTOMATION_REPORT_HAS_TESTRUN_ID = "Jenkins.Automation.CompressFile.HasTestRunId";
 
     // TEP
     public static final String TEP_SPERATED_PRODUCT = "TEP_SeparatedByProduct";

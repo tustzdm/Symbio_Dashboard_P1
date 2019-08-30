@@ -48,7 +48,7 @@ public class TestRun implements Serializable {
     private Integer status;
 
     @Column(name = "screenshot_flag", nullable = false)
-    private Integer screenshot_flag;
+    private Integer screenshotFlag;
 
     @Column(name = "app_path")
     private String appPath;

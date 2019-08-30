@@ -21,4 +21,6 @@ public interface TestResultService {
     EnumDef.TEST_RESULT_QA_STATUS getQAStatusEnum(Integer qaStatus);
 
     Result<FilePathDTO> getFilePathDTOByInfo(Integer testSetId, String testCaseId, String locale);
+
+    Result<FilePathDTO> getFilePathDTOByInfo(TestRun testRun);
 }

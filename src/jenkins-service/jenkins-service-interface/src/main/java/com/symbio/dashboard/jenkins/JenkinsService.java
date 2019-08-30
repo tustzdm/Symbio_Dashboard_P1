@@ -23,6 +23,8 @@ public interface JenkinsService {
 
     Result<TEPInfoDTO> getTEPInfo(Integer userId, String locale, Integer testSetId, Integer tepId);
 
-    Result<String> runJob(Integer userId, String locale, Integer testSetId, Integer tepId, Map<String, String> params);
+    Result<String> runJob(Integer userId, String locale, Integer testSetId, Integer testRunId, Integer tepId, Map<String, String> params);
+
+    Result<String> runJob(Integer runCaseType, Map<String, String> params);
 
 }

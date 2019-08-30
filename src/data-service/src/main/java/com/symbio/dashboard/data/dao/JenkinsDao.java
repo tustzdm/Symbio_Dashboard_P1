@@ -260,7 +260,7 @@ public class JenkinsDao {
      * @param buildId
      * @return
      */
-    public Result saveNewJobHistory(Integer userId, String locale, Integer testSetId, Integer tepId, JenkinsSvrInfo jsi, Map<String, String> map, Integer buildId) {
+    public Result saveNewJobHistory(Integer userId, String locale, Integer testSetId, Integer testRunId, Integer tepId, JenkinsSvrInfo jsi, Map<String, String> map, Integer buildId) {
         Result retResult = new Result();
 
         User user = userDao.getUserById(userId);
@@ -269,7 +269,7 @@ public class JenkinsDao {
         }
 
         try {
-            JenkinsJobHistoryMain jobHistoryMain = JenkinsJobHistoryFactory.createNewHistoryMainInfo(user, testSetId, tepId, jsi, map, buildId);
+            JenkinsJobHistoryMain jobHistoryMain = JenkinsJobHistoryFactory.createNewHistoryMainInfo(user, testSetId, testRunId, tepId, jsi, map, buildId);
             jjhMainRep.saveAndFlush(jobHistoryMain);
         } catch (Exception e) {
             e.printStackTrace();

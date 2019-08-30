@@ -16,5 +16,9 @@ public interface TestRunService {
 
     Result updateTestRun(Integer userId, String locale, TestRun testRun);
 
+    TestRun updateTestRun(TestRun testRun);
+
     TestRun getTestRunByReportFileInfo(Integer testSetId, String strTestCaseId, String locale);
+
+    TestRun getTestRunById(Integer id);
 }
