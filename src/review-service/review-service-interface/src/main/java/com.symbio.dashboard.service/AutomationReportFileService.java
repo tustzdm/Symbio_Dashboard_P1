@@ -6,12 +6,13 @@ import com.symbio.dashboard.model.ParseResultSummary;
 import com.symbio.dashboard.model.RelationTestCaseMethod;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
 public interface AutomationReportFileService {
 
-    ParseResultSummary getParseResultSummaryByFileName(String fileName);
+    List<ParseResultSummary> getParseResultSummaryByFileName(String fileName);
 
     Result<Map<String, Object>> getMapByReportFileName(String fileName);
 

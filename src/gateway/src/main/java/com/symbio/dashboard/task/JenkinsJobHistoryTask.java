@@ -2,10 +2,13 @@ package com.symbio.dashboard.task;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.constant.CommonDef;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.jenkins.JenkinsJobHistoryServiceImpl;
 import com.symbio.dashboard.jenkins.JenkinsServiceImpl;
 import com.symbio.dashboard.model.JenkinsJobHistoryMain;
+import com.symbio.dashboard.model.TestResult;
+import com.symbio.dashboard.service.TestRunServiceImpl;
 import com.symbio.dashboard.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +24,13 @@ import java.util.List;
 public class JenkinsJobHistoryTask {
 
     @Autowired
-    JenkinsServiceImpl jenkinsService;
+    private JenkinsServiceImpl jenkinsService;
 
     @Autowired
-    JenkinsJobHistoryServiceImpl jjHService;
+    private JenkinsJobHistoryServiceImpl jjHService;
+
+    @Autowired
+    private TestRunServiceImpl testRunService;
 
     @Async
     //@Scheduled(cron = "0 */5 * * * ? ")
@@ -58,9 +64,11 @@ public class JenkinsJobHistoryTask {
     @Scheduled(cron = "0 0 0/1 * * ? ")
     //@Scheduled(cron = "*/5 * * * * ? ")
     public void checkJenkinsJobStatus() {
+        String funcName = "JenkinsJobHistoryTask.checkJenkinsJobStatus()";
+
         try {
             log.info("==================================================================");
-            log.info("JenkinsJobHistoryTask.checkJenkinsJobStatus() Enter");
+            log.info(funcName + " Enter");
             log.info("==================================================================");
             System.out.println((new Date()).toString());
 
@@ -119,13 +127,18 @@ public class JenkinsJobHistoryTask {
                             bUpdateTestRun = true;
                         }
                     }
+
+                    // Step4 - Update Test Run status
+                    if (bUpdateTestRun && EnumDef.isUpdateJobWeatherStatus(enumJobStatus)) {
+                        // update each TestRun Id' status or TestResult's Status
+                        Result<TestResult> retUpdJobWeather = testRunService.updateTestResultJobWeather(item, enumJobStatus);
+                        if (retUpdJobWeather.hasError()) {
+                            log.warn(ErrorConst.getWarningLogMsg(funcName, retUpdJobWeather));
+                        }
+                    }
                 }
 
-                // Step4 - Update Test Run status
-                if (bUpdateTestRun) {
-                    // ToDo: update each TestRun Id' status or TestResult's Status
-                    // jenkins_job_history_detail -> TestRun or TestResult
-                }
+
             }
 
             log.info("JenkinsJobHistoryTask.checkJenkinsJobStatus() Exit");

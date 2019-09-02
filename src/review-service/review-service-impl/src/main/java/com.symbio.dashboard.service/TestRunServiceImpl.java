@@ -6,6 +6,7 @@ import com.symbio.dashboard.business.TestCaseFactory;
 import com.symbio.dashboard.business.TestResultFactory;
 import com.symbio.dashboard.business.TestRunFactory;
 import com.symbio.dashboard.constant.CommonDef;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.dao.*;
 import com.symbio.dashboard.data.repository.TestCaseRep;
@@ -16,6 +17,7 @@ import com.symbio.dashboard.dto.TestRunExcelDTO;
 import com.symbio.dashboard.dto.TestRunUiDTO;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.Locales;
+import com.symbio.dashboard.model.JenkinsJobHistoryMain;
 import com.symbio.dashboard.model.TestCase;
 import com.symbio.dashboard.model.TestResult;
 import com.symbio.dashboard.model.TestRun;
@@ -89,10 +91,7 @@ public class TestRunServiceImpl implements TestRunService {
         Result<TestRunUiDTO> retResult;
 
         try {
-            //TestRunUiDTO data = new TestRunUiDTO();
-            // ToDo: Result<TestRunUiDTO> retTRDTO = testRunDAO.getList();
             retResult = testRunDao.getList(locale, testRun);
-//            retResult.setCd(data);
         } catch (Exception e) {
             e.printStackTrace();
             retResult = commonDao.getResultArgs(locale,"000102", "getting TestRun List");
@@ -326,5 +325,37 @@ public class TestRunServiceImpl implements TestRunService {
         }
 
         return data;
+    }
+
+    @Override
+    public Result<TestResult> updateTestResultJobWeather(JenkinsJobHistoryMain jjhM, EnumDef.JENKINS_JOB_STATUS enumJobStatus) {
+        String funcName = "TestRunServiceImpl.updateTestResultJobWeather()";
+
+        Result<TestResult> retResult = new Result<>();
+        try {
+            if (jjhM != null && !CommonUtil.isEmpty(jjhM.getTestRunId())) {
+                Integer nTestRunId = jjhM.getTestRunId();
+                boolean bHasTRunIdSetting = commonDao.isProjectConfigSettingTrue(ProjectConst.JENKINS_AUTOMATION_REPORT_HAS_TESTRUN_ID);
+
+                if (bHasTRunIdSetting && EnumDef.isUpdateJobWeatherStatus(enumJobStatus)) {
+                    TestRun tr = testRunDao.getTestRunById(nTestRunId);
+                    if (tr != null && EnumDef.isUpdateTestResultByTRunStatus(tr.getStatus())) {
+                        TestResult testResult = testResultRep.getByTestRunId(nTestRunId);
+                        if (testResult != null) {
+                            testResult.setJobWeather(enumJobStatus.getCode());
+                            testResultRep.saveAndFlush(testResult);
+
+                            retResult.setCd(testResult);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(ErrorConst.getExceptionLogMsg(funcName, e));
+            return ErrorConst.getExceptionResult("invoking " + funcName, e);
+        }
+
+        return retResult;
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 /**
  * @ClassName - RemoveUiElementAuthServiceImpl
  * @Author - admin
- * @Description - TODO
+ * @Description
  * @Date - 2019/7/9 16:41
  * @Version 1.0
  */

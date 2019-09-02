@@ -377,8 +377,6 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
             qualityViewLayoutInformation.setKey(key);
             qualityViewLayoutInformation.setType(reportChart.getType());
             //做一些key的判断，判断是否需要添加pos
-            //TODO
-
             //根据locale获得相应的name值
             qualityViewLayoutInformation.setName(getNameByLocale(locale,reportChart.getName()));
 
@@ -451,8 +449,8 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
                                             List<ListRowChart> listRowChart,
                                             List<ListList> listList){
 
-        //可以进行一些处理，最终确定反馈信息......
-        //TODO 判断所有的key在reportChart能不能找到
+        // 可以进行一些处理，最终确定反馈信息......
+        // 判断所有的key在reportChart能不能找到
         Result list = judgeAllListKey(listChartCommon,listChartOther,listRowChart,listList);
         if (list.hasError()){
             return list;
@@ -671,7 +669,6 @@ public class QualityViewLayoutServiceImpl implements QualityViewLayoutService {
 
         for (ListRowChart listRowChart : listRowCharts){
             Integer pos = listRowChart.getPos();
-            //TODO
             if (isIllegalPosRowChart(posList, pos)) {
                 return new Result("N10002", "ListRowChart的坐标不合法");
             }

@@ -13,7 +13,7 @@ import java.util.Map;
  * 本类作为Release UI info的接口数据类
  * @ClassName - ReleaseUiDTO
  * @Author - admin
- * @Description - TODO
+ * @Description
  * @Date - 2019/7/30 14:29
  * @Version 1.0
  */

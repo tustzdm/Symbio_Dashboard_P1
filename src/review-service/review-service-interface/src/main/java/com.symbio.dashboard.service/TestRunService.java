@@ -2,6 +2,9 @@ package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
+import com.symbio.dashboard.enums.EnumDef;
+import com.symbio.dashboard.model.JenkinsJobHistoryMain;
+import com.symbio.dashboard.model.TestResult;
 import com.symbio.dashboard.model.TestRun;
 import org.springframework.stereotype.Service;
 
@@ -21,4 +24,6 @@ public interface TestRunService {
     TestRun getTestRunByReportFileInfo(Integer testSetId, String strTestCaseId, String locale);
 
     TestRun getTestRunById(Integer id);
+
+    Result<TestResult> updateTestResultJobWeather(JenkinsJobHistoryMain jjhM, EnumDef.JENKINS_JOB_STATUS enumJobStatus);
 }

@@ -143,7 +143,7 @@ public class QualityViewServiceImpl implements QualityViewService {
             list.add("common");
         } else if (new Integer(1).equals(search.getIsCommon())) {
             list.add("common");
-            //TODO 根据search中other里面的内容创建list
+            // 根据search中other里面的内容创建list
         } else {
             return new Result("N10001", "没有这个数字");
         }
@@ -171,7 +171,7 @@ public class QualityViewServiceImpl implements QualityViewService {
             listCombox.setName(q.getName());
 
             if (new Integer(1).equals(search.getIsCommon())) {
-                //TODO 根据search创建相应的condition
+                // 根据search创建相应的condition
             } else {
                 return new Result("N100001", "iscommon只能为0或者1，不能为别的");
             }
@@ -198,7 +198,7 @@ public class QualityViewServiceImpl implements QualityViewService {
                 stackedLineChart.setKey(key);
                 stackedLineChart.setPos(q.getPos());
 
-                //TODO 通过search封装data
+                // 通过search封装data
                 stackedLineChart.setData(null);
 
                 list.add(stackedLineChart);

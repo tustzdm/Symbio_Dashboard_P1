@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,7 +42,7 @@ public class AutomationReportFileServiceImpl implements AutomationReportFileServ
     private RelationTestCaseMethodRep relationTestCaseMethodRep;
 
     @Override
-    public ParseResultSummary getParseResultSummaryByFileName(String fileName) {
+    public List<ParseResultSummary> getParseResultSummaryByFileName(String fileName) {
         return parseResultSumRep.getByFileName(fileName);
     }
 

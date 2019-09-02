@@ -104,11 +104,9 @@ public class ResultReviewController extends BaseController {
             file.transferTo(dest); //保存文件
             return "true";
         } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return "false";
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             return "false";
         }

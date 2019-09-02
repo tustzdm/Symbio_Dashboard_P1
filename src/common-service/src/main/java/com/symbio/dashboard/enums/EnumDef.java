@@ -401,6 +401,30 @@ public class EnumDef {
     }
 
     /**
+     * Judge update Test Run's job weather or not if need
+     *
+     * @param enumItem
+     * @return
+     */
+    public static boolean isUpdateJobWeatherStatus(JENKINS_JOB_STATUS enumItem) {
+        boolean bRet = false;
+
+        switch (enumItem) {
+            default:
+                break;
+            case AUTO_SUCCESS:
+            case AUTO_FAILURE:
+            case ABORTED:
+            case AUTO_SKIP:
+            case ERROR:
+                bRet = true;
+                break;
+        }
+
+        return bRet;
+    }
+
+    /**
      * Jenkins job is terminated or not
      *
      * @param enumItem
@@ -599,6 +623,14 @@ public class EnumDef {
         @Override
         public String toString() {
             return String.valueOf(this.code);
+        }
+    }
+
+    public static boolean isUpdateTestResultByTRunStatus(Integer trStatus) {
+        if (trStatus != TEST_RUN_STATUS.SUCCESS.getCode()) {
+            return true;
+        } else {
+            return false;
         }
     }
 

@@ -75,8 +75,6 @@ public class MonitorServiceImpl implements MonitorService {
             } else {
                 ParseResultSummary prs = resultUnzip.getCd();
                 if (prs != null) {
-                    ParseResultSummary prsInfo = reportFileService.getParseResultSummaryByFileName(prs.getFileName());
-
                     // Move to Backup folder
                     Result<String> resultMoveZip = zipService.backupZipFile(prs.getFilePath());
                     if (resultMoveZip.isSuccess()) {
@@ -86,7 +84,11 @@ public class MonitorServiceImpl implements MonitorService {
                         log.warn(String.format("Failure. ec= %s, em = %s", resultMoveZip.getEc(), resultMoveZip.getEm()));
                     }
 
-                    if (prsInfo == null) {
+                    List<ParseResultSummary> prsInfo = reportFileService.getParseResultSummaryByFileName(prs.getFileName());
+                    if (prsInfo == null || prsInfo.size() == 0) {
+                        parseResultSumService.updateParseResultSummary(prs);
+                    } else {
+                        log.info("Reparse the file: " + prs.getFileName() + ", old parseStatus is " + prsInfo.get(0).getParseStatus());
                         parseResultSumService.updateParseResultSummary(prs);
                     }
                 }
