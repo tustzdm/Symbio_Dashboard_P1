@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.symbio</groupId>
 	<artifactId>dashboard</artifactId>
-	<version>0.2.0-SNAPHSOT</version>
+	<version>0.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>dashboard</name>
 	<description>dashboard Service</description>
