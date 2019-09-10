@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
-    Result getUserInfo(Integer id);
+    Result<User> getUserInfo(Integer id);
 
     Result getUserList(Integer productId);
 
@@ -19,4 +19,6 @@ public interface UserService {
     Result getUserListByStatus(String locale, Integer status);
 
     Result saveUserInfo(String locale, User userInfo);
+
+    Result login(String locale, String name, String passWd);
 }

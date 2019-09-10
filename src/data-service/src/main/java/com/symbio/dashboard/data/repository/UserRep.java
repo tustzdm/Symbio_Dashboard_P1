@@ -19,6 +19,12 @@ public interface UserRep extends JpaRepository<User, Integer> {
     @Override
     User getOne(Integer id);
 
+    @Query(value = "SELECT * FROM `user` WHERE id = ?", nativeQuery = true)
+    User getById(Integer id);
+
+    @Query(value = "SELECT * FROM `user` WHERE name = ?1 and status = ?2", nativeQuery = true)
+    User getUserByName(String name, Integer status);
+
     @Query(value = "SELECT * FROM user ORDER BY id", nativeQuery = true)
     List<User> getAllUser();
 

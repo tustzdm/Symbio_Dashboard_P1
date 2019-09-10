@@ -4,6 +4,7 @@ import com.symbio.dashboard.Result;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.repository.UserRep;
+import com.symbio.dashboard.encrypt.MD5Util;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.util.BusinessUtil;
@@ -38,12 +39,12 @@ public class UserServiceImpl implements UserService {
     private CommonDao commonDao;
 
     @Override
-    public Result getUserInfo(String locale, Integer id){
+    public Result<User> getUserInfo(String locale, Integer id) {
         logger.trace("UserServiceImpl.getUserInfo() Enter");
         logger.trace(String.format("locale = %s, id = %d", locale, id));
 
-        Result retResult = null;
-        User retUser = userRep.getOne(id);
+        Result<User> retResult = new Result();
+        User retUser = userRep.getById(id);
         if(retUser == null) {
             retResult = new Result("10001", "Could not get user info");
         } else {
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result getUserInfo(Integer id){
+    public Result<User> getUserInfo(Integer id) {
         return getUserInfo(Locales.EN_US.toString(), id);
     }
     @Override
@@ -105,11 +106,10 @@ public class UserServiceImpl implements UserService {
                 return commonDao.getResult("100201", "Password");
             }
 
+            user.setPasswd(MD5Util.encrypt(user.getPasswd()));
             if (!CommonUtil.isEmpty(user.getFirstName()) && !CommonUtil.isEmpty(user.getLastName())) {
                 user.setFullName(String.format("%s %s", user.getFirstName(), user.getLastName()));
             }
-
-            user.setPasswd(user.getPasswd());
 
             user.setCreateTime(new Date());
         }
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
         User newUserInfo = userInfo;
 
         if (!BusinessUtil.isIdEmpty(userInfo.getId())) {
-            User userData = userRep.getOne(userInfo.getId());
+            User userData = userRep.getById(userInfo.getId());
             if (CommonUtil.isEmpty(userData)) {
                 return commonDao.getTableNoDataArgsResult("User", userInfo.getId());
             }
@@ -146,5 +146,44 @@ public class UserServiceImpl implements UserService {
         }
 
         return null;
+    }
+
+    private Result<User> checkLoginUserInfo(String locale, String name, String pass) {
+
+        if (CommonUtil.isEmpty(name)) {
+            return commonDao.getResultArgs(locale, "100201", "Name");
+        }
+
+        if (CommonUtil.isEmpty(pass)) {
+            return commonDao.getResultArgs(locale, "100201", "Password");
+        }
+
+        return new Result();
+    }
+
+    @Override
+    public Result login(String locale, String name, String passWd) {
+
+        // Step1 - validation
+        Result retCheck = checkLoginUserInfo(locale, name, passWd);
+        if (retCheck.hasError()) {
+            return new Result(retCheck);
+        }
+
+        // Step2 - Check user
+        User userData = userRep.getUserByName(name, 1);
+        if (userData == null) {
+            return commonDao.getResult("100204");
+        } else {
+            String strPass = MD5Util.encrypt(passWd);
+            if (!strPass.equals(userData.getPasswd())) {
+                return commonDao.getResult("100204");
+            }
+        }
+
+        // Step3 - get Role & Menu
+        Integer userId = userData.getId();
+
+        return new Result();
     }
 }
