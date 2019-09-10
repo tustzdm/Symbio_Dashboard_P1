@@ -1,15 +1,20 @@
 package com.symbio.dashboard.setting.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.constant.ErrorConst;
+import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.repository.UserRep;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.User;
+import com.symbio.dashboard.util.BusinessUtil;
+import com.symbio.dashboard.util.CommonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +33,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRep userRep;
+
+    @Autowired
+    private CommonDao commonDao;
 
     @Override
     public Result getUserInfo(String locale, Integer id){
@@ -85,4 +93,58 @@ public class UserServiceImpl implements UserService {
         return getUserListByStatus(Locales.EN_US.toString(), status);
     }
 
+    private Result<User> validationUser(User user) {
+        Result retResult = new Result();
+
+        if (CommonUtil.isEmpty(user.getName())) {
+            return commonDao.getResult("100201", "Name");
+        }
+
+        if (CommonUtil.isEmpty(user.getId())) {
+            if (CommonUtil.isEmpty(user.getPasswd())) {
+                return commonDao.getResult("100201", "Password");
+            }
+
+            if (!CommonUtil.isEmpty(user.getFirstName()) && !CommonUtil.isEmpty(user.getLastName())) {
+                user.setFullName(String.format("%s %s", user.getFirstName(), user.getLastName()));
+            }
+
+            user.setPasswd(user.getPasswd());
+
+            user.setCreateTime(new Date());
+        }
+
+        retResult.setCd(user);
+        return retResult;
+    }
+
+    @Override
+    public Result saveUserInfo(String locale, User userInfo) {
+        String funcName = "UserServiceImpl.saveUserInfo()";
+        User newUserInfo = userInfo;
+
+        if (!BusinessUtil.isIdEmpty(userInfo.getId())) {
+            User userData = userRep.getOne(userInfo.getId());
+            if (CommonUtil.isEmpty(userData)) {
+                return commonDao.getTableNoDataArgsResult("User", userInfo.getId());
+            }
+
+            newUserInfo.setCreateTime(userData.getCreateTime());
+        } else {
+            Result<User> retChkUser = validationUser(userInfo);
+            if (retChkUser.hasError()) {
+                return new Result(retChkUser);
+            }
+            newUserInfo = retChkUser.getCd();
+        }
+
+        try {
+            userRep.saveAndFlush(newUserInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ErrorConst.getExceptionResult(funcName, e);
+        }
+
+        return null;
+    }
 }

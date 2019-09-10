@@ -1,6 +1,7 @@
 package com.symbio.dashboard.setting.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.model.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,4 +17,6 @@ public interface UserService {
     Result getUserList(String locale, Integer productId);
 
     Result getUserListByStatus(String locale, Integer status);
+
+    Result saveUserInfo(String locale, User userInfo);
 }
