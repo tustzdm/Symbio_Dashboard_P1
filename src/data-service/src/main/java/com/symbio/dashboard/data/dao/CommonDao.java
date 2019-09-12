@@ -468,6 +468,14 @@ public class CommonDao {
     return getLocalResult(Locales.EN_US.toString(), ErrorConst.MISSING_FUNCTION_PARAMETER, args);
   }
 
+  public Result getDuplicateMessageLocale(String locale, Object... args) {
+    return getResultArgs(locale, ErrorConst.EXCEPTION_DUPLICATE_MSG, args);
+  }
+
+  public Result getDuplicateMessage(Object... args) {
+    return getDuplicateMessageLocale(Locales.EN_US.toString(), args);
+  }
+
   /**
    * Args: [Table Name], [id]
    *

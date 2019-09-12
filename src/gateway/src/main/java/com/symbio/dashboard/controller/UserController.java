@@ -41,7 +41,7 @@ public class UserController extends BaseController {
      * 测试接口：
      * localhost:9090/user/saveUserInfo
      */
-    @RequestMapping("/saveUserInfo")
+    @PostMapping("/saveUserInfo")
     public Result saveUserInfo(
             @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale, @RequestBody User userInfo) {
         Result result = new Result();

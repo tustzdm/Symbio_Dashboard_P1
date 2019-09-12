@@ -1,10 +1,12 @@
 package com.symbio.dashboard.setting.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.business.UserFactory;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.repository.UserRep;
 import com.symbio.dashboard.encrypt.MD5Util;
+import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.util.BusinessUtil;
@@ -12,10 +14,10 @@ import com.symbio.dashboard.util.CommonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -94,24 +96,22 @@ public class UserServiceImpl implements UserService {
         return getUserListByStatus(Locales.EN_US.toString(), status);
     }
 
-    private Result<User> validationUser(User user) {
+    private Result<User> validationUser(String locale, User userData) {
         Result retResult = new Result();
+        User user = userData;
 
         if (CommonUtil.isEmpty(user.getName())) {
             return commonDao.getResult("100201", "Name");
         }
 
         if (CommonUtil.isEmpty(user.getId())) {
+            user = UserFactory.createNewUser(locale, user);
+
             if (CommonUtil.isEmpty(user.getPasswd())) {
                 return commonDao.getResult("100201", "Password");
             }
 
             user.setPasswd(MD5Util.encrypt(user.getPasswd()));
-            if (!CommonUtil.isEmpty(user.getFirstName()) && !CommonUtil.isEmpty(user.getLastName())) {
-                user.setFullName(String.format("%s %s", user.getFirstName(), user.getLastName()));
-            }
-
-            user.setCreateTime(new Date());
         }
 
         retResult.setCd(user);
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
 
             newUserInfo.setCreateTime(userData.getCreateTime());
         } else {
-            Result<User> retChkUser = validationUser(userInfo);
+            Result<User> retChkUser = validationUser(locale, userInfo);
             if (retChkUser.hasError()) {
                 return new Result(retChkUser);
             }
@@ -140,12 +140,20 @@ public class UserServiceImpl implements UserService {
 
         try {
             userRep.saveAndFlush(newUserInfo);
+        } catch (DataIntegrityViolationException ec) {
+            if (ec.getMessage().contains("unique_user_nickName")) {
+                logger.error(commonDao.getMessage(locale, ErrorConst.EXCEPTION_DUPLICATE_KEY, "Name", newUserInfo.getName(), "User"), ec);
+                return commonDao.getDuplicateMessage("Name", newUserInfo.getName());
+            } else {
+                ec.printStackTrace();
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error(ErrorConst.getExceptionLogMsg(funcName, e));
             return ErrorConst.getExceptionResult(funcName, e);
         }
 
-        return null;
+        return new Result();
     }
 
     private Result<User> checkLoginUserInfo(String locale, String name, String pass) {
@@ -171,7 +179,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // Step2 - Check user
-        User userData = userRep.getUserByName(name, 1);
+        User userData = userRep.getUserByName(name, EnumDef.USER_STATUS.ACTIVE.getCode());
         if (userData == null) {
             return commonDao.getResult("100204");
         } else {
@@ -180,6 +188,22 @@ public class UserServiceImpl implements UserService {
                 return commonDao.getResult("100204");
             }
         }
+
+        // Step3 - get Role & Menu
+        Integer userId = userData.getId();
+
+        return new Result();
+    }
+
+    public Result loginLDAP(String locale, String name, String passWd) {
+        // Step1 - validation
+        Result retCheck = checkLoginUserInfo(locale, name, passWd);
+        if (retCheck.hasError()) {
+            return new Result(retCheck);
+        }
+
+        // Step2 - Check LDAP user
+        User userData = null;
 
         // Step3 - get Role & Menu
         Integer userId = userData.getId();

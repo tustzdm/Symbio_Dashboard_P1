@@ -687,6 +687,132 @@ public class EnumDef {
     }
 
     @Getter
+    public enum USER_STATUS implements IDictEnum {
+        IN_ACTIVE(0, "inactive"),
+        ACTIVE(1, "active"),
+        DELETE(4, "removed");
+
+        private Integer code;
+        private String value;
+
+        USER_STATUS(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+    @Getter
+    public enum USER_CHANNEL implements IDictEnum {
+        LOCAL(0, "local"),
+        LDAP(1, "LDAP");
+
+        private Integer code;
+        private String value;
+
+        USER_CHANNEL(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+//    @Getter
+//    public enum USER_LEVEL implements IDictEnum {
+//        USER(0, "User"),
+//
+//        ADMIN(1, "Admin"),
+//        MANAGER(2, "Manager"),
+//
+//        CLIENT_MANAGER(5, "Client Manager"),
+//        CLIENT(6, "Client"),
+//
+//        QA_LEADER(10, "QA Leader"),
+//        QA(11, "QA"),
+//        IQA(12, "IQA"),
+//        LQA(13, "LQA"),
+//
+//        ENGINEER_LEADER(20, "Engineer"),
+//        ENGINEER(21, "Engineer"),
+//        DEVELOPER(25, "Developer"),
+//
+//        SYSTEM_ADMIN(912, "System Admin");
+//
+//        private Integer code;
+//        private String value;
+//
+//        USER_LEVEL(int code, String value) {
+//            this.code = code;
+//            this.value = value;
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return String.valueOf(this.code);
+//        }
+//    }
+
+//    @Getter
+//    public enum ROLE implements IDictEnum {
+//        USER(0, "User"), // CompanyUser
+//
+//        ADMIN(1, "Admin"),
+//        COMPANY_MANAGER(2, "CompanyManager"),
+//        COMPANY_ASSISTANT(3, "CompanyAssistant"),
+//        PRODUCT_MANAGER(5, "ProductManager"),
+//        PRODUCT_USER(6, "ProductUser"),
+//
+//        CLIENT_MANAGER(7, "ClientManager"),
+//        CLIENT(8, "Client"),
+//
+//        QA_LEADER(20, "QA Leader"),
+//        QA(21, "QA"),
+//
+//        IQA_LEADER(22, "IQA Leader"),
+//        IQA(23, "IQA"),
+//
+//        LQA_LEADER(24, "LQA Leader"),
+//        LQA(25, "LQA"),
+//
+//        AUTOMATION_LEADER(30, "AutomationLeader"),
+//        AUTOMATION(31, "Automation"),
+//
+//        ENGINEER_LEADER(35, "EngineerLeader"),
+//        ENGINEER(36, "Engineer"),
+//
+//        DEVELOPER_LEADER(38, "DeveloperLeader"),
+//        DEVELOPER(37, "Developer"),
+//
+//        ANONYMOUS_USER(1948, "AnonymousUser"),
+//        SYSTEM_ADMIN(912, "SystemAdmin");
+//
+//        private Integer code;
+//        private String value;
+//
+//        ROLE(int code, String value) {
+//            this.code = code;
+//            this.value = value;
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return String.valueOf(this.code);
+//        }
+//
+//        public String getRoleName() {
+//            return getValue();
+//        }
+//    }
+
+    @Getter
     public enum SCREEN_FLAG_STATUS implements IDictEnum {
         UNKNOWN(0, "No"),
         YES(1, "Yes");

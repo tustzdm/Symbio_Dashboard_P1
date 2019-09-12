@@ -4,6 +4,7 @@
 -- 2019-07-15	Ver0.5  Change 'create_user_id' NULL for Product, Release, TestSet etc.
 -- 2019-07-19   Ver0.5.1 Add column 'group_id','login' for 'user'
 -- 						 Add 'textarea' for dictionary 'HtmlType'
+-- 2019-09-12	Ver0.6 	Add Table: company_info,group_info,role_setting,user_group_role,role_menu,role_menu_function
 
 Drop Table IF EXISTS `base_code`;
 CREATE TABLE `base_code` (
@@ -997,4 +998,114 @@ CREATE TABLE `screen_shot` (
   `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time', 
   PRIMARY KEY (`id`),
   KEY `unique_screen_shot_testrunid_step` (`testRunId`, `step`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `company_info`;
+CREATE TABLE `company_info` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  `name` varchar(32) NOT NULL COMMENT 'Name',
+  `identifier` varchar(32) DEFAULT NULL,
+  `fullname` varchar(64) DEFAULT NULL COMMENT 'FullName',
+  `logo` varchar(255) DEFAULT NULL COMMENT ' /img/company/symbio.jpg,http://url:9999/...',
+  `description` varchar(255) DEFAULT NULL COMMENT 'description',
+  `createTime` datetime DEFAULT NULL COMMENT 'Create time',
+  `createUserId` int(10) unsigned NOT NULL COMMENT 'Creater id',
+  `createUserName` varchar(32) DEFAULT NULL COMMENT 'Creater name',
+  `updateUserId` int(10) unsigned DEFAULT NULL COMMENT 'Update user id',
+  `updateUserName` varchar(32) DEFAULT NULL COMMENT 'Update user name',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'update time',
+  `isDefault` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_company_info_name` (`name`),
+  UNIQUE KEY `unique_company_info_identifier` (`identifier`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `group_info`;
+CREATE TABLE `group_info` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  `name` varchar(32) NOT NULL COMMENT 'group name',
+  `isSysGroup` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'System Group or not. 0-new Group 1-systemGroup',
+  `groupType` int(11) NOT NULL DEFAULT '0' COMMENT 'type. 0-system 1-company 2-product',
+  `companyId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'type=1, company Id',
+  `productId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'type=2, product Id',
+  `description` varchar(255) DEFAULT NULL COMMENT 'Description',
+  `validation` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'Valid or not. 0-invalid，1-valid',
+  `createTime` datetime DEFAULT NULL COMMENT 'Create time',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_group_companyId_name` (`companyId`, `name`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+INSERT INTO `group_info` VALUES ('1', 'Admin', '1', '0', '0', '0', null, '1', '2019-09-12 19:48:00', '2019-09-12 17:20:00');
+INSERT INTO `group_info` VALUES ('2', 'SystemAdmin', '1', '0', '0', '0', null, '1', '2019-09-12 08:10:00', '2019-09-12 06:28:00');
+
+DROP TABLE IF EXISTS `role_setting`;
+CREATE TABLE `role_setting` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  `name` varchar(32) NOT NULL COMMENT 'Name. SystemAdmin,Client,ClientManager,CompanyManager,CompanyUser',
+  `code` int(10) unsigned NOT NULL COMMENT 'code of EnumDef.ROLE',
+  `role` int(10) unsigned NOT NULL COMMENT 'value of role.',
+  `priority` int(10) unsigned NOT NULL DEFAULT '99' COMMENT 'priority of role.',
+  `validation` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'valid or not. 0-invalid, 1-valid',
+  `description` varchar(255) DEFAULT NULL COMMENT 'Description',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_role_setting_name_role` (`role`, `name`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+INSERT INTO `role_setting` VALUES ('1', 'SystemAdmin', '912', '7', '1', '1', null);
+INSERT INTO `role_setting` VALUES ('2', 'User', '0', '0', '80', '1', null);
+INSERT INTO `role_setting` VALUES ('3', 'Admin', '1', '7', '2', '1', null);
+INSERT INTO `role_setting` VALUES ('4', 'CompanyManager', '2', '7', '3', '0', null);
+INSERT INTO `role_setting` VALUES ('5', 'CompanyAssistant', '3', '7', '3', '0', null);
+INSERT INTO `role_setting` VALUES ('6', 'ProductManager', '5', '7', '5', '1', null);
+INSERT INTO `role_setting` VALUES ('7', 'ProductUser', '6', '1', '6', '1', null);
+INSERT INTO `role_setting` VALUES ('8', 'ClientManager', '7', '1', '70', '1', null);
+INSERT INTO `role_setting` VALUES ('9', 'Client', '8', '1', '71', '1', null);
+INSERT INTO `role_setting` VALUES ('10', 'QA Leader', '20', '1', '20', '1', null);
+INSERT INTO `role_setting` VALUES ('11', 'QA', '21', '1', '21', '1', null);
+INSERT INTO `role_setting` VALUES ('12', 'IQA Leader', '22', '1', '22', '1', null);
+INSERT INTO `role_setting` VALUES ('13', 'IQA', '23', '1', '23', '1', null);
+INSERT INTO `role_setting` VALUES ('14', 'LQA Leader', '24', '1', '24', '1', null);
+INSERT INTO `role_setting` VALUES ('15', 'LQA', '25', '1', '25', '1', null);
+INSERT INTO `role_setting` VALUES ('16', 'AutomationLeader', '30', '1', '30', '1', null);
+INSERT INTO `role_setting` VALUES ('17', 'Automation', '31', '1', '31', '1', null);
+INSERT INTO `role_setting` VALUES ('18', 'EngineerLeader', '35', '1', '35', '1', null);
+INSERT INTO `role_setting` VALUES ('19', 'Engineer', '36', '1', '36', '1', null);
+INSERT INTO `role_setting` VALUES ('20', 'DeveloperLeader', '38', '1', '38', '1', null);
+INSERT INTO `role_setting` VALUES ('21', 'Developer', '39', '1', '39', '1', null);
+INSERT INTO `role_setting` VALUES ('22', 'AnonymousUser', '1948', '1', '81', '1', null);
+
+DROP TABLE IF EXISTS `user_group_role`;
+CREATE TABLE `user_group_role` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  `userId` int(10) unsigned NOT NULL COMMENT 'user id',
+  `groupId` int(10) unsigned NOT NULL COMMENT 'group Id',
+  `roleId` int(10) unsigned NOT NULL COMMENT 'role Id',
+  `createTime` datetime DEFAULT NULL COMMENT 'Create time',
+  `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+INSERT INTO `user_group_role` VALUES ('1', '1', '1', '3', '2019-09-12 17:30:59', '2019-09-12 17:29:02');
+INSERT INTO `user_group_role` VALUES ('2', '8', '2', '1', '2019-09-12 17:32:04', '2019-09-12 17:30:07');
+
+DROP TABLE IF EXISTS `role_menu`;
+CREATE TABLE `role_menu` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  `roleId` int(10) unsigned NOT NULL COMMENT 'FK: role_setting.id',
+  `menuId` int(10) unsigned NOT NULL COMMENT 'FK: menu.id',
+  `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Record timestamp',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_role_menu` (`roleId`,`menuId`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `role_menu_function`;
+CREATE TABLE `role_menu_function` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
+  `roleId` int(10) unsigned NOT NULL COMMENT 'FK: role_setting.id',
+  `menuId` int(10) unsigned NOT NULL COMMENT 'FK: menu.id',
+  `functionId` int(10) unsigned NOT NULL COMMENT 'FK: function_info.id',
+  `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Record timestamp',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_role_menu_function` (`roleId`,`menuId`, `functionId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
