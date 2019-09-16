@@ -13,6 +13,9 @@ public class ErrorConst {
     public final static String EXCEPTION_DUPLICATE_KEY = "000020";
     public final static String EXCEPTION_DUPLICATE_MSG = "000021";
 
+    public final static String EXCEPTION_ENUM_CONVERT_ERROR_CODE = "000015";
+    public final static String EXCEPTION_ENUM_CONVERT_ERROR_NAME = "000024";
+
     public final static String JENKINS_FETCH_JOBARGS_AUTOMATICALLY = "300503";
     public final static String JENKINS_JOB_NO_PARAMETER = "300504";
 

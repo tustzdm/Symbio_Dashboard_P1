@@ -28,6 +28,9 @@ public class Menu implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "code", nullable = false)
+    private String code;
+
     @Column(name = "groupName")
     private String groupName;
 
@@ -45,6 +48,9 @@ public class Menu implements Serializable {
 
     @Column(name = "parentId")
     private Integer parentId;
+
+    @Column(name = "validation", nullable = false)
+    private Integer validation;
 
     @Column(name = "createTime")
     private Date  createTime;

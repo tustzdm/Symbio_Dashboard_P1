@@ -34,6 +34,9 @@ public class FunctionInfo implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "validation", nullable = false)
+    private Integer validation;
+
     @Column(name = "createTime")
     private Date  createTime;
 }

@@ -5,6 +5,8 @@
 -- 2019-07-19   Ver0.5.1 Add column 'group_id','login' for 'user'
 -- 						 Add 'textarea' for dictionary 'HtmlType'
 -- 2019-09-12	Ver0.6 	Add Table: company_info,group_info,role_setting,user_group_role,role_menu,role_menu_function
+-- 2019-09-16   Ver0.6.1 Add column 'code','validation' for 'menu', Add column 'validation' for 'function_info'
+					
 
 Drop Table IF EXISTS `base_code`;
 CREATE TABLE `base_code` (
@@ -715,6 +717,7 @@ DROP TABLE IF EXISTS `menu`;
 CREATE TABLE `menu` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
   `name` varchar(32) NOT NULL COMMENT 'Name',
+  `code` varchar(16) NOT NULL COMMENT 'Menu code',
   `groupName` varchar(64) DEFAULT NULL COMMENT 'Group name',
   `logo` varchar(255) DEFAULT NULL COMMENT 'logo',
   `url` varchar(255) DEFAULT NULL COMMENT 'url',
