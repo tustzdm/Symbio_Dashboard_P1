@@ -100,6 +100,20 @@ public class TestSetController extends BaseController {
         return result;
     }
 
+    @RequestMapping("/getTestCaseList")
+    public Result getTestCaseList(@RequestParam(value = "token") String token,
+                                  @RequestParam(value = "testSetId") Integer testSetId,
+                                  @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                  @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
+                                  @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        Integer userId = 0;
+        Result result = testSetService.getTestCaseList(userId, locale, testSetId, pageIndex, pageSize);
+        if (result.hasError()) {
+            return result;
+        }
+        return result;
+    }
+
     @RequestMapping("/getTestSetUiInfo")
     public Result getTestSetUiInfo(@RequestParam(value = "token") String token,
                                    @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,

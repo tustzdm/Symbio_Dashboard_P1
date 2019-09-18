@@ -4,6 +4,7 @@ public enum SystemListSetting {
   Product("product"),
   Release("release"),
   TestSet("testset"),
+  TestCase("testcase"),
   ResultReview("resultreview");
 
   private SystemListSetting(String page){

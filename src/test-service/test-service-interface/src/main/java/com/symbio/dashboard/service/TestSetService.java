@@ -9,6 +9,8 @@ public interface TestSetService {
 
     Result getTestSetList(Integer userId, String locale, Integer releaseId, Integer pageIndex, Integer pageSize);
 
+    Result getTestCaseList(Integer userId, String locale, Integer testSetId, Integer pageIndex, Integer pageSize);
+
     Result getTestSetList(Integer releaseId, Integer pageIndex, Integer pageSize);
 
 

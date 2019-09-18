@@ -241,7 +241,7 @@ public class ReleaseDao {
             CommonListDTO retListDTO = new CommonListDTO();
             List<Map<String, Object>> listRelease = new ArrayList<Map<String, Object>>();
 
-            String sql = String.format("SELECT %s FROM `release` WHERE product_id = %d and display = 1 ORDER by id",  strFields, productId);
+            String sql = String.format("SELECT %s FROM `release` WHERE product_id = %d and display = 1 ORDER by id DESC", strFields, productId);
             if (pageIndex != null && pageSize != null) {
                 sql += String.format(" LIMIT %d,%d", pageIndex, pageSize);
             }
@@ -323,7 +323,7 @@ public class ReleaseDao {
             CommonListDTO retProduct = (CommonListDTO) retReleaseResult.getCd();
             retProdDTO.setTotalRecord(retProduct.getTotalRecord());
             retProdDTO.setFields(retProduct.getFields());
-            retProduct.setDataType(retProduct.getDataType());
+            retProdDTO.setDataType(retProduct.getDataType());
             retProdDTO.setData(retProduct.getData());
             retResult = new Result(retProdDTO);
         }

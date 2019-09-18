@@ -103,7 +103,7 @@ public class TestSetDao {
             CommonListDTO retListDTO = new CommonListDTO();
             List<Map<String, Object>> listTestSet = new ArrayList<Map<String, Object>>();
 
-            String sql = String.format("SELECT %s FROM `test_set` WHERE release_id = %d and display = 1 ORDER by id",  strFields, releaseId);
+            String sql = String.format("SELECT %s FROM `test_set` WHERE release_id = %d and display = 1 ORDER by id DESC", strFields, releaseId);
             if (pageIndex != null && pageSize != null) {
                 sql += String.format(" LIMIT %d,%d", pageIndex, pageSize);
             }
@@ -189,7 +189,7 @@ public class TestSetDao {
             CommonListDTO retProduct = (CommonListDTO) retReleaseResult.getCd();
             retProdDTO.setTotalRecord(retProduct.getTotalRecord());
             retProdDTO.setFields(retProduct.getFields());
-            retProduct.setDataType(retProduct.getDataType());
+            retProdDTO.setDataType(retProduct.getDataType());
             retProdDTO.setData(retProduct.getData());
             retResult = new Result(retProdDTO);
         }

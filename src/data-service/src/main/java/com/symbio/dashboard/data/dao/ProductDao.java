@@ -304,7 +304,7 @@ public class ProductDao {
             CommonListDTO retProduct = new CommonListDTO();
             List<Map<String, Object>> listProduct = new ArrayList<Map<String, Object>>();
 
-            String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER by id", strFields);
+            String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER by id DESC", strFields);
             if (pageIndex != null && pageSize != null) {
                 sql += String.format(" LIMIT %d,%d", pageIndex, pageSize);
             }

@@ -4,6 +4,7 @@ import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.charts.BarChart;
 import com.symbio.dashboard.data.charts.PieChart;
 import com.symbio.dashboard.data.dao.CommonDao;
+import com.symbio.dashboard.data.dao.TestCaseDao;
 import com.symbio.dashboard.data.dao.TestSetDao;
 import com.symbio.dashboard.data.dao.UserDao;
 import com.symbio.dashboard.data.repository.TestSetRep;
@@ -36,18 +37,27 @@ public class TestSetServiceImpl implements TestSetService {
 
     @Autowired
     private TestSetRep testSetRep;
-
     @Autowired
     private TestSetDao testsetDao;
+    @Autowired
+    private TestCaseDao testCaseDao;
     @Autowired
     private UserDao userDao;
     @Autowired
     private CommonDao commonDao;
-
     @Autowired
     private PieChart pieChart;
     @Autowired
     private BarChart barChart;
+
+    @Override
+    public Result getTestCaseList(Integer userId, String locale, Integer testSetId, Integer pageIndex, Integer pageSize) {
+        Result retResult = testCaseDao.getTestCaseList(locale, testSetId, pageIndex, pageSize);
+        if (retResult.hasError()) {
+            logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+        }
+        return retResult;
+    }
 
     @Override
     public Result getTestSetList(Integer userId, String locale, Integer releaseId, Integer pageIndex, Integer pageSize) {
