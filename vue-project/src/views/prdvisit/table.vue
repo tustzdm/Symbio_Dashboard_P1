@@ -114,7 +114,7 @@ table {
   border-collapse: collapse;
 }
 p {
-  margin: 8px 20px;
+  margin: 8px 0;
   font-size: 16px;
 }
 a > p {
@@ -125,7 +125,7 @@ a > p {
 a {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
 }
 span {
   font-size: 14px;
