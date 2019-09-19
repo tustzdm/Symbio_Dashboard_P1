@@ -1,11 +1,11 @@
 <template>
-<div  class="buy-root" style="width:85%;margin-left:7.5%">
+<div class="buy-root" style="width:85%;margin-left:7.5%">
     <!-- 两个部分mabage-top和(表格、翻页)，两者之间都用flex布局-->
     <top @getTableData="getTableData($event)"></top>
     <!-- manage-top end -->
 
     <el-card class="caseTabel" shadow="hover" style="border:none">
-        <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;height: 100%;background-color:rgb(240,240,240); text-align:center" :max-height="tableHeight">
+        <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;height: 100%;text-align:center" :max-height="tableHeight">
             <el-table-column type="selection" width="50px"></el-table-column>
             <!-- <el-table-column prop="status" sortable label="Status">
                 <template slot-scope="scope">
@@ -25,13 +25,33 @@
                     <img :src="scope.row.screenshot" class="el-img-custom" />
                 </template>
             </el-table-column> -->
-             <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" sortable :label="item.label"></el-table-column>
+            <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" sortable :label="item.label">
+                <!-- <template v-show="item.field=='status'" slot-scope="scope">
+                    <div>
+                        <div style="height:18px;width:18px;border-radius:9px;float:left;margin-left:30px" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='-1'}"></div>
+                        {{scope.row.status}}
+                    </div>
+                </template> -->
+                <template  slot-scope="scope">
+                    <div v-if="!['status','screenshotFlag'].includes(item.field)">
+                        {{scope.row[item.field]}}
+                    </div>
+                    <div v-if="item.field=='status'">
+                        <div style="height:10px;width:10px;border-radius:50%;float:left;display:inline-block;margin-left:60px;margin-top:6px;margin-right:8px" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></div>
+                        <span style="float:left;display:inline-block">{{statusArray[scope.row[item.field]]}}</span>
+                    </div>       
+                    <div v-if="item.field=='screenshotFlag'">
+                        <img v-if="scope.row[item.field]!=0" src="../../assets/images/screenshot-icon2.png" alt="">
+                    </div>
+                </template>
+            </el-table-column>
         </el-table>
     </el-card>
     <div class="fanye">
         <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="dataList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin: 10px 0" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
     </div>
     <!-- tabel和翻页要写到一个div里然后和manage-top flex布局 -->
+
 </div>
 </template>
 
@@ -51,7 +71,8 @@ export default {
             dataList: [],
             pageSize: 20,
             currentPage: 1,
-            tableColownms:{}
+            tableColownms: {},
+            statusArray:['Not Run','Pass','','','Fail','Skip']
         }
     },
     components: {
@@ -76,7 +97,7 @@ export default {
         //       });
     },
     mounted() {
-        
+
         this.getTestManagerInfo()
         window.onresize = () => {
             return (() => {
@@ -104,9 +125,9 @@ export default {
                 pageSize: this.pageSize,
                 currentPage: this.currentPage
             }
-            getTestManager(params).then(res => {
-                this.dataList = res.data
-            })
+            // getTestManager(params).then(res => {
+            //     this.dataList = res.data
+            // }) //mock 数据里的datalist
         },
         handleBtn(type) {
             if (type != 'refresh') {
@@ -157,11 +178,11 @@ export default {
         addShow() {
             this.addPartShow = true
         },
-        getTableData(val){
-             this.dataList = val.cd.data;
-             this.tableColownms = val.cd.columns;
+        getTableData(val) {
+            this.dataList = val.cd.data;
+            this.tableColownms = val.cd.columns;
             console.log(22222);
-            console.log( this.tableColownms);
+            console.log(this.tableColownms);
             console.log(this.dataList)
             console.log(222);
         }
@@ -169,7 +190,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .buy-root {
     height: 100%;
     display: flex;
@@ -240,14 +261,25 @@ export default {
 
 /* 控制不同状态case的颜色 */
 .auto_block {
-    background: #ccc;
+    background: #8E8E8E;
 }
 
 .auto_pass {
-    background: #adedc5;
+    background: #02C874;
 }
 
 .auto_failed {
-    background: rgb(246, 184, 184);
+    background: #FF5151;
+}
+
+.auto_skip{
+    background: #0072E3;
+}
+
+/* 控制tabelHead 里的字体颜色 */
+th .cell{
+        font-weight:bold;
+        font-size:15px;
+        color:#5B5B5B;
 }
 </style>

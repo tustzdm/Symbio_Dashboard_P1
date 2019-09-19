@@ -8,7 +8,7 @@
                     {{productName}}
                     <i class="el-icon-caret-bottom el-icon--right"></i>
                 </span>
-                <el-dropdown-menu>
+                <el-dropdown-menu >
                     <!-- <el-row class="demo-autocomplete">
                         <el-col :span="12">
                             <el-autocomplete class="inline-input" v-model="state2" :fetch-suggestions="querySearch" placeholder="Search here" :trigger-on-focus="false" @select="handleSelect" style="width:180px"></el-autocomplete>
@@ -28,9 +28,9 @@
                     <el-dropdown-item v-for="item in productList" :class="{selected:item.id==productId}" :command="item.id" :key="item.id">
                         {{item.name}}
                     </el-dropdown-item>
-                    <el-dropdown-item style="text-align:center;">
-                        <i class="el-icon-more-outline"></i>More
-                    </el-dropdown-item>
+                    <span>
+                            <router-link :to="{ name: 'addproject', query: { pageType: 'Product'}}" class="add_link"><i class="el-icon-plus"></i> Add Product</router-link>
+                    </span>
                 </el-dropdown-menu>
             </el-dropdown>
             <span class="sperate-arrow">
@@ -54,9 +54,9 @@
                     <el-dropdown-item v-for="item in releaseList" :class="{selected:item.id==releaseId}" :command="item.id" :key="item.id">
                         {{item.name}}
                     </el-dropdown-item>
-                    <el-dropdown-item style="text-align:center;">
-                        <i class="el-icon-more-outline"></i>More
-                    </el-dropdown-item>
+                    <span>
+                            <router-link :to="{ name: 'addproject', query: { pageType: 'Release',productId: this.productId}}" class="add_link"><i class="el-icon-plus"></i> Add Release</router-link>
+                    </span>
                 </el-dropdown-menu>
             </el-dropdown>
             <span class="sperate-arrow">
@@ -80,13 +80,13 @@
                     <el-dropdown-item v-for="item in testSetList" :class="{selected:item.id==testSetId}" :command="item.id" :key="item.id">
                         {{item.name}}
                     </el-dropdown-item>
-                    <el-dropdown-item style="text-align:center;">
-                        <i class="el-icon-more-outline"></i>More
-                    </el-dropdown-item>
+                    <span>
+                            <router-link :to="{ name: 'addproject', query: { pageType: 'TestSet',productId: this.productId,releaseId: this.releaseId}}" class="add_link"><i class="el-icon-plus"></i> Add TestSet</router-link>
+                    </span>
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
-        <div class="product-select select">
+        <!-- <div class="product-select select">
             <el-dropdown trigger="click">
                 <span class="el-dropdown-link">
                     ADD
@@ -108,18 +108,15 @@
                             <router-link to="/addcase/index">Add Testset</router-link>
                         </span>
                     </el-dropdown-item>
-                    <el-dropdown-item style="text-align:center;">
-                        <i class="el-icon-more-outline"></i>More
-                    </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
-        </div>
+        </div> -->
         <div class="manage-top-right">
-            <el-button @click="centerDialogVisible = true" style="background-color:gray;color:white" size="mini">import</el-button>
-            <el-button style="background-color:#c2eaae;color:white" size="mini">Run</el-button>
-            <el-button style="background-color:rgb(190, 205, 223);color:white" size="mini">Refresh</el-button>
-            <el-button style="background-color:rgb(246, 184, 184);color:white" size="mini">Add Bug</el-button>
-            <div class="select" style="float:right; margin-right:30px">
+            <el-button class="btn-top" style="background-color:#73BF00;" size="mini">Run</el-button>
+            <el-button class="btn-top" style="background-color:#FF9797;" size="mini">Add Bug</el-button>
+            <el-button class="btn-top" style="background-color:#5CADAD;" size="mini">Refresh</el-button>  
+            <el-button class="btn-top" @click="centerDialogVisible = true" style="background-color:#FF8040;" size="mini">Import</el-button>
+            <div class="select" style="float:right; margin-left:30px">
                 <el-dropdown trigger="click">
                     <span class="el-dropdown-link">
                         Filter
@@ -148,8 +145,8 @@
             <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.excel file only, less than 500m</div>
         </el-upload>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="centerDialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+            <el-button @click="centerDialogVisible = false">cancel</el-button>
+            <el-button type="primary" @click="centerDialogVisible = false">Confirm</el-button>
         </span>
     </el-dialog>
 </el-card>
@@ -171,15 +168,14 @@ export default {
             productList: '',
             releaseList: '',
             testSetList: '',
-
             tableColumn: '',
             tableData: '',
             centerDialogVisible: false,
             fileList: [{
-                name: 'food.jpeg',
+                name: 'test111.xlsx',
                 url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
             }, {
-                name: 'food2.jpeg',
+                name: 'test222.xlsx',
                 url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
             }]
         }
@@ -288,7 +284,7 @@ export default {
 
 <style lang="stylus" scoped>
 .selected {
-    background-color: #ccc
+    background-color: #97CBFF
 }
 
 .el-dropdown-link {
@@ -318,10 +314,31 @@ export default {
 }
 
 .manage-top-right {
-    width: 360px;
+    width: auto;
     height: 40px;
     line-height: 40px;
     float: right;
-    margin-right: 20px;
+    margin-right: 30px;
+}
+
+.btn-top{
+    color: white;
+    font-size: 15px;
+    font-weight:bold;
+}
+.btn-top:hover{
+    color: white;
+}
+.el-dropdown-link{
+    font-weight:bold;
+    font-famliy: Poppins;
+    color:#272727;
+    font-size: 15px;
+}
+.add_link{
+    font-size: 13px;
+    line-height: 27px;
+    padding: 0 15px;
+    font-weight:bold;
 }
 </style>
