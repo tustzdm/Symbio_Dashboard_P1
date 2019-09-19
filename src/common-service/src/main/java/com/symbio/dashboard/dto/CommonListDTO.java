@@ -30,7 +30,7 @@ public class CommonListDTO implements Serializable {
   public CommonListDTO(String locale, Integer pageIndex, Integer pageSize){
     this.locale = locale;
     this.pageIndex = pageIndex == null ? 0 : pageIndex;
-    this.pageSize = pageSize == null ? 20 : pageIndex;
+    this.pageSize = pageSize == null ? 20 : pageSize;
   }
 
 }

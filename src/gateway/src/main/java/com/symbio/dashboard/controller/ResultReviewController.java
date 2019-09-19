@@ -72,6 +72,31 @@ public class ResultReviewController extends BaseController {
         return retResult;
     }
 
+    @RequestMapping("/run")
+    public Result runTestRun(@RequestBody TestRunVO testRun) {
+        log.trace("ResultReviewController.runTestRun() Enter");
+
+        Result retResult = new Result();
+        try {
+            Integer userId = 0;
+            testRun.setUserId(userId);
+            if (StringUtil.isEmpty(testRun.getLocale())) {
+                testRun.setLocale(Locales.EN_US.toString());
+            }
+
+            retResult = testRunService.runTestRun(testRun.getLocale(), testRun);
+
+            if (retResult.hasError()) {
+                log.error(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        log.trace("ResultReviewController.runTestRun() Exit");
+        return retResult;
+    }
+
     @RequestMapping("/upload")
     public Result upload(HttpServletRequest request) {
         log.debug("ResultReviewController.upload() Enter.");

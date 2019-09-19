@@ -22,4 +22,9 @@ public interface TestRunRep extends JpaRepository<TestRun, Integer> {
 
     @Query(value = "SELECT * FROM test_run WHERE testset_id = ?1 AND testcase_id = ?2 AND locale = ?3 AND display = 1", nativeQuery = true)
     TestRun getByTestSetIdAndTestCaseIdAndLocale(Integer testSetId, Integer testCaseId, String locale);
+
+    @Query(value = "SELECT COUNT(*) FROM test_run tr " +
+            " INNER JOIN test_case tc ON tr.testcase_id = tc.id" +
+            " WHERE tr.testset_id = ?1", nativeQuery = true)
+    Integer getCountByTestSetId(Integer testSetId);
 }

@@ -36,4 +36,10 @@ public class TestRunUiDTO implements Serializable {
   private List<Map<String, Object>> productList;
   private List<Map<String, Object>> releaseList;
   private List<Map<String, Object>> testSetList;
+
+  public TestRunUiDTO(String locale, Integer pageIndex, Integer pageSize) {
+    this.locale = locale;
+    this.pageIndex = pageIndex == null ? 0 : pageIndex;
+    this.pageSize = pageSize == null ? 20 : pageSize;
+  }
 }

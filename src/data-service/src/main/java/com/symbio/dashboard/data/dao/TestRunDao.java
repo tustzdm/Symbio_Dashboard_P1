@@ -20,8 +20,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @ClassName - TestRunDao
@@ -54,7 +56,7 @@ public class TestRunDao {
     private TestSetDao testSetDao;
 
     public Result<TestRunUiDTO> getList(String locale, TestRunVO testRun) {
-        TestRunUiDTO testRunUiDTO = new TestRunUiDTO();
+        TestRunUiDTO testRunUiDTO = new TestRunUiDTO(locale, testRun.getPageIndex(), testRun.getPageSize());
         Result retResult = new Result(testRunUiDTO);
 
         List<SysListSetting> listSetting = sysListSettingRep.getEntityInfoNonUi(SystemListSetting.ResultReview.toString());
@@ -92,6 +94,41 @@ public class TestRunDao {
         return retResult;
     }
 
+    public Result<TestRunUiDTO> demoRunResult(Result<TestRunUiDTO> data) {
+        Result<TestRunUiDTO> retResult = data;
+        if (data.isSuccess()) {
+            TestRunUiDTO dtoTR = retResult.getCd();
+            List<Map<String, Object>> listTestRun = dtoTR.getData();
+            listTestRun = demoRun(listTestRun);
+            dtoTR.setData(listTestRun);
+        }
+
+        return retResult;
+    }
+
+    private List<Map<String, Object>> demoRun(List<Map<String, Object>> data) {
+        if (CommonUtil.isEmpty(data)) return new ArrayList<>();
+
+        List<Map<String, Object>> retList = data;
+        String[] TRunStatus = {"0", "1", "4", "5"}; // EnumDef.TEST_RUN_STATUS
+
+        for (Map<String, Object> item : retList) {
+            String strStatus = (String) item.get("status");
+
+            if ("0".equals(strStatus)) {
+                Random random = new Random();
+                int idxTRStatus = random.nextInt(4);
+
+                item.put("status", TRunStatus[idxTRStatus]);
+                if (idxTRStatus != 0) {
+                    item.put("screenshotFlag", "1");
+                }
+            }
+        }
+
+        return retList;
+    }
+
     private Result getTestRunMapInfoByField(Integer testSetId, String strFields, Integer pageIndex, Integer pageSize, List<String> listUserFields) {
 
         log.debug("strField = " + strFields);
@@ -124,7 +161,7 @@ public class TestRunDao {
                 }
             }
 
-            long nCount = testRunRep.count();
+            long nCount = testRunRep.getCountByTestSetId(testSetId);
             testRunUiDTO.setTotalRecord(new Long(nCount).intValue());
 
             retResult = new Result(testRunUiDTO);

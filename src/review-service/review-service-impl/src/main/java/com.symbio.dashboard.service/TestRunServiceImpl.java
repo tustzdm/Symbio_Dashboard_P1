@@ -102,6 +102,28 @@ public class TestRunServiceImpl implements TestRunService {
     }
 
     @Override
+    public Result runTestRun(String locale, TestRunVO testRun) {
+        log.trace("TestRunServiceImpl.runTestRun() Enter");
+        log.trace(testRun.toString());
+
+        Result<TestRunUiDTO> retResult;
+
+        try {
+            retResult = testRunDao.getList(locale, testRun);
+            if (retResult.isSuccess()) {
+                // Demo result
+                retResult = testRunDao.demoRunResult(retResult);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            retResult = commonDao.getResultArgs(locale, "000102", "run TestRun List");
+        }
+
+        log.trace("TestRunServiceImpl.runTestRun() Exit");
+        return retResult;
+    }
+
+    @Override
     public Result getTestRunDemoList(String locale, TestRunVO testRun) {
         Result<TestRunUiDTO> retResult = new Result<TestRunUiDTO>();
         try {
