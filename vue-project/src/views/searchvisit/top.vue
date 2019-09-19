@@ -304,8 +304,9 @@ export default {
                     "testSetId": this.testSetId
                 }
             }).then(res => {
-                this.$emit('getTableData', res);
-                console.log(res);
+                setTimeout(() => {
+                    this.$emit('getTableData', res);
+                }, 3000);
             })
         }
     }

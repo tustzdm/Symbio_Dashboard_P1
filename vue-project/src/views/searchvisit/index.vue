@@ -25,6 +25,9 @@
                     <img :src="scope.row.screenshot" class="el-img-custom" />
                 </template>
             </el-table-column> -->
+             <el-table-column label="" width="80">
+                <i class="el-icon-loading"></i>
+            </el-table-column>
             <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" sortable :label="item.label">
                 <!-- <template v-show="item.field=='status'" slot-scope="scope">
                     <div>
@@ -32,16 +35,18 @@
                         {{scope.row.status}}
                     </div>
                 </template> -->
-                <template  slot-scope="scope">
+                <template slot-scope="scope">
                     <div v-if="!['status','screenshotFlag'].includes(item.field)">
                         {{scope.row[item.field]}}
                     </div>
                     <div v-if="item.field=='status'">
                         <div style="height:10px;width:10px;border-radius:50%;float:left;display:inline-block;margin-left:60px;margin-top:6px;margin-right:8px" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></div>
                         <span style="float:left;display:inline-block">{{statusArray[scope.row[item.field]]}}</span>
-                    </div>       
+                    </div>
                     <div v-if="item.field=='screenshotFlag'">
-                        <img v-if="scope.row[item.field]!=0" src="../../assets/images/screenshot-icon2.png" alt="">
+                        <router-link :to="{ name: 'pictures'}">
+                            <img v-if="scope.row[item.field]!=0" src="../../assets/images/screenshot-icon2.png" alt="">
+                        </router-link>
                     </div>
                 </template>
             </el-table-column>
@@ -72,7 +77,7 @@ export default {
             pageSize: 20,
             currentPage: 1,
             tableColownms: {},
-            statusArray:['Not Run','Pass','','','Fail','Skip']
+            statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip']
         }
     },
     components: {
@@ -272,14 +277,14 @@ export default {
     background: #FF5151;
 }
 
-.auto_skip{
+.auto_skip {
     background: #0072E3;
 }
 
 /* 控制tabelHead 里的字体颜色 */
-th .cell{
-        font-weight:bold;
-        font-size:15px;
-        color:#5B5B5B;
+th .cell {
+    font-weight: bold;
+    font-size: 15px;
+    color: #5B5B5B;
 }
 </style>

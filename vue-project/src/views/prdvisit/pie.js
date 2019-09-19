@@ -58,7 +58,7 @@ export default function getData(filter = defaultValue) {
                 radius: '55%',
                 center: ['50%', '60%'],
                 data: sortData(data, filter.toLowerCase()),
-                color: ['#484891', '#FFBB77', '#7A85A1', '#9EADC5', '#408080', '#F9E8E0'],
+                color: ['#7A85A1', '#9EADC5', '#C9D4E3', '#E8E8E8', '#F3D1CD', '#F9E8E0'],
                 itemStyle: {
                     emphasis: {
                         shadowBlur: 10,

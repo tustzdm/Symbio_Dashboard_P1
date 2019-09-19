@@ -142,7 +142,8 @@ export const constantRouterMap = [
             }
         ],
         hidden: true
-    }, {
+    }, 
+    {
         path: "/prdvisit",
         component: Layout,
         children: [
@@ -179,8 +180,33 @@ export const constantRouterMap = [
                     title: "releaseInfo",
                     icon: "",
                 },
+            },
+            {
+                path: "testset",
+                component: _import("buy/testsetInfo"),
+                name: "testsetInfo",
+                meta: {
+                    title: "testsetInfo",
+                    icon: "",
+                },
+            },
+            {
+                path: "/result",
+                component: _import("results/pictures"),
+                children: [
+                    {
+                        path: "/result/pictures",
+                        component: _import("results/pictures"),
+                        name: "pictures",
+                        meta: {
+                            title: "pictures",
+                            icon: "",
+                        },
+                    }
+                ],
             }
         ],
+        
     },
     { path: "*", redirect: "/404", hidden: true }
 ];
