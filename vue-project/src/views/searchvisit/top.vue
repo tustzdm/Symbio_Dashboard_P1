@@ -8,7 +8,7 @@
                     {{productName}}
                     <i class="el-icon-caret-bottom el-icon--right"></i>
                 </span>
-                <el-dropdown-menu >
+                <el-dropdown-menu>
                     <!-- <el-row class="demo-autocomplete">
                         <el-col :span="12">
                             <el-autocomplete class="inline-input" v-model="state2" :fetch-suggestions="querySearch" placeholder="Search here" :trigger-on-focus="false" @select="handleSelect" style="width:180px"></el-autocomplete>
@@ -29,7 +29,7 @@
                         {{item.name}}
                     </el-dropdown-item>
                     <span>
-                            <router-link :to="{ name: 'addproject', query: { pageType: 'Product'}}" class="add_link"><i class="el-icon-plus"></i> Add Product</router-link>
+                        <router-link :to="{ name: 'addproject', query: { pageType: 'Product'}}" class="add_link"><i class="el-icon-plus"></i> Add Product</router-link>
                     </span>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -55,7 +55,7 @@
                         {{item.name}}
                     </el-dropdown-item>
                     <span>
-                            <router-link :to="{ name: 'addproject', query: { pageType: 'Release',productId: this.productId}}" class="add_link"><i class="el-icon-plus"></i> Add Release</router-link>
+                        <router-link :to="{ name: 'addproject', query: { pageType: 'Release',productId: this.productId}}" class="add_link"><i class="el-icon-plus"></i> Add Release</router-link>
                     </span>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -81,7 +81,7 @@
                         {{item.name}}
                     </el-dropdown-item>
                     <span>
-                            <router-link :to="{ name: 'addproject', query: { pageType: 'TestSet',productId: this.productId,releaseId: this.releaseId}}" class="add_link"><i class="el-icon-plus"></i> Add TestSet</router-link>
+                        <router-link :to="{ name: 'addproject', query: { pageType: 'TestSet',productId: this.productId,releaseId: this.releaseId}}" class="add_link"><i class="el-icon-plus"></i> Add TestSet</router-link>
                     </span>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -112,9 +112,9 @@
             </el-dropdown>
         </div> -->
         <div class="manage-top-right">
-            <el-button class="btn-top" style="background-color:#73BF00;" size="mini">Run</el-button>
+            <el-button class="btn-top" @click="runDialogVisible = true" style="background-color:#73BF00;" size="mini">Run</el-button>
             <el-button class="btn-top" style="background-color:#FF9797;" size="mini">Add Bug</el-button>
-            <el-button class="btn-top" style="background-color:#5CADAD;" size="mini">Refresh</el-button>  
+            <el-button class="btn-top" style="background-color:#5CADAD;" size="mini">Refresh</el-button>
             <el-button class="btn-top" @click="centerDialogVisible = true" style="background-color:#FF8040;" size="mini">Import</el-button>
             <div class="select" style="float:right; margin-left:30px">
                 <el-dropdown trigger="click">
@@ -134,11 +134,8 @@
             </div>
         </div>
     </div>
+    <!-- import dialog -->
     <el-dialog title="Import" :visible.sync="centerDialogVisible" width="30%" center>
-        <!-- <form>
-            <input id="file" name="file" type="file" />
-            <input id="token" name="token" type="hidden" />
-        </form> -->
         <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="upLoadUrl" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
@@ -149,8 +146,23 @@
             <el-button type="primary" @click="centerDialogVisible = false">Confirm</el-button>
         </span>
     </el-dialog>
+    <!-- run dialog -->
+    <el-dialog title="Runing Enviroment" :visible.sync="runDialogVisible" width="30%" center>
+        <div class="top" style="margin:25px 0">
+            <span style="padding-left:80px;font-family:Poppins;">Select TEP:</span>
+            <select value="1" id="" style="margin-left:20px;height:30px;width:200px">
+                <option >Web Automation</option>
+                <option selected="true" >Mobile Automation</option>
+                <option>Performance Automation</option>
+                <option>API Automation</option>
+            </select>
+        </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="runDialogVisible = false">cancel</el-button>
+            <el-button type="primary" @click="runConfirm">Run</el-button>
+        </span>
+    </el-dialog>
 </el-card>
-<!-- manage-top end -->
 </template>
 
 <script>
@@ -158,7 +170,7 @@ export default {
     name: 'top',
     data() {
         return {
-            upLoadUrl:'/api/result/upload',
+            upLoadUrl: '/api/result/upload',
             productName: 'Product',
             releaseName: 'Release',
             testSetName: 'TestSet',
@@ -171,6 +183,7 @@ export default {
             tableColumn: '',
             tableData: '',
             centerDialogVisible: false,
+            runDialogVisible: false,
             fileList: [{
                 name: 'test111.xlsx',
                 url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
@@ -265,7 +278,7 @@ export default {
             });
         },
 
-        //upload method
+        //import method
         submitUpload() {
             this.$refs.upload.submit();
         },
@@ -275,8 +288,25 @@ export default {
         handlePreview(file) {
             console.log(file);
         },
-        uploadSuccess(){
+        uploadSuccess() {
             alert(response);
+        },
+
+        //run method
+        runConfirm(){
+            this.runDialogVisible =false;
+             this.Fetch(`/result/run`, {
+                method: "POST",
+                body: {
+                    "token": "123",
+                    "productId": this.productId,
+                    "releaseId": this.releaseId,
+                    "testSetId": this.testSetId
+                }
+            }).then(res => {
+                this.$emit('getTableData', res);
+                console.log(res);
+            })
         }
     }
 }
@@ -321,24 +351,27 @@ export default {
     margin-right: 30px;
 }
 
-.btn-top{
+.btn-top {
     color: white;
     font-size: 15px;
-    font-weight:bold;
+    font-weight: bold;
 }
-.btn-top:hover{
+
+.btn-top:hover {
     color: white;
 }
-.el-dropdown-link{
-    font-weight:bold;
+
+.el-dropdown-link {
+    font-weight: bold;
     font-famliy: Poppins;
-    color:#272727;
+    color: #272727;
     font-size: 15px;
 }
-.add_link{
+
+.add_link {
     font-size: 13px;
     line-height: 27px;
     padding: 0 15px;
-    font-weight:bold;
+    font-weight: bold;
 }
 </style>

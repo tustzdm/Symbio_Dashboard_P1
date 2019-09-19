@@ -24,7 +24,7 @@ export default function getData() {
                 name: 'Sample Data',
                 type: 'pie',
                 radius: '55%',
-                center: ['50%', '60%'],
+                center: ['55%', '55%'],
                 data: [
                     { value: randomize(), name: 'NewAccountSignUp' },
                     { value: randomize(), name: 'RiskTransfer' },

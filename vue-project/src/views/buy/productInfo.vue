@@ -1,27 +1,29 @@
 <template>
-<div class="buy-root" style="width:85%;margin-left:7.5%">
-    <div class="manage-charts">
-        <div class="chartContainer" style="text-align:center">
-            <div style="display:inline-block">
-                <chart style="display:inline-block" :options="pie" class="panel" />
+<el-row>
+    <el-col :span="20" :offset="2">
+        <div class="manage-charts">
+            <div class="chartContainer" >
+                <div style="display:inline-block">
+                    <chart style="display:inline-block" :options="pie" class="panel" />
+                </div>
+            </div>
+            <div class="chartContainerRight">
+                <div style="display:inline-block">
+                    <chart :options="rect" class="panel" />
+                </div>
             </div>
         </div>
-        <div class="chartContainer">
-            <div style="display:inline-block">
-                <chart :options="rect" class="panel" />
-            </div>
+        <div>
+            <el-card class="listHead" shadow="never" style="padding-right:5%">
+                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Release List</h2>
+                <el-button @click="add" style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
+                    + Add Release
+                </el-button>
+            </el-card>
         </div>
-    </div>
-    <div>
-        <el-card class="listHead" shadow="never" style="padding-right:5%">
-            <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Release List</h2>
-            <el-button @click="add" style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
-                + Add Release 
-            </el-button>
-        </el-card>
-    </div>
-    <releaseList></releaseList>
-</div>
+        <releaseList></releaseList>
+    </el-col>
+</el-row>
 </template>
 
 <script>
@@ -43,24 +45,27 @@ export default {
         return {
             pie: getPie(),
             rect: getRect(),
-            productId:''
+            productId: ''
         }
     },
     components: {
         releaseList: releaseList,
         chart: ECharts
     },
-    created(){
-        this.productId =this.$route.query.productId;
+    created() {
+        this.productId = this.$route.query.productId;
     },
-    mounted() {},
+    mounted() {
+        document.getElementsByClassName('echarts')[0].style.width = document.body.clientWidth * (11 / 27) + 'px';
+        document.getElementsByClassName('echarts')[1].style.width = document.body.clientWidth * (11 / 27) + 'px';
+    },
     methods: {
         initProjet() {
             getProjectInfo().then(res => {
                 this.projectInfo = res.data
             })
         },
-        add() {//通过这个传给 add页面要取的值的类型比如product release
+        add() { //通过这个传给 add页面要取的值的类型比如product release
             this.$router.push({
                 path: '/addproject/index',
                 name: 'addproject',
@@ -79,15 +84,21 @@ export default {
     width: 100%;
 }
 
+.panel {
+    margin: 0;
+    padding: 0;
+}
+
 .chartContainer {
-    width: 50%;
+    width: 48%;
     float: left;
     text-align: center;
 }
 
-.buy-root {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+.chartContainerRight {
+    width: 47%;
+    float: left;
+    margin-left 2.3%;
+    text-align: center;
 }
 </style>

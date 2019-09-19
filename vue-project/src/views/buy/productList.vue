@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="sss">
     <el-card class="manage-tabel" shadow="never">
         <!-- <el-table :data="tableData"> -->
         <el-table :data="productList">

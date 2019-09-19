@@ -1,12 +1,13 @@
 <template>
-<div class="buy-root" style="width:85%;margin-left:7.5%">
+<el-row>
+    <el-col :span="20" :offset="2">
     <div class="manage-charts">
         <div class="chartContainer" style="text-align:center">
             <div style="display:inline-block">
                 <chart style="display:inline-block" :options="pie" class="panel" />
             </div>
         </div>
-        <div class="chartContainer">
+        <div class="chartContainerRight">
             <div style="display:inline-block">
                 <chart :options="rect" class="panel" />
             </div>
@@ -21,7 +22,8 @@
         </el-card>
     </div>
     <testsetList></testsetList>
-</div>
+    </el-col>
+</el-row>
 </template>
 
 <script>
@@ -52,7 +54,8 @@ export default {
         chart: ECharts
     },
     mounted() {
-         
+         document.getElementsByClassName('echarts')[0].style.width = document.body.clientWidth * (11 / 27) + 'px';
+        document.getElementsByClassName('echarts')[1].style.width = document.body.clientWidth * (11 / 27) + 'px';
     },
     created(){
         this.productId =this.$route.query.productId;
@@ -84,15 +87,21 @@ export default {
     width: 100%;
 }
 
+.panel {
+    margin: 0;
+    padding: 0;
+}
+
 .chartContainer {
-    width: 50%;
+    width: 48%;
     float: left;
     text-align: center;
 }
 
-.buy-root {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+.chartContainerRight {
+    width: 47%;
+    float: left;
+    margin-left 2.3%;
+    text-align: center;
 }
 </style>
