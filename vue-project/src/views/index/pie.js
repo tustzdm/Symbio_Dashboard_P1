@@ -28,7 +28,7 @@ export default function getData() {
                     { value: randomize(), name: 'Mac' },
                     { value: randomize(), name: 'Web' }
                 ],
-                color: ['#484891', '#FFBB77', '#7A85A1', '#9EADC5', '#408080', '#F9E8E0'],
+                color: ['#F9E8E0', '#F3D1CD', '#7A85A1', '#9EADC5', '#C9D4E3', '#E8E8E8'],
                 itemStyle: {
                     emphasis: {
                         shadowBlur: 10,
