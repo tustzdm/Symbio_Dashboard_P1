@@ -3,6 +3,7 @@ package com.symbio.dashboard.controller;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
 import com.symbio.dashboard.constant.CommonDef;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.dto.TestRunExcelDTO;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.service.FileUploadService;
@@ -98,11 +99,47 @@ public class ResultReviewController extends BaseController {
     }
 
     @RequestMapping("/upload")
-    public Result upload(HttpServletRequest request) {
-        log.debug("ResultReviewController.upload() Enter.");
+    public Result upload(@RequestParam(value = "testSetId", required = false, defaultValue = "0") Integer testSetId,
+                         @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                         HttpServletRequest request) {
+        String funcName = "ResultReviewController.upload()";
+        log.debug(funcName + " Enter");
 
-        Result<String> retsaveFile = fileService.saveExcel(request, CommonDef.FOLDER_PATH_IMPORT_TESTCASE);
+        Result<String> retsaveFile = new Result<String>();
 
+        try {
+            retsaveFile = fileService.saveExcel(request, CommonDef.FOLDER_PATH_IMPORT_TESTCASE);
+            if (retsaveFile.hasError()) {
+                log.info(ErrorConst.getWarningLogMsg(funcName, retsaveFile));
+                return retsaveFile;
+            }
+
+            Integer nTestTestSetId = 435; // testSetId
+            //if (testSetId != null && testSetId > 0) {
+            String fileName = retsaveFile.getCd();
+
+            Result<List<TestRunExcelDTO>> retImportExcel = testRunService.importExcel(locale, nTestTestSetId, fileName);
+            if (retImportExcel.hasError()) {
+                log.error(ErrorConst.getWarningLogMsg(funcName, retImportExcel));
+                return retImportExcel;
+            } else {
+                Integer nTestRunCount = 0;
+                List<TestRunExcelDTO> listTestRun = retImportExcel.getCd();
+                if (!CommonUtil.isEmpty(listTestRun)) {
+                    nTestRunCount = listTestRun.size();
+                }
+                retsaveFile.setCd(String.format("Test Run count: " + nTestRunCount));
+            }
+//            } else {
+//                return getResultArgs(locale, "000018", "TestSet ID");
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(ErrorConst.getExceptionLogMsg(funcName, e));
+            return new Result(ErrorConst.getExceptionResult(funcName, e));
+        }
+
+        log.debug(funcName + " Exit");
         return retsaveFile;
     }
 
@@ -167,8 +204,8 @@ public class ResultReviewController extends BaseController {
         try {
             Result<List<TestRunExcelDTO>> resultImportExcel = testRunService.importExcel(locale, testSetId, fileName);
 
-            if (retResult.hasError()) {
-                log.error(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+            if (resultImportExcel.hasError()) {
+                log.error(String.format("ec:%s, em:%s", resultImportExcel.getEc(), resultImportExcel.getEm()));
             }
             Integer nTestRunCount = 0;
             List<TestRunExcelDTO> listTestRun = resultImportExcel.getCd();

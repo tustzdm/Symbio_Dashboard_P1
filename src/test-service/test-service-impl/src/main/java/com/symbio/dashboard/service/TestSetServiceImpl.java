@@ -137,8 +137,11 @@ public class TestSetServiceImpl implements TestSetService {
 
             try {
                 // Save or update
-                testSetRep.saveAndFlush(testSet);
-                retResult = new Result(strMsg);
+                testSet = testSetRep.saveAndFlush(testSet);
+
+                Map<String, Integer> map = new HashMap<>();
+                map.put("id", testSet.getId());
+                retResult = new Result(map);
             } catch (Exception e) {
                 e.printStackTrace();
                 if(e.getMessage().contains("testset_release_name")) {

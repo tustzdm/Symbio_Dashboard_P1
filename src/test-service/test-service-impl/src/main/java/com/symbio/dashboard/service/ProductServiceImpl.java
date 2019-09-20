@@ -139,8 +139,10 @@ public class ProductServiceImpl implements ProductService {
 
             try {
                 // Save or update
-                productRep.saveAndFlush(product);
-                result = new Result(strMsg);
+                product = productRep.saveAndFlush(product);
+                Map<String, Integer> map = new HashMap<>();
+                map.put("id", product.getId());
+                result = new Result(map);
             } catch (Exception e) {
                 e.printStackTrace();
                 if(e.getMessage().contains("product_name")) {

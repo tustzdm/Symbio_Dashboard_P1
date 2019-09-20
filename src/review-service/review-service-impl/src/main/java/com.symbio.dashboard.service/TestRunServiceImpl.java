@@ -5,7 +5,6 @@ import com.symbio.dashboard.bean.TestRunVO;
 import com.symbio.dashboard.business.TestCaseFactory;
 import com.symbio.dashboard.business.TestResultFactory;
 import com.symbio.dashboard.business.TestRunFactory;
-import com.symbio.dashboard.constant.CommonDef;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.dao.*;
@@ -151,7 +150,7 @@ public class TestRunServiceImpl implements TestRunService {
 
         // 2. Get Test case info from excel - List
         List<Map<String, String>> listNameField = headerResult.getCd();
-        String newFileName = CommonDef.FOLDER_PATH_IMPORT_TESTCASE + fileName;
+        String newFileName = fileName; // CommonDef.FOLDER_PATH_IMPORT_TESTCASE + fileName;
         importResult = excelReadUtil.read(newFileName, listNameField);
         if (importResult.hasError()) {
             return importResult;
@@ -187,22 +186,19 @@ public class TestRunServiceImpl implements TestRunService {
     private Result<TestRun> saveNewTestRunInfo(Integer testSetId, TestCase testCase, String locale) {
 
         // Add Test Run
-        Integer id = testCase.getId();
-        TestRun testRun = testRunRep.getByTestCaseIdAndLocale(id, locale);
-        TestResult testResult;
+        TestRun testRun = testRunRep.getByTestSetIdAndTestCaseIdAndLocale(testSetId, testCase.getId(), locale);
+        TestResult testResult = null;
         try {
             if (testRun == null) {
                 testRun = TestRunFactory.createNewTestRun(testCase, testSetId, locale);
                 testRun = testRunRep.saveAndFlush(testRun);
-
-                testResult = TestResultFactory.createNewTestResult(testSetId, testRun.getId());
-                testResultRep.saveAndFlush(testResult);
             } else {
                 testResult = testResultRep.getByTestRunId(testRun.getId());
-                if (CommonUtil.isEmpty(testResult)) {
-                    testResult = TestResultFactory.createNewTestResult(testSetId, testRun.getId());
-                    testResultRep.saveAndFlush(testResult);
-                }
+            }
+
+            if (CommonUtil.isEmpty(testResult)) {
+                testResult = TestResultFactory.createNewTestResult(testSetId, testRun.getId());
+                testResultRep.saveAndFlush(testResult);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -214,6 +210,8 @@ public class TestRunServiceImpl implements TestRunService {
 
     private Result<List<TestRunExcelDTO>> updateTestCase(Integer testSetId, List<TestRunExcelDTO> listTestCase) {
         Result result = new Result();
+        String funcName = "TestRunServiceImpl.updateTestCase()";
+
         TestCase testCase;
         TestCase updatedTestCase = new TestCase();
         List<TestCase> testCaseList = new ArrayList<>();
@@ -221,35 +219,59 @@ public class TestRunServiceImpl implements TestRunService {
         Integer caseType = testSetRep.getTypeById(testSetId);
         TestCase newTC = null;
         String trLocale = null;
+        Result retInsertTestRun = null;
+        boolean bInsertNewTestRun = false;
+
         for (TestRunExcelDTO item : listTestCase) {
             TestCase t = item.getTestCase();
             trLocale = item.getLocale();
             String caseId = t.getCaseId();
+            bInsertNewTestRun = false;
 
             testCase = testCaseRep.getByCaseIdAndCaseType(caseId, caseType);
             if (testCase == null) {
                 // Add new test case
                 newTC = TestCaseFactory.createNewTestCaseByExcel(caseType, t);
                 updatedTestCase = testCaseRep.saveAndFlush(newTC);
+
+                // Insert new Test Run
+                retInsertTestRun = saveNewTestRunInfo(testSetId, updatedTestCase, trLocale);
+                if (retInsertTestRun.hasError()) {
+                    log.error(ErrorConst.getErrorLogMsg(funcName, retInsertTestRun));
+                    return new Result(retInsertTestRun);
+                }
+                bInsertNewTestRun = true;
+
             } else {
                 TestRun tr = null;
-                // Check TestRun
-                if (trLocale.contains(",")) {
-                    String locale;
-                    String[] locales = trLocale.split(",");
-                    for (String loc : locales) {
-                        locale = loc.trim();
-                        tr = testRunRep.getByTestSetIdAndTestCaseIdAndLocale(testSetId, testCase.getId(), locale);
-                        result = saveNewTestRunInfo(testSetId, testCase, locale);
-                        if (result.hasError()) {
-                            return result;
-                        }
-                    }
-                } else {
-                    tr = testRunRep.getByTestSetIdAndTestCaseIdAndLocale(testSetId, testCase.getId(), trLocale);
-                    result = saveNewTestRunInfo(testSetId, testCase, trLocale);
-                    if (result.hasError()) {
-                        return result;
+//                // Check TestRun
+//                if (trLocale.contains(",")) {
+//                    String locale;
+//                    String[] locales = trLocale.split(",");
+//                    for (String loc : locales) {
+//                        locale = loc.trim();
+//                        tr = testRunRep.getByTestSetIdAndTestCaseIdAndLocale(testSetId, testCase.getId(), locale);
+//                        result = saveNewTestRunInfo(testSetId, testCase, locale);
+//                        if (result.hasError()) {
+//                            return result;
+//                        }
+//                    }
+//                } else {
+////                    tr = testRunRep.getByTestSetIdAndTestCaseIdAndLocale(testSetId, testCase.getId(), trLocale);
+////                    result = saveNewTestRunInfo(testSetId, testCase, trLocale);
+////                    if (result.hasError()) {
+////                        return result;
+////                    }
+//                }
+
+                tr = testRunRep.getByTestSetIdAndTestCaseIdAndLocale(testSetId, testCase.getId(), trLocale);
+                if (tr == null) {
+                    retInsertTestRun = saveNewTestRunInfo(testSetId, testCase, trLocale);
+                    if (retInsertTestRun.hasError()) {
+                        log.error(ErrorConst.getErrorLogMsg(funcName, retInsertTestRun));
+                        return new Result(retInsertTestRun);
+                    } else {
+                        bInsertNewTestRun = true;
                     }
                 }
 
@@ -257,35 +279,41 @@ public class TestRunServiceImpl implements TestRunService {
                 try {
                     EnumDef.TESTCASE_IMP_REPLACE_SUCC enumItem = EnumDef.getEnumTypeByCode(EnumDef.TESTCASE_IMP_REPLACE_SUCC.class, Integer.parseInt(replaceTestRunFlag));
                     switch (enumItem) {
-                        case IGNORE:
+                        case IGNORE: // Not Update TestRun
                             updatedTestCase = null;
                             break;
-                        case UPDATETC:
+                        case UPDATETC: // Only update TC
                             newTC = TestCaseFactory.mergeTestCaseByExcel(testCase, t);
                             updatedTestCase = testCaseRep.saveAndFlush(newTC);
                             break;
-                        case BOTHUPDATE:
+                        case BOTHUPDATE: // Update TC & TRun
                             newTC = TestCaseFactory.mergeTestCaseByExcel(testCase, t);
-
                             updatedTestCase = testCaseRep.saveAndFlush(newTC);
 
-                            if (tr != null) {
-                                if (trLocale.contains(",")) {
-                                    String locale;
-                                    String[] locales = trLocale.split(",");
-                                    for (String loc : locales) {
-                                        locale = loc.trim();
-                                        result = saveNewTestRunInfo(testSetId, testCase, locale);
-                                        if (result.hasError()) {
-                                            return result;
-                                        }
-                                    }
-                                }
-                                result = saveNewTestRunInfo(testSetId, updatedTestCase, trLocale);
-                                if (result.hasError()) {
-                                    return result;
+                            if (bInsertNewTestRun == false) {
+                                Result retUpdTestRun = saveNewTestRunInfo(testSetId, updatedTestCase, trLocale);
+                                if (retUpdTestRun.hasError()) {
+                                    return retUpdTestRun;
                                 }
                             }
+
+//                            if (tr != null) {
+//                                if (trLocale.contains(",")) {
+//                                    String locale;
+//                                    String[] locales = trLocale.split(",");
+//                                    for (String loc : locales) {
+//                                        locale = loc.trim();
+//                                        result = saveNewTestRunInfo(testSetId, testCase, locale);
+//                                        if (result.hasError()) {
+//                                            return result;
+//                                        }
+//                                    }
+//                                }
+//                                result = saveNewTestRunInfo(testSetId, updatedTestCase, trLocale);
+//                                if (result.hasError()) {
+//                                    return result;
+//                                }
+//                            }
                             break;
                     }
                 } catch (Exception e) {

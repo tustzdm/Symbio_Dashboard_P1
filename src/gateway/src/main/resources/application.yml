@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://192.168.170.100:3306/phase1_dev?serverTimezone=GMT%2b8
+    url: jdbc:mysql://192.168.170.100:3306/phase1_dev?useUnicode=true&characterEncoding=utf8
     username: root
     password: 'symbio@2018'
     testWhileIdle:  true

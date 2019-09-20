@@ -153,8 +153,12 @@ public class ReleaseServiceImpl implements ReleaseService {
 
             try {
                 // Save or update
-                releaseRep.saveAndFlush(release);
-                result = new Result(strMsg);
+                release = releaseRep.saveAndFlush(release);
+
+                Map<String, Integer> map = new HashMap<>();
+                map.put("id", release.getId());
+
+                result = new Result(map);
             } catch (Exception e) {
                 e.printStackTrace();
                 if (e.getMessage().contains("release_productid_name")) {

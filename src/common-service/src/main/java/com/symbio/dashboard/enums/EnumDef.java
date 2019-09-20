@@ -575,9 +575,9 @@ public class EnumDef {
      * @return
      */
     public enum TESTCASE_IMP_REPLACE_SUCC implements IDictEnum {
-        UPDATETC(2, "Update Test Case Only"),
-        BOTHUPDATE(1, "Update Test Case and Test Run"),
-        IGNORE(0, "Neither update");
+        IGNORE(0, "Neither update"),
+        UPDATETC(1, "Update Test Case Only"),
+        BOTHUPDATE(2, "Update Test Case and Test Run");
 
         private int code;
         private String value;
