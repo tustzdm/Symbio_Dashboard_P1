@@ -17,13 +17,12 @@
             <el-card class="listHead" shadow="never" style="padding-right:5%">
                 <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Testcase List</h2>
                 <el-button @click="add" style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
-                    + Add Testcase
+                    + Import Testcase
                 </el-button>
             </el-card>
         </div>
         <el-card shadow="hover" style="border:none">
             <el-table :data="dataList" @selection-change="handleSelectionChange" style="width: 100%;height: 100%;text-align:center">
-                <el-table-column type="selection" width="50px"></el-table-column>
                 <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" sortable :label="item.label">
                     <template slot-scope="scope">
                         <div v-if="item.field!='detailSteps'">
@@ -35,7 +34,7 @@
                             <el-dialog title="Steps Detail" :visible.sync="stepVisible" width="30%" :before-close="handleClose">
                                 {{scope.row[item.field]}}
                                 <span slot="footer" class="dialog-footer">
-                                    <el-button type="primary" @click="stepVisible = false">Confirm</el-button>
+                                    <el-button type="primary" @click="stepVisible = false">OK</el-button>
                                 </span>
                             </el-dialog>
 

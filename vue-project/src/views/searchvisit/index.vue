@@ -25,7 +25,7 @@
                     <img :src="scope.row.screenshot" class="el-img-custom" />
                 </template>
             </el-table-column> -->
-             <el-table-column label="" width="80">
+             <el-table-column v-if="run" label="" width="80">
                 <i class="el-icon-loading"></i>
             </el-table-column>
             <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" sortable :label="item.label">
@@ -77,7 +77,8 @@ export default {
             pageSize: 20,
             currentPage: 1,
             tableColownms: {},
-            statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip']
+            statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
+            run:false
         }
     },
     components: {
@@ -178,12 +179,14 @@ export default {
             this.getTestManagerInfo()
         },
         handleSelectionChange(val) {
-            this.multipleSelection = val
+            this.multipleSelection = val       
+            console.log(this.multipleSelection)
         },
         addShow() {
             this.addPartShow = true
         },
         getTableData(val) {
+            this.run = false;
             this.dataList = val.cd.data;
             this.tableColownms = val.cd.columns;
             console.log(22222);

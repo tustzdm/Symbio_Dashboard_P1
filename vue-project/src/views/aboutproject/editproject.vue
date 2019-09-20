@@ -24,7 +24,7 @@
                         <option :value="user.id" v-for="user in userList">{{user.fullName}}</option>
                     </select>
                     <input type="text" name="" id="" v-if="item.type === 'calender'">
-                    <p v-if="item.type === 'calender'">sdssssssssssssssssssss</p>
+                    <p v-if="item.type === 'calender'"></p>
                     <el-date-picker v-model="product[item.key]" v-if="item.type === 'calendar'" placeholder="Choose Date"></el-date-picker>
                     <el-input type="textarea" v-model="product[item.key]" :autosize="{ minRows: 4}" v-if="item.type == 'textarea'" :maxlength="JSON.parse(item.constCondition).maxLength" show-word-limit></el-input>
                 </el-col>

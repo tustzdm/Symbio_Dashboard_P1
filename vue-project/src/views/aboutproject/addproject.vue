@@ -29,12 +29,18 @@
         </el-form>
         <div class="sbumitArea">
             <span>
-                <!-- <button class="saveButton" style="border-radius:10px"> asdfas</button> -->
                 <el-button class="saveButton" type="primary" @click="onSubmit">Save</el-button>
                 <el-button class="cancelButton" @click="onCancel">Cancel</el-button>
             </span>
         </div>
     </el-card>
+    <el-dialog title="提示" :visible.sync="toNextPage" width="30%" :before-close="handleClose">
+        <span>Operation Success!</span>
+        <span slot="footer" class="dialog-footer">
+            <el-button @click="continueAdd">Continue to add</el-button>
+            <el-button type="primary" @click="toNextPage = false">Back</el-button>
+        </span>
+    </el-dialog>
 </el-col>
 </template>
 
@@ -57,7 +63,10 @@ export default {
             fatherReleaseList: '',
             fatherProductList: '',
             fatherProductId: '',
-            fatherReleaseId:''
+            fatherReleaseId: '',
+            toNextPage: false,
+            newId:'',
+            childPage:["Release","TestSet"]
         }
     },
     created() {
@@ -73,15 +82,15 @@ export default {
             this.uiList = res.cd.uiInfo;
             // this.product = res.cd.data;
             this.product.productId = this.fatherProductId; //add release时带的productID   
-            
-             this.product.releaseId = this.fatherReleaseId; //add release时带的productID  
+
+            this.product.releaseId = this.fatherReleaseId; //add release时带的productID  
             this.fatherReleaseList = res.cd.releaseList;
             this.fatherProductList = res.cd.productList;
         });
     },
     watch: {
         product: function (val) {
-            this.Fetch(`/navigation/getReleaseList?token=1&productId=${this.product.productId}`, { 
+            this.Fetch(`/navigation/getReleaseList?token=1&productId=${this.product.productId}`, {
                 method: "GET"
             }).then(res => {
 
@@ -113,8 +122,10 @@ export default {
                 if (ec != '0') {
                     alert("Error Code:" + res.data.ec + ", Error Message:" + res.data.em);
                 } else {
-                    this.$message.success("Operation Success！");
-                    this.$router.go(-1);
+                    this.toNextPage = true;
+                    this.newId = res.data.cd.id
+                    // this.$message.success("Operation Success！");
+                    // this.$router.go(-1);
                 }
             }).catch(err => {
                 alert(err);
@@ -129,6 +140,34 @@ export default {
                 strArr[i] = strArr[i].charAt(0).toUpperCase() + strArr[i].substring(1);
             }
             return strArr.join('');
+        },
+
+        handleClose(done) {
+            this.$confirm('确认关闭？')
+                .then(_ => {})
+                .catch(_ => {});
+        },
+        continueAdd() {
+            this.toNextPage = false;
+            var queryCon ={}
+            if(this.pageType == "Product"){
+                queryCon={
+                    pageType: 'Release',
+                    productId: this.newId
+                }
+            }else if(this.pageType == "Release"){
+                queryCon={
+                    pageType: 'TestSet',
+                    productId: this.productId,
+                    releaseId: this.newId
+                }
+            }
+            this.$router.push({
+                path: '/addproject/index',
+                name: 'addproject',
+                query:queryCon
+            })
+               window.location.reload();//这里router跳转之后页面不刷新，暂且使用这种方式
         }
     }
 }
