@@ -6,6 +6,7 @@ import com.symbio.dashboard.constant.CommonDef;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.dao.*;
 import com.symbio.dashboard.dto.FilePathDTO;
+import com.symbio.dashboard.dto.TestResultUiDTO;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.ParseResultSummary;
@@ -93,7 +94,7 @@ public class TestResultServiceImpl implements TestResultService {
 
             TestResult updTR = testResultDao.updateTestResult(testResult);
 
-            processScreenShot(prs, tr, testMethod.getLogs(), dtoFilePathInfo);
+            processScreenShot(prs, updTR.getId(), testMethod.getLogs(), dtoFilePathInfo);
 
             if (testMethod.getLogs().size() > 0) {
                 updTR.setScreenShotFlag(EnumDef.ENTITY_BOOL.YES.getCode());
@@ -111,7 +112,7 @@ public class TestResultServiceImpl implements TestResultService {
     }
 
     public Integer removeScreenShot(Integer testRunId) {
-        testRunDao.removeScreenShotByTestRunId(testRunId);
+        testRunDao.removeScreenShotByTestResultId(testRunId);
         return 0;
     }
 
@@ -119,11 +120,11 @@ public class TestResultServiceImpl implements TestResultService {
      * Save or Update relevant logs info for the Test Run
      *
      * @param prs
-     * @param testRun
+     * @param testResultId
      * @param logs
      * @return
      */
-    protected Result<Integer> processScreenShot(ParseResultSummary prs, TestRun testRun, List<Logs> logs, FilePathDTO dtoFilePathInfo) {
+    protected Result<Integer> processScreenShot(ParseResultSummary prs, Integer testResultId, List<Logs> logs, FilePathDTO dtoFilePathInfo) {
 
         Result<Integer> retResult = new Result();
 
@@ -132,8 +133,8 @@ public class TestResultServiceImpl implements TestResultService {
         }
 
         // Step1 - Remove screenshot if possible
-        Integer testRunId = testRun.getId();
-        testRunDao.removeScreenShotByTestRunId(testRunId);
+        //Integer testRunId = testRun.getId();
+        testRunDao.removeScreenShotByTestResultId(testResultId);
 
         // Step2 - insert new screen shot
         Logs log = null;
@@ -149,7 +150,7 @@ public class TestResultServiceImpl implements TestResultService {
             }
 
             // Step3 - Get ready
-            ss = ScreenShotFactory.createNew(workPath, testRunId, i, log, dtoFilePathInfo);
+            ss = ScreenShotFactory.createNew(workPath, testResultId, i, log, dtoFilePathInfo);
 
             // Step4 - upload file
             processScreenshotFiles(ss);
@@ -346,5 +347,26 @@ public class TestResultServiceImpl implements TestResultService {
         return retResult;
     }
 
+    @Override
+    public Result<TestResultUiDTO> getTestResultInfoByTestRunId(Integer userId, String locale, Integer testRunId) {
+        String funcName = "TestResultServiceImpl.getTestResultInfoByTestRunId()";
 
+        Result<TestResultUiDTO> retResult = new Result();
+
+        TestResult tResult = testResultDao.getTestResultByTestRunId(testRunId);
+        if (CommonUtil.isEmpty(tResult)) {
+            log.warn(ErrorConst.getWarningLogMsg(funcName, "Could not find record by TestRun Id " + testRunId));
+            return retResult;
+        }
+
+        TestResultUiDTO testResultDTO = new TestResultUiDTO(locale, testRunId);
+        testResultDTO.setRole(7);
+        testResultDTO.setTestRunId(testRunId);
+        testResultDTO.setTestResult(tResult);
+
+        List<ScreenShot> listScreenShots = testResultDao.getScreenShotsByTestResultId(tResult.getId());
+        testResultDTO.setListScreenShots(listScreenShots);
+
+        return retResult;
+    }
 }

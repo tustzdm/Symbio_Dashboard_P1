@@ -23,4 +23,6 @@ public interface TestResultService {
     Result<FilePathDTO> getFilePathDTOByInfo(Integer testSetId, String testCaseId, String locale);
 
     Result<FilePathDTO> getFilePathDTOByInfo(TestRun testRun);
+
+    Result getTestResultInfoByTestRunId(Integer userId, String locale, Integer testRunId);
 }

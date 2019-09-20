@@ -221,9 +221,9 @@ public class TestRunDao {
         return data;
     }
 
-    public void removeScreenShotByTestRunId(Integer testRunId) {
+    public void removeScreenShotByTestResultId(Integer testResultId) {
         try {
-            screenshotRep.deleteByTestRunId(testRunId);
+            screenshotRep.deleteByTestResultId(testResultId);
         } catch (Exception e) {
             e.printStackTrace();
             log.warn(ErrorConst.getExceptionLogMsg("TestRunDao.removeScreenShotByTestRunId()", e));

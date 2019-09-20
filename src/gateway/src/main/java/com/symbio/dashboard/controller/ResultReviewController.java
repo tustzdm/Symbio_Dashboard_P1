@@ -8,6 +8,7 @@ import com.symbio.dashboard.dto.TestRunExcelDTO;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.service.FileUploadService;
 import com.symbio.dashboard.service.IssueService;
+import com.symbio.dashboard.service.TestResultServiceImpl;
 import com.symbio.dashboard.service.TestRunService;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.StringUtil;
@@ -15,10 +16,7 @@ import com.symbio.dashboard.validator.ImpTestCaseValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +44,8 @@ public class ResultReviewController extends BaseController {
     private FileUploadService fileService;
     @Autowired
     private IssueService issueService;
+    @Autowired
+    private TestResultServiceImpl testResultService;
 
     @RequestMapping("/getList")
     public Result getList(@RequestBody TestRunVO testRun) {
@@ -99,9 +99,10 @@ public class ResultReviewController extends BaseController {
     }
 
     @RequestMapping("/upload")
-    public Result upload(@RequestParam(value = "testSetId", required = false, defaultValue = "0") Integer testSetId,
-                         @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
-                         HttpServletRequest request) {
+    public Result importTestCaseExcel(@RequestParam(value = "token", required = false, defaultValue = "") String token,
+                                      @RequestParam(value = "testSetId", required = false, defaultValue = "0") Integer testSetId,
+                                      @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                      HttpServletRequest request) {
         String funcName = "ResultReviewController.upload()";
         log.debug(funcName + " Enter");
 
@@ -115,24 +116,25 @@ public class ResultReviewController extends BaseController {
             }
 
             Integer nTestTestSetId = 435; // testSetId
-            //if (testSetId != null && testSetId > 0) {
-            String fileName = retsaveFile.getCd();
+            if (testSetId != null && testSetId > 0) {
+                nTestTestSetId = testSetId;
+                String fileName = retsaveFile.getCd();
 
-            Result<List<TestRunExcelDTO>> retImportExcel = testRunService.importExcel(locale, nTestTestSetId, fileName);
-            if (retImportExcel.hasError()) {
-                log.error(ErrorConst.getWarningLogMsg(funcName, retImportExcel));
-                return retImportExcel;
-            } else {
-                Integer nTestRunCount = 0;
-                List<TestRunExcelDTO> listTestRun = retImportExcel.getCd();
-                if (!CommonUtil.isEmpty(listTestRun)) {
-                    nTestRunCount = listTestRun.size();
+                Result<List<TestRunExcelDTO>> retImportExcel = testRunService.importExcel(locale, nTestTestSetId, fileName);
+                if (retImportExcel.hasError()) {
+                    log.error(ErrorConst.getWarningLogMsg(funcName, retImportExcel));
+                    return retImportExcel;
+                } else {
+                    Integer nTestRunCount = 0;
+                    List<TestRunExcelDTO> listTestRun = retImportExcel.getCd();
+                    if (!CommonUtil.isEmpty(listTestRun)) {
+                        nTestRunCount = listTestRun.size();
+                    }
+                    retsaveFile.setCd(String.format("Test Run count: " + nTestRunCount));
                 }
-                retsaveFile.setCd(String.format("Test Run count: " + nTestRunCount));
+            } else {
+                return getResultArgs(locale, "000018", "TestSet ID");
             }
-//            } else {
-//                return getResultArgs(locale, "000018", "TestSet ID");
-//            }
         } catch (Exception e) {
             e.printStackTrace();
             log.error(ErrorConst.getExceptionLogMsg(funcName, e));
@@ -142,6 +144,28 @@ public class ResultReviewController extends BaseController {
         log.debug(funcName + " Exit");
         return retsaveFile;
     }
+
+    @GetMapping("/getTestResultInfo")
+    public Result getTestResultInfo(@RequestParam(value = "token") String token,
+                                    @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                    @RequestParam(value = "testRunId") Integer testRunId) {
+        String funcName = "ResultReviewController.getTestResultInfo()";
+        log.debug(funcName + " Enter");
+        log.debug("token = {}, locale = {}, testRunId = {}", token, locale, testRunId);
+
+        Integer userId = 0;
+
+        Result retTestResult = testResultService.getTestResultInfoByTestRunId(userId, locale, testRunId);
+        if (retTestResult.hasError()) {
+            log.error(ErrorConst.getErrorLogMsg(funcName, retTestResult));
+            return retTestResult;
+        }
+
+        log.debug(funcName + " Exit");
+        return retTestResult;
+    }
+
+    //==================================================================================================================
 
     /**
      * 实现文件上传
@@ -222,6 +246,7 @@ public class ResultReviewController extends BaseController {
         return retResult;
     }
 
+    @Deprecated
     @RequestMapping("/addProductIssue")
     public Result addProductIssue(@RequestParam(value = "productId") Integer productId) {
         log.trace("ResultReviewController.addBug() Enter");
@@ -234,6 +259,7 @@ public class ResultReviewController extends BaseController {
         return retResult;
     }
 
+    @Deprecated
     @RequestMapping("/addNewCategory")
     public Result addNewCategory(@RequestParam(value = "productId") Integer productId) {
         log.trace("ResultReviewController.addBug() Enter");

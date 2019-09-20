@@ -25,8 +25,8 @@ public class ScreenShot implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Integer id;
-    @Column(name = "testRunId", nullable = false)
-    private Integer testRunId;
+    @Column(name = "testResultId", nullable = false)
+    private Integer testResultId;
     @Column(name = "status")
     private Integer status;
     @Column(name = "step")
@@ -58,6 +58,8 @@ public class ScreenShot implements Serializable {
     private Integer fileSize;
     @Column(name = "thumbnailFilePath")
     private String thumbnailFilePath;
+    @Column(name = "thumbnailHttpPath")
+    private String thumbnailHttpPath;
     @Column(name = "thumbnailFileName")
     private String thumbnailFileName;
     @Column(name = "thumbnailFileSize")

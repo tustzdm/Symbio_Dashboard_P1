@@ -960,7 +960,8 @@ CREATE TABLE `issue_reason` (
 DROP TABLE IF EXISTS `screen_shot`;
 CREATE TABLE `screen_shot` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
-  `testRunId` int(10) unsigned NOT NULL COMMENT 'FK: [test_run].id',
+--  `testRunId` int(10) unsigned NOT NULL COMMENT 'FK: [test_run].id',
+  `testResultId` int(10) unsigned NOT NULL COMMENT 'FK: [test_result].id',
   `status` int(10) unsigned DEFAULT NULL COMMENT 'status. 0-unReviewed,1-pass,4-fail',
   `step` int(10) unsigned DEFAULT '0' COMMENT 'index of ss in the report file. 1,2,3....',
   `source` varchar(128) DEFAULT NULL COMMENT 'filename. sources/GUID.source.txt',
@@ -976,6 +977,7 @@ CREATE TABLE `screen_shot` (
   `fileName` varchar(255) DEFAULT NULL COMMENT '文件名',
   `fileSize` int(10) unsigned DEFAULT NULL COMMENT '照片大小，单位：字节',
   `thumbnailFilePath` varchar(255) DEFAULT NULL COMMENT 'thumbnail file path',
+  `thumbnailHttpPath` varchar(255) DEFAULT NULL COMMENT 'Inner work path for front-end for all resources',
   `thumbnailFileName` varchar(255) DEFAULT NULL COMMENT 'thumbnail file name',
   `thumbnailFileSize` int(10) unsigned DEFAULT NULL COMMENT 'thumbnail file size',
   `description` varchar(255) DEFAULT NULL COMMENT 'Description',

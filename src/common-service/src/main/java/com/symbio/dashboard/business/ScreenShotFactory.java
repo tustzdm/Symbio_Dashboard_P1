@@ -12,10 +12,10 @@ import java.util.Date;
 
 public class ScreenShotFactory {
 
-    public static ScreenShot createNew(String workPath, Integer testRunId, Integer index, Logs log, FilePathDTO dtoFilePathInfo) {
+    public static ScreenShot createNew(String workPath, Integer testResultId, Integer index, Logs log, FilePathDTO dtoFilePathInfo) {
         ScreenShot ss = new ScreenShot();
 
-        ss.setTestRunId(testRunId);
+        ss.setTestResultId(testResultId);
         ss.setStatus(0);
         ss.setStep(index);
         ss.setSource(log.getSource());

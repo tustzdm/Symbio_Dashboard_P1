@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 public interface ScreenShotRep extends JpaRepository<ScreenShot, Integer> {
@@ -13,5 +14,7 @@ public interface ScreenShotRep extends JpaRepository<ScreenShot, Integer> {
     void deleteById(Integer integer);
 
     @Transactional
-    void deleteByTestRunId(Integer id);
+    void deleteByTestResultId(Integer id);
+
+    List<ScreenShot> getByTestResultId(Integer testResultId);
 }
