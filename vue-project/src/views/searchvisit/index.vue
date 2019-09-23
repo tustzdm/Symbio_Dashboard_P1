@@ -29,12 +29,6 @@
                 <i class="el-icon-loading"></i>
             </el-table-column>
             <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" sortable :label="item.label">
-                <!-- <template v-show="item.field=='status'" slot-scope="scope">
-                    <div>
-                        <div style="height:18px;width:18px;border-radius:9px;float:left;margin-left:30px" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='-1'}"></div>
-                        {{scope.row.status}}
-                    </div>
-                </template> -->
                 <template slot-scope="scope">
                     <div v-if="!['status','screenshotFlag'].includes(item.field)">
                         {{scope.row[item.field]}}
@@ -78,7 +72,7 @@ export default {
             currentPage: 1,
             tableColownms: {},
             statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
-            run:false
+            run:true
         }
     },
     components: {
@@ -186,7 +180,6 @@ export default {
             this.addPartShow = true
         },
         getTableData(val) {
-            this.run = false;
             this.dataList = val.cd.data;
             this.tableColownms = val.cd.columns;
             console.log(22222);

@@ -30,14 +30,12 @@
                         </div>
                         <div v-if="item.field=='detailSteps'">
                             <el-button type="text" @click="stepVisible = true">Steps</el-button>
-
                             <el-dialog title="Steps Detail" :visible.sync="stepVisible" width="30%" :before-close="handleClose">
                                 {{scope.row[item.field]}}
                                 <span slot="footer" class="dialog-footer">
                                     <el-button type="primary" @click="stepVisible = false">OK</el-button>
                                 </span>
                             </el-dialog>
-
                         </div>
                     </template>
                 </el-table-column>
@@ -47,6 +45,17 @@
             <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="dataList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin: 10px 0" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
         </div>
         <div style="height:100px;width:100%;background:white"></div>
+        <el-dialog title="Import" :visible.sync="centerDialogVisible" width="30%" center>
+            <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/upload?token=1&testSetId=${this.testSetId}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+                <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
+                <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.excel file only, less than 500m</div>
+            </el-upload>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="centerDialogVisible = false">cancel</el-button>
+                <el-button type="primary" @click="centerDialogVisible = false">Confirm</el-button>
+            </span>
+        </el-dialog>
     </el-col>
 </el-row>
 </template>
@@ -75,7 +84,8 @@ export default {
             testsetId: '',
             dataList: [],
             tableColownms: {},
-            stepVisible: false
+            stepVisible: false,
+            centerDialogVisible:false
         }
     },
     components: {
@@ -106,15 +116,16 @@ export default {
             })
         },
         add() {
-            this.$router.push({
-                path: '/addproject/index',
-                name: 'addproject',
-                query: {
-                    pageType: 'TestSet',
-                    productId: this.productId,
-                    releaseId: this.releaseId
-                }
-            })
+            this.centerDialogVisible=true;
+            // this.$router.push({
+            //     path: '/addproject/index',
+            //     name: 'addproject',
+            //     query: {
+            //         pageType: 'TestSet',
+            //         productId: this.productId,
+            //         releaseId: this.releaseId
+            //     }
+            // })
         },
         getTestCases() {
             this.Fetch(`/testmgmt/getTestCaseList?token=1&testSetId=${this.testsetId}`, {
@@ -127,7 +138,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .manage-charts {
     width: 100%;
 }
@@ -148,5 +159,9 @@ export default {
     float: left;
     margin-left 2.3%;
     text-align: center;
+}
+
+.has-gutter th .cell {
+    font-family Poppins
 }
 </style>

@@ -112,10 +112,10 @@
             </el-dropdown>
         </div> -->
         <div class="manage-top-right">
-            <el-button class="btn-top" @click="runDialogVisible = true" style="background-color:#c2eaae;" size="mini">Run</el-button>
-            <el-button class="btn-top" style="background-color:rgb(246, 184, 184);" size="mini">Add Bug</el-button>
-            <el-button class="btn-top" style="background-color:rgb(190, 205, 223);" size="mini">Refresh</el-button>
-            <el-button class="btn-top" @click="centerDialogVisible = true" style="background-color:rgb(131, 150, 162);" size="mini">Import</el-button>
+            <el-button class="btn-top" @click="runDialogVisible = true" style="background-color:#73BF00;" size="mini">Run</el-button>
+            <el-button class="btn-top" style="background-color:#FF9797;" size="mini">Add Bug</el-button>
+            <el-button class="btn-top" style="background-color:#5CADAD;" size="mini">Refresh</el-button>
+            <el-button class="btn-top" @click="centerDialogVisible = true" style="background-color:#FF8040;" size="mini">Import</el-button>
             <div class="select" style="float:right; margin-left:30px">
                 <el-dropdown trigger="click">
                     <span class="el-dropdown-link">
@@ -136,7 +136,7 @@
     </div>
     <!-- import dialog -->
     <el-dialog title="Import" :visible.sync="centerDialogVisible" width="30%" center>
-        <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/upload?token=1&testSetId=${this.testSetId}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+        <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="upLoadUrl" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
             <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.excel file only, less than 500m</div>
@@ -170,7 +170,7 @@ export default {
     name: 'top',
     data() {
         return {
-            
+            upLoadUrl: '/api/result/upload',
             productName: 'Product',
             releaseName: 'Release',
             testSetName: 'TestSet',
@@ -184,7 +184,6 @@ export default {
             tableData: '',
             centerDialogVisible: false,
             runDialogVisible: false,
-            upLoadUrl: `/api/result/upload?token=1&testSetId=${this.testSetId}`,
             fileList: [{
                 name: 'test111.xlsx',
                 url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'

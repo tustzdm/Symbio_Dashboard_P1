@@ -63,10 +63,6 @@
 
 
 
-
-
-
-
 /* testmanagement manage-top style reset */
 .manage-top .el-card__body{
     padding: 0
@@ -102,3 +98,14 @@
 .manage-tabel .has-gutter th:first-child {
   padding-right: 150px;
 }
+
+.listHead{
+  font-family:Poppins
+}
+.listHead button{
+  font-weight: bold;
+}
+tbody tr td .cell{
+  font-family:Poppins;
+}
+
