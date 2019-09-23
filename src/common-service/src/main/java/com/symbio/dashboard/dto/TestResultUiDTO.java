@@ -1,6 +1,5 @@
 package com.symbio.dashboard.dto;
 
-import com.symbio.dashboard.model.ScreenShot;
 import com.symbio.dashboard.model.TestResult;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 本类作为 TestResult Info 的接口数据类
@@ -22,7 +22,7 @@ public class TestResultUiDTO implements Serializable {
     private Integer testRunId;
 
     private TestResult testResult;
-    private List<ScreenShot> listScreenShots;
+    private List<Map<String, Object>> listScreenShots;
 
     //private List<Map<String, Object>> productList;
 

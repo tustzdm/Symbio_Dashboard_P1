@@ -27,7 +27,7 @@ public class ZipTransferTask {
 
     @Async
     @Scheduled(cron = "0 0/5 * * * ? ")
-//    @Scheduled(cron = "0/30 * * * * ? ")
+    //@Scheduled(cron = "0/30 * * * * ? ")
     public void processReportZipFile() {
         log.debug("ZipTransferTask.processReportZipFile() Enter");
 
@@ -44,9 +44,9 @@ public class ZipTransferTask {
     }
 
     @Async
-    //@Scheduled(cron = "0 0/3 * * * ? ")
-//    @Scheduled(cron = "0/10 * * * * ? ")
-    @Scheduled(cron = "0 0 0/1 * * ? ")
+    @Scheduled(cron = "0 0/3 * * * ? ")
+    //@Scheduled(cron = "0/10 * * * * ? ")
+    //@Scheduled(cron = "0 0 0/1 * * ? ")
     public void processTestResultByUnzipReportFile() {
         log.debug("ZipTransferTask.processTestResultByUnzipReportFile() Enter");
         try {

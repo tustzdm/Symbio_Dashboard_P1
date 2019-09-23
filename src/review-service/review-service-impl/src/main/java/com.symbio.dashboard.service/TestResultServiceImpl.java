@@ -355,7 +355,7 @@ public class TestResultServiceImpl implements TestResultService {
 
         TestResult tResult = testResultDao.getTestResultByTestRunId(testRunId);
         if (CommonUtil.isEmpty(tResult)) {
-            log.warn(ErrorConst.getWarningLogMsg(funcName, "Could not find record by TestRun Id " + testRunId));
+            log.warn(ErrorConst.getWarningLogMsg(funcName, "Could not find TestResult record by TestRun Id " + testRunId));
             return retResult;
         }
 
@@ -365,7 +365,9 @@ public class TestResultServiceImpl implements TestResultService {
         testResultDTO.setTestResult(tResult);
 
         List<ScreenShot> listScreenShots = testResultDao.getScreenShotsByTestResultId(tResult.getId());
-        testResultDTO.setListScreenShots(listScreenShots);
+        testResultDTO.setListScreenShots(ScreenShotFactory.getScreenshotUIList(listScreenShots));
+
+        retResult.setCd(testResultDTO);
 
         return retResult;
     }

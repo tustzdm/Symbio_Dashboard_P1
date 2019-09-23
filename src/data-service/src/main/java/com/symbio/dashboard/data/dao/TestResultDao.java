@@ -52,16 +52,8 @@ public class TestResultDao {
         if (CommonUtil.isEmpty(listScreenShots)) {
             listScreenShots = new ArrayList<>();
         }
-        return new ArrayList<>();
+        return listScreenShots;
     }
-
-//    public List<ScreenShot> getScreenShotsByTestRunId(Integer testRunId) {
-//        List<ScreenShot> listScreenShots = screenShotRep.getByTestRunId(testRunId);
-//        if (CommonUtil.isEmpty(listScreenShots)) {
-//            listScreenShots = new ArrayList<>();
-//        }
-//        return listScreenShots;
-//    }
 
 }
 

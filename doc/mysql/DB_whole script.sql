@@ -960,7 +960,6 @@ CREATE TABLE `issue_reason` (
 DROP TABLE IF EXISTS `screen_shot`;
 CREATE TABLE `screen_shot` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'PK',
---  `testRunId` int(10) unsigned NOT NULL COMMENT 'FK: [test_run].id',
   `testResultId` int(10) unsigned NOT NULL COMMENT 'FK: [test_result].id',
   `status` int(10) unsigned DEFAULT NULL COMMENT 'status. 0-unReviewed,1-pass,4-fail',
   `step` int(10) unsigned DEFAULT '0' COMMENT 'index of ss in the report file. 1,2,3....',

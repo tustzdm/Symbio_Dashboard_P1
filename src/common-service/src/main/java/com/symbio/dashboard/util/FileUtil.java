@@ -41,7 +41,7 @@ public class FileUtil {
     }
 
     public static String getScreenShotAccessHttpDir(FilePathDTO dtoFilePathInfo) {
-        // mock/image/...
+        // mock/image/0_1/108_2_1/200/en_US/screenshots/{filename}
         return CommonDef.FOLDER_NAME_SCREENSHOT + getTestSetWorkPath(dtoFilePathInfo);
     }
 
@@ -64,6 +64,11 @@ public class FileUtil {
     public static String getSourceSubFolder(FilePathDTO dtoFilePathInfo) {
         // {company}_{productId}/{releaseId}_{testSetId}_{caseType}/{testCaseId}_{zipFile}/{locale}/source/
         return dtoFilePathInfo.getSourceFilePath();
+    }
+
+    public static String getScreenShotThumbnailAccessHttpDir(FilePathDTO dtoFilePathInfo) {
+        // mock/image/0_1/108_2_1/200/en_US/screenshots/thumbnail/{filename}
+        return CommonDef.FOLDER_NAME_SCREENSHOT + getTestSetWorkPath(dtoFilePathInfo) + CommonDef.THUMBNAIL;
     }
 
     public static String getThumbnailAbsolutePath(FilePathDTO dtoFilePathInfo) {
@@ -102,5 +107,9 @@ public class FileUtil {
             }
         }
         return strFilePath;
+    }
+
+    public static String getCombineHttpPath(String path, String fileName) {
+        return getCombineAbsolutePath(path, fileName).replace("\\", "/");
     }
 }

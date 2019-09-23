@@ -6,9 +6,10 @@ import com.symbio.dashboard.model.ScreenShot;
 import com.symbio.dashboard.model.json.Logs;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.FileUtil;
+import com.symbio.dashboard.util.WebUtil;
 
 import java.io.File;
-import java.util.Date;
+import java.util.*;
 
 public class ScreenShotFactory {
 
@@ -29,7 +30,7 @@ public class ScreenShotFactory {
 
             String strSSFileName = getReportJsonFileName(ss.getImage());
             ss.setHttpFilePath(
-                    FileUtil.getCombineAbsolutePath(
+                    FileUtil.getCombineHttpPath(
                             FileUtil.getScreenShotAccessHttpDir(dtoFilePathInfo), strSSFileName));
             //ss.setFilePath(FileUtil.getCombineAbsolutePath(FileUtil.getScreenShotAbsolutePath(dtoFilePathInfo), strSSFileName));
             ss.setFilePath(FileUtil.getScreenShotAbsolutePath(dtoFilePathInfo));
@@ -37,6 +38,8 @@ public class ScreenShotFactory {
             ss.setFileSize(0);
 
             // ss.setThumbnailFilePath(FileUtil.getCombineAbsolutePath(FileUtil.getThumbnailAbsolutePath(dtoFilePathInfo), strSSFileName));
+            ss.setThumbnailHttpPath(FileUtil.getCombineHttpPath(
+                    FileUtil.getScreenShotThumbnailAccessHttpDir(dtoFilePathInfo), strSSFileName));
             ss.setThumbnailFilePath(FileUtil.getThumbnailAbsolutePath(dtoFilePathInfo));
             ss.setThumbnailFileName(strSSFileName);
             ss.setThumbnailFileSize(0);
@@ -79,6 +82,42 @@ public class ScreenShotFactory {
                 String.format("%s%s%s", CommonDef.SCREENSHOTS, CommonDef.THUMBNAIL, File.separator));
 
         return strFileName;
+    }
+
+    /**
+     * Get ScreenShot Info for UI
+     *
+     * @param data
+     * @return
+     */
+    public static List<Map<String, Object>> getScreenshotUIList(List<ScreenShot> data) {
+        if (CommonUtil.isEmpty(data)) {
+            return new ArrayList<>();
+        }
+
+        List<Map<String, Object>> retListSS = new ArrayList<>();
+        Map<String, Object> mapScreenShot = new HashMap<>();
+        for (ScreenShot item : data) {
+            mapScreenShot = new HashMap<>();
+
+            mapScreenShot.put("id", item.getId());
+            mapScreenShot.put("status", item.getStatus());
+            mapScreenShot.put("step", item.getStep());
+            mapScreenShot.put("source", WebUtil.getItemValue(item.getSource()));
+            mapScreenShot.put("message", WebUtil.getItemValue(item.getMessage()));
+
+            mapScreenShot.put("fileName", WebUtil.getItemValue(item.getFileName()));
+            mapScreenShot.put("httpFilePath", WebUtil.getItemValue(item.getHttpFilePath()));
+            mapScreenShot.put("thumbnailHttpPath", WebUtil.getItemValue(item.getThumbnailHttpPath()));
+
+            mapScreenShot.put("description", WebUtil.getItemValue(item.getDescription()));
+            mapScreenShot.put("jiraTicket", WebUtil.getItemValue(item.getJiraTicket()));
+            //mapScreenShot.put("message", WebUtil.getItemValue(item));
+
+            retListSS.add(mapScreenShot);
+        }
+
+        return retListSS;
     }
 
 
