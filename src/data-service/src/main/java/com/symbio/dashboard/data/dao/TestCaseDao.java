@@ -9,6 +9,7 @@ import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.SysListSetting;
+import com.symbio.dashboard.model.TestCase;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
@@ -170,5 +171,10 @@ public class TestCaseDao {
         }
 
         return retResult;
+    }
+
+
+    public TestCase getById(Integer id) {
+        return testCaseRep.getById(id);
     }
 }

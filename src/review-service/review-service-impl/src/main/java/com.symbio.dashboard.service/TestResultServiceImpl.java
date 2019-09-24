@@ -9,10 +9,7 @@ import com.symbio.dashboard.dto.FilePathDTO;
 import com.symbio.dashboard.dto.TestResultUiDTO;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.Locales;
-import com.symbio.dashboard.model.ParseResultSummary;
-import com.symbio.dashboard.model.ScreenShot;
-import com.symbio.dashboard.model.TestResult;
-import com.symbio.dashboard.model.TestRun;
+import com.symbio.dashboard.model.*;
 import com.symbio.dashboard.model.json.Logs;
 import com.symbio.dashboard.model.json.TestMethods;
 import com.symbio.dashboard.util.CommonUtil;
@@ -55,6 +52,8 @@ public class TestResultServiceImpl implements TestResultService {
     private TestRunDao testRunDao;
     @Autowired
     private TestResultDao testResultDao;
+    @Autowired
+    private TestCaseDao testCaseDao;
 
     @Autowired
     private FileServiceImpl fileService;
@@ -353,9 +352,21 @@ public class TestResultServiceImpl implements TestResultService {
 
         Result<TestResultUiDTO> retResult = new Result();
 
+        TestRun testRun = testRunDao.getTestRunById(testRunId);
+        if (CommonUtil.isEmpty(testRun)) {
+            log.warn(ErrorConst.getWarningLogMsg(funcName, "Could not find TestRun record by Id " + testRunId));
+            return retResult;
+        }
+
         TestResult tResult = testResultDao.getTestResultByTestRunId(testRunId);
         if (CommonUtil.isEmpty(tResult)) {
             log.warn(ErrorConst.getWarningLogMsg(funcName, "Could not find TestResult record by TestRun Id " + testRunId));
+            return retResult;
+        }
+
+        TestCase testCase = testCaseDao.getById(testRun.getTestcaseId());
+        if (CommonUtil.isEmpty(testCase)) {
+            log.warn(ErrorConst.getWarningLogMsg(funcName, "Could not find TestCase record by TestRun Id " + testRunId));
             return retResult;
         }
 
@@ -363,6 +374,8 @@ public class TestResultServiceImpl implements TestResultService {
         testResultDTO.setRole(7);
         testResultDTO.setTestRunId(testRunId);
         testResultDTO.setTestResult(tResult);
+        testResultDTO.setTestCase(testCase);
+        testResultDTO.setTestRun(testRun);
 
         List<ScreenShot> listScreenShots = testResultDao.getScreenShotsByTestResultId(tResult.getId());
         testResultDTO.setListScreenShots(ScreenShotFactory.getScreenshotUIList(listScreenShots));

@@ -1,6 +1,8 @@
 package com.symbio.dashboard.dto;
 
+import com.symbio.dashboard.model.TestCase;
 import com.symbio.dashboard.model.TestResult;
+import com.symbio.dashboard.model.TestRun;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +23,11 @@ public class TestResultUiDTO implements Serializable {
     private Integer role;
     private Integer testRunId;
 
+    private TestCase testCase;
+    private TestRun testRun;
     private TestResult testResult;
+
+    private Map<String, Object> mapTestResult;
     private List<Map<String, Object>> listScreenShots;
 
     //private List<Map<String, Object>> productList;
