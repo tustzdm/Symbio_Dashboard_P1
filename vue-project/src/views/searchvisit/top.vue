@@ -112,9 +112,9 @@
             </el-dropdown>
         </div> -->
         <div class="manage-top-right">
-            <el-button class="btn-top" @click="runDialogVisible = true" style="background-color:#73BF00;" size="mini">Run</el-button>
-            <el-button class="btn-top" style="background-color:#FF9797;" size="mini">Add Bug</el-button>
-            <el-button class="btn-top" style="background-color:#5CADAD;" size="mini">Refresh</el-button>
+            <el-button class="btn-top" @click="runDialogVisible = true" style="background-color:#5CADAD" size="mini">Run</el-button>
+            <el-button class="btn-top" style="background-color:rgb(246, 184, 184)" size="mini">Add Bug</el-button>
+            <el-button class="btn-top" style="background-color:rgb(190, 205, 223);" size="mini">Refresh</el-button>
             <el-button class="btn-top" @click="centerDialogVisible = true" style="background-color:#FF8040;" size="mini">Import</el-button>
             <div class="select" style="float:right; margin-left:30px">
                 <el-dropdown trigger="click">
