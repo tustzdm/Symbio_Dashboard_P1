@@ -389,7 +389,7 @@ public class JenkinsServiceImpl implements JenkinsService {
         if (CommonUtil.isEmpty(newTEPId)) {
             newTEPId = listTEP.get(0).getId();
         }
-        dtoTepInfo.setTepId(tepId);
+        dtoTepInfo.setTepId(newTEPId);
         dtoTepInfo.setNameList(getNameList(listTEP));
 
         // Step2 - Get Job args that corresponds to TEP selected

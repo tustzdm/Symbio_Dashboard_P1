@@ -4,8 +4,10 @@ import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
 import com.symbio.dashboard.constant.CommonDef;
 import com.symbio.dashboard.constant.ErrorConst;
+import com.symbio.dashboard.dto.TEPInfoDTO;
 import com.symbio.dashboard.dto.TestRunExcelDTO;
 import com.symbio.dashboard.enums.Locales;
+import com.symbio.dashboard.jenkins.JenkinsService;
 import com.symbio.dashboard.service.FileUploadService;
 import com.symbio.dashboard.service.IssueService;
 import com.symbio.dashboard.service.TestResultServiceImpl;
@@ -46,6 +48,8 @@ public class ResultReviewController extends BaseController {
     private IssueService issueService;
     @Autowired
     private TestResultServiceImpl testResultService;
+    @Autowired
+    private JenkinsService jenkinsService;
 
     @RequestMapping("/getList")
     public Result getList(@RequestBody TestRunVO testRun) {
@@ -163,6 +167,27 @@ public class ResultReviewController extends BaseController {
 
         log.debug(funcName + " Exit");
         return retTestResult;
+    }
+
+    @RequestMapping("/getTEPInfo")
+    public Result getTEPInfo(@RequestParam(value = "token") String token,
+                             @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                             @RequestParam(value = "testSetId") Integer testSetId,
+                             @RequestParam(value = "tepId", required = false, defaultValue = "") Integer tepId) {
+        Result retResult = new Result();
+        try {
+            Integer userId = 1;
+            Result<TEPInfoDTO> resultJenkins = jenkinsService.getTEPInfo(userId, locale, testSetId, tepId);
+            if (resultJenkins.hasError()) {
+                retResult = new Result(resultJenkins);
+            } else {
+                retResult = resultJenkins;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return retResult;
     }
 
     //==================================================================================================================
