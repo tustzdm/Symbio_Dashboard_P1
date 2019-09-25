@@ -22,7 +22,7 @@
                                 <li>Case ID :</li>
                                 <li>Priority :</li>
                                 <li>Feture Area :</li>
-                                <li>Method of Execution:</li>
+                                <li>Case Type:</li>
                                 <!-- <li v-if="item!=null" v-for="(item,index) in testcase" :key="item">{{index}}:</li> -->
                             </ul>
                             <ul class="rightUl">
@@ -48,10 +48,34 @@
                 </div>
             </el-collapse-transition>
 
-            <div class="pictures">
+            <div class="pictures" style="padding-bottom:150px;overflow:hidden;">
                 <ul>
-                    <li v-for="item in screenshotList" :key="item.id" style="float:left;display:block;width:25%">
-                        <img class="thumbnail" src="../../assets/images/screenshots/thumbnail/44c8a33a-fce9-422a-87d4-1170c1d6c6c0.png" alt="">
+                    <!-- <li v-for="item in screenshotList" :key="item.id" style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/screenshot/1.png" alt="">
+                    </li> -->
+                     <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/screenshot/1.png" alt="">
+                    </li>
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/screenshot/2.png" alt="">
+                    </li>
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/screenshot/3.png" alt="">
+                    </li>
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/screenshot/4.png" alt="">
+                    </li>
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/screenshot/5.png" alt="">
+                    </li>
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/screenshot/6.png" alt="">
+                    </li>
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/screenshot/7.png" alt="">
+                    </li>
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/screenshot/8.png" alt="">
                     </li>
                 </ul>
             </div>
@@ -71,11 +95,11 @@ export default {
             testrun:{},
             arrowDown:true,
             statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
-            caseTypeArray:['Automation Test','Manual Test','API Test','Performance Test']
+            caseTypeArray:['Automation Test','Automation Test','API Test','Performance Test']
         }
     },
     created() {
-        this.Fetch(`http://192.168.170.100:9090/result/getTestResultInfo?token=1&testRunId=483`, {
+        this.Fetch(`/result/getTestResultInfo?token=1&testRunId=483`, {
             method: "GET"
         }).then(res => {
             console.log(res);
@@ -128,12 +152,8 @@ export default {
 
 .thumbnail {
     width: 100%;
-    border-right: 10px solid white;
+    border-right: 15px solid white;
     box-sizing: border-box;
-}
-
-li:last-child .thumbnail {
-    border: none
 }
 
 /* 控制不同状态case的颜色 */

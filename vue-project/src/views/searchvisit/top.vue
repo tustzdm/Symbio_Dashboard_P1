@@ -147,15 +147,33 @@
         </span>
     </el-dialog>
     <!-- run dialog -->
-    <el-dialog title="Runing Enviroment" :visible.sync="runDialogVisible" width="30%" center>
-        <div class="top" style="margin:25px 0">
-            <span style="padding-left:80px;font-family:Poppins;">Select TEP:</span>
-            <select value="1" id="" style="margin-left:20px;height:30px;width:200px">
-                <option >Web Automation</option>
-                <option selected="true" >Mobile Automation</option>
-                <option>Performance Automation</option>
-                <option>API Automation</option>
-            </select>
+    <el-dialog title="Runing Enviroment" :visible.sync="runDialogVisible" width="50%" center>
+        <div class="top" style="margin:25px 0;">
+            <ul style="text-align:center">
+                <li style="height:55px">
+                    <span style="font-family:Poppins;">TEP Name:</span>
+                    <select value="1" id="" style="margin-left:20px;height:30px;width:300px">
+                        <option v-for="item in tepnameList" :key="item.id">{{item.name}}</option>
+                    </select>
+                </li>
+                <li>
+                    <span style="font-family:Poppins;">TestText:</span>
+                    <input></input>
+                </li>
+                <li>
+                    <span style="font-family:Poppins;">TestBool:</span>
+                    <el-radio-group>
+                        <el-radio label="1">Yes</el-radio>
+                        <el-radio label="0">No</el-radio>
+                    </el-radio-group>
+                </li>
+                <li>
+                    <span style="font-family:Poppins;">TestBool:</span>
+                    <select value="1" id="" style="margin-left:20px;height:30px;width:300px">
+                        <option v-for="item in testSelectList" value="" :key="item.id">{{item.name}}</option>
+                    </select>
+                </li>
+            </ul>
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button @click="runDialogVisible = false">cancel</el-button>
@@ -184,6 +202,8 @@ export default {
             tableData: '',
             centerDialogVisible: false,
             runDialogVisible: false,
+            tepnameList: [],
+            testSelectList: [],
             fileList: [{
                 name: 'test111.xlsx',
                 url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
@@ -195,6 +215,14 @@ export default {
     },
     created() {
         this.getNavgationList();
+        this.Fetch(`/result/getTEPInfo?token=1&testSetId=1`, {
+            method: "GET"
+        }).then(res => {
+            console.log(res);
+            this.tepnameList = res.cd.nameList;
+            console.log(this.tepnameList)
+            this.testSelectList = res.cd.data
+        });
     },
     mounted() {
 
@@ -293,9 +321,9 @@ export default {
         },
 
         //run method
-        runConfirm(){
-            this.runDialogVisible =false;
-             this.Fetch(`/result/run`, {
+        runConfirm() {
+            this.runDialogVisible = false;
+            this.Fetch(`/result/run`, {
                 method: "POST",
                 body: {
                     "token": "123",
