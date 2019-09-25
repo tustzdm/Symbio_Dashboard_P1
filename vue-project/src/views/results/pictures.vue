@@ -8,20 +8,32 @@
                     <i @click="show3 = !show3;arrowDown=!arrowDown"  v-show="!arrowDown" class="el-icon-caret-top"></i>
                 </h2>
                 <div class="headRight">
-                    <el-button class="btn-top" @click="runDialogVisible = true" style="background-color:#FF9797;" size="mini"><i class="el-icon-back"></i> Back</el-button>
-                    <el-button class="btn-top" style="background-color:#73BF00;" size="mini"><i class="el-icon-edit"></i> Edit</el-button>
+                    <el-button class="btn-top" @click="runDialogVisible = true" style="background-color: rgb(190, 205, 223);" size="mini"><i class="el-icon-back"></i> Back</el-button>
+                    <el-button class="btn-top" style="background-color:rgb(246, 184, 184);" size="mini"><i class="el-icon-edit"></i> Edit</el-button>
                 </div>
             </el-card>
 
             <el-collapse-transition>
                 <div v-show="show3">
-                    <div class="transition-box" style="width:100%;border:1px solid red;overflow:hidden">
+                    <div class="transition-box" style="width:100%;overflow:hidden">
                         <div class="ulCon">
                             <ul class="leftUl">
-                                <li v-if="item!=null" v-for="(item,index) in testcase" :key="item">{{index}}:</li>
+                                <li>Auto Status :</li>
+                                <li>Case ID :</li>
+                                <li>Priority :</li>
+                                <li>Feture Area :</li>
+                                <li>Method of Execution:</li>
+                                <!-- <li v-if="item!=null" v-for="(item,index) in testcase" :key="item">{{index}}:</li> -->
                             </ul>
                             <ul class="rightUl">
-                               <li v-if="item!=null" v-for="(item) in testcase" :key="item">{{item}}</li>
+                              <li>
+                                <span :class="{auto_pass:testcase.caseStatus=='1',auto_block:testcase.caseStatus=='0',auto_failed:testcase.caseStatus=='4',auto_skip:testcase.caseStatus=='5'}">{{statusArray[testcase.caseStatus]}}</span>
+                              </li>
+                              <li>{{testcase.caseId}}</li>
+                              <li>{{testcase.priority}}</li>
+                              <li>{{testcase.featureArea}}</li>
+                              <li>{{caseTypeArray[testcase.caseType]}}</li>
+                               <!-- <li v-if="item!=null" v-for="(item) in testcase" :key="item">{{item}}</li> -->
                             </ul>
                         </div>
                         <div class="ulCon">
@@ -57,7 +69,9 @@ export default {
             screenshotList: [],
             testcase:{},
             testrun:{},
-            arrowDown:true
+            arrowDown:true,
+            statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
+            caseTypeArray:['Automation Test','Manual Test','API Test','Performance Test']
         }
     },
     created() {
@@ -89,14 +103,19 @@ export default {
 .ulCon{
   width:50%;
   float left
+  margin-top 15px
 }
 .ulCon .leftUl{
-  width:30%;
+  width:35%;
   float left
 }
 .ulCon .rightUl{
-  width:70%;
+  width:65%;
   float left
+}
+.ulCon li{
+  height 35px
+  line-height 35px
 }
 .ulCon .leftUl li{
   text-align:right;
@@ -115,5 +134,30 @@ export default {
 
 li:last-child .thumbnail {
     border: none
+}
+
+/* 控制不同状态case的颜色 */
+.auto_block {
+    background: rgb(122, 133, 161);
+    border-radius: 3px;
+    padding: 0 5px;
+}
+
+.auto_pass {
+    background: #02C874;
+    border-radius: 3px;
+    padding: 0 5px;
+}
+
+.auto_failed {
+    background: #FF5151;
+    border-radius: 3px;
+    padding: 0 5px;
+}
+
+.auto_skip {
+    background: #0072E3;
+    border-radius: 3px;
+    padding: 0 5px;
 }
 </style>
