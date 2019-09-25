@@ -149,8 +149,9 @@
     <!-- run dialog -->
     <el-dialog title="Runing Enviroment" :visible.sync="runDialogVisible" width="50%" center>
         <div class="top" style="margin:25px 0;">
-            <ul style="text-align:center">
-                <li style="height:55px">
+            
+            <ul class="runUl" style="text-align:center">
+                <li >
                     <span style="font-family:Poppins;">TEP Name:</span>
                     <select value="1" id="" style="margin-left:20px;height:30px;width:300px">
                         <option v-for="item in tepnameList" :key="item.id">{{item.name}}</option>
@@ -158,11 +159,11 @@
                 </li>
                 <li>
                     <span style="font-family:Poppins;">TestText:</span>
-                    <input></input>
+                    <el-input v-model="input" placeholder="" style="margin-left:20px;width:300px"></el-input>
                 </li>
                 <li>
                     <span style="font-family:Poppins;">TestBool:</span>
-                    <el-radio-group>
+                    <el-radio-group  style="margin-left:20px;width:300px">
                         <el-radio label="1">Yes</el-radio>
                         <el-radio label="0">No</el-radio>
                     </el-radio-group>
@@ -402,5 +403,11 @@ export default {
     line-height: 27px;
     padding: 0 15px;
     font-weight: bold;
+}
+
+.runUl li {
+    height 50px
+    line-height 50px
+    color black
 }
 </style>
