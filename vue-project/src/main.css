@@ -109,3 +109,15 @@ tbody tr td .cell{
   font-family:Poppins;
 }
 
+
+.el-dialog{
+  border-radius: 5px;
+}
+.el-dialog__header{
+  border-bottom: 1px solid lightgray
+}
+
+/* 修改所有的dialog的close */
+.el-dialog__close{
+  font-size: 25px
+}

@@ -11,7 +11,7 @@ export default function getData() {
         },
         legend: {
             orient: 'vertical',
-            data: ['Android', 'iOS', 'Windows', 'Mac', 'Web'],
+            data: ['Android', 'iOS', 'Windows', 'Mac', 'Tablet'],
             left: '10px',
             y: '10px'
         },
@@ -26,7 +26,7 @@ export default function getData() {
                     { value: randomize(), name: 'iOS' },
                     { value: randomize(), name: 'Windows' },
                     { value: randomize(), name: 'Mac' },
-                    { value: randomize(), name: 'Web' }
+                    { value: randomize(), name: 'Tablet' }
                 ],
                 color: ['#F9E8E0', '#F3D1CD', '#7A85A1', '#9EADC5', '#C9D4E3', '#E8E8E8'],
                 itemStyle: {

@@ -1,11 +1,11 @@
 <template>
 <div class="buy-root" style="width:85%;margin-left:7.5%">
     <!-- 两个部分mabage-top和(表格、翻页)，两者之间都用flex布局-->
-    <top @getTableData="getTableData($event)"></top>
+    <top @runStatus="runStatus($event)" @getTableData="getTableData($event)" ></top>
     <!-- manage-top end -->
 
     <el-card class="caseTabel" shadow="hover" style="border:none">
-        <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;height: 100%;text-align:center" :max-height="tableHeight">
+        <el-table  :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)"  @selection-change="handleSelectionChange" style="width: 100%;height: 100%;text-align:center" >
             <el-table-column type="selection" width="50px"></el-table-column>
             <!-- <el-table-column prop="status" sortable label="Status">
                 <template slot-scope="scope">
@@ -25,7 +25,7 @@
                     <img :src="scope.row.screenshot" class="el-img-custom" />
                 </template>
             </el-table-column> -->
-             <el-table-column v-if="run" label="" width="80">
+            <el-table-column v-if="run" label="" width="80">
                 <i class="el-icon-loading"></i>
             </el-table-column>
             <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" sortable :label="item.label">
@@ -38,7 +38,7 @@
                         <span style="float:left;display:inline-block">{{statusArray[scope.row[item.field]]}}</span>
                     </div>
                     <div v-if="item.field=='screenshotFlag'">
-                        <router-link :to="{ name: 'pictures'}">
+                        <router-link :to="{ name: 'pictures', query: { status:scope.row.status, caseId:scope.row.caseId}}">
                             <img v-if="scope.row[item.field]!=0" src="../../assets/images/screenshot-icon2.png" alt="">
                         </router-link>
                     </div>
@@ -55,10 +55,10 @@
 </template>
 
 <script>
-import {
-    getTestManager,
-    getProjectInfo
-} from '@/api/index'
+// import {
+//     getTestManager,
+//     getProjectInfo
+// } from '@/api/index'
 import storage from '@/utils/storage'
 import top from './top'
 export default {
@@ -72,7 +72,8 @@ export default {
             currentPage: 1,
             tableColownms: {},
             statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
-            run:true
+            run: false,
+            multipleSelection:[1,2]
         }
     },
     components: {
@@ -97,8 +98,6 @@ export default {
         //       });
     },
     mounted() {
-
-        this.getTestManagerInfo()
         window.onresize = () => {
             return (() => {
                 this.screenHeight = document.body.clientHeight
@@ -114,78 +113,29 @@ export default {
         }
     },
     methods: {
-        getTestManagerInfo() {
-            let params = {
-                autoStatus: this.autoStatus,
-                qastatus: this.qastatus,
-                columns: this.columns,
-                select1: this.select1,
-                select2: this.select2,
-                select3: this.select3,
-                pageSize: this.pageSize,
-                currentPage: this.currentPage
-            }
-            // getTestManager(params).then(res => {
-            //     this.dataList = res.data
-            // }) //mock 数据里的datalist
-        },
-        handleBtn(type) {
-            if (type != 'refresh') {
-                this.autoStatus = type
-            }
-            this.getTestManagerInfo()
-        },
-        handleSelect() {
-            this.getTestManagerInfo()
-        },
-        handleCommand(command) {
-            let [type, data] = command
-            if (type == 'add') {
-                this.$router.push({
-                    path: data,
-                    query: {
-                        type: 'add'
-                    }
-                })
-                return
-            }
-            if (type == 'p') {
-                this.versionInfo = data.children
-                storage.set('curProject', data)
-                this.proTitle = data.name
-            }
-            if (type == 'v') {
-                this.caseInfo = data.children
-                storage.set('curVersion', data)
-                this.verTitle = data.name
-            }
-            if (type == 'c') {
-                this.caseTitle = data.name
-                storage.set('curCase', data)
-            }
-        },
         currentChange(currentPage) {
             this.currentPage = currentPage
-            this.getTestManagerInfo()
         },
         sizeChange(size) {
             this.pageSize = size
-            this.getTestManagerInfo()
         },
         handleSelectionChange(val) {
-            this.multipleSelection = val       
-            console.log(this.multipleSelection)
-        },
-        addShow() {
-            this.addPartShow = true
+            this.multipleSelection = val;
+            console.log('select++++++++++++++');
+            console.log(this.multipleSelection);
         },
         getTableData(val) {
             this.dataList = val.cd.data;
             this.tableColownms = val.cd.columns;
-            console.log(22222);
             console.log(this.tableColownms);
             console.log(this.dataList)
-            console.log(222);
+            this.run = false;
+        },
+        runStatus(val) {
+            // if(this.multipleSelection.length<=0){
+            //     alert(1111)
+            // }
+            this.run = true;
         }
     }
 }

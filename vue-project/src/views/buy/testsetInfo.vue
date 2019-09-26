@@ -15,9 +15,9 @@
         </div>
         <div>
             <el-card class="listHead" shadow="never" style="padding-right:5%">
-                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Testcase List</h2>
+                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Test Case List</h2>
                 <el-button @click="add" style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
-                    + Import Testcase
+                    + Import Test Case
                 </el-button>
             </el-card>
         </div>
@@ -46,7 +46,7 @@
         </div>
         <div style="height:100px;width:100%;background:white"></div>
         <el-dialog title="Import" :visible.sync="centerDialogVisible" width="30%" center>
-            <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/upload?token=1&testSetId=${this.testSetId}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+            <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/upload?token=1&testSetId=${this.testsetId}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
                 <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
                 <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.excel file only, less than 500m</div>

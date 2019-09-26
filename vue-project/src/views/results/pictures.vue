@@ -8,7 +8,7 @@
                     <i @click="show3 = !show3;arrowDown=!arrowDown"  v-show="!arrowDown" class="el-icon-caret-top"></i>
                 </h2>
                 <div class="headRight">
-                    <el-button class="btn-top" @click="runDialogVisible = true" style="background-color: rgb(190, 205, 223);" size="mini"><i class="el-icon-back"></i> Back</el-button>
+                    <el-button class="btn-top" @click="back" style="background-color: rgb(190, 205, 223);" size="mini"><i class="el-icon-back"></i> Back</el-button>
                     <el-button class="btn-top" style="background-color:rgb(246, 184, 184);" size="mini"><i class="el-icon-edit"></i> Edit</el-button>
                 </div>
             </el-card>
@@ -27,9 +27,9 @@
                             </ul>
                             <ul class="rightUl">
                               <li>
-                                <span :class="{auto_pass:testcase.caseStatus=='1',auto_block:testcase.caseStatus=='0',auto_failed:testcase.caseStatus=='4',auto_skip:testcase.caseStatus=='5'}">{{statusArray[testcase.caseStatus]}}</span>
+                                <span :class="{auto_pass:status=='1',auto_block:status=='0',auto_failed:status=='4',auto_skip:status=='5'}">{{statusArray[status]}}</span>
                               </li>
-                              <li>{{testcase.caseId}}</li>
+                              <li>{{caseId}}</li>
                               <li>{{testcase.priority}}</li>
                               <li>{{testcase.featureArea}}</li>
                               <li>{{caseTypeArray[testcase.caseType]}}</li>
@@ -38,10 +38,19 @@
                         </div>
                         <div class="ulCon">
                             <ul class="leftUl">
-                                <li v-if="item!=null" v-for="(item,index) in testrun" :key="item">{{index}}:</li>
+                                <li>Test Run ID :</li>
+                                <li>Locale :</li>
+                                <li>QA Status :</li>
+                                <li>Bug Id:</li>
+                                <li>Bug Report :</li>
                             </ul>
                             <ul class="rightUl">
-                                <li v-if="item!=null" v-for="(item) in testrun" :key="item">{{item}}</li>
+                                <!-- <li v-if="item!=null" v-for="(item) in testrun" :key="item">{{item}}</li> -->
+                                <li>{{testrun.id}}</li>
+                              <li>{{testrun.locale}}</li>
+                              <li>{{testresult.qaStatus}}</li>
+                              <li>{{testresult.bugReportId}}</li>
+                               <li>{{testresult.bugReportTitle}}</li>
                             </ul>
                         </div>
                     </div>
@@ -93,7 +102,10 @@ export default {
             screenshotList: [],
             testcase:{},
             testrun:{},
+            testresult:{},
             arrowDown:true,
+            status:'',
+            caseId:'',
             statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
             caseTypeArray:['Automation Test','Automation Test','API Test','Performance Test']
         }
@@ -106,9 +118,17 @@ export default {
             this.screenshotList = res.cd.listScreenShots;
             this.testcase = res.cd.testCase;
             this.testrun = res.cd.testRun
+            this.testresult = res.cd.testResult;
+            this.status = this.$route.query.status;
+            this.caseId = this.$route.query.caseId;
         });
     },
-    computed: {}
+    computed: {},
+    methods:{
+      back(){
+        this.$router.go(-1)
+      }
+    }
 }
 </script>
 

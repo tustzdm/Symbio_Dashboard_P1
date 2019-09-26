@@ -9,21 +9,21 @@
       { required: item.isRequired == 1, message: `Please input ${item.key}`, trigger: 'blur' }
     ]" :key="item.id" :label="item.label+' :'" :prop="item.key">
                 <el-col :span="15">
-                    <el-input v-model="product[item.key]" maxlength="30" v-if="['text','Number','Text'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"></el-input>
-                    <select v-if="['list','SelectList'].indexOf(item.type) >= 0" v-model="product[item.key]">
+                    <el-input class="input_select" v-model="product[item.key]" maxlength="30" v-if="['text','Number','Text'].indexOf(item.type) >= 0" :placeholder="item.placeHolder"></el-input>
+                    <select class="input_select" v-if="['list','SelectList'].indexOf(item.type) >= 0" v-model="product[item.key]">
                         <option v-for="option in item.data" :value="option.code" :key="option.id">{{option.value}}</option>
                     </select>
-                    <select v-if="['productlist'].indexOf(item.type) >= 0" v-model="product.productId">
+                    <select class="input_select" v-if="['productlist'].indexOf(item.type) >= 0" v-model="product.productId">
                         <option v-for="item in fatherProductList" :value="item.id" :key="item.id">{{item.name}}</option>
                     </select>
-                    <select v-if="['releaselist'].indexOf(item.type) >= 0" v-model="product.releaseId">
+                    <select class="input_select" v-if="['releaselist'].indexOf(item.type) >= 0" v-model="product.releaseId">
                         <option v-for="item in fatherReleaseList" :value="item.id" :key="item.id">{{item.name}}</option>
                     </select>
-                    <select v-if="['user','User'].indexOf(item.type) >= 0" v-model="product[tranformStr(item.dbField)]">
+                    <select class="input_select" v-if="['user','User'].indexOf(item.type) >= 0" v-model="product[tranformStr(item.dbField)]">
                         <option :value="user.id" v-for="user in userList">{{user.fullName}}</option>
                     </select>
                     <el-date-picker v-model="product[item.key]" v-if="item.type === 'calendar'" placeholder="Choose Date"></el-date-picker>
-                    <el-input type="textarea" v-model="product[item.key]" :autosize="{ minRows: 4}" v-if="item.type == 'textarea'" :maxlength="JSON.parse(item.constCondition).maxLength" show-word-limit></el-input>
+                    <el-input class="input_select" type="textarea" v-model="product[item.key]" :autosize="{ minRows: 4}" v-if="item.type == 'textarea'" :maxlength="JSON.parse(item.constCondition).maxLength" show-word-limit></el-input>
                 </el-col>
             </el-form-item>
         </el-form>
@@ -34,7 +34,7 @@
             </span>
         </div>
     </el-card>
-    <el-dialog title="提示" :visible.sync="toNextPage" width="30%" :before-close="handleClose">
+    <el-dialog title="Tips:" :visible.sync="toNextPage" width="30%">
         <span>Operation Success!</span>
         <span slot="footer" class="dialog-footer">
             <el-button @click="continueAdd">Continue to add</el-button>
@@ -65,8 +65,8 @@ export default {
             fatherProductId: '',
             fatherReleaseId: '',
             toNextPage: false,
-            newId:'',
-            childPage:["Release","TestSet"]
+            newId: '',
+            childPage: ["Release", "TestSet"]
         }
     },
     created() {
@@ -93,7 +93,6 @@ export default {
             this.Fetch(`/navigation/getReleaseList?token=1&productId=${this.product.productId}`, {
                 method: "GET"
             }).then(res => {
-
                 console.log(res.cd);
                 this.fatherReleaseList = res.cd;
 
@@ -108,8 +107,9 @@ export default {
         }
     },
     methods: {
+
         inputTips(msg, locale) {
-            return (locale == 'en_US' || typeof locale == 'undefined') ? "Please input " + msg : "请输入" + msg;
+            return (locale == 'en_US' || typeof locale == 'undefined') ? "Please input " + msg : "Please input" + msg;
         },
         onSubmit() {
             let url = `/testmgmt/update${this.pageType}?token=111`;
@@ -141,22 +141,16 @@ export default {
             }
             return strArr.join('');
         },
-
-        handleClose(done) {
-            this.$confirm('确认关闭？')
-                .then(_ => {})
-                .catch(_ => {});
-        },
         continueAdd() {
             this.toNextPage = false;
-            var queryCon ={}
-            if(this.pageType == "Product"){
-                queryCon={
+            var queryCon = {}
+            if (this.pageType == "Product") {
+                queryCon = {
                     pageType: 'Release',
                     productId: this.newId
                 }
-            }else if(this.pageType == "Release"){
-                queryCon={
+            } else if (this.pageType == "Release") {
+                queryCon = {
                     pageType: 'TestSet',
                     productId: this.productId,
                     releaseId: this.newId
@@ -165,13 +159,36 @@ export default {
             this.$router.push({
                 path: '/addproject/index',
                 name: 'addproject',
-                query:queryCon
-            })
-               window.location.reload();//这里router跳转之后页面不刷新，暂且使用这种方式
+                query: queryCon
+            });
+
+            
+            this.pageType = this.$route.query.pageType;
+            this.fatherProductId = this.$route.query.productId;
+            this.fatherReleaseId = this.$route.query.releaseId;
+
+            this.Fetch(`/testmgmt/get${this.pageType}UiInfo?token=1&uiInfo=1&id=`, { //将所有的数据集合到一个借口里了，uiInfod对应pageType,id对应Product或者release的值
+                method: "GET"
+            }).then(res => {
+                console.log(res.cd);
+                this.userList = res.cd.userList;
+                this.uiList = res.cd.uiInfo;
+                // this.product = res.cd.data;
+                this.product.productId = this.fatherProductId; //add release时带的productID   
+
+                this.product.releaseId = this.fatherReleaseId; //add release时带的productID  
+                this.fatherReleaseList = res.cd.releaseList;
+                this.fatherProductList = res.cd.productList;
+            });
+            // window.location.reload();//这里router跳转之后页面不刷新，暂且使用这种方式
+
         }
     }
 }
 </script>
 
 <style lang="stylus" scoped>
+.input_select{
+    width:400px
+}
 </style>

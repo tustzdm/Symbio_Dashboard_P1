@@ -1,7 +1,6 @@
 <template>
 <el-card class="manage-top" shadow="hover" style="height:40px">
     <div>
-
         <div class="SiteSelect select">
             <el-dropdown trigger="click" @command="handleProductCommand">
                 <span class="el-dropdown-link">
@@ -112,7 +111,7 @@
             </el-dropdown>
         </div> -->
         <div class="manage-top-right">
-            <el-button class="btn-top" @click="runDialogVisible = true" style="background-color:#5CADAD" size="mini">Run</el-button>
+            <el-button class="btn-top" @click="runDialogVisible=true" style="background-color:#5CADAD" size="mini"><i class="el-icon-caret-right"></i> Run</el-button>
             <el-button class="btn-top" style="background-color:rgb(246, 184, 184)" size="mini">Add Bug</el-button>
             <el-button class="btn-top" style="background-color:rgb(190, 205, 223);" size="mini">Refresh</el-button>
             <el-button class="btn-top" @click="centerDialogVisible = true" style="background-color:#FF8040;" size="mini">Import</el-button>
@@ -142,42 +141,99 @@
             <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.excel file only, less than 500m</div>
         </el-upload>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="centerDialogVisible = false">cancel</el-button>
+            <el-button @click="centerDialogVisible = false">Cancel</el-button>
             <el-button type="primary" @click="centerDialogVisible = false">Confirm</el-button>
         </span>
     </el-dialog>
     <!-- run dialog -->
-    <el-dialog title="Runing Enviroment" :visible.sync="runDialogVisible" width="50%" center>
+    <el-dialog title="Select TEP" :visible.sync="runDialogVisible" width="50%" center>
         <div class="top" style="margin:25px 0;">
-            
-            <ul class="runUl" style="text-align:center">
-                <li >
-                    <span style="font-family:Poppins;">TEP Name:</span>
+
+            <!-- <ul class="runUl" style="text-align:center">
+                <li>
+                    <span style="font-family:Poppins;">TEP Name</span>
                     <select value="1" id="" style="margin-left:20px;height:30px;width:300px">
                         <option v-for="item in tepnameList" :key="item.id">{{item.name}}</option>
                     </select>
                 </li>
+                
                 <li>
-                    <span style="font-family:Poppins;">TestText:</span>
-                    <el-input v-model="input" placeholder="" style="margin-left:20px;width:300px"></el-input>
+                    <span style="font-family:Poppins;">BRANCH</span>
+                    <el-input placeholder="repository" style="margin-left:20px;width:300px" value="develop"></el-input>
                 </li>
-                <li>
-                    <span style="font-family:Poppins;">TestBool:</span>
-                    <el-radio-group  style="margin-left:20px;width:300px">
+                <-- <li>
+                    <span style="font-family:Poppins;">TestBool</span>
+                    <el-radio-group style="margin-left:20px;width:300px">
                         <el-radio label="1">Yes</el-radio>
                         <el-radio label="0">No</el-radio>
                     </el-radio-group>
+                </li> 
+                <li>
+                    <span style="font-family:Poppins;">Suite XML file</span>
+                    <el-input placeholder="xml file" style="margin-left:20px;width:300px" value="SampleSuite.xml"></el-input>
                 </li>
                 <li>
-                    <span style="font-family:Poppins;">TestBool:</span>
-                    <select value="1" id="" style="margin-left:20px;height:30px;width:300px">
-                        <option v-for="item in testSelectList" value="" :key="item.id">{{item.name}}</option>
-                    </select>
+                    <span style="font-family:Poppins;">TestRun ID</span>
+                    <el-input placeholder="Id of TestRun" style="margin-left:20px;width:300px" value="268">268</el-input>
                 </li>
-            </ul>
+            </ul> -->
+
+            <table style="width: 100%;">
+                <tr>
+                    <td>
+                        <div>
+                            <div style="width: 40%; float:left; text-align: right; margin-right:10px;margin-top:8px;height:30px;">
+                                <span style="font-family:Poppins;">TEP Name</span>
+                            </div>
+                            <div style="float:left; text-align:left;">
+                                <select value="1" id="" style="margin-left:20px;height:30px;width:300px">
+                                    <option v-for="item in tepnameList" :key="item.id">{{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <div style="width: 40%; float:left; text-align: right; margin-right:10px;margin-top:8px;height:30px;">
+                                <span style="font-family:Poppins;">BRANCH</span>
+                            </div>
+                            <div style="float:left; text-align:left;">
+                                <el-input placeholder="repository" style="margin-left:20px;width:300px" value="develop"></el-input>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <div style="width: 40%; float:left; text-align: right; margin-right:10px;margin-top:8px;height:30px;">
+                                <span style="font-family:Poppins;">Suite XML file</span>
+                            </div>
+                            <div style="float:left; text-align:left;">
+                                <el-input placeholder="xml file" style="margin-left:20px;width:300px" value="SampleSuite.xml"></el-input>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <div style="width: 40%; float:left; text-align: right; margin-right:10px;margin-top:8px;height:30px;">
+                                <span style="font-family:Poppins;">TestRun ID</span>
+                            </div>
+                            <div style="float:left; text-align:left;">
+                                <el-input placeholder="Id of TestRun" style="margin-left:20px;width:300px" value="268">268</el-input>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="runDialogVisible = false">cancel</el-button>
+            <el-button @click="runDialogVisible = false">Cancel</el-button>
             <el-button type="primary" @click="runConfirm">Run</el-button>
         </span>
     </el-dialog>
@@ -205,16 +261,13 @@ export default {
             runDialogVisible: false,
             tepnameList: [],
             testSelectList: [],
-            fileList: [{
-                name: 'test111.xlsx',
-                url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-            }, {
-                name: 'test222.xlsx',
-                url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-            }]
+            fatherSelectList: '',
+            fileList: []
         }
     },
+    props: ['selectList'],
     created() {
+        this.fatherSelectList = this.selectList;
         this.getNavgationList();
         this.Fetch(`/result/getTEPInfo?token=1&testSetId=1`, {
             method: "GET"
@@ -320,7 +373,16 @@ export default {
         uploadSuccess() {
             alert(response);
         },
-
+        // checkrun() {
+        //     console.log('2222222222123123123123')
+        //     console.log(this.fatherSelectList);
+        //     if (this.fatherSelectList.length == 0) {
+        //         alert('Select one option at least');
+        //         return;
+        //     } else {
+        //         this.runDialogVisible = true;
+        //     }
+        // },
         //run method
         runConfirm() {
             this.runDialogVisible = false;
@@ -333,6 +395,7 @@ export default {
                     "testSetId": this.testSetId
                 }
             }).then(res => {
+                this.$emit('runStatus', true);
                 setTimeout(() => {
                     this.$emit('getTableData', res);
                 }, 3000);
@@ -406,8 +469,6 @@ export default {
 }
 
 .runUl li {
-    height 50px
-    line-height 50px
-    color black
+    height 50px line-height 50px color black
 }
 </style>
