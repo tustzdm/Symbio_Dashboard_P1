@@ -85,7 +85,7 @@ export default {
             dataList: [],
             tableColownms: {},
             stepVisible: false,
-            centerDialogVisible:false
+            centerDialogVisible: false
         }
     },
     components: {
@@ -116,7 +116,7 @@ export default {
             })
         },
         add() {
-            this.centerDialogVisible=true;
+            this.centerDialogVisible = true;
             // this.$router.push({
             //     path: '/addproject/index',
             //     name: 'addproject',
@@ -131,8 +131,40 @@ export default {
             this.Fetch(`/testmgmt/getTestCaseList?token=1&testSetId=${this.testsetId}`, {
                 method: "GET",
             }).then(res => {
-                console.log(111111)
+                this.dataList = res.cd.data;
+                console.log(this.dataList)
+                this.tableColownms = res.cd.columns;
+                console.log(this.tableColownms)
             });
+        },
+
+        //import method
+        submitUpload() {
+            this.$refs.upload.submit();
+        },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+        },
+        uploadSuccess(res) {
+            console.log(res);
+            this.centerDialogVisible = false;
+            console.log(res)
+            if (res.ec == 0) {
+                this.$message({
+                    message: 'Import Success',
+                    type: 'success'
+                });
+
+            } else {
+                this.$message({
+                    message: `Error Code:${res.data.ec}, Error Message:"${res.data.em}`,
+                    type: 'warning'
+                });
+            }
+            this.getTestCases();
         }
     },
 }

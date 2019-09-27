@@ -135,7 +135,7 @@
     </div>
     <!-- import dialog -->
     <el-dialog title="Import" :visible.sync="centerDialogVisible" width="30%" center>
-        <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="upLoadUrl" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+        <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/upload?token=1&testSetId=${this.testSetId}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
             <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.excel file only, less than 500m</div>
@@ -370,8 +370,23 @@ export default {
         handlePreview(file) {
             console.log(file);
         },
-        uploadSuccess() {
-            alert(response);
+        uploadSuccess(res) {
+            this.centerDialogVisible = false;
+            console.log('asdfasdfasdfasdfasdf')
+            console.log(res)
+            if (res.ec == 0) {
+                this.$message({
+                    message: 'Import Success',
+                    type: 'success'
+                });
+
+            } else {
+                this.$message({
+                    message: `Error Code:${res.data.ec}, Error Message:"${res.data.em}`,
+                    type: 'warning'
+                });
+            }
+            this.getNavgationList();
         },
         // checkrun() {
         //     console.log('2222222222123123123123')
