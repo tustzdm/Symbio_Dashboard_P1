@@ -109,6 +109,7 @@ public class ResultReviewController extends BaseController {
                                       HttpServletRequest request) {
         String funcName = "ResultReviewController.upload()";
         log.debug(funcName + " Enter");
+        log.info("testSetId = {}", testSetId);
 
         Result<String> retsaveFile = new Result<String>();
 

@@ -1,9 +1,6 @@
 <template>
   <div class="tableContainer">
-    <link
-      href="https://fonts.googleapis.com/css?family=Alegreya|Crimson+Text&display=swap"
-      rel="stylesheet"
-    >
+
     <table>
       <thead>
         <tr class="tableHeader">

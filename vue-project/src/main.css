@@ -1,4 +1,14 @@
-@import url(https://fonts.googleapis.com/css?family=Poppins);
+/* @import url(https://fonts.googleapis.com/css?family=Poppins); */
+
+@font-face {
+  font-family: Poppins;
+  src: url('./assets/fonts/Poppins-Regular.ttf');
+}
+
+@font-face {
+  font-family: Alegreya;
+  src: url('./assets/fonts/Alegreya-Regular.ttf');
+}
 
 .panel {
   background-color: #fff;

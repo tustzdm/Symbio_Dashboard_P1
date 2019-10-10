@@ -493,7 +493,7 @@ CREATE TABLE `test_case` (
   `update_user_name` varchar(32) DEFAULT NULL COMMENT 'user name',
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'udate datetime',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_testcase_product_caseid_status` (`product_id`,`case_id`, `case_status`, `validation`),
+  UNIQUE KEY `unique_testcase_product_caseid_status` (`product_id`,`case_id`, `case_type`, `case_status`, `validation`),
   KEY `idx_test_case_productId_caseId` (`product_id`,`case_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 

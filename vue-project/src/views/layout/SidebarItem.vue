@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar-wrap">
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <!-- link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" -->
 
     <template v-for="(item,index) in routes">
       <!-- 单级 -->
