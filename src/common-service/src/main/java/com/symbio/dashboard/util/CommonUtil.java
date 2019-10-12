@@ -1,6 +1,7 @@
 package com.symbio.dashboard.util;
 
 import com.symbio.dashboard.enums.EnumDef;
+import com.symbio.dashboard.enums.SystemListSetting;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -13,9 +14,25 @@ public class CommonUtil {
     public CommonUtil() {
     }
 
+    public static String getMapKey(Map<String, Object> data, String key) {
+        return getMapKey(data, key, "");
+    }
+
+    public static String getMapKey(Map<String, Object> data, String key, String defaultValue) {
+        String strData = defaultValue;
+        try {
+            if (data != null) {
+                strData = data.get(key).toString();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return strData;
+    }
+
     public static String getCamelField(String dbField) {
-        String retField = dbField;
-        String[] arrField = dbField.trim().split("_");
+        String retField = decodeKeyFileName(dbField);
+        String[] arrField = retField.trim().split("_");
         for (int i = 1; i < arrField.length; i++) {
             arrField[i] = arrField[i].substring(0, 1).toUpperCase() + arrField[i].substring(1);
         }
@@ -110,12 +127,85 @@ public class CommonUtil {
         return listFields;
     }
 
+    @Deprecated
     public static List<String> getListByMergeString(String entityFields) {
         List<String> listFields = new ArrayList<String>();
 
         try {
             String[] arrEntityFields = entityFields.split(",");
             listFields = Arrays.asList(arrEntityFields);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listFields;
+    }
+
+    public static String checkKeyFieldName(String name) {
+        String retFieldName = name;
+
+        if ("status,release,".contains(name)) {
+            retFieldName = String.format("`%s`", name);
+        }
+
+        return retFieldName;
+    }
+
+    public static String decodeKeyFileName(String name) {
+        String retFieldName = name;
+
+        if (!isEmpty(name) && name.contains("`")) {
+            retFieldName = name.replace("`", "");
+        }
+
+        return retFieldName;
+    }
+
+    private static String getListFieldName(SystemListSetting listType, String entityField) {
+        String retFieldName = entityField;
+
+        switch (listType) {
+            default:
+                break;
+            case ImageCompare:
+//                if ("thumbnailHttpPath,httpFilePath".contains(entityField)) {
+//
+//                } else {
+//
+//                }
+                if (entityField.contains(".")) {
+                    String[] arrField = entityField.split("\\.");
+                    if (arrField.length == 2) {
+                        retFieldName = arrField[1];
+                    }
+                } else if ("thumbnailHttpPath,httpFilePath,id,".contains(entityField + ",")) {
+                    retFieldName = "";
+                }
+                break;
+        }
+
+        return decodeKeyFileName(retFieldName);
+    }
+
+    public static List<String> getListByMergeString(SystemListSetting listType, String entityFields) {
+        List<String> listFields = new ArrayList<String>();
+
+        try {
+            String[] arrEntityFields = entityFields.split(",");
+            switch (listType) {
+                default:
+                    listFields = Arrays.asList(arrEntityFields);
+                    break;
+                case ImageCompare:
+                    String fieldName = null;
+                    for (int i = 0; i < arrEntityFields.length; i++) {
+                        fieldName = getListFieldName(listType, arrEntityFields[i]);
+                        if (!CommonUtil.isEmpty(fieldName)) {
+                            listFields.add(fieldName);
+                        }
+                    }
+                    break;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

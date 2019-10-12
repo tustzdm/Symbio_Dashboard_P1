@@ -167,7 +167,7 @@ public class TestRunDao {
             retResult = new Result(testRunUiDTO);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("Exception happened while invoking ProductDao.getProductInfoByField()", e);
+            log.error("Exception happened while invoking TestRunDao.getTestRunMapInfoByField()", e);
             retResult = new Result("000002", e.getMessage());
         }
 

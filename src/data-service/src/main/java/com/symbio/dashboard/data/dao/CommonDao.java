@@ -127,6 +127,82 @@ public class CommonDao {
     return dbFields;
   }
 
+  public static List<String> getQueryFields(SystemListSetting listType, List<SysListSetting> listSetting) {
+    List<String> dbFields = new ArrayList<>();
+
+    boolean bFindId = false;
+
+    for (SysListSetting item : listSetting) {
+      if (!StringUtil.isEmpty(item.getField())) {
+        String strFieldInfo = item.getField();
+        if (strFieldInfo.contains(".")) {
+          String[] arrField = strFieldInfo.split("\\.");
+          if (arrField.length == 2) {
+            // Make field name regular
+            arrField[1] = CommonUtil.checkKeyFieldName(arrField[1]);
+            switch (listType) {
+              default:
+                //strFieldInfo = strFieldInfo;
+                break;
+              case ResultReview:
+                strFieldInfo = "tc." + arrField[1];
+                break;
+              case ImageCompare:
+                // not support src./dest.
+                strFieldInfo = "";
+                break;
+            }
+          }
+        } else {
+          // Make field name regular
+          strFieldInfo = CommonUtil.checkKeyFieldName(strFieldInfo);
+
+          switch (listType) {
+            default:
+              break;
+            case ResultReview:
+              strFieldInfo = "tr." + strFieldInfo;
+              break;
+            case ImageCompare:
+              strFieldInfo = "ss." + strFieldInfo;
+              break;
+          }
+        }
+
+        // Support removing field if need
+        if (!CommonUtil.isEmpty(strFieldInfo)) {
+          dbFields.add(strFieldInfo);
+        }
+
+
+        if (!bFindId && item.getField().equals("id")) {
+          bFindId = true;
+        }
+      }
+    }
+
+    if (!bFindId) {
+      switch (listType) {
+        default:
+          dbFields.add(0, "id");
+          break;
+      }
+    }
+
+    // Add extra fields if needed
+    switch (listType) {
+      default:
+        break;
+      case ImageCompare:
+        dbFields.add(0, "tr.locale");
+        dbFields.add("ss.thumbnailHttpPath");
+        dbFields.add("ss.httpFilePath");
+        break;
+    }
+
+    return dbFields;
+  }
+
 
   public static List<String> getQueryFieldsAppend(List<SysListSetting> listSetting, List<String> listAppendFields) {
     List<String> dbFields = getQueryFields(listSetting);

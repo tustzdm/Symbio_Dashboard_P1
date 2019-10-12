@@ -982,7 +982,9 @@ CREATE TABLE `screen_shot` (
   `description` varchar(255) DEFAULT NULL COMMENT 'Description',
   `jiraTicketId` varchar(32) DEFAULT NULL,
   `jiraTicket` varchar(3000) DEFAULT NULL,
-  `qaComment` varchar(3000) DEFAULT NULL,
+  `qaComment` varchar(3000) DEFAULT NULL, 
+  `review` varchar(255) DEFAULT NULL COMMENT 'review option',
+  `validation` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT '0-invalid,1-valid,4-delete,8-archived',
 
   `ssfield_int1` int(10) DEFAULT NULL COMMENT 'Field int',
   `ssfield_int2` int(10) DEFAULT NULL COMMENT 'Field int',

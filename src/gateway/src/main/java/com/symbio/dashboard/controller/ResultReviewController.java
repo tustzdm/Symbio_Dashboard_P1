@@ -8,10 +8,7 @@ import com.symbio.dashboard.dto.TEPInfoDTO;
 import com.symbio.dashboard.dto.TestRunExcelDTO;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.jenkins.JenkinsService;
-import com.symbio.dashboard.service.FileUploadService;
-import com.symbio.dashboard.service.IssueService;
-import com.symbio.dashboard.service.TestResultServiceImpl;
-import com.symbio.dashboard.service.TestRunService;
+import com.symbio.dashboard.service.*;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.StringUtil;
 import com.symbio.dashboard.validator.ImpTestCaseValidator;
@@ -50,6 +47,8 @@ public class ResultReviewController extends BaseController {
     private TestResultServiceImpl testResultService;
     @Autowired
     private JenkinsService jenkinsService;
+    @Autowired
+    private ResultReviewServiceImpl resultReviewService;
 
     @RequestMapping("/getList")
     public Result getList(@RequestBody TestRunVO testRun) {
@@ -74,6 +73,30 @@ public class ResultReviewController extends BaseController {
         }
 
         log.trace("ResultReviewController.getList() Exit");
+        return retResult;
+    }
+
+    @RequestMapping("/getReviewList")
+    public Result getReviewList(@RequestParam(value = "token") String token,
+                                @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                @RequestParam(value = "testRunId") Integer testRunId,
+                                @RequestParam(value = "trlocale") String trlocale,
+                                @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
+                                @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        log.trace("ResultReviewController.getReviewList() Enter");
+
+        Result retResult = new Result();
+        try {
+            Integer userId = 0;
+            retResult = resultReviewService.getList(userId, locale, testRunId, trlocale, pageIndex, pageSize);
+            if (retResult.hasError()) {
+                log.error(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        log.trace("ResultReviewController.getReviewList() Exit");
         return retResult;
     }
 
