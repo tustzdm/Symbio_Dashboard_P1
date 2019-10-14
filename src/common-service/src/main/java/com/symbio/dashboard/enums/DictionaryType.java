@@ -12,7 +12,12 @@ public enum DictionaryType {
   ColumnType("ColumnType"),
   TestSetType("TestSetType"),
   TestSetStatus("TestSetStatus"),
-  TestRunStatus("TestRunStatus");
+  TestRunStatus("TestRunStatus"),
+  JENKINS_JOB_STATUS("JenkinsJobStatus"),
+
+  // Support locale in the field
+  SCREEN_SHOT_STATUS_LOCALE("ScreenShotStatus"),
+  TEST_RESULT_STATUS_LOCALE("TestResultStatus");
 
   private DictionaryType(String type){
     this.type = type;

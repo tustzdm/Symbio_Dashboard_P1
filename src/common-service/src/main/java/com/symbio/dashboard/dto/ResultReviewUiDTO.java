@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -44,5 +45,11 @@ public class ResultReviewUiDTO implements Serializable {
         this.pageIndex = pageIndex == null ? 0 : pageIndex;
         this.pageSize = pageSize == null ? 20 : pageSize;
         this.sourceLocale = Locales.EN_US.toString();
+
+        this.listLocales = new ArrayList<>();
+        this.listStatus = new ArrayList<>();
+        this.columns = new ArrayList();
+        this.fields = new ArrayList<>();
+        this.data = new ArrayList();
     }
 }

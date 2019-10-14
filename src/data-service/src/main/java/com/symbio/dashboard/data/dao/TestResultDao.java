@@ -1,15 +1,13 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.repository.ScreenShotRep;
 import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.TestResultRep;
 import com.symbio.dashboard.data.repository.TestRunRep;
 import com.symbio.dashboard.dto.ResultReviewUiDTO;
-import com.symbio.dashboard.enums.ListColumns;
-import com.symbio.dashboard.enums.ListDataType;
-import com.symbio.dashboard.enums.Locales;
-import com.symbio.dashboard.enums.SystemListSetting;
+import com.symbio.dashboard.enums.*;
 import com.symbio.dashboard.model.ScreenShot;
 import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.TestResult;
@@ -44,6 +42,8 @@ public class TestResultDao {
     @Autowired
     private CommonDao commonDao;
     @Autowired
+    private DictionaryDao dictDao;
+    @Autowired
     private TestRunRep testRunRep;
     @Autowired
     private TestResultRep testResultRep;
@@ -64,7 +64,14 @@ public class TestResultDao {
     private final String RESULT_REVIEW_ITEM_LOCALE = "locale";
     private final String RESULT_REVIEW_ITEM_HTTPFILEPATH = "httpFilePath";
     private final String RESULT_REVIEW_ITEM_THUMBNAILHTTPPATH = "thumbnailHttpPath";
+    private static String VUE_DOMAIN_ADDRESS = null;
 
+    private String getVUEDomainHttp() {
+        if (VUE_DOMAIN_ADDRESS == null) {
+            VUE_DOMAIN_ADDRESS = commonDao.getConfigValueByKey(ProjectConst.VUE_DOMAIN_NAME); //  "https://vue.symbio.com.cn/";
+        }
+        return VUE_DOMAIN_ADDRESS;
+    }
 
     public TestResult updateTestResult(TestResult tr) {
         return testResultRep.saveAndFlush(tr);
@@ -131,7 +138,14 @@ public class TestResultDao {
             return commonDao.getTableNoDataArgsLocale(locale, "Test_Run", testRunId);
         }
 
-        //getData(testRunUiDTO, testRun);
+        // Get Status List info
+        List<Map<String, Object>> listStatus =
+                dictDao.getDicMapDataByTypeLocale(DictionaryType.SCREEN_SHOT_STATUS_LOCALE.getType(), locale);
+        resultReviewDTO.setListStatus(listStatus);
+
+        // Get Locale List info
+        List<Map<String, Object>> listLocales = getTestRunLocales(testRunId, locale);
+        resultReviewDTO.setListLocales(listLocales);
 
         // Fetch data from db
         String strFields = String.join(",", listFields);
@@ -412,8 +426,8 @@ public class TestResultDao {
 
         if (id != null && id > 0) {
             data.put("id", id);
-            data.put("url", url);
-            data.put("thumbnail", thumbnail);
+            data.put("url", getVUEDomainHttp() + url);
+            data.put("thumbnail", getVUEDomainHttp() + thumbnail);
         } else {
             data.put("id", 0);
             data.put("url", "");
@@ -421,6 +435,10 @@ public class TestResultDao {
         }
 
         return data;
+    }
+
+    private List<Map<String, Object>> getTestRunLocales(Integer testRunId, String locale) {
+        return new ArrayList<>();
     }
 
 }

@@ -54,5 +54,5 @@ public class ProjectConst {
     public static final String TESTCASE_IMP_LOCALE_DEFAULT = "TestCase_Import_Locale_Default";
     public static final String TESTCASE_IMP_FIELD_CASE_ID = "caseId";
 
-
+    public static final String VUE_DOMAIN_NAME = "Vue.Domain.Name";
 }

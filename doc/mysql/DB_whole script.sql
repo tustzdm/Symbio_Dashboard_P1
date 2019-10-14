@@ -154,6 +154,66 @@ INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`)
 INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
 	VALUES (260, 'ColumnTypeEnd', 'coltypeend', 'Column Type End', 'place holder for last of col type');
 
+INSERT INTO `dictionary` VALUES ('261', 'TestSetType', '1', 'Automation Test', '1', '');
+INSERT INTO `dictionary` VALUES ('262', 'TestSetType', '2', 'Manual Test', '1', '');
+INSERT INTO `dictionary` VALUES ('263', 'TestSetType', '4', 'API Test', '1', '');
+INSERT INTO `dictionary` VALUES ('264', 'TestSetType', '8', 'Performance Test', '1', '');
+INSERT INTO `dictionary` VALUES ('265', 'TestSetStatus', '0', 'Pending', '1', '');
+INSERT INTO `dictionary` VALUES ('266', 'TestSetStatus', '1', 'Ongoing', '1', '');
+INSERT INTO `dictionary` VALUES ('267', 'TestSetStatus', '2', 'Completed', '1', '');
+INSERT INTO `dictionary` VALUES ('270', 'TestRunStatus', '0', 'NotRun', '1', '');
+INSERT INTO `dictionary` VALUES ('271', 'TestRunStatus', '2', 'Success', '1', '');
+INSERT INTO `dictionary` VALUES ('272', 'TestRunStatus', '4', 'Failure', '1', '');
+INSERT INTO `dictionary` VALUES ('280', 'JenkinsJobStatus', '0', '', '1', 'Jenkins Stardard Status \'Pending\'');
+INSERT INTO `dictionary` VALUES ('281', 'JenkinsJobStatus', '1', 'Running', '1', 'Jenkins Stardard Status');
+INSERT INTO `dictionary` VALUES ('282', 'JenkinsJobStatus', '2', 'SUCCESS', '1', 'Jenkins Stardard Status');
+INSERT INTO `dictionary` VALUES ('283', 'JenkinsJobStatus', '3', 'FAILURE', '1', 'Jenkins Stardard Status');
+INSERT INTO `dictionary` VALUES ('284', 'JenkinsJobStatus', '4', 'ABORTED', '1', 'Jenkins Stardard Status');
+INSERT INTO `dictionary` VALUES ('285', 'JenkinsJobStatus', '5', 'Skipped', '1', 'logic status');
+INSERT INTO `dictionary` VALUES ('286', 'JenkinsJobStatus', '6', 'waiting', '1', 'logic status');
+INSERT INTO `dictionary` VALUES ('287', 'JenkinsJobStatus', '7', 'error', '1', 'logic status');
+
+-- 2019/10/14
+INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
+	VALUES (300, 'ScreenShotStatus', '0', '{"en_us":"Not Run","zh_cn": "未确认"}', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('ScreenShotStatus', '1', '{"en_us":"Pass","zh_cn": "通过"}', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('ScreenShotStatus', '4', '{"en_us":"Failed","zh_cn": "失败"}', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('ScreenShotStatus', '11', '{"en_us":"Conditional Pass","zh_cn": "部分通过"}', '');
+-- 2019/10/14
+INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
+	VALUES (310, 'TestResultStatus', '0', '{"en_us":"Not Run","zh_cn": "未确认"}', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('TestResultStatus', '1', '{"en_us":"Success","zh_cn": "通过"}', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('TestResultStatus', '4', '{"en_us":"Failed","zh_cn": "失败"}', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('TestResultStatus', '5', '{"en_us":"Skip","zh_cn": "Skip"}', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('TestResultStatus', '10', '{"en_us":"Test Not Required","zh_cn": "不适用"}', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('TestResultStatus', '11', '{"en_us":"Conditional Pass","zh_cn": "部分通过"}', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('TestResultStatus', '12', '{"en_us":"QA Support","zh_cn": "QA支持"}', '');
+	
+-- 2019/10/14
+
+
+INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
+	VALUES (300, 'ScreenShotStatus', '0', '{"en_us":"","zh_cn": ""}', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('ScreenShotStatus', '1', '{"en_us":"","zh_cn": ""}', '', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('ScreenShotStatus', '1', '{"en_us":"","zh_cn": ""}', '', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('ScreenShotStatus', '1', '{"en_us":"","zh_cn": ""}', '', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('ScreenShotStatus', '1', '{"en_us":"","zh_cn": ""}', '', '');
+
+
+>>>>>>> 7462a87... Update result/getReviewList interface
 
 DROP TABLE IF EXISTS `report_chart`;
 CREATE TABLE `report_chart` (

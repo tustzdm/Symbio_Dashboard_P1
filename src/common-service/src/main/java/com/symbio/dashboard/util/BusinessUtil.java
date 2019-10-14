@@ -9,7 +9,6 @@ import com.symbio.dashboard.model.Product;
 import com.symbio.dashboard.model.Release;
 import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.User;
-import org.json.JSONObject;
 
 import java.util.*;
 
@@ -97,17 +96,19 @@ public class BusinessUtil {
         mapColInfo = new HashMap<String, Object>();
 
         mapColInfo.put(ListColumns.KEY.getKey(), item.getKey());
-        String strColLabel = item.getLabel();
-        try {
-          JSONObject jsonLabel = new JSONObject(strColLabel);
-          if (locale == Locales.ZH_CN.toString()) {
-            mapColInfo.put(ListColumns.LABEL.getKey(), jsonLabel.get(strKeyCN));
-          } else {
-            mapColInfo.put(ListColumns.LABEL.getKey(), jsonLabel.get(strKeyEN));
-          }
-        } catch (Exception jsonE) {
-          jsonE.printStackTrace();
-        }
+//        String strColLabel = item.getLabel();
+//        try {
+//          JSONObject jsonLabel = new JSONObject(strColLabel);
+//          if (locale == Locales.ZH_CN.toString()) {
+//            mapColInfo.put(ListColumns.LABEL.getKey(), jsonLabel.get(strKeyCN));
+//          } else {
+//            mapColInfo.put(ListColumns.LABEL.getKey(), jsonLabel.get(strKeyEN));
+//          }
+//        } catch (Exception jsonE) {
+//          jsonE.printStackTrace();
+//        }
+        mapColInfo.put(ListColumns.LABEL.getKey(), CommonUtil.getJSONLocaleValue(item.getLabel(), locale));
+
         mapColInfo.put(ListColumns.TYPE.getKey(), item.getType());
         // Change field to CamelField for UI
         mapColInfo.put(ListColumns.FIELD.getKey(), EntityUtils.getMapFieldKey(WebUtil.getItemValue(item.getField())));

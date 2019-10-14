@@ -1,7 +1,9 @@
 package com.symbio.dashboard.util;
 
 import com.symbio.dashboard.enums.EnumDef;
+import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.enums.SystemListSetting;
+import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -143,7 +145,7 @@ public class CommonUtil {
     public static String checkKeyFieldName(String name) {
         String retFieldName = name;
 
-        if ("status,release,".contains(name)) {
+        if ("key,type,status,release,search,data,".contains(name)) {
             retFieldName = String.format("`%s`", name);
         }
 
@@ -263,5 +265,23 @@ public class CommonUtil {
             return true;
         }
         return false;
+    }
+
+    public static String getJSONLocaleValue(String value, String locale) {
+        String retValue = "";
+        if (isEmpty(value)) return retValue;
+
+        try {
+            String strLocale = locale;
+            if (isEmpty(locale)) {
+                strLocale = Locales.EN_US.toString();
+            }
+            JSONObject jsonLabel = new JSONObject(value);
+            retValue = jsonLabel.get(strLocale.toLowerCase()).toString();
+        } catch (Exception jsonE) {
+            jsonE.printStackTrace();
+        }
+
+        return retValue;
     }
 }
