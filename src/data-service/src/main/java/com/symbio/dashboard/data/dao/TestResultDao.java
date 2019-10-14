@@ -2,16 +2,10 @@ package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.constant.ProjectConst;
-import com.symbio.dashboard.data.repository.ScreenShotRep;
-import com.symbio.dashboard.data.repository.SysListSettingRep;
-import com.symbio.dashboard.data.repository.TestResultRep;
-import com.symbio.dashboard.data.repository.TestRunRep;
+import com.symbio.dashboard.data.repository.*;
 import com.symbio.dashboard.dto.ResultReviewUiDTO;
 import com.symbio.dashboard.enums.*;
-import com.symbio.dashboard.model.ScreenShot;
-import com.symbio.dashboard.model.SysListSetting;
-import com.symbio.dashboard.model.TestResult;
-import com.symbio.dashboard.model.TestRun;
+import com.symbio.dashboard.model.*;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
@@ -46,11 +40,17 @@ public class TestResultDao {
     @Autowired
     private TestRunRep testRunRep;
     @Autowired
+    private TestRunDao testRunDao;
+
+    @Autowired
     private TestResultRep testResultRep;
     @Autowired
     private ScreenShotRep screenShotRep;
     @Autowired
     private SysListSettingRep sysListSettingRep;
+    @Autowired
+    private LocalesInfoRep localesInfoRep;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -437,8 +437,50 @@ public class TestResultDao {
         return data;
     }
 
+    /**
+     * Get Locale info list
+     *
+     * @param testRunId
+     * @param locale
+     * @return
+     */
     private List<Map<String, Object>> getTestRunLocales(Integer testRunId, String locale) {
-        return new ArrayList<>();
+
+        List<Map<String, Object>> retListLocalesInfo = new ArrayList<>();
+        try {
+            String sql = testRunDao.getLocalesInfoSQLById(testRunId);
+            List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+            List<Map<String, Object>> listMapData = EntityUtils.castQuerytoMap(listResult, "locale");
+
+            List<String> listLocales = new ArrayList<>();
+            for (Map<String, Object> item : listMapData) {
+                listLocales.add(item.get("locale").toString());
+            }
+
+            String strQuery = String.join(",", listLocales);
+            if (!CommonUtil.isEmpty(strQuery)) {
+                List<LocaleInfo> listLocaleInfo = new ArrayList<>();
+                List<LocaleInfo> listAllLocale = localesInfoRep.findAll();
+                String strBaseLocale = Locales.EN_US.toString();
+                for (LocaleInfo item : listAllLocale) {
+                    if (listLocales.indexOf(item.getCode()) != -1 && !item.getCode().equals(strBaseLocale)) {
+                        listLocaleInfo.add(item);
+                    }
+                }
+
+                Map<String, Object> mapData = null;
+                for (LocaleInfo item : listLocaleInfo) {
+                    mapData = new HashMap<>();
+                    mapData.put("code", item.getCode());
+                    mapData.put("value", Locales.ZH_CN.toString().equals(locale) ? item.getZhCn() : item.getEnUs());
+                    retListLocalesInfo.add(mapData);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return retListLocalesInfo;
     }
 
 }

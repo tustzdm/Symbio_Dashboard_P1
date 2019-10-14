@@ -1175,3 +1175,34 @@ CREATE TABLE `role_menu_function` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_role_menu_function` (`roleId`,`menuId`, `functionId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- 2019/10/14
+Drop Table IF EXISTS `locales_info`;
+CREATE TABLE `locales_info` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(16) NOT NULL COMMENT 'full info. ex: en_US',
+  `language` varchar(16) DEFAULT NULL COMMENT 'language info. ex: en',
+  `region` varchar(16) DEFAULT NULL COMMENT 'region info. ex: US',
+  `en_us` VARCHAR(255) NOT NULL COMMENT 'Message for en_US',
+  `zh_cn` VARCHAR(255) DEFAULT '' COMMENT 'Message for zh_cn',
+  `regionInfo` varchar(255) DEFAULT NULL COMMENT 'detail region info.',
+	`description` varchar(255) DEFAULT NULL COMMENT 'description',
+  `validation` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'valid or not. 0-invalid, 1-valid',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_locale_info_code` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('de_DE', 'German');
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('en_AU', 'English, Australia');
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('en_CA', 'English, Canada');
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('en_GB', 'English, UK');
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('en_US', 'English, US');
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('es_ES', 'Spanish');
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('fr_CA', 'French, Canada');
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('fr_FR', 'French');
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('it_IT', 'Italian');
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('pt_BR', 'Portuguese, Brazil');
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('pt_PT', 'Protuguese');
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('ru_RU', 'Russian');
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('zh_CN', 'Chinese, China');
+INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('zh_HK', 'Chinese, Hong Kong');

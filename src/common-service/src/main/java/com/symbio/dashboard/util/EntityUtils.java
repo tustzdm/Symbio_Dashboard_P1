@@ -55,6 +55,40 @@ public class EntityUtils {
         return returnList;
     }
 
+    // Not Test
+    @Deprecated
+    public static <T> List<T> castOneFieldEntity(List<Object> list, Class<T> clazz, Object model) {
+        List<T> returnList = new ArrayList<T>();
+        if (list.isEmpty()) {
+            return returnList;
+        }
+        //获取每个数组集合的元素个数
+        Object co = list.get(0);
+
+        //获取当前实体类的属性名、属性值、属性类别
+        List<Map> attributeInfoList = getFieldsInfo(model);
+        //创建属性类别数组
+        Class[] c2 = new Class[attributeInfoList.size()];
+        //如果数组集合元素个数与实体类属性个数不一致则发生错误
+//        if (attributeInfoList.size() != co.length) {
+//            return returnList;
+//        }
+        //确定构造方法
+        for (int i = 0; i < attributeInfoList.size(); i++) {
+            c2[i] = (Class) attributeInfoList.get(i).get("type");
+        }
+        try {
+            for (Object o : list) {
+                Constructor<T> constructor = clazz.getConstructor(c2);
+                returnList.add(constructor.newInstance(o));
+            }
+        } catch (Exception ex) {
+            logger.error("castOneFieldEntity() 实体数据转化为实体类发生异常：异常信息：{}", ex.getMessage());
+            return returnList;
+        }
+        return returnList;
+    }
+
     /**
      * 根据属性名获取属性值
      *
@@ -342,17 +376,27 @@ public class EntityUtils {
             List<String> listKeys = getMapKeys(arrFields);
 
             // 如果数组集合元素个数与实体类属性个数不一致则发生错误
-            if (list.get(0).length != listKeys.size()) {
+            if (listKeys.size() != 1 && list.get(0).length != listKeys.size()) {
                 return returnList;
             }
 
             Map<String, Object> mapData;
-            for (Object[] item : list) {
-                mapData = new HashMap<String, Object>();
-                for (int i = 0; i < listKeys.size(); i++) {
-                    mapData.put(listKeys.get(i), WebUtil.getItemValue(item[i]));
+            if (listKeys.size() > 1) {
+                for (Object[] item : list) {
+                    mapData = new HashMap<String, Object>();
+                    for (int i = 0; i < listKeys.size(); i++) {
+                        mapData.put(listKeys.get(i), WebUtil.getItemValue(item[i]));
+                    }
+                    returnList.add(mapData);
                 }
-                returnList.add(mapData);
+            } else {
+                for (Object item : list) {
+                    mapData = new HashMap<String, Object>();
+                    for (int i = 0; i < listKeys.size(); i++) {
+                        mapData.put(listKeys.get(i), WebUtil.getItemValue(item));
+                    }
+                    returnList.add(mapData);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

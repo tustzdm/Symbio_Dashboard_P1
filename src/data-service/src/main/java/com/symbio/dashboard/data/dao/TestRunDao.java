@@ -233,6 +233,14 @@ public class TestRunDao {
     public TestRun getTestRunById(Integer id) {
         return testRunRep.getById(id);
     }
+
+    public String getLocalesInfoSQLById(Integer testRunId) {
+        return "SELECT DISTINCT locale FROM test_run tr"
+                + " JOIN (select id, testset_id, testcase_id from test_run) base on tr.testset_id = base.testset_id AND tr.testcase_id = base.testcase_id"
+                + " WHERE base.id = " + testRunId
+                + " AND tr.display = 1 AND tr.validation = 1"
+                + " ORDER BY locale";
+    }
 }
 
 
