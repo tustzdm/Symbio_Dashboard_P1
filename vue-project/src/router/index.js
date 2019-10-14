@@ -189,21 +189,31 @@ export const constantRouterMap = [
                     title: "testsetInfo",
                     icon: "",
                 },
+            }
+        ],
+        
+    },
+    {
+        path: "/searchvisit",
+        component: Layout,
+        children: [
+            {
+                path: "results/pictures",
+                component: _import("results/pictures"),
+                name: "pictures",
+                meta: {
+                    title: "pictures",
+                    icon: "",
+                },
             },
             {
-                path: "/result",
-                component: _import("results/pictures"),
-                children: [
-                    {
-                        path: "/result/pictures",
-                        component: _import("results/pictures"),
-                        name: "pictures",
-                        meta: {
-                            title: "pictures",
-                            icon: "",
-                        },
-                    }
-                ],
+                path: "results/compare",
+                component: _import("results/compare"),
+                name: "compare",
+                meta: {
+                    title: "compare",
+                    icon: "",
+                },
             }
         ],
         

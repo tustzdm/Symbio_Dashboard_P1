@@ -1,11 +1,11 @@
 <template>
 <div class="buy-root" style="width:85%;margin-left:7.5%">
     <!-- 两个部分mabage-top和(表格、翻页)，两者之间都用flex布局-->
-    <top @runStatus="runStatus($event)" @getTableData="getTableData($event)" ></top>
+    <top @runStatus="runStatus($event)" @getTableData="getTableData($event)"></top>
     <!-- manage-top end -->
 
     <el-card class="caseTabel" shadow="hover" style="border:none">
-        <el-table  :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)"  @selection-change="handleSelectionChange" style="width: 100%;height: 100%;text-align:center" >
+        <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;height: 100%;text-align:center">
             <el-table-column type="selection" width="50px"></el-table-column>
             <!-- <el-table-column prop="status" sortable label="Status">
                 <template slot-scope="scope">
@@ -44,6 +44,13 @@
                     </div>
                 </template>
             </el-table-column>
+            <el-table-column label="Review" width="80">
+                <template slot-scope="scope">
+                    <router-link :to="{ name: 'compare', query: {locale:scope.row.locale, runId:scope.row.id}}">
+                        sss
+                    </router-link>
+                </template>
+            </el-table-column>
         </el-table>
     </el-card>
     <div class="fanye">
@@ -73,7 +80,7 @@ export default {
             tableColownms: {},
             statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
             run: false,
-            multipleSelection:[1,2]
+            multipleSelection: [1, 2]
         }
     },
     components: {
