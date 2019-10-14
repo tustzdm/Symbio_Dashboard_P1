@@ -27,3 +27,5 @@ dist/
 package-lock.json
 
 debugController.java
+
+vue.config.js
