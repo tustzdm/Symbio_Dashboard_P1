@@ -134,6 +134,7 @@ export default {
         getTableData(val) {
             this.dataList = val.cd.data;
             this.tableColownms = val.cd.columns;
+            console.log('tablecolumn');
             console.log(this.tableColownms);
             console.log(this.dataList)
             this.run = false;
