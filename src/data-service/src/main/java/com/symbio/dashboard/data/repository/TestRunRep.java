@@ -31,6 +31,12 @@ public interface TestRunRep extends JpaRepository<TestRun, Integer> {
     @Query(value = "SELECT * FROM test_run WHERE id = ?1 AND locale = ?2 AND display = 1 AND validation = 1 LIMIT 0,1", nativeQuery = true)
     TestRun getValidTestRunByIdAndLocale(Integer id, String locale);
 
+    @Query(value = "SELECT tr.* FROM test_run tr " +
+            " join (select id, testset_id, testcase_id from test_run) base on tr.testset_id = base.testset_id AND tr.testcase_id = base.testcase_id" +
+            " WHERE base.id = ?1 AND tr.locale = ?2 AND display = 1 AND validation = 1" +
+            " LIMIT 0,1", nativeQuery = true)
+    TestRun getValidTestRunByNeighbourIdAndLocale(Integer id, String locale);
+
     @Query(value = "SELECT DISTINCT * FROM test_run " +
             " JOIN (select id, testset_id, testcase_id from test_run) base ON tr.testset_id = base.testset_id AND tr.testcase_id = base.testcase_id " +
             " WHERE base.id = ?1 AND tr.display = 1 AND tr.validation = 1" +

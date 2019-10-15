@@ -623,7 +623,7 @@ CREATE TABLE `test_result` (
   `start_time` datetime DEFAULT NULL COMMENT 'start Locale time',
   `end_time` datetime DEFAULT NULL COMMENT 'end Locale Time',
   `start_utc_time` datetime DEFAULT NULL COMMENT 'start Time',
-  `time_zone` float DEFAULT NULL COMMENT 'Timezone',
+  `time_zone` float DEFAULT '0' COMMENT 'Timezone',
   `exec_duration` int(10) unsigned DEFAULT NULL COMMENT 'execute duration seconds.',
   `note` varchar(255) DEFAULT NULL COMMENT 'Note or Bug',
   `exception_desc` varchar(8000) DEFAULT NULL COMMENT 'exception',

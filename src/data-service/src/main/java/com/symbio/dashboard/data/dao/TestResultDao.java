@@ -132,9 +132,9 @@ public class TestResultDao {
         resultReviewDTO.setTestRunId(testRunId);
 
         // Get TestSetId and caseId
-        TestRun tr = testRunRep.getValidTestRunByIdAndLocale(testRunId, trLocale);
+        TestRun tr = testRunRep.getValidTestRunByNeighbourIdAndLocale(testRunId, trLocale);
         if (CommonUtil.isEmpty(tr)) {
-            log.error("Could not find TestRun recode by id({}), locale({})", testRunId, trLocale);
+            log.error("Could not find TestRun recode by neighbour id({}), its locale({})", testRunId, trLocale);
             return commonDao.getTableNoDataArgsLocale(locale, "Test_Run", testRunId);
         }
 
@@ -153,11 +153,6 @@ public class TestResultDao {
         if (resultFetchSS.hasError()) {
             retResult = resultFetchSS;
         } else {
-//            TestRunUiDTO retTestRun = (TestRunUiDTO) retTestRunResult.getCd();
-//            testRunUiDTO.setTotalRecord(retTestRun.getTotalRecord());
-//            testRunUiDTO.setFields(EntityUtils.getDTOFields(retTestRun.getFields()));
-//            testRunUiDTO.setDataType(retTestRun.getDataType());
-//            testRunUiDTO.setData(retTestRun.getData());
             retResult = new Result(resultReviewDTO);
         }
 
@@ -277,10 +272,11 @@ public class TestResultDao {
                 default:
                     break;
                 case ImageCompare:
+                    String strBaseLocale = Locales.EN_US.toString();
                     for (Map<String, Object> item : data) {
                         if (RESULT_REVIEW_COL_TARGET_SCREEN.equalsIgnoreCase(item.get(ListColumns.KEY.getKey()).toString())) {
                             String strLabel = item.get(ListColumns.LABEL.getKey()).toString();
-                            item.put(ListColumns.LABEL.getKey(), String.format(strLabel, trLocale));
+                            item.put(ListColumns.LABEL.getKey(), String.format(strLabel, strBaseLocale.equals(trLocale) ? "" : trLocale));
                         }
                     }
                     break;
@@ -370,7 +366,6 @@ public class TestResultDao {
             step = Integer.parseInt(CommonUtil.getMapKey(item, RESULT_REVIEW_ITEM_STEP));
             url = CommonUtil.getMapKey(item, RESULT_REVIEW_ITEM_HTTPFILEPATH);
             thumbnail = CommonUtil.getMapKey(item, RESULT_REVIEW_ITEM_THUMBNAILHTTPPATH);
-            //strCurrentLocale = CommonUtil.getMapKey(item, RESULT_REVIEW_ITEM_LOCALE);
 
             mapData.remove(RESULT_REVIEW_ITEM_ID);
             mapData.remove(RESULT_REVIEW_ITEM_HTTPFILEPATH);
