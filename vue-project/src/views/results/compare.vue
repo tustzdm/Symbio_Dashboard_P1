@@ -1,64 +1,87 @@
 <template>
 <el-row>
     <el-col :span="20" :offset="2">
-        <el-card class="listHead" shadow="never" style="padding-right:5%">
-            <select value="1" id="" style="margin-left:20px;height:30px;width:200px;margin-top:5px">
-                <!-- <option v-for="item in tepnameList" :key="item.id">{{item.name}}</option> -->
-            </select>
-            {{runId}}{{locale}}
-            <div class="headRight">
-                <el-button class="btn-top" style="background-color:rgb(246, 184, 184);" size="mini"><i class="el-icon-upload2"></i> Upload</el-button>
-                <el-button class="btn-top" @click="back" style="background-color: rgb(190, 205, 223);" size="mini"><i class="el-icon-back"></i>Back</el-button>
-            </div>
+        <div class="compareCon">
+            <el-card class="listHead" shadow="never" style="padding-right:5%">
+                <el-select v-model="locale" style="margin-left:20px;height:30px;width:200px;margin-top:5px" placeholder="Please Choose">
+                    <el-option v-for="item in localeList" :key="item.value" :label="item.label" :value="item.code">
+                    </el-option>
+                </el-select>
+                <div class="headRight">
+                    <el-button class="btn-top" style="background-color:rgb(246, 184, 184);" size="mini"><i class="el-icon-upload2"></i> Upload</el-button>
+                    <el-button class="btn-top" @click="back" style="background-color: rgb(190, 205, 223);" size="mini"><i class="el-icon-back"></i>Back</el-button>
+                </div>
 
-        </el-card>
-        <el-card>
-            <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;text-align:center">
-                <el-table-column type="selection" width="50"></el-table-column>
-                <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" sortable :label="item.label">
-                    <template slot-scope="scope">
-                        <div v-if="!['sourceLocale','targetLocale','status','screenshotFlag'].includes(item.field)">
-                            {{scope.row[item.field]}}
-                        </div>
-                        <div v-if="item.field=='status'">
-                            <!-- <div style="height:10px;width:10px;border-radius:50%;float:left;display:inline-block;margin-left:60px;margin-top:6px;margin-right:8px" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></div> -->
-                            <span style="display:inline-block">{{statusArray[scope.row[item.field]]}}</span>
-                            <!-- <span style="padding-right:10px">
+            </el-card>
+            <el-card>
+                <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;text-align:center">
+                    <el-table-column type="selection" width="50"></el-table-column>
+                    <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" sortable :label="item.label">
+                        <template slot-scope="scope">
+                            <div v-if="!['sourceLocale','targetLocale','status','screenshotFlag'].includes(item.field)">
+                                {{scope.row[item.field]}}
+                            </div>
+                            <div v-if="item.field=='status'">
+                                <!-- <div style="height:10px;width:10px;border-radius:50%;float:left;display:inline-block;margin-left:60px;margin-top:6px;margin-right:8px" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></div> -->
+                                <span style="display:inline-block">{{statusArray[scope.row[item.field]]}}</span>
+                                <!-- <span style="padding-right:10px">
                             <img style="width:100px;height:100px" class="thumbnail" src="../../assets/images/compare/1-en.png" alt="">
                         </span>
                         <span >
                             <img style="width:100px;height:100px" class="thumbnail" src="../../assets/images/compare/1-ch.png" alt="">
                         </span> -->
-                        </div>
-                        <div v-if="item.field=='sourceLocale'">
-                            <span>
-                                <img style="width:150px;" @click="compareDialog=true" class="thumbnail" :src="scope.row['sourceLocale'].thumbnail" alt="screenShot">
-                            </span>
-                        </div>
-                        <div v-if="item.field=='targetLocale'">
-                            <span>
-                                <img style="width:150px;" @click="compareDialog=true" class="thumbnail" :src="scope.row['targetLocale'].thumbnail" alt="screenShot">
-                            </span>
-                        </div>
-                        <div v-if="item.field=='screenshotFlag'">
-                            <router-link :to="{ name: 'pictures', query: {  caseId:scope.row.caseId}}">
-                                <img v-if="scope.row[item.field]!=0" src="../../assets/images/screenshot-icon2.png" alt="">
-                            </router-link>
-                        </div>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </el-card>
+                            </div>
+                            <div v-if="item.field=='sourceLocale'">
+                                <span>
+                                    <img style="width:150px;" @click="stepId=scope.row.step;leftImg=scope.row['sourceLocale'].url;rightImg=scope.row['targetLocale'].url;compareDialog=true;" class="thumbnail" :src="scope.row['sourceLocale'].thumbnail" alt="screenShot">
+                                </span>
+                            </div>
+                            <div v-if="item.field=='targetLocale'">
+                                <span>
+                                    <img v-if="scope.row['targetLocale'].thumbnail!=''" style="width:150px;" @click="stepId=scope.row.step;leftImg=scope.row['sourceLocale'].url;rightImg=scope.row['targetLocale'].url;compareDialog=true;" class="thumbnail" :src="scope.row['targetLocale'].thumbnail" alt="screenShot">
+                                </span>
+                            </div>
+                            <div v-if="item.field=='screenshotFlag'">
+                                <router-link :to="{ name: 'pictures', query: {  caseId:scope.row.caseId}}">
+                                    <img v-if="scope.row[item.field]!=0" src="../../assets/images/screenshot-icon2.png" alt="">
+                                </router-link>
+                            </div>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-card>
 
+            <div class="compareDia">
+                <el-dialog :visible.sync="compareDialog" fullscreen width="100%" custom-class="compare" style="background:black" :before-close="handleClose" center>
+                    <div class="left" style="width:50%;float:left">
+                        <div style="float:left;position:fixed;top:45%;left:0">
+                            <i @click="beforeStep" style="color:white;font-size:45px;font-weight:bold" class="el-icon-arrow-left"></i>
+                        </div>
+                        <div style="width:85%;height:100%;float:right;padding-right:4px;box-sizing:border-box;">
+                            <img class="thumbnail" style="float:right" :src="leftImg" alt="screenShot">
+                        </div>
+                    </div>
 
-        <el-dialog :visible.sync="compareDialog" fullscreen='true' width="100%" style="background:black" :before-close="handleClose">
-            <div style="width:50%;height:100%;float:left;padding-right:4px;box-sizing:border-box;">
-                <img style="width:100%;" class="thumbnail" src="https://vue.symbio.com.cn/mock/image/0_433/434_435_1/182/en_US/screenshots/af1a574c-b318-4f6b-8d22-9a96e0039fff.png" alt="screenShot">
+                    <div style="width:50%;float:left">
+                        <div style="width:85%;height:100%;float:left;padding-left:4px;box-sizing:border-box;">
+                            <img class="thumbnail" style="float:left" :src="rightImg" alt="screenShot">
+                        </div>
+
+                        <div style="float:right;top:45%;right:0;position:fixed">
+                            <i @click="nextStep" style="color:white;font-size:45px;font-weight:bold" class="el-icon-arrow-right"></i>
+                        </div>
+                    </div>
+
+                    <span slot="title" class="dialog-footer" center>
+                        <el-button icon="el-icon-zoom-in" style="font-size:20px"> </el-button>
+                        <el-button icon="el-icon-zoom-out " style="font-size:20px"></el-button>
+                        <el-button icon="el-icon-chat-line-round " style="font-size:20px"></el-button>
+                        <el-button icon="el-icon-upload2 " style="font-size:20px"></el-button>
+                    </span>
+                </el-dialog>
             </div>
-            <div style="width:50%;height:100%;float:left;padding-left:4px;box-sizing:border-box;">
-                <img style="width:100%;" class="thumbnail" src="https://vue.symbio.com.cn/mock/image/0_433/434_435_1/182/en_US/screenshots/44c8a33a-fce9-422a-87d4-1170c1d6c6c0.png" alt="screenShot">
-            </div>
-        </el-dialog>
+        </div>
+
         <!-- <div class="fanye" style="padding-bottom:50px;margin-top:15px">
             <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="dataList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin: 10px 0" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
         </div> -->
@@ -80,77 +103,126 @@ export default {
             statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
             localeList: '',
             srcc: 'https://vue.symbio.com.cn/mock/image/0_433/434_435_1/182/en_US/screenshots/thumbnail/af1a574c-b318-4f6b-8d22-9a96e0039fff.png',
-            compareDialog:false
+            compareDialog: false,
+            stepId: '',
+            leftImg: 'ssss',
+            rightImg: 'sssss'
         }
     },
     created() {
+
         this.runId = this.$route.query.runId;
         this.locale = this.$route.query.locale;
 
-        this.Fetch(`/result/getReviewList?token=123&testRunId=1075&trlocale=pt_BR`, {
-            method: "POST",
-            // body: {
-            //     "token": "123",
-            //     "productId": 1,
-            //     "releaseId": 1,
-            //     "testSetId": 4
-            // }
-        }).then(res => {
-            console.log(11111111)
-            console.log(res);
-            this.tableColownms = res.cd.columns;
-            this.dataList = res.cd.data;
-            console.log(11111111)
-            console.log(this.dataList);
-        }).catch(err => {
-            alert(err);
-        });
+        this.getTableData();
     },
     computed: {},
+    watch: {
+        locale: function (val) {
+            this.getTableData();
+        }
+    },
     methods: {
         back() {
             this.$router.go(-1)
+        },
+        getTableData() {
+            this.Fetch(`/result/getReviewList?token=123&testRunId=${this.runId}&trlocale=${this.locale}`, {
+                method: "POST",
+                // body: {
+                //     "token": "123",
+                //     "productId": 1,
+                //     "releaseId": 1,
+                //     "testSetId": 4
+                // }
+            }).then(res => {
+                console.log(11111111)
+                console.log(res);
+                this.tableColownms = res.cd.columns;
+                this.dataList = res.cd.data;
+                console.log(11111111)
+                console.log(this.dataList);
+                this.localeList = res.cd.listLocales;
+            }).catch(err => {
+                alert(err);
+            });
+        },
+        nextStep() {
+            console.log(this.stepId);
+            if (this.stepId == this.dataList.length - 1) {
+                this.$message({
+                    message: 'It is the last',
+                    type: 'warning',
+                    duration: 1000
+                });
+                return
+            } else {
+                this.stepId++;
+                this.leftImg = this.dataList[this.stepId].sourceLocale.url;
+                this.rightImg = this.dataList[this.stepId].targetLocale.url;
+            }
+        },
+        beforeStep() {
+            console.log(this.stepId);
+            if (this.stepId == 0) {
+                this.$message({
+                    message: 'This is the first',
+                    type: 'warning',
+                    duration: 1000
+                });
+                return
+            } else {
+                this.stepId--;
+                this.leftImg = this.dataList[this.stepId].sourceLocale.url;
+                this.rightImg = this.dataList[this.stepId].targetLocale.url;
+            }
         }
     }
 }
 </script>
 
-<style lang="stylus" scoped>
-body {
-    overflow auto
-}
+<style lang="stylus">
+.compareCon {
+    .listHead {
+        margin-top: 10px;
+        height: 40px;
+    }
 
-.listHead {
-    margin-top: 10px;
-    height: 40px;
-}
+    .headRight {
+        float: right;
+        margin-top: 5px;
+    }
 
-.headRight {
-    float: right;
-    margin-top: 5px;
-}
+    .btn-top {
+        color: white;
+        font-size: 15px;
+        font-weight: bold;
+    }
 
-.btn-top {
-    color: white;
-    font-size: 15px;
-    font-weight: bold;
-}
+    /* 控制不同状态case的颜色 */
+    .auto_block {
+        background: #8E8E8E;
+    }
 
-/* 控制不同状态case的颜色 */
-.auto_block {
-    background: #8E8E8E;
-}
+    .auto_pass {
+        background: #02C874;
+    }
 
-.auto_pass {
-    background: #02C874;
-}
+    .auto_failed {
+        background: #FF5151;
+    }
 
-.auto_failed {
-    background: #FF5151;
-}
+    .auto_skip {
+        background: #0072E3;
+    }
 
-.auto_skip {
-    background: #0072E3;
-}
+    .compareDia .el-dialog {
+        background-color: black;
+        height auto
+    }
 
+    .compareDia .el-dialog__header {
+        border: 0
+    }
+}
 </style>
