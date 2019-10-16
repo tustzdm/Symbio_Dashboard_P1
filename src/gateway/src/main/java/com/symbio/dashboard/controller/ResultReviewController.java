@@ -134,19 +134,19 @@ public class ResultReviewController extends BaseController {
         log.debug(funcName + " Enter");
         log.info("testSetId = {}", testSetId);
 
-        Result<String> retsaveFile = new Result<String>();
+        Result<String> retSaveFile = new Result<String>();
 
         try {
-            retsaveFile = fileService.saveExcel(request, CommonDef.FOLDER_PATH_IMPORT_TESTCASE);
-            if (retsaveFile.hasError()) {
-                log.info(ErrorConst.getWarningLogMsg(funcName, retsaveFile));
-                return retsaveFile;
+            retSaveFile = fileService.saveExcel(request, CommonDef.FOLDER_PATH_IMPORT_TESTCASE);
+            if (retSaveFile.hasError()) {
+                log.info(ErrorConst.getWarningLogMsg(funcName, retSaveFile));
+                return retSaveFile;
             }
 
             Integer nTestTestSetId = 435; // testSetId
             if (testSetId != null && testSetId > 0) {
                 nTestTestSetId = testSetId;
-                String fileName = retsaveFile.getCd();
+                String fileName = retSaveFile.getCd();
 
                 Result<List<TestRunExcelDTO>> retImportExcel = testRunService.importExcel(locale, nTestTestSetId, fileName);
                 if (retImportExcel.hasError()) {
@@ -158,7 +158,7 @@ public class ResultReviewController extends BaseController {
                     if (!CommonUtil.isEmpty(listTestRun)) {
                         nTestRunCount = listTestRun.size();
                     }
-                    retsaveFile.setCd(String.format("Test Run count: " + nTestRunCount));
+                    retSaveFile.setCd(String.format("Test Run count: " + nTestRunCount));
                 }
             } else {
                 return getResultArgs(locale, "000018", "TestSet ID");
@@ -170,7 +170,56 @@ public class ResultReviewController extends BaseController {
         }
 
         log.debug(funcName + " Exit");
-        return retsaveFile;
+        return retSaveFile;
+    }
+
+    @RequestMapping("/uploadReviewZipFile")
+    public Result uploadReviewZipFile(@RequestParam(value = "token") String token,
+                                      @RequestParam(value = "testRunId") Integer testRunId,
+                                      @RequestParam(value = "targetLocale") Integer targetLocale,
+                                      @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                      HttpServletRequest request) {
+        String funcName = "ResultReviewController.uploadReviewZipFile()";
+        log.debug(funcName + " Enter");
+        log.info("testSetId = {}, targetLocale ={}", testRunId, targetLocale);
+
+        Result<String> retSaveFile = new Result<String>();
+
+        try {
+//            retSaveFile = fileService.uploadReviewZipFile(request, CommonDef.FOLDER_PATH_IMPORT_TESTCASE);
+//            if (retSaveFile.hasError()) {
+//                log.info(ErrorConst.getWarningLogMsg(funcName, retSaveFile));
+//                return retSaveFile;
+//            }
+
+//            Integer nTestTestSetId = 435; // testSetId
+//            if (testSetId != null && testSetId > 0) {
+//                nTestTestSetId = testSetId;
+//                String fileName = retSaveFile.getCd();
+//
+//                Result<List<TestRunExcelDTO>> retImportExcel = testRunService.importExcel(locale, nTestTestSetId, fileName);
+//                if (retImportExcel.hasError()) {
+//                    log.error(ErrorConst.getWarningLogMsg(funcName, retImportExcel));
+//                    return retImportExcel;
+//                } else {
+//                    Integer nTestRunCount = 0;
+//                    List<TestRunExcelDTO> listTestRun = retImportExcel.getCd();
+//                    if (!CommonUtil.isEmpty(listTestRun)) {
+//                        nTestRunCount = listTestRun.size();
+//                    }
+//                    retSaveFile.setCd(String.format("Test Run count: " + nTestRunCount));
+//                }
+//            } else {
+//                return getResultArgs(locale, "000018", "TestSet ID");
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(ErrorConst.getExceptionLogMsg(funcName, e));
+            return new Result(ErrorConst.getExceptionResult(funcName, e));
+        }
+
+        log.debug(funcName + " Exit");
+        return retSaveFile;
     }
 
     @GetMapping("/getTestResultInfo")

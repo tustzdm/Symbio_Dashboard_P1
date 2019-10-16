@@ -32,9 +32,9 @@ public interface TestSetRep extends JpaRepository<TestSet,Integer> {
     int getReleaseCount(Integer releaseId);
 
     @Query(value = "SELECT product.id FROM product " +
-            "INNER join `release` ON `release`.product_id = product.id " +
-            "INNER join test_set ON test_set.release_id = `release`.id" +
-            "WHERE test_set.id = ?1", nativeQuery = true)
+            " INNER join `release` ON `release`.product_id = product.id " +
+            " INNER join test_set ON test_set.release_id = `release`.id" +
+            " WHERE test_set.id = ?1", nativeQuery = true)
     Integer getProductIdByTestSetId(Integer testSetId);
 
     @Query(value = "SELECT `type` FROM `test_set` WHERE id = ?1", nativeQuery = true)

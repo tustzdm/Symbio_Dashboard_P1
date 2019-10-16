@@ -396,13 +396,12 @@ public class TestResultDao {
             Integer currStep = 0;
             for (Map<String, Object> item : list) {
                 currStep = Integer.parseInt(CommonUtil.getMapKey(item, RESULT_REVIEW_ITEM_STEP));
-                if (currStep == currStep) {
+                if (currStep == step) {
                     id = Integer.parseInt(CommonUtil.getMapKey(item, RESULT_REVIEW_ITEM_ID));
                     url = CommonUtil.getMapKey(item, RESULT_REVIEW_ITEM_HTTPFILEPATH);
                     thumbnail = CommonUtil.getMapKey(item, RESULT_REVIEW_ITEM_THUMBNAILHTTPPATH);
                     break;
                 }
-
             }
 
         } catch (Exception e) {

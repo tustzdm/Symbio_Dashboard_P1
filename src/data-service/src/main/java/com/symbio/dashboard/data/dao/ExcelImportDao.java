@@ -48,6 +48,7 @@ public class ExcelImportDao {
             List<Map<String, String>> list = new ArrayList<>();
             Map<String, String> map;
 
+            /*
             String productConfig = commonDao.getConfigValueByKey(ProjectConst.TESTCASE_SPERATED_PRODUCT);
             Integer productId;
             if (EnumDef.TESTCASE_SEPARATED_PRODUCT.NO.toString().equalsIgnoreCase(productConfig)) {
@@ -60,6 +61,22 @@ public class ExcelImportDao {
             List<SettingExcelImport> headSettingList = settingExcelImportRep.getByCaseType(testSetType, productId);
             if (CommonUtil.isEmpty(headSettingList)) {
                 headSettingList = settingExcelImportRep.getByCaseType(testSetType, 0);
+
+                if (CommonUtil.isEmpty(headSettingList)) {
+                    return commonDao.getResultArgs(locale, "300202", testSetType);
+                }
+            }*/
+
+            String productConfig = commonDao.getConfigValueByKey(ProjectConst.TESTCASE_SPERATED_PRODUCT);
+            Integer testSetType = testSetRep.getTypeById(testSetId);
+            Integer productId = testSetRep.getProductIdByTestSetId(testSetId);
+
+            List<SettingExcelImport> headSettingList = settingExcelImportRep.getByCaseType(testSetType, productId);
+            if (CommonUtil.isEmpty(headSettingList)) {
+                // Try to get common setting
+                if (EnumDef.TESTCASE_SEPARATED_PRODUCT.NO.toString().equalsIgnoreCase(productConfig)) {
+                    headSettingList = settingExcelImportRep.getByCaseType(testSetType, 0);
+                }
 
                 if (CommonUtil.isEmpty(headSettingList)) {
                     return commonDao.getResultArgs(locale, "300202", testSetType);

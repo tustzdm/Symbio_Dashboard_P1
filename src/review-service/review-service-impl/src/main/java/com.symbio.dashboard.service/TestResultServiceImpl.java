@@ -149,7 +149,7 @@ public class TestResultServiceImpl implements TestResultService {
             }
 
             // Step3 - Get ready
-            ss = ScreenShotFactory.createNew(workPath, testResultId, i, log, dtoFilePathInfo);
+            ss = ScreenShotFactory.createNew(workPath, testResultId, i + 1, log, dtoFilePathInfo);
 
             // Step4 - upload file
             processScreenshotFiles(ss);
