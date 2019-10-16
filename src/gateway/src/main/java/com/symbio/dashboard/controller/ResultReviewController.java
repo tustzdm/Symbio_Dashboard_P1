@@ -8,6 +8,7 @@ import com.symbio.dashboard.dto.TEPInfoDTO;
 import com.symbio.dashboard.dto.TestRunExcelDTO;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.jenkins.JenkinsService;
+import com.symbio.dashboard.monitor.service.impl.MonitorServiceImpl;
 import com.symbio.dashboard.service.*;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.StringUtil;
@@ -50,6 +51,9 @@ public class ResultReviewController extends BaseController {
     @Autowired
     private ResultReviewServiceImpl resultReviewService;
 
+    @Autowired
+    private MonitorServiceImpl monitorService;
+
     @RequestMapping("/getList")
     public Result getList(@RequestBody TestRunVO testRun) {
         log.trace("ResultReviewController.getList() Enter");
@@ -63,7 +67,6 @@ public class ResultReviewController extends BaseController {
             }
 
             retResult = testRunService.getTestRunList(testRun.getLocale(), testRun);
-//            retResult = testRunService.importExcel(1,);
 
             if (retResult.hasError()) {
                 log.error(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
@@ -173,7 +176,68 @@ public class ResultReviewController extends BaseController {
         return retSaveFile;
     }
 
-    @RequestMapping("/uploadReviewZipFile")
+    /**
+     * Just provide zip file
+     *
+     * @param token
+     * @param locale
+     * @param request
+     * @return
+     */
+    @PostMapping("/uploadTestRunZipFile")
+    public Result uploadTestRunZipFile(@RequestParam(value = "token") String token,
+                                       @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                       HttpServletRequest request) {
+        String funcName = "ResultReviewController.uploadTestRunZipFile()";
+        log.debug(funcName + " Enter");
+
+        Result<String> retUploadFile = new Result<String>();
+
+        try {
+            retUploadFile = fileService.uploadZipFile(request, CommonDef.FOLDER_PATH_DASHBOARD_ZIP_ROOT);
+            if (retUploadFile.hasError()) {
+                log.info(ErrorConst.getWarningLogMsg(funcName, retUploadFile));
+                return retUploadFile;
+            }
+
+            // Let zip file be parsed ASAP
+            Result resultTask = monitorService.checkZipRoot();
+            if (resultTask.hasError()) {
+                log.error(ErrorConst.getWarningLogMsg(funcName, resultTask));
+                retUploadFile = new Result(resultTask);
+            } else {
+                Result<String> result = monitorService.parseZip();
+                if (result.isSuccess()) {
+                    if (!CommonUtil.isEmpty(result.getCd())) {
+                        log.info(funcName + " Success. Return :" + result.getCd());
+                    }
+                } else {
+                    log.warn(ErrorConst.getWarningLogMsg(funcName, result));
+                    retUploadFile = new Result(result);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(ErrorConst.getExceptionLogMsg(funcName, e));
+            return new Result(ErrorConst.getExceptionResult(funcName, e));
+        }
+
+        log.debug(funcName + " Exit");
+        return retUploadFile;
+    }
+
+    /**
+     * Zip file is only supported for Test Run which has the TestSet & CaseId's locale
+     * testRunId
+     *
+     * @param token
+     * @param testRunId    Neighbour Test Run Id
+     * @param targetLocale Test Run which has same TestSet and Test Case of testRunId and the locale specified
+     * @param locale
+     * @param request
+     * @return
+     */
+    @PostMapping("/uploadReviewZipFile")
     public Result uploadReviewZipFile(@RequestParam(value = "token") String token,
                                       @RequestParam(value = "testRunId") Integer testRunId,
                                       @RequestParam(value = "targetLocale") Integer targetLocale,
@@ -185,7 +249,7 @@ public class ResultReviewController extends BaseController {
 
         Result<String> retSaveFile = new Result<String>();
 
-        try {
+//        try {
 //            retSaveFile = fileService.uploadReviewZipFile(request, CommonDef.FOLDER_PATH_IMPORT_TESTCASE);
 //            if (retSaveFile.hasError()) {
 //                log.info(ErrorConst.getWarningLogMsg(funcName, retSaveFile));
@@ -212,11 +276,11 @@ public class ResultReviewController extends BaseController {
 //            } else {
 //                return getResultArgs(locale, "000018", "TestSet ID");
 //            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error(ErrorConst.getExceptionLogMsg(funcName, e));
-            return new Result(ErrorConst.getExceptionResult(funcName, e));
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            log.error(ErrorConst.getExceptionLogMsg(funcName, e));
+//            return new Result(ErrorConst.getExceptionResult(funcName, e));
+//        }
 
         log.debug(funcName + " Exit");
         return retSaveFile;

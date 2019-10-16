@@ -127,9 +127,76 @@ public class FileUploadService {
         return retData;
     }
 
+    public Result<String> uploadZipFile(HttpServletRequest request, String strUploadFolder) {
+        Result<String> retData = new Result<String>();
+        retData.setCd("");
+        try {
+            CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
+                    request.getSession().getServletContext());
+
+            String strFileName = "";
+            int nFileCount = 0;
+
+            if (multipartResolver.isMultipart(request)) {
+                MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+                Iterator<String> iter = multiRequest.getFileNames();
+                while (iter.hasNext()) {
+                    int pre = (int) System.currentTimeMillis();
+                    MultipartFile file = multiRequest.getFile(iter.next());
+                    if (file != null) {
+                        nFileCount++;
+                        String myFileName = file.getOriginalFilename();
+                        if (myFileName.trim() != "") {
+                            String fileName = file.getOriginalFilename();
+                            strFileName = fileName;
+                            if (!isAllowZipFile(fileName)) {
+                                retData.setEc(ErrorConst.TESTRESULT_ZIP_NOTSUPPORT);
+                                retData.setEm(ErrorConst.TESTRESULT_ZIP_NOTSUPPORT_M);
+                            } else {
+                                String path = strUploadFolder;
+                                File savedir = new File(path);
+                                if (!savedir.exists())
+                                    savedir.mkdirs();
+                                File localFile = new File(path, fileName);
+                                file.transferTo(localFile);
+                                retData.setCd(localFile.getPath());
+                            }
+                        }
+                    }
+                    int finaltime = (int) System.currentTimeMillis();
+                    System.out.println(finaltime - pre);
+                }
+            }
+        } catch (IllegalStateException e) {
+            log.error("IllegalStateException while FileUploadService.uploadZipFile().", e);
+            retData.setEc(ErrorConst.ERROR);
+            retData.setEm(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("IOException while FileUploadService.uploadZipFile()", e);
+            retData.setEc(ErrorConst.ERROR);
+            retData.setEm(e.getMessage());
+        }
+
+        return retData;
+    }
+
     public boolean isAllowIMGExt(String fileName) {
         boolean bAllow = false;
         String[] allowExt = {"jpg", "jpeg", "gif", "png", "bmp"};
+        String ext = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).toLowerCase(Locale.ENGLISH);
+        for (String str : allowExt) {
+            if (ext.equalsIgnoreCase(str)) {
+                bAllow = true;
+                break;
+            }
+        }
+        return bAllow;
+    }
+
+    public boolean isAllowZipFile(String fileName) {
+        boolean bAllow = false;
+        String[] allowExt = {"zip"};
         String ext = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).toLowerCase(Locale.ENGLISH);
         for (String str : allowExt) {
             if (ext.equalsIgnoreCase(str)) {

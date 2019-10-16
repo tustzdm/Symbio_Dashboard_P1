@@ -29,8 +29,11 @@ public class ErrorConst {
     public final static String TESTCASE_IMPEXCEL_EXCEPTION = "N09011";
     public final static String TESTCASE_IMPEXCEL_EXCEPTION_M = "Import excel format Exception";
 
-    public final static String TESTCASE_IMPEXCEL_NOTSUPPORT = "N09011";
+    public final static String TESTCASE_IMPEXCEL_NOTSUPPORT = "N09016";
     public final static String TESTCASE_IMPEXCEL_NOTSUPPORT_M = "Only support Excel file for importing Test Case";
+
+    public final static String TESTRESULT_ZIP_NOTSUPPORT = "N09018";
+    public final static String TESTRESULT_ZIP_NOTSUPPORT_M = "Only support zip file for Test result parser";
 
     // Util - File
     public final static String FILE_UTIL_FILENAME_EMPTY = "002002";
