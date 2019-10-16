@@ -85,31 +85,6 @@
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
-        <!-- <div class="product-select select">
-            <el-dropdown trigger="click">
-                <span class="el-dropdown-link">
-                    ADD
-                    <i class="el-icon-plus"></i>
-                </span>
-                <el-dropdown-menu>
-                    <el-dropdown-item>
-                        <span>
-                            <router-link to="/addproject/index">Add Product</router-link>
-                        </span>
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                        <span>
-                            <router-link to="/addversion/index">Add Release</router-link>
-                        </span>
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                        <span>
-                            <router-link to="/addcase/index">Add Testset</router-link>
-                        </span>
-                    </el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
-        </div> -->
         <div class="manage-top-right">
             <el-button class="btn-top" @click="runDialogVisible=true" style="background-color:#5CADAD" size="mini"><i class="el-icon-caret-right"></i> Run</el-button>
             <el-button class="btn-top" style="background-color:rgb(246, 184, 184)" size="mini">Add Bug</el-button>
@@ -249,9 +224,9 @@ export default {
             productName: 'Product',
             releaseName: 'Release',
             testSetName: 'TestSet',
-            productId: '1',
-            releaseId: '1',
-            testSetId: '4',
+            productId: '480',
+            releaseId: '',
+            testSetId: '',
             productList: '',
             releaseList: '',
             testSetList: '',
@@ -425,10 +400,6 @@ export default {
     background-color: #97CBFF
 }
 
-.el-dropdown-link {
-    cursor: pointer;
-}
-
 .select {
     float: left;
     height: 40px;
@@ -470,6 +441,7 @@ export default {
 }
 
 .el-dropdown-link {
+    cursor: pointer;
     font-weight: bold;
     font-famliy: Poppins;
     color: #272727;

@@ -47,15 +47,16 @@
             <el-table-column label="Review" width="80">
                 <template slot-scope="scope">
                     <router-link :to="{ name: 'compare', query: {locale:scope.row.locale, runId:scope.row.id}}">
-                        sss
+                       <img style="width:15px" src="../../assets/images/eye.jpeg" alt="">
                     </router-link>
                 </template>
             </el-table-column>
         </el-table>
     </el-card>
-    <div class="fanye">
-        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="dataList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin: 10px 0" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
+    <div class="fanye" style="margin:15px 0" >
+        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="dataList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin-bottom:30px" @current-change="currentChange" @size-change="sizeChange" ></el-pagination>
     </div>
+    <div style="width:100%;height:80px"></div>
     <!-- tabel和翻页要写到一个div里然后和manage-top flex布局 -->
 
 </div>
@@ -149,65 +150,9 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-.buy-root {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
+<style lang="stylus" scoped>
 
-.buy-root .manage-top {
-    width: 100%;
-    height: 40px;
-    flex-grow: 0;
-    flex-shrink: 0;
-}
 
-.buy-root .caseTabel {
-    flex-grow: 1;
-    flex-shrink: 1;
-    height: auto;
-}
-
-.buy-root .fanye {
-    flex-grow: 0;
-    flex-shrink: 0;
-    height: 52px;
-}
-
-.el-dropdown-link {
-    cursor: pointer;
-}
-
-.select {
-    float: left;
-    height: 40px;
-    line-height: 40px;
-    margin-left: 20px;
-    font-family: Poppins;
-}
-
-.select-search {
-    margin: 3px 12px;
-    width: 150px;
-    font-famliy: Poppins;
-}
-
-.product-select {
-    width: 300px;
-}
-
-.sperate-arrow {
-    margin-left: 10px;
-}
-
-.manage-top-right {
-    width: 360px;
-    height: 40px;
-    line-height: 40px;
-    float: right;
-    margin-right: 20px;
-}
 
 /*
    多行注释
