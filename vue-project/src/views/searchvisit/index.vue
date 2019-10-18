@@ -5,37 +5,21 @@
     <!-- manage-top end -->
 
     <el-card class="caseTabel" shadow="hover" style="border:none">
-        <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;height: 100%;text-align:center">
+        <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;height: 100%;">
             <el-table-column type="selection" width="50px"></el-table-column>
-            <!-- <el-table-column prop="status" sortable label="Status">
-                <template slot-scope="scope">
-                    <div>
-                        <div style="height:18px;width:18px;border-radius:9px;float:left;margin-left:30px" :class="{auto_pass:scope.row.autoStatus=='Pass',auto_block:scope.row.autoStatus=='NotRun',auto_failed:scope.row.autoStatus=='Failed'}"></div>
-                        {{scope.row.autoStatus}}
-                    </div>
-                </template>
-            </el-table-column>
-            <el-table-column prop="generate" sortable label="Generate"></el-table-column>
-            <el-table-column prop="caseId" sortable label="Case ID"></el-table-column>
-            <el-table-column prop="featureArea" label="Feature Area"></el-table-column>
-            <el-table-column prop="qastatus" label="QA Status"></el-table-column>
-            <el-table-column prop="locale" label="Locale"></el-table-column>
-            <el-table-column prop="screenshotFlag" label="ScreenShot">
-                <template slot-scope="scope">
-                    <img :src="scope.row.screenshot" class="el-img-custom" />
-                </template>
-            </el-table-column> -->
             <el-table-column v-if="run" label="" width="80">
                 <i class="el-icon-loading"></i>
             </el-table-column>
-            <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" sortable :label="item.label">
+            <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" :width="['id'].includes(item.field )? '50px':''" sortable :label="item.label">
                 <template slot-scope="scope">
                     <div v-if="!['status','screenshotFlag'].includes(item.field)">
                         {{scope.row[item.field]}}
                     </div>
                     <div v-if="item.field=='status'">
-                        <div style="height:10px;width:10px;border-radius:50%;float:left;display:inline-block;margin-left:60px;margin-top:6px;margin-right:8px" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></div>
-                        <span style="float:left;display:inline-block">{{statusArray[scope.row[item.field]]}}</span>
+                        <div>
+                            <div style="height:10px;width:10px;border-radius:50%;display:inline-block;margin-top:6px;margin-right:8px" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></div>
+                            <span style="display:inline-block">{{statusArray[scope.row[item.field]]}}</span>
+                        </div>
                     </div>
                     <div v-if="item.field=='screenshotFlag'">
                         <router-link :to="{ name: 'pictures', query: { status:scope.row.status, caseId:scope.row.caseId}}">
@@ -47,14 +31,14 @@
             <el-table-column label="Review" width="80">
                 <template slot-scope="scope">
                     <router-link :to="{ name: 'compare', query: {locale:scope.row.locale, runId:scope.row.id}}">
-                       <img style="width:15px" src="../../assets/images/eye.jpeg" alt="">
+                        <img style="width:15px" src="../../assets/images/eye.jpeg" alt="">
                     </router-link>
                 </template>
             </el-table-column>
         </el-table>
     </el-card>
-    <div class="fanye" style="margin:15px 0" >
-        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="dataList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin-bottom:30px" @current-change="currentChange" @size-change="sizeChange" ></el-pagination>
+    <div class="fanye" style="margin:15px 0">
+        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="dataList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin-bottom:30px" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
     </div>
     <div style="width:100%;height:80px"></div>
     <!-- tabel和翻页要写到一个div里然后和manage-top flex布局 -->
@@ -151,9 +135,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
-
-
 /*
    多行注释
    只有在compress选项未启用的时候才会被输出

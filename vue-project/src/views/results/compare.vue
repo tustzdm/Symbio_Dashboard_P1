@@ -63,20 +63,21 @@
                 </div>
 
                 <div class="headRight">
-                    <span style="font-weight:bold;padding-right:10px">Target Locale:</span>  <el-select v-model="locale" style="width:200px;margin-bottom:5px;padding-right:60px" placeholder="Please Choose">
+                    <span style="font-weight:bold;padding-right:10px">Target Locale:</span>
+                    <el-select v-model="locale" style="width:200px;margin-bottom:5px;padding-right:60px" placeholder="Please Choose">
                         <el-option v-for="item in localeList" :key="item.value" :label="item.label" :value="item.code">
                         </el-option>
                     </el-select>
-                    <el-button class="btn-top" style="background-color:rgb(246, 184, 184);" size="mini"><i class="el-icon-upload2"></i> Upload</el-button>
+                    <el-button class="btn-top" @click="uploadDialogVisible = true" style="background-color:rgb(246, 184, 184);" size="mini"><i class="el-icon-upload2"></i> Upload</el-button>
                     <el-button class="btn-top" @click="back" style="background-color: rgb(190, 205, 223);" size="mini"><i class="el-icon-back"></i>Back</el-button>
                 </div>
 
             </el-card>
             <el-card>
-                <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;text-align:center">
+                <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;">
                     <el-table-column type="selection" width="50"></el-table-column>
                     <template v-for="item in tableColownms">
-                        <el-table-column v-if="item.field!='id'" :key="item.id" :prop="item.field" sortable :label="item.label">
+                        <el-table-column v-if="item.type!='hidden'" :key="item.id" :prop="item.field" sortable :label="item.label">
                             <template slot-scope="scope">
                                 <div v-if="!['sourceLocale','targetLocale','status','screenshotFlag'].includes(item.field)">
                                     {{scope.row[item.field]}}
@@ -112,7 +113,7 @@
 
                 </el-table>
             </el-card>
-
+            <div style="width:100%;height:150px;"></div>
             <div class="compareDia">
                 <el-dialog :visible.sync="compareDialog" fullscreen width="100%" custom-class="compare" style="background:black" :before-close="handleClose" center>
                     <div class="left" style="width:50%;float:left">
@@ -149,6 +150,17 @@
         <!-- <div class="fanye" style="padding-bottom:50px;margin-top:15px">
             <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="dataList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin: 10px 0" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
         </div> -->
+        <el-dialog title="UpLoad" :visible.sync="uploadDialogVisible" width="30%" center>
+            <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/uploadTestRunZipFile?token=123`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+                <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
+                <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.zip file only, less than 50m</div>
+            </el-upload>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="uploadDialogVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="uploadDialogVisible = false">Confirm</el-button>
+            </span>
+        </el-dialog>
     </el-col>
 </el-row>
 </template>
@@ -180,11 +192,14 @@ export default {
             testSetId: '',
             productList: '',
             releaseList: '',
-            testSetList: ''
+            testSetList: '',
+            uploadDialogVisible: false,
+            fileList: []
         }
     },
     created() {
-
+        console.log(22134654649687)
+        console.log(this.uploadDialogVisible);
         this.runId = this.$route.query.runId;
         this.locale = this.$route.query.locale;
 
@@ -224,7 +239,7 @@ export default {
         nextStep() {
             this.direct = 'right';
             console.log(this.stepId);
-            if (this.stepId == this.dataList.length - 1) {
+            if (this.stepId == this.dataList.length) {
                 this.$message({
                     message: 'It is the last',
                     type: 'warning',
@@ -246,7 +261,7 @@ export default {
         beforeStep() {
             this.direct = 'left';
             console.log(this.stepId);
-            if (this.stepId == 0) {
+            if (this.stepId == 1) {
                 this.$message({
                     message: 'This is the first',
                     type: 'warning',
@@ -264,7 +279,35 @@ export default {
                     this.direct = ''
                 }, 300);
             }
-        }
+        },
+        //import method
+        submitUpload() {
+            this.$refs.upload.submit();
+        },
+        handleRemove(file, fileList) {
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+        },
+        uploadSuccess(res) {
+            this.centerDialogVisible = false;
+            console.log('asdfasdfasdfasdfasdf')
+            console.log(res)
+            if (res.ec == 0) {
+                this.$message({
+                    message: 'Import Success',
+                    type: 'success'
+                });
+
+            } else {
+                this.$message({
+                    message: `Error Code:${res.data.ec}, Error Message:"${res.data.em}`,
+                    type: 'warning'
+                });
+            }
+            // this.getNavgationList();
+        },
     }
 }
 </script>
@@ -325,7 +368,7 @@ export default {
         background-color: lightblue
     }
 
-    .el-dropdown-link {  
+    .el-dropdown-link {
         cursor: pointer;
         font-weight: bold;
         font-famliy: Poppins;

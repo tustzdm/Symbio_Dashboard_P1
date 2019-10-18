@@ -62,7 +62,7 @@
                 <i class="el-icon-arrow-right"></i>
             </span>
         </div>
-        <div class="product-select select">
+        <div class="select">
             <el-dropdown trigger="click" @command="handleTestsetCommand">
                 <span class="el-dropdown-link">
                     {{testSetName}}
@@ -161,45 +161,21 @@
                                 <span style="font-family:Poppins;">TEP Name</span>
                             </div>
                             <div style="float:left; text-align:left;">
-                                <select value="1" id="" style="margin-left:20px;height:30px;width:300px">
-                                    <option v-for="item in tepnameList" :key="item.id">{{item.name}}</option>
+                                <select v-model="tepId" id="" style="margin-left:20px;height:30px;width:300px">
+                                    <option v-for="item in tepnameList" :key="item.id" :value="item.id">{{item.name}}</option>
                                 </select>
                             </div>
                         </div>
                     </td>
                 </tr>
-                <tr>
+                <tr v-for="item in testSelectList" :key="item.id">
                     <td>
                         <div>
                             <div style="width: 40%; float:left; text-align: right; margin-right:10px;margin-top:8px;height:30px;">
-                                <span style="font-family:Poppins;">BRANCH</span>
+                                <span style="font-family:Poppins;">{{item.name}}</span>
                             </div>
                             <div style="float:left; text-align:left;">
-                                <el-input placeholder="repository" style="margin-left:20px;width:300px" value="develop"></el-input>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div>
-                            <div style="width: 40%; float:left; text-align: right; margin-right:10px;margin-top:8px;height:30px;">
-                                <span style="font-family:Poppins;">Suite XML file</span>
-                            </div>
-                            <div style="float:left; text-align:left;">
-                                <el-input placeholder="xml file" style="margin-left:20px;width:300px" value="SampleSuite.xml"></el-input>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div>
-                            <div style="width: 40%; float:left; text-align: right; margin-right:10px;margin-top:8px;height:30px;">
-                                <span style="font-family:Poppins;">TestRun ID</span>
-                            </div>
-                            <div style="float:left; text-align:left;">
-                                <el-input placeholder="Id of TestRun" style="margin-left:20px;width:300px" value="268">268</el-input>
+                                <el-input placeholder="repository" style="margin-left:20px;width:300px" :value="item.defaultValue"></el-input>
                             </div>
                         </div>
                     </td>
@@ -235,6 +211,7 @@ export default {
             centerDialogVisible: false,
             runDialogVisible: false,
             tepnameList: [],
+            tepId: '5',
             testSelectList: [],
             fatherSelectList: '',
             fileList: []
@@ -253,10 +230,18 @@ export default {
             this.testSelectList = res.cd.data
         });
     },
-    mounted() {
-
-    },
+    mounted() {},
     watch: {
+        tepId: function (val) {
+            this.Fetch(`/result/getTEPInfo?token=1&testSetId=1&tepId=${val}`, {
+                method: "GET"
+            }).then(res => {
+                console.log(res);
+                this.tepnameList = res.cd.nameList;
+                console.log(this.tepnameList)
+                this.testSelectList = res.cd.data
+            });
+        }
         // productId:function (val) {
         //     this.releaseName = 'Release';
         //     this.testSetName = 'TestSet';
@@ -412,10 +397,6 @@ export default {
     margin: 3px 12px;
     width: 150px;
     font-famliy: Poppins;
-}
-
-.product-select {
-    width: 300px;
 }
 
 .sperate-arrow {

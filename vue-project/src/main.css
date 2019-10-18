@@ -131,3 +131,8 @@ tbody tr td .cell{
 .el-dialog__close{
   font-size: 25px
 }
+/* 修改翻页器的字体 */
+.el-pagination span{
+  font-family: "Poppins";
+  color: black
+}
