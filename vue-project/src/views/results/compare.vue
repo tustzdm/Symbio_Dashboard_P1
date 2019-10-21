@@ -74,7 +74,7 @@
 
             </el-card>
             <el-card>
-                <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;">
+                <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;" row-class-name="step">
                     <el-table-column type="selection" width="50"></el-table-column>
                     <template v-for="item in tableColownms">
                         <el-table-column v-if="item.type!='hidden'" :key="item.id" :prop="item.field" sortable :label="item.label">
@@ -140,9 +140,19 @@
 
                         <el-button icon="el-icon-zoom-in" @click="imgActualSize" style="font-size:20px"> </el-button>
                         <el-button icon="el-icon-zoom-out" @click="imgFitScreen" style="font-size:20px"></el-button>
-                        <el-button icon="el-icon-chat-line-round " style="font-size:20px"></el-button>
+                        <el-button icon="el-icon-chat-line-round" @click="commentDialog=true" style="font-size:20px"></el-button>
                         <el-button icon="el-icon-upload2 " style="font-size:20px"></el-button>
                     </span>
+
+                    <el-dialog title="Add comment" :visible.sync="commentDialog" center append-to-body width="30%">
+                        <!-- <el-input type="textarea" :rows="5" placeholder="Input comment here" v-model="textarea">
+                        </el-input> 有bug-->
+                        <textarea id="comment_text" name="" rows="10" style="width:100%;height:100%;border-radius:5px;border:1px solid lightgray"></textarea>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="commentDialog = false">Cancel</el-button>
+                            <el-button type="primary" @click="submitComment">Confirm</el-button>
+                        </span>
+                    </el-dialog>
                 </el-dialog>
             </div>
         </div>
@@ -193,7 +203,8 @@ export default {
             releaseList: '',
             testSetList: '',
             uploadDialogVisible: false,
-            fileList: []
+            fileList: [],
+            commentDialog: false
         }
     },
     created() {
@@ -292,14 +303,23 @@ export default {
             }
             // this.getNavgationList();
         },
+        //调整图片的大小，目前是手机尺寸的类型
         imgFitScreen() {
             var winHeight = document.body.clientHeight || document.documentElement.clientHeight;
             document.getElementsByClassName('bigImg')[0].style.height = winHeight - 105 + 'px'
             document.getElementsByClassName('bigImg')[1].style.height = winHeight - 105 + 'px'
         },
         imgActualSize() {
-            document.getElementsByClassName('bigImg')[0].style.height ='100%';
+            document.getElementsByClassName('bigImg')[0].style.height = '100%';
             document.getElementsByClassName('bigImg')[1].style.height = '100%';
+        },
+
+        //submitComment
+        submitComment() {
+            var trId= this.stepId-1;
+            this.commentDialog = false ;
+            var comment_text=document.getElementById('comment_text').value;
+            document.getElementsByClassName('step')[trId].getElementsByTagName('td')[4].innerHTML = `<textarea name="" id="" rows="10" style="width:100%;height:100%;border-radius:5px;border:1px solid lightgray">${comment_text}</textarea>`
         }
     }
 }
