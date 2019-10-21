@@ -6,10 +6,9 @@
       <el-col :class="translateLeft">
         <div v-show="notforget">
           <div class="logo">
-            <div class="title">
-              <a>
-                <span>{{$t('login.sysName')}}</span>
-              </a>
+            <div  class="title">
+                <!-- <span>{{$t('login.sysName')}}</span> -->
+                <img style="width:72%;" src="../../assets/images/loginlogo.png" alt="">
             </div>
           </div>
         
@@ -22,7 +21,7 @@
                 <el-input :placeholder="$t('login.pwdplaceholder')" type="password" v-model="ruleForm.password"></el-input>
               </el-form-item>
               <el-form-item class="btn">
-                <el-button :loading="loading" type="primary" @click="handleLogin('ruleForm')">{{$t('login.btn')}}</el-button>
+                <el-button :loading="loading" type="primary" @click="aaa();">{{$t('login.btn')}}</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -83,7 +82,7 @@ export default {
     return {
       lang: this.$store.state.app.language,
       ruleForm: {
-        username: storage.get('loginUser') || 'admin',
+        username: storage.get('loginUser'),
         password: ''
       },
       rules: {
@@ -131,6 +130,22 @@ export default {
     }
   },
   methods: {
+    aaa(){
+      if(this.ruleForm.password!=''){
+          if(this.ruleForm.password!='symbio123'){
+          this.$message({
+              message: 'User or Password is not correct',
+              type: 'error',
+              duration: 1500,
+              offset:380
+          });
+          return
+          }
+      }else{
+          return false
+      }
+      this.handleLogin('ruleForm');
+    },
     wrapSwitch(state) {
       this.switchLeft = !this.switchLeft
       this.switchRight = !this.switchRight
@@ -235,13 +250,13 @@ export default {
   box-shadow 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04)
 
   .logo
-    padding-top 26px
+    padding-top 10px
     text-align center
+    padding-bottom 13px
 
   .title
     font-weight bold
     color main-color
-    padding-top 8px
     font-size 22px
 
     a

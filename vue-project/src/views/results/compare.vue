@@ -117,29 +117,29 @@
             <div class="compareDia">
                 <el-dialog :visible.sync="compareDialog" fullscreen width="100%" custom-class="compare" style="background:black" :before-close="handleClose" center>
                     <div class="left" style="width:50%;float:left">
-                        <div style="float:left;position:fixed;top:45%;left:0">
-                            <i @click="beforeStep" style="color:white;font-size:45px;font-weight:bold" :class="{nextbefore:direct=='left'}" class="el-icon-arrow-left beforeStep"></i>
+                        <div class="iBox" style="float:left;position:fixed;top:45%;left:0">
+                            <i @click="beforeStep" style="color:white;font-size:45px;font-weight:bold" class="el-icon-arrow-left beforeStep"></i>
                         </div>
                         <div style="width:85%;height:100%;float:right;padding-right:4px;box-sizing:border-box;">
-                            <img class="thumbnail" style="float:right" :src="leftImg" alt="screenShot">
+                            <img class="bigImg" style="float:right;height:100%" :src="leftImg" alt="screenShot">
                         </div>
                     </div>
 
-                    <div style="width:50%;float:left">
+                    <div class="right" style="width:50%;float:left">
                         <div style="width:85%;height:100%;float:left;padding-left:4px;box-sizing:border-box;">
-                            <img v-if="rightImg!=''" class="thumbnail" style="float:left" :src="rightImg" alt="screenShot">
+                            <img v-if="rightImg!=''" class="bigImg" style="float:left" :src="rightImg" alt="screenShot">
                         </div>
 
-                        <div style="float:right;top:45%;right:0;position:fixed">
-                            <i @click="nextStep" style="color:white;font-size:45px;font-weight:bold" :class="{nextbefore:direct=='right'}" class="el-icon-arrow-right"></i>
+                        <div class="iBox" style="float:right;top:45%;right:0;position:fixed">
+                            <i @click="nextStep" style="color:white;font-size:45px;font-weight:bold" class="el-icon-arrow-right"></i>
                         </div>
                     </div>
 
                     <span slot="title" class="dialog-footer" center>
                         <span style="position:absolute;float:left;font-size:25px;color:white;left:100px;font-weight:bold">Step:{{stepId}}</span>
 
-                        <el-button icon="el-icon-zoom-in" style="font-size:20px"> </el-button>
-                        <el-button icon="el-icon-zoom-out " style="font-size:20px"></el-button>
+                        <el-button icon="el-icon-zoom-in" @click="imgActualSize" style="font-size:20px"> </el-button>
+                        <el-button icon="el-icon-zoom-out" @click="imgFitScreen" style="font-size:20px"></el-button>
                         <el-button icon="el-icon-chat-line-round " style="font-size:20px"></el-button>
                         <el-button icon="el-icon-upload2 " style="font-size:20px"></el-button>
                     </span>
@@ -183,7 +183,6 @@ export default {
             stepId: '',
             leftImg: 'ssss',
             rightImg: 'sssss',
-            direct: '',
             productName: 'Product',
             releaseName: 'Release',
             testSetName: 'TestSet',
@@ -202,7 +201,6 @@ export default {
         console.log(this.uploadDialogVisible);
         this.runId = this.$route.query.runId;
         this.locale = this.$route.query.locale;
-
         this.getTableData();
     },
     computed: {},
@@ -237,29 +235,21 @@ export default {
             });
         },
         nextStep() {
-            this.direct = 'right';
-            console.log(this.stepId);
+            console.log(this.stepId)
+
             if (this.stepId == this.dataList.length) {
                 this.$message({
                     message: 'It is the last',
                     type: 'warning',
                     duration: 1000
                 });
-                setTimeout(() => {
-                    this.direct = ''
-                }, 300);
-                return
             } else {
                 this.stepId++;
                 this.leftImg = this.dataList[this.stepId].sourceLocale.url;
                 this.rightImg = this.dataList[this.stepId].targetLocale.url;
-                setTimeout(() => {
-                    this.direct = ''
-                }, 300);
             }
         },
         beforeStep() {
-            this.direct = 'left';
             console.log(this.stepId);
             if (this.stepId == 1) {
                 this.$message({
@@ -267,17 +257,11 @@ export default {
                     type: 'warning',
                     duration: 1000
                 });
-                setTimeout(() => {
-                    this.direct = ''
-                }, 300);
                 return
             } else {
                 this.stepId--;
                 this.leftImg = this.dataList[this.stepId].sourceLocale.url;
                 this.rightImg = this.dataList[this.stepId].targetLocale.url;
-                setTimeout(() => {
-                    this.direct = ''
-                }, 300);
             }
         },
         //import method
@@ -308,6 +292,15 @@ export default {
             }
             // this.getNavgationList();
         },
+        imgFitScreen() {
+            var winHeight = document.body.clientHeight || document.documentElement.clientHeight;
+            document.getElementsByClassName('bigImg')[0].style.height = winHeight - 105 + 'px'
+            document.getElementsByClassName('bigImg')[1].style.height = winHeight - 105 + 'px'
+        },
+        imgActualSize() {
+            document.getElementsByClassName('bigImg')[0].style.height ='100%';
+            document.getElementsByClassName('bigImg')[1].style.height = '100%';
+        }
     }
 }
 </script>
@@ -364,16 +357,21 @@ export default {
         border: 0
     }
 
-    .nextbefore {
-        background-color: lightblue
-    }
-
     .el-dropdown-link {
         cursor: pointer;
         font-weight: bold;
         font-famliy: Poppins;
         color: #272727;
         font-size: 15px;
+    }
+
+    /* 设置图片翻页按钮的动态效果 */
+    .left .iBox:active {
+        background-color: lightblue
+    }
+
+    .right .iBox:active {
+        background-color: lightblue
     }
 }
 </style>
