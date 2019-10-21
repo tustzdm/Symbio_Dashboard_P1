@@ -139,8 +139,9 @@ public class TestRunDao {
             List<Map<String, Object>> listTestRun;
 
             String sql = String.format("SELECT %s FROM test_run tr " +
-                    "JOIN test_case tc ON tr.testcase_id = tc.id " +
-                    "WHERE tr.testset_id = %d AND tr.display = 1 AND tr.validation = 1", strFields, testSetId);
+                    " JOIN test_case tc ON tr.testcase_id = tc.id " +
+                    " WHERE tr.testset_id = %d AND tr.display = 1 AND tr.validation = 1" +
+                    " ORDER BY tr.id", strFields, testSetId);
             if (pageIndex != null && pageSize != null) {
                 sql += String.format(" LIMIT %d,%d", pageIndex, pageSize);
             }
