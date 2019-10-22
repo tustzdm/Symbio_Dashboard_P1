@@ -141,8 +141,16 @@
                         <el-button icon="el-icon-zoom-in" @click="imgActualSize" style="font-size:20px"> </el-button>
                         <el-button icon="el-icon-zoom-out" @click="imgFitScreen" style="font-size:20px"></el-button>
                         <el-button icon="el-icon-chat-line-round" @click="commentDialog=true" style="font-size:20px"></el-button>
-                        <el-button icon="el-icon-upload2 " style="font-size:20px"></el-button>
+                        <el-button icon="el-icon-upload2 " @click="reportDialog=true" style="font-size:20px"></el-button>
                     </span>
+
+                    <el-dialog title="Report Bug" :visible.sync="reportDialog" center append-to-body width="30%">
+                        <canvas id="xxx" width=300 height=300></canvas>
+                        <span slot="footer" class="dialog-footer">
+                            <el-button @click="reportDialog = false">Cancel</el-button>
+                            <el-button type="primary" @click="submitComment">Confirm</el-button>
+                        </span>
+                    </el-dialog>
 
                     <el-dialog title="Add comment" :visible.sync="commentDialog" center append-to-body width="30%">
                         <!-- <el-input type="textarea" :rows="5" placeholder="Input comment here" v-model="textarea">
@@ -204,7 +212,8 @@ export default {
             testSetList: '',
             uploadDialogVisible: false,
             fileList: [],
-            commentDialog: false
+            commentDialog: false,
+            reportDialog:false
         }
     },
     created() {

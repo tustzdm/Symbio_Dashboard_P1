@@ -214,6 +214,15 @@ export const constantRouterMap = [
                     title: "compare",
                     icon: "",
                 },
+            },
+            {
+                path: "results/drawer",
+                component: _import("results/drawer"),
+                name: "drawer",
+                meta: {
+                    title: "drawer",
+                    icon: "",
+                },
             }
         ],
         
