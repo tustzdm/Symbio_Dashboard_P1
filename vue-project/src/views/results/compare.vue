@@ -316,10 +316,15 @@ export default {
 
         //submitComment
         submitComment() {
-            var trId= this.stepId-1;
-            this.commentDialog = false ;
-            var comment_text=document.getElementById('comment_text').value;
-            document.getElementsByClassName('step')[trId].getElementsByTagName('td')[4].innerHTML = `<textarea name="" id="" rows="10" style="width:100%;height:100%;border-radius:5px;border:1px solid lightgray">${comment_text}</textarea>`
+            var trId = this.stepId - 1;
+            this.commentDialog = false;
+            var comment_text = document.getElementById('comment_text').value;
+            document.getElementsByClassName('step')[trId].getElementsByTagName('td')[4].innerHTML = `<textarea name="" id="" rows="5" style="width:95%;margin-top:0;height:100%;border-radius:3px;border:1px solid lightgray">${comment_text}</textarea>`;
+            this.$message({
+                message: 'Comment add successfully',
+                type: 'warning',
+                duration: 1300
+            });
         }
     }
 }
