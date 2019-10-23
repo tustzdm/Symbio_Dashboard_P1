@@ -223,6 +223,15 @@ export const constantRouterMap = [
                     title: "drawer",
                     icon: "",
                 },
+            },
+            {
+                path: "results/paint",
+                component: _import("results/paint"),
+                name: "paint",
+                meta: {
+                    title: "paint",
+                    icon: "",
+                },
             }
         ],
         

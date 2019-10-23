@@ -144,8 +144,8 @@
                         <el-button icon="el-icon-upload2 " @click="reportDialog=true" style="font-size:20px"></el-button>
                     </span>
 
-                    <el-dialog title="Report Bug" :visible.sync="reportDialog" center append-to-body width="30%">
-                        <canvas id="xxx" width=300 height=300></canvas>
+                    <el-dialog title="Report Bug" :visible.sync="reportDialog" center append-to-body width="70%">
+                        <drawer :url="rightImg"></drawer>
                         <span slot="footer" class="dialog-footer">
                             <el-button @click="reportDialog = false">Cancel</el-button>
                             <el-button type="primary" @click="submitComment">Confirm</el-button>
@@ -184,6 +184,7 @@
 </template>
 
 <script>
+import drawer from './drawer'
 export default {
     name: 'compare',
     data() {
@@ -215,6 +216,9 @@ export default {
             commentDialog: false,
             reportDialog:false
         }
+    },
+    components: {
+        drawer: drawer
     },
     created() {
         console.log(22134654649687)

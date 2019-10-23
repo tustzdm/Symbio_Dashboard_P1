@@ -1,30 +1,36 @@
 <template>
 <div class="inner draw" @mousemove="beginPath($event)">
     <div class="wrap">
-        <canvas id="canvas" class="fl"  width="600" height="400" style="background-image:url('https://vue.symbio.com.cn/mock/image/0_480/1076_1077_1/762/en_US/screenshots/001.png')" @mousedown="canvasDown($event)" @mouseup="canvasUp($event)" @mousemove="canvasMove($event)" @touchstart="canvasDown($event)" @touchend="canvasUp($event)" @touchmove="canvasMove($event)">
+        <canvas id="canvas" class="fl" width="300" height="600" @mousedown="canvasDown($event)" @mouseup="canvasUp($event)" @mousemove="canvasMove($event)" @touchstart="canvasDown($event)" @touchend="canvasUp($event)" @touchmove="canvasMove($event)">
         </canvas>
         <div id="control" class="fl">
             <!--画笔颜色-->
             <div id="canvas-color">
                 <h5>
-                   Color:</h5>
+                    Color</h5>
                 <ul>
                     <li v-for="item in colors" :class="{'active':config.lineColor === item}" :style="{ background: item }" @click="setColor(item)"></li>
                 </ul>
             </div>
             <!--画笔-->
             <div id="canvas-brush">
-                <h5>Size:</h5>
-                <span v-for="pen in brushs" :class="[pen.className,{'active': config.lineWidth === pen.lineWidth}]" @click="setBrush(pen.lineWidth)"></span>
+                <h5>Size</h5>
+                <span v-for="pen in brushs" :class="[pen.className,{'active': config.lineWidth === pen.lineWidth}]" @click="setBrush(pen.lineWidth)">
+                    <i class="el-icon-edit"></i>
+                </span>
             </div>
             <!--操作-->
             <div id="canvas-control">
-                <h5>Operate</h5>
-                <span v-for="control in controls" :title="control.title" :class="control.className" @click="controlCanvas(control.action)"></span>
+                <h5>Control</h5>
+                <span v-for="control in controls" :title="control.title" :class="control.className" @click="controlCanvas(control.action)">
+                    <i v-if="control.action=='prev'" class="el-icon-back"></i>
+                    <i v-if="control.action=='next'" class="el-icon-right"></i>
+                    <i v-if="control.action=='clear'" class="el-icon-delete"></i>
+                </span>
             </div>
             <!-- 生成图像-->
             <div id="canvas-drawImage">
-                <h5>Generate img</h5>
+                <h5>Generate</h5>
                 <button class="drawImage" @click="getImage()">Generate</button>
             </div>
         </div>
@@ -41,6 +47,7 @@
 
 <script>
 export default {
+    name: 'drawer',
     data() {
         return {
             colors: ['#fef4ac', '#0018ba', '#ffc200', '#f32f15', '#cccccc', '#5ab639'],
@@ -68,22 +75,32 @@ export default {
                 lineWidth: 1,
                 lineColor: '#f2849e',
                 shadowBlur: 2
-            }
+            },
+            imgEdit:this.url
         }
+    },
+    props: {
+        url: String
     },
     created() {
         this.$emit('setNav', '在线涂鸦画板')
+        alert(this.imgEdit)
     },
     mounted() {
         const canvas = document.querySelector('#canvas')
         this.context = canvas.getContext('2d')
+        var imgObj = new Image();
+        imgObj.src = this.imgEdit;
+        //待图片加载完后，将其显示在canvas上
+        imgObj.onload = function () {
+            var ctx = canvas.getContext('2d');
+            // ctx.drawImage(this, 0, 0); //this即是imgObj,保持图片的原始大小：470*480
+            ctx.drawImage(this, 0, 0, 300, 600); //改变图片的大小到1024*768
+        }
         this.initDraw()
         this.setCanvasStyle()
         document.querySelector('#footer').classList.add('hide-footer')
-        document.querySelector('body').classList.add('fix-body');
-         //创建image对象
-        
-
+        document.querySelector('body').classList.add('fix-body')
     },
     destroyed() {
         document.querySelector('#footer').classList.remove('hide-footer')
@@ -134,8 +151,13 @@ export default {
                 let canvasX
                 let canvasY
                 if (this.isPc()) {
-                    canvasX = e.clientX - t.parentNode.offsetLeft
-                    canvasY = e.clientY - t.parentNode.offsetTop
+                    console.log(t.parentNode.parentNode)
+                    // alert(1111)
+                    // canvasX = e.clientX - t.parentNode.offsetLeft
+                    // canvasY = e.clientY - t.parentNode.offsetTop
+                    canvasX = e.clientX - document.querySelector('.draw').parentNode.parentNode.offsetLeft - 25;
+                    canvasY = e.clientY - document.querySelector('.draw').parentNode.parentNode.offsetTop - 80;
+                    console.log(e.offsetLeft);
                 } else {
                     canvasX = e.changedTouches[0].clientX - t.parentNode.offsetLeft
                     canvasY = e.changedTouches[0].clientY - t.parentNode.offsetTop
