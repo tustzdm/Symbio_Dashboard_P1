@@ -1016,6 +1016,7 @@ CREATE TABLE `issue_reason` (
   `createUserName` varchar(32) DEFAULT NULL COMMENT 'Create user name',
   `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
   PRIMARY KEY (`id`)
+--  UNIQUE KEY `unique_issue_reason_category_reason` (`issue_category_id`,`reason`,`validation`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Issue reason';
 
 -- 2019/8/26

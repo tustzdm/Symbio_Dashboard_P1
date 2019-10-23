@@ -34,6 +34,6 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public Result AddProductIssueInfo(Integer productId) {
-        return null;
+        return issueDao.AddNewProductIssueCategory(productId);
     }
 }

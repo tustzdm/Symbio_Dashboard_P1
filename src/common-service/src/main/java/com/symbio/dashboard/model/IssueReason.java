@@ -32,7 +32,7 @@ public class IssueReason implements Serializable {
     @Column(name = "reason")
     private String reason;
 
-    @Column(name = "issueLevel")
+    @Column(name = "issue_level")
     private Integer issueLevel;
 
     @Column(name = "idx", nullable = false)

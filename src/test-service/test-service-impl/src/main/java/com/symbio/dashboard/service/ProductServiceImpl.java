@@ -1,8 +1,10 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.charts.BarChart;
 import com.symbio.dashboard.data.charts.PieChart;
+import com.symbio.dashboard.data.dao.IssueDao;
 import com.symbio.dashboard.data.dao.ProductDao;
 import com.symbio.dashboard.data.dao.UserDao;
 import com.symbio.dashboard.data.repository.ProductRep;
@@ -34,6 +36,8 @@ public class ProductServiceImpl implements ProductService {
 
     private static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
+    @Autowired
+    private IssueDao issueDao;
     @Autowired
     private ProductDao productDao;
     @Autowired
@@ -91,7 +95,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Result updateProduct(Product productInfo) {
-        logger.trace("ProductServiceImpl.updateProduct() Enter");
+        String funcName = "ProductServiceImpl.updateProduct()";
+
+        logger.trace(funcName + " Enter");
 
         Result result = null;
         String strMsg = null;
@@ -145,7 +151,10 @@ public class ProductServiceImpl implements ProductService {
 
                 // If new product, add issue category and reason at the same time
                 if (bAddNewProduct) {
-
+                    Result retCloneIssueInfo = issueDao.AddNewProductIssueCategory(product.getId());
+                    if (!retCloneIssueInfo.isSuccess()) {
+                        logger.error(ErrorConst.getErrorLogMsg(funcName + " - AddNewProductIssueCategory", retCloneIssueInfo));
+                    }
                 }
 
                 Map<String, Integer> map = new HashMap<>();

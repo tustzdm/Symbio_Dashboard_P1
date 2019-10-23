@@ -1,6 +1,7 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.business.IssueFactory;
 import com.symbio.dashboard.data.repository.IssueCategoryRep;
 import com.symbio.dashboard.data.repository.IssueReasonRep;
 import com.symbio.dashboard.model.IssueCategory;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ import java.util.List;
 
 @Repository
 @Slf4j
+@Transactional
 @SuppressWarnings("unchecked")
 public class IssueDao {
 
@@ -44,6 +47,32 @@ public class IssueDao {
         return retResult;
     }
 
+    public Result AddNewProductIssueCategory(Integer productId) {
+
+        int nInsert = 0;
+        try {
+            nInsert = issueCategoryRep.copyCommonCategory(productId);
+
+            List<IssueCategory> listCommCategory = issueCategoryRep.getByProductId(0);
+            List<IssueCategory> listNewCategory = issueCategoryRep.getByProductId(productId);
+            List<IssueReason> listCommReason = issueReasonRep.getByProductId(0);
+
+            Integer categoryId = null;
+            Integer newCategoryId = null;
+            for (IssueReason reason : listCommReason) {
+                categoryId = reason.getIssueCategoryId();
+
+                newCategoryId = IssueFactory.findAppropriateCategoryId(categoryId, listCommCategory, listNewCategory);
+                if (newCategoryId != null && newCategoryId > 0) {
+                    IssueReason newReason = IssueFactory.cloneNewIssueRease(newCategoryId, reason);
+                    issueReasonRep.saveAndFlush(newReason);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new Result(nInsert);
+    }
 
     public Result addProductIssue(Integer productId) {
         Result retResult = new Result();
