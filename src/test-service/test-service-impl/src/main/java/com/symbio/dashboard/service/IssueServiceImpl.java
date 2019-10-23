@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 /**
  * @ClassName - IssueServiceImpl
- * @Author - admin
+ * @Author - Shawn
  * @Description
- * @Date - 2019/8/28 14:41
+ * @Date - 2019/10/23
  * @Version 1.0
  */
 
@@ -28,7 +28,12 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public Result addNewCategory(Integer productId, Integer caseType) {
+    public Result addProdutIssueCategory(Integer productId) {
+        return null;
+    }
+
+    @Override
+    public Result AddProductIssueInfo(Integer productId) {
         return null;
     }
 }

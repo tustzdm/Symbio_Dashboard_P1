@@ -8,5 +8,9 @@ public interface IssueService {
 
     Result addProductIssue(Integer productId);
 
-    Result addNewCategory(Integer productId, Integer caseType);
+    Result AddProductIssueInfo(Integer productId);
+
+    Result addProdutIssueCategory(Integer productId);
+
+
 }

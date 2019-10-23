@@ -22,7 +22,7 @@ import java.util.Date;
 public class IssueReason implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -40,6 +40,9 @@ public class IssueReason implements Serializable {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "validation")
+    private Integer validation;
 
     @Column(name = "createTime")
     private Date createTime;

@@ -95,6 +95,7 @@ public class ProductServiceImpl implements ProductService {
 
         Result result = null;
         String strMsg = null;
+        Boolean bAddNewProduct = false;
 
         try {
             Product product = productInfo;
@@ -103,6 +104,7 @@ public class ProductServiceImpl implements ProductService {
 
             // If id is null, add new Product
             if (BusinessUtil.isIdEmpty(productInfo.getId())) {
+                bAddNewProduct = true;
                 strMsg = "Added";
                 result = verifyProductInfo(productInfo);
                 if (result.hasError()) {
@@ -140,6 +142,12 @@ public class ProductServiceImpl implements ProductService {
             try {
                 // Save or update
                 product = productRep.saveAndFlush(product);
+
+                // If new product, add issue category and reason at the same time
+                if (bAddNewProduct) {
+
+                }
+
                 Map<String, Integer> map = new HashMap<>();
                 map.put("id", product.getId());
                 result = new Result(map);

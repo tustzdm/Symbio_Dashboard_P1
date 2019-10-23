@@ -54,6 +54,12 @@ public class ResultReviewController extends BaseController {
     @Autowired
     private MonitorServiceImpl monitorService;
 
+    /**
+     * 得到Test Run List
+     *
+     * @param testRun
+     * @return
+     */
     @RequestMapping("/getList")
     public Result getList(@RequestBody TestRunVO testRun) {
         log.trace("ResultReviewController.getList() Enter");
@@ -79,6 +85,17 @@ public class ResultReviewController extends BaseController {
         return retResult;
     }
 
+    /**
+     * 得到 Result Review List 数据
+     *
+     * @param token
+     * @param locale
+     * @param testRunId
+     * @param trlocale
+     * @param pageIndex
+     * @param pageSize
+     * @return
+     */
     @RequestMapping("/getReviewList")
     public Result getReviewList(@RequestParam(value = "token") String token,
                                 @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
@@ -128,6 +145,15 @@ public class ResultReviewController extends BaseController {
         return retResult;
     }
 
+    /**
+     * 上传 Excel文件，用于导入Test Run / Test Result 数据
+     *
+     * @param token
+     * @param testSetId
+     * @param locale
+     * @param request
+     * @return
+     */
     @RequestMapping("/upload")
     public Result importTestCaseExcel(@RequestParam(value = "token", required = false, defaultValue = "") String token,
                                       @RequestParam(value = "testSetId", required = false, defaultValue = "0") Integer testSetId,

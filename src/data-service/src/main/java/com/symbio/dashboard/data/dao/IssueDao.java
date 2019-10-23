@@ -32,6 +32,18 @@ public class IssueDao {
     @Autowired
     private IssueReasonRep issueReasonRep;
 
+    public Result<List<IssueCategory>> getCommonProductIssueCategory() {
+        Result<List<IssueCategory>> retResult = new Result();
+
+        List<IssueCategory> listData = issueCategoryRep.findByProductIdAndValidation(0, 1);
+        if (CommonUtil.isEmpty(listData)) {
+            listData = new ArrayList<>();
+        }
+        retResult.setCd(listData);
+
+        return retResult;
+    }
+
 
     public Result addProductIssue(Integer productId) {
         Result retResult = new Result();
