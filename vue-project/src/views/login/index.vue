@@ -8,7 +8,8 @@
           <div class="logo">
             <div  class="title">
                 <!-- <span>{{$t('login.sysName')}}</span> -->
-                <img style="width:72%;" src="../../assets/images/loginlogo.png" alt="">
+                <img style="width:16%;float:left;margin:38px 7px 0 30px;" src="../../assets/images/symbio.png" alt="">
+                <div style="width:69%;float:left;margin-top:55px;">Smart Test Ops</div>
             </div>
           </div>
         
@@ -242,7 +243,7 @@ export default {
   
 .login-wrap
   overflow hidden
-  width 400px
+  width 500px
   height 400px
   background white
   border-radius 4px
@@ -255,9 +256,10 @@ export default {
     padding-bottom 13px
 
   .title
+    font-font-family Poppins
     font-weight bold
-    color main-color
-    font-size 22px
+    font-size 47px
+    color #fa7b30
 
     a
       cursor cell

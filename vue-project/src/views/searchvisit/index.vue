@@ -10,26 +10,30 @@
             <el-table-column v-if="run" label="" width="80">
                 <i class="el-icon-loading"></i>
             </el-table-column>
-            <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" :width="['id'].includes(item.field )? '50px':''" sortable :label="item.label">
+            <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" :width="['id'].includes(item.field )? '100px':['status','screenshotFlag','locale','priority'].includes(item.field )? '140px':''" sortable :label="item.label">
                 <template slot-scope="scope">
-                    <div v-if="!['status','screenshotFlag'].includes(item.field)">
+                    <div v-if="!['status','screenshotFlag','priority'].includes(item.field)">
                         {{scope.row[item.field]}}
                     </div>
+                    <span v-if="item.field=='priority'" style="border-radius:3px;padding:0 5px" :class="scope.row[item.field]">
+                        {{scope.row[item.field]}}
+                    </span>
                     <div v-if="item.field=='status'">
-                        <div>
-                            <div style="height:10px;width:10px;border-radius:50%;display:inline-block;margin-top:6px;margin-right:8px" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></div>
-                            <span style="display:inline-block">{{statusArray[scope.row[item.field]]}}</span>
+                        <div style="">
+                            <span style="height:15px;width:15px;border-radius:50%;display:inline-block;margin-top:4px;margin-right:8px;" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></span>
+                            <span style="position:absolute">{{statusArray[scope.row[item.field]]}}</span>
                         </div>
                     </div>
-                    <div v-if="item.field=='screenshotFlag'">
+                    <div v-if="item.field=='screenshotFlag'" align="center">
                         <router-link :to="{ name: 'pictures', query: { status:scope.row.status, caseId:scope.row.caseId}}">
                             <img v-if="scope.row[item.field]!=0" src="../../assets/images/screenshot-icon2.png" alt="">
                         </router-link>
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column label="Review" width="80">
+            <el-table-column label="Review" width="80" align="center">
                 <template slot-scope="scope">
+
                     <router-link :to="{ name: 'compare', query: {locale:scope.row.locale, runId:scope.row.id}}">
                         <img style="width:15px" src="../../assets/images/eye.jpeg" alt="">
                     </router-link>
@@ -166,5 +170,22 @@ th .cell {
     font-weight: bold;
     font-size: 15px;
     color: #5B5B5B;
+}
+
+.P1{
+    color:white
+    background:#F44336
+}
+.P2{
+    color:white
+    background-color: #BA68C8
+}
+.P3{
+    color:white
+    background-color: #3F51B5
+}
+.P4{
+    color:white
+    background-color: #00BCD4
 }
 </style>

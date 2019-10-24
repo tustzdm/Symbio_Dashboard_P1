@@ -84,7 +84,7 @@ export default {
     },
     created() {
         this.$emit('setNav', '在线涂鸦画板')
-        alert(this.imgEdit)
+        // alert(this.imgEdit)
     },
     mounted() {
         const canvas = document.querySelector('#canvas')
@@ -152,7 +152,6 @@ export default {
                 let canvasY
                 if (this.isPc()) {
                     console.log(t.parentNode.parentNode)
-                    // alert(1111)
                     // canvasX = e.clientX - t.parentNode.offsetLeft
                     // canvasY = e.clientY - t.parentNode.offsetTop
                     canvasX = e.clientX - document.querySelector('.draw').parentNode.parentNode.offsetLeft - 25;

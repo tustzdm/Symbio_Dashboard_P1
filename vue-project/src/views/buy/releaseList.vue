@@ -2,9 +2,9 @@
 <div>
     <el-card class="manage-tabel" shadow="never">
         <!-- <el-table :data="tableData"> -->
-        <el-table :data="productList">
+        <el-table :data="productList" align="center">
             <p>{{productList}}</p>
-            <el-table-column prop="name" label="Name" :width="0.5*tabelWidth">
+            <el-table-column prop="name" align="center" label="Name" :width="0.5*tabelWidth">
                 <template slot-scope="scope">
                     <div>
                         <router-link :to="{ name: 'releaseInfo', query: { productId:productId, releaseId:scope.row.id}}">{{scope.row.name}}</router-link>
@@ -12,7 +12,7 @@
                     <div>{{scope.row.description}}</div>
                 </template>
             </el-table-column>
-            <el-table-column prop="progress" label="Progress" :width="0.25*tabelWidth">
+            <el-table-column prop="progress" align="center" label="Progress" :width="0.25*tabelWidth">
                 <template slot-scope="scope">
                     <div style="float:left;border:1px solid white;width:80%;height:100%;border-radius:10px;background-color:#e8ebf1">
                         <div v-bind:style="{width:scope.row.progress.progress}" style="float:left;background-color:#b1c9f7;border-radius:10px"><span v-if="scope.row.progress.done/scope.row.progress.total >1 ">{{scope.row.progress.done}}</span>{{scope.row.progress.done}}</div>
@@ -22,7 +22,7 @@
                     <!-- <el-progress :text-inside="true" :stroke-width="20" :percentage="90"></el-progress> -->
                 </template>
             </el-table-column>
-            <el-table-column label="Operation">
+            <el-table-column align="right" label="Operation">
                 <template slot-scope="scope">
                     <el-button :formId="scope.row.id" class="editDeleteBtn" @click="editRouter" icon="el-icon-edit" circle></el-button>
                     <el-button :formId="scope.row.id" class="editDeleteBtn" @click="deleteTr" type="danger" icon="el-icon-delete" circle></el-button>

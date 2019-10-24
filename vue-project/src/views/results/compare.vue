@@ -83,8 +83,9 @@
                                     {{scope.row[item.field]}}
                                 </div>
                                 <div v-if="item.field=='status'">
-                                    <!-- <div style="height:10px;width:10px;border-radius:50%;float:left;display:inline-block;margin-left:60px;margin-top:6px;margin-right:8px" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></div> -->
-                                    <span style="display:inline-block">{{statusArray[scope.row[item.field]]}}</span>
+                                    <!-- <span style="display:inline-block">{{statusArray[scope.row[item.field]]}}</span> -->
+                                    <span style="display:inline-block">{{getValueBycode(scope.row[item.field],statusList) }}</span>
+
                                     <!-- <span style="padding-right:10px">
                             <img style="width:100px;height:100px" class="thumbnail" src="../../assets/images/compare/1-en.png" alt="">
                         </span>
@@ -214,7 +215,8 @@ export default {
             uploadDialogVisible: false,
             fileList: [],
             commentDialog: false,
-            reportDialog:false
+            reportDialog: false,
+            statusList:[]
         }
     },
     components: {
@@ -254,23 +256,25 @@ export default {
                 console.log(11111111)
                 console.log(this.dataList);
                 this.localeList = res.cd.listLocales;
+
+                 this.statusList = res.cd.listStatus;
             }).catch(err => {
                 alert(err);
             });
         },
         nextStep() {
             console.log(this.stepId)
-
             if (this.stepId == this.dataList.length) {
                 this.$message({
                     message: 'It is the last',
                     type: 'warning',
                     duration: 1000
                 });
+                return
             } else {
                 this.stepId++;
-                this.leftImg = this.dataList[this.stepId].sourceLocale.url;
-                this.rightImg = this.dataList[this.stepId].targetLocale.url;
+                this.leftImg = this.dataList[this.stepId-1].sourceLocale.url;
+                this.rightImg = this.dataList[this.stepId-1].targetLocale.url;
             }
         },
         beforeStep() {
@@ -284,8 +288,8 @@ export default {
                 return
             } else {
                 this.stepId--;
-                this.leftImg = this.dataList[this.stepId].sourceLocale.url;
-                this.rightImg = this.dataList[this.stepId].targetLocale.url;
+                this.leftImg = this.dataList[this.stepId-1].sourceLocale.url;
+                this.rightImg = this.dataList[this.stepId-1].targetLocale.url;
             }
         },
         //import method
@@ -338,6 +342,14 @@ export default {
                 type: 'warning',
                 duration: 1300
             });
+        },
+        //getValueBycode
+        getValueBycode(code, list) {
+            for (var i = 0; i < list.length; i++) {
+                if (code == list[i].code) {
+                    return list[i].value;
+                }
+            }
         }
     }
 }

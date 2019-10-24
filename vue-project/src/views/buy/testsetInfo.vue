@@ -25,13 +25,22 @@
             <el-table :data="dataList" @selection-change="handleSelectionChange" style="width: 100%;height: 100%;text-align:center">
                 <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" sortable :label="item.label">
                     <template slot-scope="scope">
-                        <div v-if="item.field!='detailSteps'">
+                        <div v-if="!['detailSteps','caseType','priority'].includes(item.field)">
                             {{scope.row[item.field]}}
+                        </div>
+                        <span v-if="item.field=='priority'" style="border-radius:3px;padding:0 5px" :class="scope.row[item.field]">
+                            {{scope.row[item.field]}}
+                        </span>
+                        <div v-if="item.field=='caseType'">
+                            {{caseTypeList[scope.row[item.field]]}}
                         </div>
                         <div v-if="item.field=='detailSteps'">
                             <el-button type="text" @click="stepVisible = true">Steps</el-button>
-                            <el-dialog title="Steps Detail" :visible.sync="stepVisible" width="30%" :before-close="handleClose">
-                                {{scope.row[item.field]}}
+                            <el-dialog id="stepCon" title="Steps Detail" :visible.sync="stepVisible" width="30%">
+                                <!-- {{JSON.parse(scope.row[item.field])}} -->
+                                <ul>
+                                    <li v-for="item in JSON.parse(scope.row[item.field])">{{item}}</li>
+                                </ul>
                                 <span slot="footer" class="dialog-footer">
                                     <el-button type="primary" @click="stepVisible = false">OK</el-button>
                                 </span>
@@ -85,7 +94,8 @@ export default {
             dataList: [],
             tableColownms: {},
             stepVisible: false,
-            centerDialogVisible: false
+            centerDialogVisible: false,
+            caseTypeList:['','Automation TestCase','Manual TestCase','','API TestCase','','','','Performance TestCase']
         }
     },
     components: {
@@ -165,6 +175,9 @@ export default {
                 });
             }
             this.getTestCases();
+        },
+        getStepContent(){
+            document.getElementById('stepCon').innerHTML= val;
         }
     },
 }
@@ -195,5 +208,22 @@ export default {
 
 .has-gutter th .cell {
     font-family Poppins
+}
+
+.P1{
+    color:white
+    background:#F44336
+}
+.P2{
+    color:white
+    background-color: #BA68C8
+}
+.P3{
+    color:white
+    background-color: #3F51B5
+}
+.P4{
+    color:white
+    background-color: #00BCD4
 }
 </style>
