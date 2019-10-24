@@ -263,11 +263,24 @@ public class ProductDao {
 
         Progress progress;
         Random random = new Random();
+        boolean bProcessRandom = false;
         for (Map item : retMap) {
-            int total = random.nextInt(500);
-            int done = random.nextInt(500);
-            if (done > total) done = total;
-            progress = new Progress(done, total);
+            bProcessRandom = true;
+            if (item.containsKey("status")) {
+                if (Integer.parseInt(item.get("status").toString()) == 0) {
+                    bProcessRandom = false;
+                }
+            }
+
+            if (bProcessRandom) {
+                int total = random.nextInt(500);
+                int done = random.nextInt(500);
+                if (done > total) done = total;
+                progress = new Progress(done, total);
+
+            } else {
+                progress = new Progress(0, 0);
+            }
             item.put("progress", progress);
         }
         return retMap;

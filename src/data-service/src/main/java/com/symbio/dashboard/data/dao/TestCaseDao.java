@@ -14,6 +14,7 @@ import com.symbio.dashboard.model.TestCase;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
+import com.symbio.dashboard.util.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -159,6 +160,8 @@ public class TestCaseDao {
                 retListDTO.setFields(EntityUtils.getDTOFields(listDBFields));
                 retListDTO.setDataType(ListDataType.Map.getDataType());
 
+                listReleaseInfo = convertDataForBusiness(strFields, listReleaseInfo);
+
                 if (CommonUtil.isEmpty(listUserFields)) {
                     retListDTO.setData(listReleaseInfo);
                 } else {
@@ -180,6 +183,23 @@ public class TestCaseDao {
         }
 
         return retResult;
+    }
+
+    private List<Map<String, Object>> convertDataForBusiness(String fields, List<Map<String, Object>> data) {
+        List<Map<String, Object>> retList = data;
+
+        if (CommonUtil.isEmpty(fields) || CommonUtil.isEmpty(data)) {
+            retList = new ArrayList<>();
+        }
+
+        if (fields.contains("detail_steps")) {
+            String key = EntityUtils.getMapFieldKey("detail_steps");
+            for (Map<String, Object> item : data) {
+                String steps = item.get(key).toString();
+                item.put(key, JSONUtil.strToJSONArray(steps, ";").toString());
+            }
+        }
+        return retList;
     }
 
 

@@ -146,4 +146,24 @@ public class JSONUtil {
 
     return map;
   }
+
+  public static JSONArray strToJSONArray(String text, String splitSymbol) {
+    JSONArray retJSONArray = new JSONArray();
+
+    if (text == null || text.length() == 0) {
+      return retJSONArray;
+    }
+
+    try {
+      String[] arrContent = text.split(splitSymbol);
+      for (String item : arrContent) {
+        retJSONArray.put(item);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return retJSONArray;
+  }
+
 }
