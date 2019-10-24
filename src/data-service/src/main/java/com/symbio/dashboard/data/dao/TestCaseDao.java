@@ -5,7 +5,8 @@ import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.TestCaseRep;
 import com.symbio.dashboard.data.repository.TestSetRep;
-import com.symbio.dashboard.dto.CommonListDTO;
+import com.symbio.dashboard.dto.TestCaseListDTO;
+import com.symbio.dashboard.enums.DictionaryType;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.SysListSetting;
@@ -51,6 +52,9 @@ public class TestCaseDao {
     @Autowired
     private TestCaseRep testCaseRep;
 
+    @Autowired
+    private DictionaryDao dictDao;
+
     /**
      * 得到Test Set 列表信息
      *
@@ -64,7 +68,7 @@ public class TestCaseDao {
         log.trace("TestCaseDao.getTestCaseList() Enter.");
         log.debug(String.format("Args: locale = %s, testSetId = &d, pageIndex = %d, pageSize = %d", locale, testSetId, pageIndex, pageSize));
 
-        CommonListDTO retProdDTO = new CommonListDTO(locale, pageIndex, pageSize);
+        TestCaseListDTO retProdDTO = new TestCaseListDTO(locale, pageIndex, pageSize);
         Result retResult = new Result(retProdDTO);
 
         List<SysListSetting> listSetting = sysListSettingRep.getEntityInfo(SystemListSetting.TestCase.toString());
@@ -88,6 +92,11 @@ public class TestCaseDao {
             return retResult;
         }
 
+        // Get Status List info
+        List<Map<String, Object>> listStatus =
+                dictDao.getDicMapDataByTypeLocale(DictionaryType.TEST_CASE_TYPE_LOCALE.getType(), locale);
+        retProdDTO.setListCaseType(listStatus);
+
         List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
 
         String strFields = String.join(",", listFields);
@@ -95,7 +104,7 @@ public class TestCaseDao {
         if (retTestCaseResult.hasError()) {
             retResult = retTestCaseResult;
         } else {
-            CommonListDTO retProduct = (CommonListDTO) retTestCaseResult.getCd();
+            TestCaseListDTO retProduct = (TestCaseListDTO) retTestCaseResult.getCd();
             retProdDTO.setTotalRecord(retProduct.getTotalRecord());
             retProdDTO.setFields(retProduct.getFields());
             retProdDTO.setDataType(retProduct.getDataType());
@@ -121,7 +130,7 @@ public class TestCaseDao {
         String funcName = "TestCaseDao.getTestCaseMapInfoByField()";
 
         try {
-            CommonListDTO retListDTO = new CommonListDTO();
+            TestCaseListDTO retListDTO = new TestCaseListDTO();
             List<Map<String, Object>> listTestSet = new ArrayList<Map<String, Object>>();
 
             // Get query sql

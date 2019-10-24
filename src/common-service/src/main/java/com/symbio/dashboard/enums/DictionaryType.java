@@ -17,7 +17,8 @@ public enum DictionaryType {
 
   // Support locale in the field
   SCREEN_SHOT_STATUS_LOCALE("ScreenShotStatus"),
-  TEST_RESULT_STATUS_LOCALE("TestResultStatus");
+  TEST_RESULT_STATUS_LOCALE("TestResultStatus"),
+  TEST_CASE_TYPE_LOCALE("TestCaseTypeLocale");
 
   private DictionaryType(String type){
     this.type = type;

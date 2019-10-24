@@ -197,23 +197,16 @@ INSERT INTO `dictionary`(`type`,`code`,`value`, `description`)
 	VALUES ('TestResultStatus', '11', '{"en_us":"Conditional Pass","zh_cn": "部分通过"}', '');
 INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
 	VALUES ('TestResultStatus', '12', '{"en_us":"QA Support","zh_cn": "QA支持"}', '');
-	
--- 2019/10/14
 
-
+-- 2019/10/24
 INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
-	VALUES (300, 'ScreenShotStatus', '0', '{"en_us":"","zh_cn": ""}', '');
+	VALUES (321, 'TestCaseTypeLocale', '1', '{"en_us":"Automation TestCase","zh_cn": "自动化测试用例"}', 'TestSet.CaseType');
 INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
-	VALUES ('ScreenShotStatus', '1', '{"en_us":"","zh_cn": ""}', '', '');
+	VALUES ('TestCaseTypeLocale', '2', '{"en_us":"Manual TestCase","zh_cn": "手工测试用例"}', '');
 INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
-	VALUES ('ScreenShotStatus', '1', '{"en_us":"","zh_cn": ""}', '', '');
+	VALUES ('TestCaseTypeLocale', '4', '{"en_us":"API TestCase","zh_cn": "API用例"}', '');
 INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
-	VALUES ('ScreenShotStatus', '1', '{"en_us":"","zh_cn": ""}', '', '');
-INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
-	VALUES ('ScreenShotStatus', '1', '{"en_us":"","zh_cn": ""}', '', '');
-
-
->>>>>>> 7462a87... Update result/getReviewList interface
+	VALUES ('TestCaseTypeLocale', '5', '{"en_us":"Performance TestCase","zh_cn": "性能测试用例"}', '');
 
 DROP TABLE IF EXISTS `report_chart`;
 CREATE TABLE `report_chart` (
