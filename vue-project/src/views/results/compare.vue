@@ -143,9 +143,9 @@
                         <el-button icon="el-icon-zoom-out" @click="imgFitScreen" style="font-size:20px"></el-button>
                         <el-button icon="el-icon-chat-line-round" @click="commentDialog=true" style="font-size:20px"></el-button>
                         <el-button icon="el-icon-crop" @click="reportDialog=true" style="font-size:20px"></el-button>
-                        <el-button icon="el-icon-circle-check" @click="hoverMsg('Pass')" style="font-size:20px"></el-button>
-                        <el-button icon="el-icon-circle-close" @click="hoverMsg('Fail')" style="font-size:20px"></el-button>
-                        <el-button icon="el-icon-upload2" style="font-size:20px"></el-button>
+                        <el-button icon="el-icon-circle-check" @click="hoverMsg('success', 'Pass')" style="font-size:20px"></el-button>
+                        <el-button icon="el-icon-circle-close" @click="hoverMsg('error', 'Fail')" style="font-size:20px"></el-button>
+                        <el-button icon="el-icon-upload2" @click="hoverMsg('info', 'Upload or replace image for the locale')" style="font-size:20px"></el-button>
                     </span>
 
                     <el-dialog title="Report Bug" :visible.sync="reportDialog" center append-to-body width="70%">
@@ -188,6 +188,10 @@
 </template>
 
 <script>
+function isStrEmpty(str) {
+    return (str == null || str == '' || typeof str == 'undefined');
+};
+
 import drawer from './drawer'
 export default {
     name: 'compare',
@@ -354,11 +358,11 @@ export default {
                 }
             }
         },
-        hoverMsg(msg){
+        hoverMsg(type, msg){
             this.$message({
                     message: msg,
-                    type: 'info',
-                    duration: 500
+                    type: type,
+                    duration: 800
                 });
             return;
         }
