@@ -118,6 +118,7 @@ public class TestRunDao {
             if ("0".equals(strStatus)) {
                 Random random = new Random();
                 int idxTRStatus = random.nextInt(4);
+                if (idxTRStatus == 0) idxTRStatus = 1; // Not run -> success
 
                 item.put("status", TRunStatus[idxTRStatus]);
                 if (idxTRStatus != 0) {
@@ -140,8 +141,14 @@ public class TestRunDao {
 
             String sql = String.format("SELECT %s FROM test_run tr " +
                     " JOIN test_case tc ON tr.testcase_id = tc.id " +
-                    " WHERE tr.testset_id = %d AND tr.display = 1 AND tr.validation = 1" +
-                    " ORDER BY tr.id", strFields, testSetId);
+                    " WHERE tr.testset_id = %d AND tr.display = 1 AND tr.validation = 1", strFields, testSetId);
+
+            if (strFields.contains("tc.case_id") && strFields.contains("tr.locale")) {
+                sql += " ORDER BY tc.case_id, tr.locale";
+            } else {
+                sql += " ORDER BY tr.id";
+            }
+
             if (pageIndex != null && pageSize != null) {
                 sql += String.format(" LIMIT %d,%d", pageIndex, pageSize);
             }

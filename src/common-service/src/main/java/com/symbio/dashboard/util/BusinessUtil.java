@@ -2,6 +2,7 @@ package com.symbio.dashboard.util;
 
 import com.symbio.dashboard.business.CommonListDTOFactory;
 import com.symbio.dashboard.constant.ProjectConfigConst;
+import com.symbio.dashboard.entity.Progress;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.ListColumns;
 import com.symbio.dashboard.enums.Locales;
@@ -275,6 +276,36 @@ public class BusinessUtil {
     } else {
       return id < 1;
     }
+  }
+
+  public static List<Map<String, Object>> randomProgress(List<Map<String, Object>> data) {
+    List<Map<String, Object>> retList = data;
+
+    Progress progress;
+    Random random = new Random();
+    boolean bProcessRandom = false;
+    for (Map item : data) {
+      bProcessRandom = true;
+      if (item.containsKey("status")) {
+        String strStatus = item.get("status").toString();
+        if (Integer.parseInt(strStatus) == 0) {
+          bProcessRandom = false;
+        }
+      }
+
+      if (bProcessRandom) {
+        int total = random.nextInt(500);
+        int done = random.nextInt(500);
+        if (done > total) done = total;
+        progress = new Progress(done, total);
+
+      } else {
+        progress = new Progress(0, 0);
+      }
+      item.put("progress", progress);
+    }
+    return retList;
+
   }
 
 }

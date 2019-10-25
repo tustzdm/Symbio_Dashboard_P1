@@ -62,7 +62,7 @@
                     <!-- <li v-for="item in screenshotList" :key="item.id" style="float:left;display:block;width:25%">
                         <img class="thumbnail" src="../../assets/images/screenshot/1.png" alt="">
                     </li> -->
-                     <li style="float:left;display:block;width:25%">
+                    <!--li style="float:left;display:block;width:25%">
                         <img class="thumbnail" src="../../assets/images/screenshot/1.png" alt="">
                     </li>
                     <li style="float:left;display:block;width:25%">
@@ -85,6 +85,28 @@
                     </li>
                     <li style="float:left;display:block;width:25%">
                         <img class="thumbnail" src="../../assets/images/screenshot/8.png" alt="">
+                    </li -->
+
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/vivo/mobile/1.png" alt="">
+                    </li>
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/vivo/mobile/2.png" alt="">
+                    </li>
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/vivo/mobile/3.png" alt="">
+                    </li>
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/vivo/mobile/4.png" alt="">
+                    </li>
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/vivo/mobile/5.png" alt="">
+                    </li>
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/vivo/mobile/6.png" alt="">
+                    </li>
+                    <li style="float:left;display:block;width:25%">
+                        <img class="thumbnail" src="../../assets/images/vivo/mobile/7.png" alt="">
                     </li>
                 </ul>
             </div>

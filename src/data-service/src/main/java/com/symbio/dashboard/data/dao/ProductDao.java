@@ -8,7 +8,6 @@ import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.data.repository.UserRep;
 import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.dto.ProductUiDTO;
-import com.symbio.dashboard.entity.Progress;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
@@ -29,7 +28,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName - ProductDao
@@ -261,28 +263,31 @@ public class ProductDao {
             e.printStackTrace();
         }
 
-        Progress progress;
-        Random random = new Random();
-        boolean bProcessRandom = false;
-        for (Map item : retMap) {
-            bProcessRandom = true;
-            if (item.containsKey("status")) {
-                if (Integer.parseInt(item.get("status").toString()) == 0) {
-                    bProcessRandom = false;
-                }
-            }
+//        Progress progress;
+//        Random random = new Random();
+//        boolean bProcessRandom = false;
+//        for (Map item : retMap) {
+//            bProcessRandom = true;
+//            if (item.containsKey("status")) {
+//                String strStatus = item.get("status").toString();
+//                if (Integer.parseInt(strStatus) == 0) {
+//                    bProcessRandom = false;
+//                }
+//            }
+//
+//            if (bProcessRandom) {
+//                int total = random.nextInt(500);
+//                int done = random.nextInt(500);
+//                if (done > total) done = total;
+//                progress = new Progress(done, total);
+//
+//            } else {
+//                progress = new Progress(0, 0);
+//            }
+//            item.put("progress", progress);
+//        }
+        retMap = BusinessUtil.randomProgress(retMap);
 
-            if (bProcessRandom) {
-                int total = random.nextInt(500);
-                int done = random.nextInt(500);
-                if (done > total) done = total;
-                progress = new Progress(done, total);
-
-            } else {
-                progress = new Progress(0, 0);
-            }
-            item.put("progress", progress);
-        }
         return retMap;
     }
 

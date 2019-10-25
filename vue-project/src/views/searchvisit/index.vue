@@ -10,12 +10,12 @@
             <el-table-column v-if="run" label="" width="80">
                 <i class="el-icon-loading"></i>
             </el-table-column>
-            <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" :width="['id'].includes(item.field )? '100px':['status','screenshotFlag','locale','priority'].includes(item.field )? '140px':''" sortable :label="item.label">
+            <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" :width="['id'].includes(item.field )? '100px':['status','screenshotFlag','locale','priority'].includes(item.field )? '120px':''" sortable :label="item.label">
                 <template slot-scope="scope">
                     <div v-if="!['status','screenshotFlag','priority'].includes(item.field)">
                         {{scope.row[item.field]}}
                     </div>
-                    <span v-if="item.field=='priority'" style="border-radius:3px;padding:0 5px" :class="scope.row[item.field]">
+                    <span v-if="item.field=='priority'" style="border-radius:3px;padding:2px 6px;margin:10px" :class="scope.row[item.field]">
                         {{scope.row[item.field]}}
                     </span>
                     <div v-if="item.field=='status'">
@@ -172,20 +172,24 @@ th .cell {
     color: #5B5B5B;
 }
 
+.P0{
+    color:white
+    background: #f3d1cd
+}
 .P1{
     color:white
-    background:#F44336
+    background: #f9e8e0
 }
 .P2{
     color:white
-    background-color: #BA68C8
+    background-color: #c9d4e3
 }
 .P3{
     color:white
-    background-color: #3F51B5
+    background-color: #9eadc5
 }
 .P4{
     color:white
-    background-color: #00BCD4
+    background-color: #7a85a1
 }
 </style>

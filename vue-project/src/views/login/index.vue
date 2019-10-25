@@ -8,8 +8,8 @@
           <div class="logo">
             <div  class="title">
                 <!-- <span>{{$t('login.sysName')}}</span> -->
-                <img style="width:16%;float:left;margin:38px 7px 0 30px;" src="../../assets/images/symbio.png" alt="">
-                <div style="width:69%;float:left;margin-top:55px;">Smart Test Ops</div>
+                <img style="width:25%;float:left;margin:40px 7px 0 10px;" src="../../assets/images/symbio.png" alt="">
+                <span style="width:68%;float:left;margin-top:40px;">Smart Test Ops</span>
             </div>
           </div>
         
@@ -258,7 +258,7 @@ export default {
   .title
     font-font-family Poppins
     font-weight bold
-    font-size 47px
+    font-size 45px
     color #fa7b30
 
     a

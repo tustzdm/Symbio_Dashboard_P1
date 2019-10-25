@@ -7,7 +7,6 @@ import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.data.repository.UserRep;
 import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.dto.ReleaseUiDTO;
-import com.symbio.dashboard.entity.Progress;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.enums.UIInfoPage;
@@ -23,7 +22,10 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName - ReleaseDao
@@ -198,15 +200,16 @@ public class ReleaseDao {
             e.printStackTrace();
         }
 
-        Progress progress;
-        Random random = new Random();
-        for (Map item : retMap) {
-            int total = random.nextInt(500);
-            int done = random.nextInt(500);
-            if (done > total) done = total;
-            progress = new Progress(done, total);
-            item.put("progress", progress);
-        }
+//        Progress progress;
+//        Random random = new Random();
+//        for (Map item : retMap) {
+//            int total = random.nextInt(500);
+//            int done = random.nextInt(500);
+//            if (done > total) done = total;
+//            progress = new Progress(done, total);
+//            item.put("progress", progress);
+//        }
+        retMap = BusinessUtil.randomProgress(retMap);
         return retMap;
     }
 

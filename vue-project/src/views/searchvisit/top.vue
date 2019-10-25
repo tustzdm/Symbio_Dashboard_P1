@@ -136,7 +136,7 @@
                     <span style="font-family:Poppins;">BRANCH</span>
                     <el-input placeholder="repository" style="margin-left:20px;width:300px" value="develop"></el-input>
                 </li>
-                <-- <li>
+                <li>
                     <span style="font-family:Poppins;">TestBool</span>
                     <el-radio-group style="margin-left:20px;width:300px">
                         <el-radio label="1">Yes</el-radio>
@@ -226,8 +226,8 @@ export default {
         }).then(res => {
             console.log(res);
             this.tepnameList = res.cd.nameList;
-            console.log(this.tepnameList)
-            this.testSelectList = res.cd.data
+            console.log(this.tepnameList);
+            this.testSelectList = res.cd.data;
         });
     },
     mounted() {},
