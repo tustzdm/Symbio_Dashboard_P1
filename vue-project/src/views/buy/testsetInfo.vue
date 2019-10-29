@@ -35,16 +35,8 @@
                             {{caseTypeList[scope.row[item.field]]}}
                         </div>
                         <div v-if="item.field=='detailSteps'">
-                            <el-button type="text" @click="stepVisible = true;">Steps</el-button>
-                            <el-dialog id="stepCon" title="Steps Detail" :visible.sync="stepVisible" width="30%">
-                                <!-- {{JSON.parse(scope.row[item.field])}} -->
-                                <ul>
-                                    <li v-for="item in JSON.parse(scope.row[item.field])">{{item}}</li>
-                                </ul>
-                                <span slot="footer" class="dialog-footer">
-                                    <el-button type="primary" @click="stepVisible = false;">OK</el-button>
-                                </span>
-                            </el-dialog>
+                            <el-button type="text" @click="stepVisible = true;stepContent=JSON.parse(scope.row[item.field])">Steps</el-button>
+
                         </div>
                     </template>
                 </el-table-column>
@@ -54,6 +46,17 @@
             <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="dataList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin: 10px 0" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
         </div>
         <div style="height:100px;width:100%;background:white"></div>
+
+        <el-dialog id="stepCon" title="Steps Detail" :visible.sync="stepVisible" width="30%">
+            <!-- {{JSON.parse(scope.row[item.field])}} -->
+            <ul>
+                <li v-for="item in stepContent" :key="item">{{item}}</li>
+            </ul>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="stepVisible = false;">OK</el-button>
+            </span>
+        </el-dialog>
+
         <el-dialog title="Import" :visible.sync="centerDialogVisible" width="30%" center>
             <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/upload?token=1&testSetId=${this.testsetId}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
                 <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
@@ -95,7 +98,9 @@ export default {
             tableColownms: {},
             stepVisible: false,
             centerDialogVisible: false,
-            caseTypeList:['','Automation TestCase','Manual TestCase','','API TestCase','','','','Performance TestCase']
+            caseTypeList: ['', 'Automation TestCase', 'Manual TestCase', '', 'API TestCase', '', '', '', 'Performance TestCase'],
+            stepContent: {},
+            index:0
         }
     },
     components: {
@@ -176,7 +181,7 @@ export default {
             }
             this.getTestCases();
         },
-        getStepContent(){
+        getStepContent() {
             document.getElementById('stepCon').innerHTML = val;
         }
     },
@@ -210,24 +215,28 @@ export default {
     font-family Poppins
 }
 
-.P0{
-    color:white
+.P0 {
+    color: white;
     background: #f3d1cd
 }
-.P1{
-    color:white
+
+.P1 {
+    color: white;
     background: #f9e8e0
 }
-.P2{
-    color:white
+
+.P2 {
+    color: white;
     background-color: #c9d4e3
 }
-.P3{
-    color:white
+
+.P3 {
+    color: white;
     background-color: #9eadc5
 }
-.P4{
-    color:white
+
+.P4 {
+    color: white;
     background-color: #7a85a1
 }
 </style>
