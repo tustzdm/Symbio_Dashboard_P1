@@ -139,7 +139,7 @@
                     <span slot="title" class="dialog-footer" center>
                         <span style="position:absolute;float:left;font-size:25px;color:white;left:100px;font-weight:bold">Step:&nbsp;{{stepId}}</span>
 
-                        <el-button icon="el-icon-zoom-in" @click="imgActualSize" @hover style="font-size:20px"> </el-button>
+                        <el-button icon="el-icon-zoom-in" @click="imgActualSize" style="font-size:20px"> </el-button>
                         <el-button icon="el-icon-zoom-out" @click="imgFitScreen" style="font-size:20px"></el-button>
                         <el-button icon="el-icon-chat-line-round" @click="commentDialog=true" style="font-size:20px"></el-button>
                         <el-button icon="el-icon-crop" @click="reportDialog=true" style="font-size:20px"></el-button>
@@ -149,7 +149,7 @@
                     </span>
 
                     <el-dialog title="Report Bug" :visible.sync="reportDialog" center append-to-body width="70%">
-                        <drawer :url="rightImg"></drawer>
+                        <paint :url="rightImg"></paint>
                         <span slot="footer" class="dialog-footer">
                             <el-button @click="reportDialog = false">Cancel</el-button>
                             <el-button type="primary" @click="submitComment">Confirm</el-button>
@@ -192,7 +192,7 @@ function isStrEmpty(str) {
     return (str == null || str == '' || typeof str == 'undefined');
 };
 
-import drawer from './drawer'
+import paint from './paint'
 export default {
     name: 'compare',
     data() {
@@ -227,7 +227,7 @@ export default {
         }
     },
     components: {
-        drawer: drawer
+        paint: paint
     },
     created() {
         console.log(22134654649687)
