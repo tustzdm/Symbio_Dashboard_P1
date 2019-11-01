@@ -148,7 +148,7 @@
                         <el-button icon="el-icon-upload2" @click="hoverMsg('info', 'Upload or replace image for the locale')" style="font-size:20px"></el-button>
                     </span>
 
-                    <el-dialog title="Report Bug" :visible.sync="reportDialog" center append-to-body width="70%">
+                    <el-dialog title="Report Bug"  :visible.sync="reportDialog" center append-to-body width="90%">
                         <paint :url="rightImg"></paint>
                         <span slot="footer" class="dialog-footer">
                             <el-button @click="reportDialog = false">Cancel</el-button>
