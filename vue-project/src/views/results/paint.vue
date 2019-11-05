@@ -1,8 +1,9 @@
 <template>
-<div>
+<div id="paint">
     <canvas id="theCanvas" @mousedown="drawLine()" width=300 height=620 style="border:1px solid gray;display:inline-block">
         <textarea name="" id="" cols="30" rows="10"></textarea>
     </canvas>
+    <textarea v-if="ifText" class="text" name="" v-model="text" id="" cols="30" rows="2" style="position:absolute"></textarea>
 
     <div style="display:inline-block;vertical-align:top;margin-left:8px">
         <ul>
@@ -11,18 +12,21 @@
             <li><i class="el-icon-edit pen" :class="{penActive:lineWidth==13}" @click="setLineWidth(13)" style="font-size:18px;"></i></li>
         </ul>
         <ul>
-            <li>
-                <el-color-picker v-model="color"></el-color-picker>
+            <li style="margin-bottom:6px">
+                <el-button @click="ifRect=false" style="padding:4px">
+                    <div style="width:12px;height:12px;padding:2px;"> <i class="el-icon-minus"></i></div>
+                </el-button>
             </li>
-            
             <li style="margin-bottom:6px">
                 <el-button @click="ifRect=true" style="padding:4px">
                     <div style="width:12px;height:12px;padding:2px;border:1px solid black;background:#99E7F7"></div>
                 </el-button>
             </li>
-
             <li>
-                <el-button style="padding:3px" @click="setText();"><i class="el-icon-s-comment" style="font-size:20px"></i></el-button>
+                <el-color-picker v-model="color"></el-color-picker>
+            </li>
+            <li>
+                <el-button style="padding:3px" @click="setText();drawText()"><i class="el-icon-s-comment" style="font-size:20px"></i></el-button>
             </li>
         </ul>
     </div>
@@ -36,12 +40,15 @@ export default {
     data() {
         return {
             lineWidth: 2,
-            color: '#000000',
+            color: '#F50C04',
             imgEdit: this.url,
             text: 'sSSSSSSSSSS',
             textarea: null,
             commentClicked: false,
-            ifRect: false
+            ifRect: false,
+            ifText:false,
+            textareaX:'',
+            textareaY:''
         }
     },
     props: {
@@ -56,6 +63,7 @@ export default {
 
         let context = theCanvas.getContext('2d')
         context.lineWidth = this.lineWidth;
+        
     },
     destroyed() {},
     computed: {
@@ -95,12 +103,15 @@ export default {
             if (this.ifRect) { //加一个判断，当不画矩形的时候继续画线，画矩形这里就返回不继续执行
                 this.drawRect()
                 return
+            }else if(this.ifText){
+                return
             }
             if (!theCanvas || !theCanvas.getContext) {
                 return false
             } else {
                 console.log(12312351343312)
-                let context = theCanvas.getContext('2d')
+                let context = theCanvas.getContext('2d');
+                context.strokeStyle = this.color;
                 let isAllowDrawLine = false
                 theCanvas.onmousedown = (e) => {
                     context.lineWidth = this.lineWidth
@@ -149,7 +160,7 @@ export default {
             let context = theCanvas.getContext('2d');
             context.beginPath();
             context.font = "50px"
-            context.fillText('Hello Vivo', 10, 60)
+            context.fillText(this.text, 10, 60)
         },
         commentClick() {
             this.commentClicked = true;
@@ -177,6 +188,7 @@ export default {
         drawRect() {
             let theCanvas = document.querySelector('#theCanvas');
             let context = theCanvas.getContext('2d');
+            context.strokeStyle = this.color;
             context.beginPath();
             let x, y, w, h;
 
@@ -198,8 +210,26 @@ export default {
                 console.log(x, y, w, h)
                 context.stroke();
             }
+        },
+        drawText(){
+            this.ifRect=false;
+            this.ifText=true;
+            let theCanvas = document.querySelector('#theCanvas');
+            let context = theCanvas.getContext('2d');
+            let x,y;
 
-            console.log(1111)
+            theCanvas.onmousedown = (e) => {
+                let ele = this.windowToCanvas(theCanvas, e.clientX, e.clientY)
+                x = ele.x;
+                y = ele.y;
+                console.log(x)
+                console.log(y)
+                 document.querySelector('.text').style.left = x + 25+'px';
+                document.querySelector('.text').style.top = y + 50+'px'
+            }
+
+           
+
         }
     }
 }
