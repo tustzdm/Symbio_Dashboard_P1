@@ -3,18 +3,25 @@
     <canvas id="theCanvas" @mousedown="drawLine()" width=300 height=620 style="border:1px solid gray;display:inline-block">
         <textarea name="" id="" cols="30" rows="10"></textarea>
     </canvas>
-    <textarea v-if="ifText" class="text" name="" v-model="text" id="" cols="30" rows="2" style="position:absolute"></textarea>
-
+    <textarea v-if="ifText" class="text" name="" @keydown="textEnter()" v-model="text" cols="30" rows="2" style="position:absolute"></textarea>
     <div style="display:inline-block;vertical-align:top;margin-left:8px">
         <ul>
-            <li> <i class="el-icon-edit pen" :class="{penActive:lineWidth==3}" @click="setLineWidth(3)" style="font-size:10px;padding:4px"></i></li>
-            <li><i class="el-icon-edit pen" :class="{penActive:lineWidth==8}" @click="setLineWidth(8)" style="font-size:15px;padding:2px"></i></li>
-            <li><i class="el-icon-edit pen" :class="{penActive:lineWidth==13}" @click="setLineWidth(13)" style="font-size:18px;"></i></li>
+            <li class="line" :class="{penActive:lineWidth==3}">
+                <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(3)"><div style="display:inlienne-block;width:19px;height:2px;background:black;margin-top:9px"></div></div>
+            </li>
+            <li class="line" :class="{penActive:lineWidth==8}">
+                <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(8)"><div style="display:inlienne-block;width:19px;height:4px;background:black;margin-top:7px"></div></div>
+            </li>
+            <li class="line" :class="{penActive:lineWidth==13}">
+                <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(13)"><div style="display:inlienne-block;width:19px;height:7px;background:black;margin-top:5px"></div></div>
+            </li>
+            <!-- <li><i class=" pen" :class="{penActive:lineWidth==8}" @click="setLineWidth(8)" style="font-size:15px;padding:2px"></i></li>
+            <li><i class=" pen" :class="{penActive:lineWidth==13}" @click="setLineWidth(13)" style="font-size:18px;"></i></li> -->
         </ul>
         <ul>
             <li style="margin-bottom:6px">
                 <el-button @click="ifRect=false" style="padding:4px">
-                    <div style="width:12px;height:12px;padding:2px;"> <i class="el-icon-minus"></i></div>
+                    <i class="el-icon-edit pen"   style="font-size:18px;"></i>
                 </el-button>
             </li>
             <li style="margin-bottom:6px">
@@ -26,7 +33,9 @@
                 <el-color-picker v-model="color"></el-color-picker>
             </li>
             <li>
-                <el-button style="padding:3px" @click="setText();drawText()"><i class="el-icon-s-comment" style="font-size:20px"></i></el-button>
+                <el-button style="padding:3px" @click="drawText()">
+                    <div style="width:18px;height:18px;line-height:16px;font-size:16px">T</div>
+                </el-button>
             </li>
         </ul>
     </div>
@@ -42,13 +51,13 @@ export default {
             lineWidth: 2,
             color: '#F50C04',
             imgEdit: this.url,
-            text: 'sSSSSSSSSSS',
+            text: '',
             textarea: null,
             commentClicked: false,
             ifRect: false,
-            ifText:false,
-            textareaX:'',
-            textareaY:''
+            ifText: false,
+            textareaX: '',
+            textareaY: ''
         }
     },
     props: {
@@ -63,7 +72,7 @@ export default {
 
         let context = theCanvas.getContext('2d')
         context.lineWidth = this.lineWidth;
-        
+
     },
     destroyed() {},
     computed: {
@@ -103,7 +112,7 @@ export default {
             if (this.ifRect) { //加一个判断，当不画矩形的时候继续画线，画矩形这里就返回不继续执行
                 this.drawRect()
                 return
-            }else if(this.ifText){
+            } else if (this.ifText) {
                 return
             }
             if (!theCanvas || !theCanvas.getContext) {
@@ -211,42 +220,53 @@ export default {
                 context.stroke();
             }
         },
-        drawText(){
-            this.ifRect=false;
-            this.ifText=true;
+        drawText() {
+            this.text = '';
+            this.ifRect = false;
+            this.ifText = true;
             let theCanvas = document.querySelector('#theCanvas');
             let context = theCanvas.getContext('2d');
-            let x,y;
 
             theCanvas.onmousedown = (e) => {
                 let ele = this.windowToCanvas(theCanvas, e.clientX, e.clientY)
-                x = ele.x;
-                y = ele.y;
-                console.log(x)
-                console.log(y)
-                 document.querySelector('.text').style.left = x + 25+'px';
-                document.querySelector('.text').style.top = y + 50+'px'
+                this.textareaX = ele.x;
+                this.textareaY = ele.y;
+                document.querySelector('.text').style.left = this.textareaX + 25 + 'px';
+                document.querySelector('.text').style.top = this.textareaY + 50 + 'px'
             }
 
-           
+        },
+        textEnter(e) {
+            let theCanvas = document.querySelector('#theCanvas');
+            let context = theCanvas.getContext('2d');
 
+            var evt = window.event || e;
+            if (evt.keyCode == 13) {
+                this.ifText = false;
+            }
+
+            context.font = "23px Poppins";
+            context.fillStyle = this.color;
+            context.fillText(this.text, this.textareaX, this.textareaY)
         }
     }
 }
 </script>
 
 <style>
-.pen {
-    width: 22px;
-    height: 22px;
+.line {
+    width: 26px;
+    height: 26px;
+    padding: 2px;
     text-align: center;
     vertical-align: bottom;
     box-sizing: border-box;
-    margin-bottom: 5px
+    margin-bottom: 3px;
+    margin-left:1px;
 }
 
 .penActive {
-    border: 2px solid #fa7b30
+    border: 1px solid #fa7b30
 }
 
 .el-color-picker--small .el-color-picker__trigger {
