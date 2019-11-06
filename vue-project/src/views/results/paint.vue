@@ -164,9 +164,8 @@ export default {
                         y
                     } = ele;
                     console.log(ele)
-                   
+                    this.setHistory();
                 }
-                 this.setHistory();
             }
         },
         setLineWidth(v) {
@@ -232,8 +231,8 @@ export default {
                 context.rect(x, y, w, h);
                 console.log(x, y, w, h)
                 context.stroke();
+                this.setHistory();
             }
-            this.setHistory();
         },
         drawText() {
             this.text = '';
@@ -248,8 +247,8 @@ export default {
                 this.textareaY = ele.y;
                 document.querySelector('.text').style.left = this.textareaX + 25 + 'px';
                 document.querySelector('.text').style.top = this.textareaY + 50 + 'px'
+                this.setHistory();
             }
-            this.setHistory();
         },
         textEnter(e) {
             let theCanvas = document.querySelector('#theCanvas');
