@@ -21,7 +21,7 @@
         <ul>
             <li style="margin-bottom:6px">
                 <el-button @click="ifRect=false" style="padding:4px">
-                    <i class="el-icon-edit pen"   style="font-size:18px;"></i>
+                    <i class="el-icon-edit"   style="font-size:18px;"></i>
                 </el-button>
             </li>
             <li style="margin-bottom:6px">
@@ -32,9 +32,14 @@
             <li>
                 <el-color-picker v-model="color"></el-color-picker>
             </li>
-            <li>
+            <li style="margin-bottom:6px">
                 <el-button style="padding:3px" @click="drawText()">
                     <div style="width:18px;height:18px;line-height:16px;font-size:16px">T</div>
+                </el-button>
+            </li>
+            <li style="margin-bottom:6px">
+                <el-button @click="saveUpload" style="padding:4px">
+                    <i class="el-icon-upload2 "   style="font-size:18px;"></i>
                 </el-button>
             </li>
         </ul>
@@ -248,6 +253,12 @@ export default {
             context.font = "23px Poppins";
             context.fillStyle = this.color;
             context.fillText(this.text, this.textareaX, this.textareaY)
+        },
+        saveUpload(){
+            let theCanvas = document.querySelector('#theCanvas');
+            let context = theCanvas.getContext('2d');
+            var saveImg = theCanvas.toDataURL('image/png');
+            alert(1111)
         }
     }
 }
