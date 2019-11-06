@@ -34,7 +34,12 @@
             </li>
             <li style="margin-bottom:6px">
                 <el-button style="padding:3px" @click="drawText()">
-                    <div style="width:18px;height:18px;line-height:16px;font-size:16px">T</div>
+                    <div style="width:19px;height:18px;line-height:16px;font-size:16px">T</div>
+                </el-button>
+            </li>
+            <li style="margin-bottom:6px">
+                <el-button @click="prevStep" style="padding:4px">
+                    <i class="el-icon-upload2 "   style="font-size:18px;"></i>
                 </el-button>
             </li>
             <li style="margin-bottom:6px">
@@ -62,7 +67,9 @@ export default {
             ifRect: false,
             ifText: false,
             textareaX: '',
-            textareaY: ''
+            textareaY: '',
+            canvasHistory:[],
+            step:-1,
         }
     },
     props: {
@@ -157,7 +164,9 @@ export default {
                         y
                     } = ele;
                     console.log(ele)
+                   
                 }
+                 this.setHistory();
             }
         },
         setLineWidth(v) {
@@ -224,6 +233,7 @@ export default {
                 console.log(x, y, w, h)
                 context.stroke();
             }
+            this.setHistory();
         },
         drawText() {
             this.text = '';
@@ -239,7 +249,7 @@ export default {
                 document.querySelector('.text').style.left = this.textareaX + 25 + 'px';
                 document.querySelector('.text').style.top = this.textareaY + 50 + 'px'
             }
-
+            this.setHistory();
         },
         textEnter(e) {
             let theCanvas = document.querySelector('#theCanvas');
@@ -259,6 +269,18 @@ export default {
             let context = theCanvas.getContext('2d');
             var saveImg = theCanvas.toDataURL('image/png');
             alert(1111)
+        },
+        setHistory(){
+            let theCanvas = document.querySelector('#theCanvas');
+            let context = theCanvas.getContext('2d');
+            this.step++;
+            this.canvasHistory.push(context.getImageData(0,0,theCanvas.width,theCanvas.height));
+        },
+        prevStep(){
+            let theCanvas = document.querySelector('#theCanvas');
+            let context = theCanvas.getContext('2d');
+            console.log(this.canvasHistory);
+            context.putImageData(this.canvasHistory[this.step--],0,0)
         }
     }
 }
