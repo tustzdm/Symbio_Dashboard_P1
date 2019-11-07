@@ -5,8 +5,8 @@ import com.symbio.dashboard.business.UserFactory;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.repository.UserRep;
+import com.symbio.dashboard.dto.UserLoginDTO;
 import com.symbio.dashboard.encrypt.MD5Util;
-import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.util.BusinessUtil;
@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // Step2 - Check user
-        User userData = userRep.getUserByName(name, EnumDef.USER_STATUS.ACTIVE.getCode());
+        User userData = userRep.getLoginUserInfo(name);
         if (userData == null) {
             return commonDao.getResult("100204");
         } else {
@@ -191,8 +191,10 @@ public class UserServiceImpl implements UserService {
 
         // Step3 - get Role & Menu
         Integer userId = userData.getId();
+        String token = "testToken";
+        UserLoginDTO dtoUserLogin = new UserLoginDTO(locale, token);
 
-        return new Result();
+        return new Result(dtoUserLogin);
     }
 
     public Result loginLDAP(String locale, String name, String passWd) {

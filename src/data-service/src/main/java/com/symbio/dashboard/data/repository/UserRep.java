@@ -28,4 +28,7 @@ public interface UserRep extends JpaRepository<User, Integer> {
     @Query(value = "SELECT * FROM user ORDER BY id", nativeQuery = true)
     List<User> getAllUser();
 
+    @Query(value = "SELECT * FROM `user` WHERE name = ?1 and status != 4 LIMIT 0,1", nativeQuery = true)
+    User getLoginUserInfo(String name);
+
 }

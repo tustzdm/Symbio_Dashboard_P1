@@ -64,4 +64,11 @@ public class UserController extends BaseController {
 
         return retUser;
     }
+
+    @PostMapping("/login")
+    public Result login(@RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                        @RequestParam(value = "name") String name,
+                        @RequestParam(value = "password") String password) {
+        return userService.login(locale, name, password);
+    }
 }
