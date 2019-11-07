@@ -149,7 +149,7 @@
                     </span>
 
                     <el-dialog title="Report Bug"  :visible.sync="reportDialog" center append-to-body width="90%">
-                        <paint :url="rightImg"></paint>
+                        <paint v-if="reportDialog" :url="rightImg"></paint>
                         <span slot="footer" class="dialog-footer">
                             <el-button @click="reportDialog = false">Cancel</el-button>
                             <el-button type="primary" @click="submitComment">Confirm</el-button>
