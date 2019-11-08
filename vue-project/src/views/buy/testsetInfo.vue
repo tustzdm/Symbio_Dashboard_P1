@@ -36,7 +36,6 @@
                         </div>
                         <div v-if="item.field=='detailSteps'">
                             <el-button type="text" @click="stepVisible = true;stepContent=JSON.parse(scope.row[item.field])">Steps</el-button>
-
                         </div>
                     </template>
                 </el-table-column>

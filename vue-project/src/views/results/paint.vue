@@ -1,61 +1,71 @@
 <template>
-<div id="paint">
-    <canvas id="theCanvas" @mousedown="drawAction()" width=300 height=620 style="border:1px solid gray;display:inline-block">
-        <textarea name="" id="" cols="30" rows="10"></textarea>
-    </canvas>
-    <textarea v-if="action=='text'" class="text" name="" @keydown="textEnter()" placeholder="click the postion to text" v-model="text" cols="30" rows="2" style="position:absolute;left:30px;top:85px"></textarea>
-    <div style="display:inline-block;vertical-align:top;margin-left:8px">
-        <ul>
-            <li class="line" :class="{penActive:lineWidth==2}">
-                <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(2)">
-                    <div style="display:inlienne-block;width:19px;height:2px;background:black;margin-top:9px"></div>
-                </div>
-            </li>
-            <li class="line" :class="{penActive:lineWidth==8}">
-                <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(8)">
-                    <div style="display:inlienne-block;width:19px;height:4px;background:black;margin-top:7px"></div>
-                </div>
-            </li>
-            <li class="line" :class="{penActive:lineWidth==13}">
-                <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(13)">
-                    <div style="display:inlienne-block;width:19px;height:7px;background:black;margin-top:5px"></div>
-                </div>
-            </li>
-            <!-- <li><i class=" pen" :class="{penActive:lineWidth==8}" @click="setLineWidth(8)" style="font-size:15px;padding:2px"></i></li>
-            <li><i class=" pen" :class="{penActive:lineWidth==13}" @click="setLineWidth(13)" style="font-size:18px;"></i></li> -->
-        </ul>
-        <ul>
-            <li style="margin-bottom:6px">
-                <el-button @click="action='line';" style="padding:4px">
-                    <i class="el-icon-edit" style="font-size:18px;"></i>
-                </el-button>
-            </li>
-            <li style="margin-bottom:6px">
-                <el-button @click="action='rect';" style="padding:4px">
-                    <div style="width:12px;height:12px;padding:2px;border:1px solid black;background:#99E7F7"></div>
-                </el-button>
-            </li>
-            <li>
-                <el-color-picker v-model="color"></el-color-picker>
-            </li>
-            <li style="margin-bottom:6px">
-                <el-button style="padding:3px" @click="text = '';action='text';">
-                    <div style="width:19px;height:18px;line-height:16px;font-size:16px">T</div>
-                </el-button>
-            </li>
-            <li style="margin-bottom:6px">
-                <el-button @click="prevStep" style="padding:4px">
-                    <i class="el-icon-back" style="font-size:18px;"></i>
-                </el-button>
-            </li>
-            <li style="margin-bottom:6px">
-                <el-button @click="saveUpload" style="padding:4px">
-                    <i class="el-icon-upload2 " style="font-size:18px;"></i>
-                </el-button>
-            </li>
-        </ul>
-    </div>
+<div class="reportPic">
+    <el-steps :active="active" finish-status="success">
+        <el-step title="步骤 1"></el-step>
+        <el-step title="步骤 2"></el-step>
+        <el-step title="步骤 3"></el-step>
+    </el-steps>
 
+    <el-button style="margin-top: 12px;" @click="prev">Previous</el-button>
+    <el-button style="margin-top: 12px;" @click="next">Next</el-button>
+    <div id="paint" v-if="false">
+        <canvas id="theCanvas" @mousedown="drawAction()" width=300 height=620 style="border:1px solid gray;display:inline-block">
+            <textarea name="" id="" cols="30" rows="10"></textarea>
+        </canvas>
+        <textarea v-if="action=='text'" class="text" name="" @keydown="textEnter()" placeholder="click the postion to text" v-model="text" cols="30" rows="2" style="position:absolute;left:30px;top:85px"></textarea>
+        <div style="display:inline-block;vertical-align:top;margin-left:8px">
+            <ul>
+                <li class="line" :class="{penActive:lineWidth==2}">
+                    <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(2)">
+                        <div style="display:inlienne-block;width:19px;height:2px;background:black;margin-top:9px"></div>
+                    </div>
+                </li>
+                <li class="line" :class="{penActive:lineWidth==8}">
+                    <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(8)">
+                        <div style="display:inlienne-block;width:19px;height:4px;background:black;margin-top:7px"></div>
+                    </div>
+                </li>
+                <li class="line" :class="{penActive:lineWidth==13}">
+                    <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(13)">
+                        <div style="display:inlienne-block;width:19px;height:7px;background:black;margin-top:5px"></div>
+                    </div>
+                </li>
+                <!-- <li><i class=" pen" :class="{penActive:lineWidth==8}" @click="setLineWidth(8)" style="font-size:15px;padding:2px"></i></li>
+            <li><i class=" pen" :class="{penActive:lineWidth==13}" @click="setLineWidth(13)" style="font-size:18px;"></i></li> -->
+            </ul>
+            <ul>
+                <li style="margin-bottom:6px">
+                    <el-button @click="action='line';" style="padding:4px">
+                        <i class="el-icon-edit" style="font-size:18px;"></i>
+                    </el-button>
+                </li>
+                <li style="margin-bottom:6px">
+                    <el-button @click="action='rect';" style="padding:4px">
+                        <div style="width:12px;height:12px;padding:2px;border:1px solid black;background:#99E7F7"></div>
+                    </el-button>
+                </li>
+                <li>
+                    <el-color-picker v-model="color"></el-color-picker>
+                </li>
+                <li style="margin-bottom:6px">
+                    <el-button style="padding:3px" @click="text = '';action='text';">
+                        <div style="width:19px;height:18px;line-height:16px;font-size:16px">T</div>
+                    </el-button>
+                </li>
+                <li style="margin-bottom:6px">
+                    <el-button @click="prevStep" style="padding:4px">
+                        <i class="el-icon-back" style="font-size:18px;"></i>
+                    </el-button>
+                </li>
+                <li style="margin-bottom:6px">
+                    <el-button @click="saveUpload" style="padding:4px">
+                        <i class="el-icon-upload2 " style="font-size:18px;"></i>
+                    </el-button>
+                </li>
+            </ul>
+        </div>
+
+    </div>
 </div>
 </template>
 
@@ -64,6 +74,7 @@ export default {
     name: 'paint',
     data() {
         return {
+            active: 0,
             lineWidth: 2,
             color: '#F50C04',
             imgEdit: this.url,
@@ -80,8 +91,7 @@ export default {
     props: {
         url: String,
     },
-    created() {
-    },
+    created() {},
     mounted() {
         let theCanvas = document.querySelector('#theCanvas');
         this.drawPic();
@@ -103,6 +113,12 @@ export default {
         }
     },
     methods: {
+        next() {
+            if (this.active++ > 2) this.active = 0;
+        },
+        prev(){
+             if (this.active-- < 0) this.active = 0;
+        },
         windowToCanvas: (canvas, x, y) => {
             let rect = canvas.getBoundingClientRect()
             return {
@@ -144,7 +160,7 @@ export default {
                 return false
             } else {
                 let context = theCanvas.getContext('2d');
-                 context.beginPath();
+                context.beginPath();
                 context.strokeStyle = this.color;
                 let isAllowDrawLine = false
                 theCanvas.onmousedown = (e) => {
@@ -239,7 +255,7 @@ export default {
                 context.fillStyle = this.color;
                 context.fillText(this.text, this.textareaX, this.textareaY);
                 this.setHistory();
-                
+
                 this.action = 'line'; // 输入完text后默认设置为画线
             }
         },
@@ -258,9 +274,9 @@ export default {
             console.log(this.canvasHistory)
         },
         prevStep() {
-            if(this.step<=0){
+            if (this.step <= 0) {
                 console.log('this is the first step!!!')
-               return
+                return
             }
             let theCanvas = document.querySelector('#theCanvas');
             let context = theCanvas.getContext('2d');

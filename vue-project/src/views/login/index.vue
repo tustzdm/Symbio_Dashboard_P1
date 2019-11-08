@@ -12,7 +12,7 @@
                 <span style="width:68%;float:left;margin-top:40px;">Smart Test Ops</span>
             </div>
           </div>
-        
+
           <div class="login-form">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
               <el-form-item prop="username">
@@ -22,7 +22,7 @@
                 <el-input :placeholder="$t('login.pwdplaceholder')" type="password" v-model="ruleForm.password"></el-input>
               </el-form-item>
               <el-form-item class="btn">
-                <el-button :loading="loading" type="primary" @click="aaa();">{{$t('login.btn')}}</el-button>
+                <el-button :loading="loading" type="primary" @click="checkLogin();">{{$t('login.btn')}}</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -131,21 +131,38 @@ export default {
     }
   },
   methods: {
-    aaa(){
-      if(this.ruleForm.password!=''){
-          if(this.ruleForm.password!='symbio123'){
-          this.$message({
-              message: 'User or Password is not correct',
-              type: 'error',
-              duration: 1500,
-              offset:380
-          });
-          return
-          }
-      }else{
-          return false
-      }
-      this.handleLogin('ruleForm');
+    checkLogin(){
+
+      this.$axios.post(`/user/login?name=${this.ruleForm.username}&password=${this.ruleForm.password}`).then(res => {
+                // success callback
+                if (res.data.ec != '0') {
+                    this.$message({
+                      message: 'User or Password is not correct',
+                      type: 'error',
+                      duration: 1500,
+                      offset:380
+                    });
+                } else {
+                    this.handleLogin('ruleForm');
+                }
+            }).catch(err => {
+                alert(err);
+            });
+      
+      // if(this.ruleForm.password!=''){
+      //     if(this.ruleForm.password!='symbio123'){
+      //     this.$message({
+      //         message: 'User or Password is not correct',
+      //         type: 'error',
+      //         duration: 1500,
+      //         offset:380
+      //     });
+      //     return
+      //     }
+      // }else{
+      //     return false
+      // }
+      // this.handleLogin('ruleForm');
     },
     wrapSwitch(state) {
       this.switchLeft = !this.switchLeft

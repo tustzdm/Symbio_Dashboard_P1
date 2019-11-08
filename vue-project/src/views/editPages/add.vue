@@ -13,15 +13,15 @@
       { required: true, message: 'Order is required'}
     ]" label="Key:" prop="key">
                 <el-col :span="16">
-                    <el-input  v-model="form.key" placeholder="Element Name"></el-input>
+                    <el-input v-model="form.key" placeholder="Element Name"></el-input>
                 </el-col>
             </el-form-item>
             <el-form-item label="DbField:" prop="">
                 <el-col :span="16">
-                    <select  v-model="form.dbField">
+                    <select v-model="form.dbField">
                         <option v-for="item in dbfieldList">{{item.code}}</option>
                     </select>
-                </el-col>              
+                </el-col>
             </el-form-item>
             <el-form-item label="Type:" prop="type">
                 <el-col :span="16">
@@ -120,7 +120,7 @@ export default {
                 idx: ''
             },
             typeList: '',
-            dbfieldList:''
+            dbfieldList: ''
         }
     },
     created() {
@@ -132,7 +132,7 @@ export default {
             console.log(res);
             this.typeList = res.cd;
         });
-        let url = `setting/getDBFields?table=${this.form.page.toLowerCase()}&token=1`;//这里取的是page的value值，实际上应该去code，先用value转小写，后面还需要把空格也删了
+        let url = `setting/getDBFields?table=${this.form.page.toLowerCase()}&token=1`; //这里取的是page的value值，实际上应该去code，先用value转小写，后面还需要把空格也删了
         this.Fetch(url, {
             method: "GET"
         }).then(res => {
@@ -187,7 +187,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" >
+<style lang="stylus">
 .el-input__inner {
     color: black;
 }
