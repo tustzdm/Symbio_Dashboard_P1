@@ -47,6 +47,8 @@ public class ResultReviewServiceImpl implements ResultReviewService {
 
     @Autowired
     private TestResultDao testResultDao;
+    @Autowired
+    private BugReportDao bugReportDao;
 
     @Override
     public Result<ResultReviewUiDTO> getList(Integer userId, String locale, Integer testRunId, String trLocale, Integer pageIndex, Integer pageSize) {
@@ -63,6 +65,30 @@ public class ResultReviewServiceImpl implements ResultReviewService {
         log.trace("ResultReviewServiceImpl.getList() Exit");
         return retResult;
     }
+
+    /**
+     * Feature: Bug report
+     * <p>
+     * Get bug info
+     *
+     * @param userId       User id
+     * @param locale       UI locale
+     * @param testRunId    Test run /Test result id
+     * @param screenshotId Screen shot id
+     * @param trLocale     Test Result locale
+     * @return
+     */
+    public Result getBugInfo(Integer userId, String locale, Integer testRunId, Integer screenshotId, String trLocale) {
+        String funcName = "ResultReviewServiceImpl.getBugInfo()";
+
+        log.trace(String.format("%s Enter", funcName));
+
+        Result retResult = bugReportDao.getBugInfo(userId, locale, testRunId, screenshotId, trLocale);
+
+        log.trace(String.format("%s Exit", funcName));
+        return retResult;
+    }
+
 
 //
 //    @Override

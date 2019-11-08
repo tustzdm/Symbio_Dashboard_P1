@@ -1202,3 +1202,53 @@ INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('pt_PT', 'Protuguese');
 INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('ru_RU', 'Russian');
 INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('zh_CN', 'Chinese, China');
 INSERT INTO `locales_info`(`code`, `en_us`) VALUES ('zh_HK', 'Chinese, Hong Kong');
+
+-- 2019/11/08
+Drop Table IF EXISTS `bug_info`;
+CREATE TABLE `bug_info` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `test_result_id` int(10) unsigned DEFAULT NULL COMMENT 'FK: [test_result].id',
+  `screen_shot_id` int(10) unsigned DEFAULT NULL COMMENT 'FK: [screen_shot].id',
+
+  `title` VARCHAR(255) COMMENT 'The title of bug',
+  `bug_priority` varchar(32) DEFAULT NULL COMMENT 'P0,P1,P2,P3, (blank)',
+  `bug_type` varchar(32) DEFAULT NULL COMMENT 'Bug type',
+  `issue_category_id` int(10) unsigned COMMENT 'FK: [issue_category].id',
+  `issue_reason_id` int(10) unsigned COMMENT 'FK: [issue_reason].id',
+  
+  `jira_project_id` int(10) unsigned COMMENT 'FK: [dictionary].id',
+  `jira_labels` varchar(64) DEFAULT NULL COMMENT 'Jira labels',
+  `locale` VARCHAR(10) DEFAULT NULL COMMENT 'locale of the test result',
+  
+  `affection_version` varchar(32) DEFAULT NULL COMMENT 'version',
+  `dev_feature` varchar(32) DEFAULT NULL COMMENT 'Feature',
+  `component` varchar(32) DEFAULT NULL COMMENT 'component',
+  
+  `assignee` int(10) unsigned COMMENT 'FK: [user].id',
+  `verifier` int(10) unsigned COMMENT 'FK: [user].id',
+  
+  `description` varchar(255) DEFAULT NULL COMMENT 'description',
+  
+  `file_path` varchar(255) DEFAULT NULL COMMENT 'File path',
+  `file_name` varchar(255) DEFAULT NULL COMMENT 'File name',
+  `file_url` varchar(255) DEFAULT NULL COMMENT 'URL of file',
+  `thumbnail_file_path` varchar(255) DEFAULT NULL COMMENT 'thumbnail file path',
+  `thumbnail_file_name` varchar(255) DEFAULT NULL COMMENT 'thumbnail file name',
+  `thumbnail_url` varchar(255) DEFAULT NULL COMMENT 'Inner work path for front-end for all resources',
+  `validation` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'valid or not. 0-invalid, 1-valid',
+  
+  `bugfield_int1` int(10) DEFAULT NULL COMMENT 'Field int',
+  `bugfield_int2` int(10) DEFAULT NULL COMMENT 'Field int',
+  `bugfield_int3` int(10) DEFAULT NULL COMMENT 'Field int',
+  `bugfield_int4` int(10) DEFAULT NULL COMMENT 'Field int',
+  `bugfield_int5` int(10) DEFAULT NULL COMMENT 'Field int',
+  `bugfield_str1` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `bugfield_str2` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `bugfield_str3` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `bugfield_str4` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `bugfield_str5` varchar(255) DEFAULT NULL COMMENT 'Field string',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create time',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_bug_info_ssid` (`screen_shot_id`, `file_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
