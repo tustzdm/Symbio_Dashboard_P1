@@ -69,7 +69,7 @@ export default {
             tableColownms: {},
             statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
             run: false,
-            multipleSelection: [1, 2]
+            multipleSelection: []
         }
     },
     components: {
@@ -117,7 +117,6 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
-            console.log('select++++++++++++++');
             console.log(this.multipleSelection);
         },
         getTableData(val) {

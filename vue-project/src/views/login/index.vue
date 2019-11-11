@@ -143,12 +143,12 @@ export default {
                       offset:380
                     });
                 } else {
+                    const tonken = res.data.cd.token;
                     this.handleLogin('ruleForm');
                 }
             }).catch(err => {
                 alert(err);
             });
-      
       // if(this.ruleForm.password!=''){
       //     if(this.ruleForm.password!='symbio123'){
       //     this.$message({
