@@ -15,6 +15,10 @@ public enum DictionaryType {
   TestRunStatus("TestRunStatus"),
   JENKINS_JOB_STATUS("JenkinsJobStatus"),
 
+  JiraProject("JiraProject"),
+  BugPriority("BugPriority"),
+  BugType("BugType"),
+
   // Support locale in the field
   SCREEN_SHOT_STATUS_LOCALE("ScreenShotStatus"),
   TEST_RESULT_STATUS_LOCALE("TestResultStatus"),

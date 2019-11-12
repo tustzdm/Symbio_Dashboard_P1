@@ -12,6 +12,7 @@ import com.symbio.dashboard.dto.BugReportUiDTO;
 import com.symbio.dashboard.dto.TestRunUiDTO;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
+import com.symbio.dashboard.enums.UIInfoKey;
 import com.symbio.dashboard.enums.UIInfoPage;
 import com.symbio.dashboard.model.BugInfo;
 import com.symbio.dashboard.model.SysListSetting;
@@ -75,7 +76,9 @@ public class BugReportDao {
             listUiInfo = commonDao.getUIInfoByPage(UIInfoPage.BugReport.toString());
             bugInfoUiDTO.setLocale(locale);
             bugInfoUiDTO.setRole(7);
-            bugInfoUiDTO.setUiInfo(commonDao.getUiInfoList(locale, UIInfoPage.BugReport.toString(), listUiInfo));
+
+            List<Map<String, Object>> listMap = commonDao.getUiInfoList(locale, UIInfoPage.BugReport.toString(), listUiInfo);
+            bugInfoUiDTO.setUiInfo(getBugInfoUiData(listMap));
 
             bugInfoUiDTO.setScreenshotId(screenshotId);
             bugInfoUiDTO.setTestRunId(testRunId);
@@ -105,6 +108,33 @@ public class BugReportDao {
 
         log.trace(funcName + " Exit");
         return retResult;
+    }
+
+    private Map<String, Object> getBugInfoUiData(List<Map<String, Object>> data) {
+        Map<String, Object> mapData = new HashMap<>();
+
+        if (CommonUtil.isEmpty(data)) {
+            mapData.put("Step1", new ArrayList<>());
+            mapData.put("Step2", new ArrayList<>());
+            return mapData;
+        }
+
+        List<Map<String, Object>> listStep1 = new ArrayList<>();
+        List<Map<String, Object>> listStep2 = new ArrayList<>();
+
+        for (Map<String, Object> mapItem : data) {
+            String step = (String) mapItem.get(UIInfoKey.ConstCondition.getKey());
+            mapItem.remove(UIInfoKey.ConstCondition.getKey());
+
+            if ("Step1".equals(step)) {
+                listStep1.add(mapItem);
+            } else if ("Step2".equals(step)) {
+                listStep2.add(mapItem);
+            }
+        }
+        mapData.put("Step1", listStep1);
+        mapData.put("Step2", listStep2);
+        return mapData;
     }
 
     public Result getBugInfoAsListSetting(Integer userId, String locale, Integer testRunId, Integer screenshotId, String trLocale) {

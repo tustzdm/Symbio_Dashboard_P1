@@ -20,7 +20,9 @@ public class BugInfoUiDTO implements Serializable {
 
     private String locale;
     private Integer role;
-    private List<Map<String, Object>> uiInfo;
+    //private List<Map<String, Object>> uiInfo;
+    private Map<String, Object> uiInfo;
+
     private Map<String, Object> data;
     private List<Map<String, Object>> userList;
 
