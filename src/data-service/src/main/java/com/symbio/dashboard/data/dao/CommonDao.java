@@ -383,19 +383,30 @@ public class CommonDao {
     List<Map<String, Object>> retList = listUiInfo;
 
     try {
-      String strDBField, strType, strDictionayTpe, strData;
+      String strKey, strDBField, strType, strDictionaryTpe, strData;
       for(Map<String, Object> mapItem : retList) {
         strDBField = (String)mapItem.get(UIInfoKey.DBField.getKey());
         strType = (String)mapItem.get(UIInfoKey.Type.getKey());
         strData = (String)mapItem.get(UIInfoKey.Data.getKey());
 
+        strKey = (String) mapItem.get(UIInfoKey.Key.getKey());
+
         // Fetch dictionay data for "list"
         if(HtmlType.SelectList.getCode().equals(strType)
                 && (StringUtil.isEmpty(strData) || "status".equalsIgnoreCase(strDBField))) {
-          strDictionayTpe = page + strDBField;
+          strDictionaryTpe = page + strDBField;
+
+          if ("bugPriority".equals(strKey)) {
+            strDictionaryTpe = "BugPriority";
+          } else if ("bugType".equals(strKey)) {
+            strDictionaryTpe = "BugType";
+          } else if ("jiraProjectId".equals(strKey)) {
+            strDictionaryTpe = "JiraProject";
+          }
+
           try {
             // validation
-            DictionaryType dictType = DictionaryType.getDicType(strDictionayTpe);
+            DictionaryType dictType = DictionaryType.getDicType(strDictionaryTpe);
             List<Map<String, Object>> listDicMap = getDictDataByType(dictType.getType());
             mapItem.put(UIInfoKey.Data.getKey(), listDicMap);
           } catch (Exception e) {

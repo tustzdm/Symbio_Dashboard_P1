@@ -358,13 +358,14 @@ public class ResultReviewController extends BaseController {
     @GetMapping("/getBugInfo")
     public Result getBugInfo(@RequestParam(value = "token") String token,
                              @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                             @RequestParam(value = "id", required = false, defaultValue = "") Integer id,
                              @RequestParam(value = "testResultId") Integer testResultId,
                              @RequestParam(value = "screenshotId") Integer screenshotId) {
         Result retResult = new Result();
 
         Integer userId = 1;
 
-        retResult = resultReviewService.getBugInfo(userId, locale, testResultId, screenshotId, locale);
+        retResult = resultReviewService.getBugInfo(userId, locale, id, testResultId, screenshotId, locale);
 
 
         return retResult;

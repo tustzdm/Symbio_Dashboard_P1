@@ -4,7 +4,8 @@ public enum UIInfoPage {
   QualityOverviewLayout("QualityOverviewLayout", ""),
   Product("product", "product"),
   Release("release","release"),
-  TestSet("testset","test_set");
+  TestSet("testset", "test_set"),
+  BugReport("BugReport", "bug_info");
 
   private UIInfoPage(String page, String table){
     this.page = page;

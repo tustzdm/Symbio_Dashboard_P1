@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface UiInfoRep extends JpaRepository<UiInfo, Integer> {
 
-    @Query(value = "select * from ui_info u where u.page=?1 and u.display = 1 order by u.id", nativeQuery = true)
+    @Query(value = "select * from ui_info u where u.page=?1 and u.display = 1 order by u.idx", nativeQuery = true)
     List<UiInfo> getUiInfoListByPageName(String page);
 
     @Override

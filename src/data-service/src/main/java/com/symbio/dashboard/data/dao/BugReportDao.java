@@ -7,13 +7,16 @@ import com.symbio.dashboard.data.repository.BugInfoRep;
 import com.symbio.dashboard.data.repository.ScreenShotRep;
 import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.TestRunRep;
+import com.symbio.dashboard.dto.BugInfoUiDTO;
 import com.symbio.dashboard.dto.BugReportUiDTO;
 import com.symbio.dashboard.dto.TestRunUiDTO;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
+import com.symbio.dashboard.enums.UIInfoPage;
 import com.symbio.dashboard.model.BugInfo;
 import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.TestRun;
+import com.symbio.dashboard.model.UiInfo;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
@@ -23,10 +26,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @ClassName - BugReportDao
@@ -61,7 +61,53 @@ public class BugReportDao {
     @Autowired
     private BugInfoRep buginfoRep;
 
-    public Result getBugInfo(Integer userId, String locale, Integer testRunId, Integer screenshotId, String trLocale) {
+    public Result getBugUiInfo(Integer userId, String locale, Integer id, Integer testRunId, Integer screenshotId, String trLocale) {
+        String funcName = "BugReportDao.getBugUiInfo()";
+
+        log.trace(funcName + " Enter");
+        Result retResult = new Result();
+
+        try {
+            Integer testResultId = testRunId;
+
+            BugInfoUiDTO bugInfoUiDTO = new BugInfoUiDTO();
+            List<UiInfo> listUiInfo = new ArrayList<UiInfo>();
+            listUiInfo = commonDao.getUIInfoByPage(UIInfoPage.BugReport.toString());
+            bugInfoUiDTO.setLocale(locale);
+            bugInfoUiDTO.setRole(7);
+            bugInfoUiDTO.setUiInfo(commonDao.getUiInfoList(locale, UIInfoPage.BugReport.toString(), listUiInfo));
+
+            bugInfoUiDTO.setScreenshotId(screenshotId);
+            bugInfoUiDTO.setTestRunId(testRunId);
+            bugInfoUiDTO.setTestResultId(testResultId);
+
+            BugInfo bugInfo = null;
+            if (!CommonUtil.isEmpty(id) && id > 0) { // Not add
+                bugInfo = buginfoRep.getOne(id);
+            } else if (!(CommonUtil.isEmpty(testRunId) || CommonUtil.isEmpty(screenshotId))) {
+
+                bugInfo = buginfoRep.getByTestResultScreenLocale(testResultId, screenshotId, trLocale);
+            }
+
+            if (CommonUtil.isEmpty(bugInfo)) {
+                bugInfoUiDTO.setData(new HashMap<String, Object>());
+            } else {
+                // TODO: class to map
+                bugInfoUiDTO.setData(new HashMap<String, Object>());
+            }
+
+            bugInfoUiDTO.setUserList(commonDao.getUserUIList(listUiInfo));
+            retResult = new Result(bugInfoUiDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            retResult = new Result("000102", "Product UI Info");
+        }
+
+        log.trace(funcName + " Exit");
+        return retResult;
+    }
+
+    public Result getBugInfoAsListSetting(Integer userId, String locale, Integer testRunId, Integer screenshotId, String trLocale) {
 
         Integer testResultId = 1;
 

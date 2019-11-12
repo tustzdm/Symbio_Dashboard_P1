@@ -207,6 +207,46 @@ INSERT INTO `dictionary`(`type`,`code`,`value`, `description`)
 	VALUES ('TestCaseTypeLocale', '4', '{"en_us":"API TestCase","zh_cn": "API用例"}', '');
 INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
 	VALUES ('TestCaseTypeLocale', '5', '{"en_us":"Performance TestCase","zh_cn": "性能测试用例"}', '');
+	
+-- 2019/11/12
+INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
+	VALUES (330, 'BugPriority', '0', 'P0', 'BugInfo.bugPriority');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('BugPriority', '1', 'P1', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('BugPriority', '2', 'P2', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('BugPriority', '3', 'P3', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('BugPriority', '4', 'P4', '');
+	
+INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
+	VALUES (340, 'TestCasePriority', 'P0', 'P0', 'TestCase.priority');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('TestCasePriority', 'P1', 'P1', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('TestCasePriority', 'P2', 'P2', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('TestCasePriority', 'P3', 'P3', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('TestCasePriority', 'P4', 'P4', '');	
+
+INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
+	VALUES (350, 'BugType', '1', 'BugType1', 'BugInfo.bugType');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('BugType', '2', 'BugType2', '');
+	
+
+INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
+	VALUES (360, 'JiraProject', '1', 'JIRA Project 1', 'BugInfo.jira_project_id');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('JiraProject', '2', 'JIRA Project 2', '');
+INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
+	VALUES ('JiraProject', '3', 'JIRA Project 3', '');
+
+
+-- Next 380	
+
 
 DROP TABLE IF EXISTS `report_chart`;
 CREATE TABLE `report_chart` (

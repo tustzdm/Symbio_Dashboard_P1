@@ -78,12 +78,15 @@ public class ResultReviewServiceImpl implements ResultReviewService {
      * @param trLocale     Test Result locale
      * @return
      */
-    public Result getBugInfo(Integer userId, String locale, Integer testRunId, Integer screenshotId, String trLocale) {
+    public Result getBugInfo(Integer userId, String locale, Integer id, Integer testRunId, Integer screenshotId, String trLocale) {
         String funcName = "ResultReviewServiceImpl.getBugInfo()";
 
         log.trace(String.format("%s Enter", funcName));
 
-        Result retResult = bugReportDao.getBugInfo(userId, locale, testRunId, screenshotId, trLocale);
+        Result retResult = bugReportDao.getBugUiInfo(userId, locale, id, testRunId, screenshotId, trLocale);
+        if (retResult.hasError()) {
+            log.error(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+        }
 
         log.trace(String.format("%s Exit", funcName));
         return retResult;
