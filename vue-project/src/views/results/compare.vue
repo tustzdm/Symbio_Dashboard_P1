@@ -329,15 +329,34 @@ export default {
         },
         //调整图片的大小，目前是手机尺寸的类型
         imgFitScreen() {
-            var winHeight = document.body.clientHeight || document.documentElement.clientHeight;
+            let leftImgObj= new Image();
+            leftImgObj.src= this.leftImg;
+            let rightImgObj= new Image();
+            rightImgObj.src= this.rightImg;
+            if(leftImgObj.width>leftImgObj.height){
+                document.getElementsByClassName('bigImg')[0].style.width = '100%';
+                document.getElementsByClassName('bigImg')[1].style.width = '100%';
+            }else{
+                var winHeight = document.body.clientHeight || document.documentElement.clientHeight;
             document.getElementsByClassName('bigImg')[0].style.height = winHeight - 105 + 'px'
             document.getElementsByClassName('bigImg')[1].style.height = winHeight - 105 + 'px'
+            }
+            
         },
         imgActualSize() {
-            document.getElementsByClassName('bigImg')[0].style.height = '100%';
-            document.getElementsByClassName('bigImg')[1].style.height = '100%';
+            let leftImgObj= new Image();
+            leftImgObj.src= this.leftImg;
+            console.log(leftImgObj.width)
+            let rightImgObj= new Image();
+            rightImgObj.src= this.rightImg;
+            if(leftImgObj.width>leftImgObj.height){
+                document.getElementsByClassName('bigImg')[0].style.width = leftImgObj.width+'px';
+                // document.getElementsByClassName('bigImg')[1].style.width = rightImgObj.width+'px';
+            }else{
+                document.getElementsByClassName('bigImg')[0].style.height = '100%';
+            // document.getElementsByClassName('bigImg')[1].style.height = '100%';
+            }
         },
-
         //submitComment
         submitComment() {
             var trId = this.stepId - 1;

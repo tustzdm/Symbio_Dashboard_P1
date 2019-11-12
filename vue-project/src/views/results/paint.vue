@@ -1,5 +1,5 @@
 <template>
-<div class="reportPic">
+<div class="report_Pic">
     <el-steps :active="active" finish-status="success">
         <el-step title="步骤 1"></el-step>
         <el-step title="步骤 2"></el-step>
@@ -8,6 +8,8 @@
 
     <el-button style="margin-top: 12px;" @click="prev">Previous</el-button>
     <el-button style="margin-top: 12px;" @click="next">Next</el-button>
+
+
     <div id="paint" v-if="false">
         <canvas id="theCanvas" @mousedown="drawAction()" width=300 height=620 style="border:1px solid gray;display:inline-block">
             <textarea name="" id="" cols="30" rows="10"></textarea>
