@@ -100,7 +100,7 @@
                                 </div>
                                 <div v-if="item.field=='targetLocale'">
                                     <span>
-                                        <img v-if="scope.row['targetLocale'].thumbnail!=''" style="width:150px;" @click="stepId=scope.row.step;leftImg=scope.row['sourceLocale'].url;rightImg=scope.row['targetLocale'].url;compareDialog=true;" class="thumbnail" :src="scope.row['targetLocale'].thumbnail" alt="screenShot">
+                                        <img v-if="scope.row['targetLocale'].thumbnail!=''" style="width:150px;" @click="stepId=scope.row.step;screenShotId=scope.row['targetLocale'].id;leftImg=scope.row['sourceLocale'].url;rightImg=scope.row['targetLocale'].url;compareDialog=true;" class="thumbnail" :src="scope.row['targetLocale'].thumbnail" alt="screenShot">
                                     </span>
                                 </div>
                                 <div v-if="item.field=='screenshotFlag'">
@@ -149,7 +149,7 @@
                     </span>
 
                     <el-dialog title="Report Bug"  :visible.sync="reportDialog" center append-to-body width="90%">
-                        <paint v-if="reportDialog" :url="rightImg"></paint>
+                        <paint v-if="reportDialog" :screenShotId="screenShotId" :url="rightImg" :runId="runId"></paint>
                         <span slot="footer" class="dialog-footer">
                             <el-button @click="reportDialog = false">Cancel</el-button>
                             <el-button type="primary" @click="submitComment">Confirm</el-button>
@@ -208,6 +208,7 @@ export default {
             srcc: 'https://vue.symbio.com.cn/mock/image/0_433/434_435_1/182/en_US/screenshots/thumbnail/af1a574c-b318-4f6b-8d22-9a96e0039fff.png',
             compareDialog: false,
             stepId: '',
+            screenShotId:'',
             leftImg: 'ssss',
             rightImg: 'sssss',
             productName: 'Product',
@@ -256,7 +257,6 @@ export default {
                 //     "testSetId": 4
                 // }
             }).then(res => {
-                console.log(11111111)
                 console.log(res);
                 this.tableColownms = res.cd.columns;
                 this.dataList = res.cd.data;
@@ -264,7 +264,7 @@ export default {
                 console.log(this.dataList);
                 this.localeList = res.cd.listLocales;
 
-                 this.statusList = res.cd.listStatus;
+                this.statusList = res.cd.listStatus;
             }).catch(err => {
                 alert(err);
             });

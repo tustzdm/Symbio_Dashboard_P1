@@ -1,16 +1,45 @@
 <template>
 <div class="report_Pic">
+    {{runId}}{{screenShotId}}
     <el-steps :active="active" finish-status="success">
         <el-step title="步骤 1"></el-step>
         <el-step title="步骤 2"></el-step>
         <el-step title="步骤 3"></el-step>
     </el-steps>
 
+    <el-form ref="form" v-if="active==0" label-width="300px">
+        <el-form-item v-for="item in stepFormList1" v-show="item.type!='hidden'" :label="item.label" :key="item.key">
+            <el-col :span="4" v-if="item.type=='text'">
+                <el-input :placeholder="item.placeHolder"></el-input>
+            </el-col>
+            <el-col :span="4" v-if="['list','user'].includes(item.type)">
+                <el-select>
+                    <el-option v-for="option in item.data" :key="option.code" :value="option.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+        </el-form-item>
+    </el-form>
+    <el-form ref="form" v-if="active==1" label-width="300px">
+        <el-form-item v-for="item in stepFormList2" v-show="item.type!='hidden'" :label="item.label" :key="item.key">
+            <el-col :span="4" v-if="item.type=='text'">
+                <el-input :placeholder="item.placeHolder"></el-input>
+            </el-col>
+            <el-col :span="4" v-if="['list','user'].includes(item.type)">
+                <el-select>
+                    <el-option v-for="option in item.data" :key="option.code" :value="option.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+            <el-col :span="4" v-if="item.type=='textarea'">
+                <el-input type="textarea" :placeholder="item.placeHolder"></el-input>
+            </el-col>
+        </el-form-item>
+    </el-form>
     <el-button style="margin-top: 12px;" @click="prev">Previous</el-button>
     <el-button style="margin-top: 12px;" @click="next">Next</el-button>
 
-
-    <div id="paint" v-if="false">
+    <div id="paint" v-if="active==2">
         <canvas id="theCanvas" @mousedown="drawAction()" width=300 height=620 style="border:1px solid gray;display:inline-block">
             <textarea name="" id="" cols="30" rows="10"></textarea>
         </canvas>
@@ -86,15 +115,35 @@ export default {
             textareaX: '',
             textareaY: '',
             canvasHistory: [],
-            step: -1,
+            step: -1,//draw step
             action: 'line',
+
+            // info 
+            screenShotId: this.screenShotId,
+            runId: this.runId,
+            stepFormList1: '',
+            stepFormList2: '',
         }
     },
     props: {
         url: String,
+        screenShotId: String,
+        runId: String
     },
-    created() {},
+    created() {
+        console.log(this.runId);
+        this.Fetch(`/result/getBugInfo?token=1&id=0&testResultId=${this.runId}&screenshotId=${this.screenShotId}`, {
+            method: "GET",
+        }).then(res => {
+            console.log(res);
+            this.stepFormList1 = res.cd.uiInfo.Step1;
+            this.stepFormList2 = res.cd.uiInfo.Step2;
+        }).catch(err => {
+            alert(err);
+        });
+    },
     mounted() {
+
         let theCanvas = document.querySelector('#theCanvas');
         this.drawPic();
 
@@ -112,14 +161,19 @@ export default {
             let context = theCanvas.getContext('2d');
             context.beginPath();
             context.strokeStyle = this.color;
+        },
+        active:(val)=>{
+            if (val==2) {
+                this.drawPic();
+            }
         }
     },
     methods: {
         next() {
             if (this.active++ > 2) this.active = 0;
         },
-        prev(){
-             if (this.active-- < 0) this.active = 0;
+        prev() {
+            if (this.active-- < 0) this.active = 0;
         },
         windowToCanvas: (canvas, x, y) => {
             let rect = canvas.getBoundingClientRect()
