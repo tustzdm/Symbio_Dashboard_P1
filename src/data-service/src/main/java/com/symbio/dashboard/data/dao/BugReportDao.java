@@ -3,21 +3,12 @@ package com.symbio.dashboard.data.dao;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
 import com.symbio.dashboard.constant.ErrorConst;
-import com.symbio.dashboard.data.repository.BugInfoRep;
-import com.symbio.dashboard.data.repository.ScreenShotRep;
-import com.symbio.dashboard.data.repository.SysListSettingRep;
-import com.symbio.dashboard.data.repository.TestRunRep;
+import com.symbio.dashboard.data.repository.*;
 import com.symbio.dashboard.dto.BugInfoUiDTO;
 import com.symbio.dashboard.dto.BugReportUiDTO;
 import com.symbio.dashboard.dto.TestRunUiDTO;
-import com.symbio.dashboard.enums.ListDataType;
-import com.symbio.dashboard.enums.SystemListSetting;
-import com.symbio.dashboard.enums.UIInfoKey;
-import com.symbio.dashboard.enums.UIInfoPage;
-import com.symbio.dashboard.model.BugInfo;
-import com.symbio.dashboard.model.SysListSetting;
-import com.symbio.dashboard.model.TestRun;
-import com.symbio.dashboard.model.UiInfo;
+import com.symbio.dashboard.enums.*;
+import com.symbio.dashboard.model.*;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
@@ -51,6 +42,8 @@ public class BugReportDao {
     @Autowired
     private TestRunRep testRunRep;
     @Autowired
+    private TestResultRep testResultRep;
+    @Autowired
     private ScreenShotRep screenshotRep;
     @Autowired
     private ProductDao productDao;
@@ -58,38 +51,72 @@ public class BugReportDao {
     private ReleaseDao releaseDao;
     @Autowired
     private TestSetDao testSetDao;
+    @Autowired
+    private IssueDao issueDao;
 
     @Autowired
     private BugInfoRep buginfoRep;
 
-    public Result getBugUiInfo(Integer userId, String locale, Integer id, Integer testRunId, Integer screenshotId, String trLocale) {
+    /**
+     * Page: Review - bug report
+     *
+     * @param userId
+     * @param locale
+     * @param id
+     * @param screenshotId
+     * @return
+     */
+    public Result getBugUiInfo(Integer userId, String locale, Integer id, Integer screenshotId) {
         String funcName = "BugReportDao.getBugUiInfo()";
 
         log.trace(funcName + " Enter");
         Result retResult = new Result();
 
         try {
-            Integer testResultId = testRunId;
+            // Step1: Get Prototype data
+            ScreenShot ss = screenshotRep.getOne(screenshotId);
+            if (CommonUtil.isEmpty(ss)) {
+                return commonDao.getTableNoDataArgsLocale(locale, "screen_shot", screenshotId);
+            }
 
+            TestResult testResult = testResultRep.getByTestRunId(ss.getTestResultId());
+            if (CommonUtil.isEmpty(testResult)) {
+                return commonDao.getTableNoDataArgsLocale(locale, "test_result", ss.getTestResultId());
+            }
+
+            TestRun testRun = testRunRep.getById(testResult.getTestRunId());
+            if (CommonUtil.isEmpty(testRun)) {
+                return commonDao.getTableNoDataArgsLocale(locale, "test_run", testResult.getTestRunId());
+            }
+
+            Integer testResultId = testResult.getId();
+            Integer testRunId = testRun.getId();
+
+            // Step2: Get UI Info setting data
             BugInfoUiDTO bugInfoUiDTO = new BugInfoUiDTO();
             List<UiInfo> listUiInfo = new ArrayList<UiInfo>();
             listUiInfo = commonDao.getUIInfoByPage(UIInfoPage.BugReport.toString());
             bugInfoUiDTO.setLocale(locale);
             bugInfoUiDTO.setRole(7);
 
+            // Step3: treat with data
             List<Map<String, Object>> listMap = commonDao.getUiInfoList(locale, UIInfoPage.BugReport.toString(), listUiInfo);
+            listMap = getIssueListInfo(listMap, testRun.getTestsetId());
+
+            // Divide into two groups
             bugInfoUiDTO.setUiInfo(getBugInfoUiData(listMap));
 
             bugInfoUiDTO.setScreenshotId(screenshotId);
             bugInfoUiDTO.setTestRunId(testRunId);
             bugInfoUiDTO.setTestResultId(testResultId);
 
+            // Step4: Get current data for update
             BugInfo bugInfo = null;
             if (!CommonUtil.isEmpty(id) && id > 0) { // Not add
                 bugInfo = buginfoRep.getOne(id);
             } else if (!(CommonUtil.isEmpty(testRunId) || CommonUtil.isEmpty(screenshotId))) {
 
-                bugInfo = buginfoRep.getByTestResultScreenLocale(testResultId, screenshotId, trLocale);
+                bugInfo = buginfoRep.getByTestResultScreenLocale(testResultId, screenshotId, testRun.getLocale());
             }
 
             if (CommonUtil.isEmpty(bugInfo)) {
@@ -99,6 +126,7 @@ public class BugReportDao {
                 bugInfoUiDTO.setData(new HashMap<String, Object>());
             }
 
+            // Step5: Get User list for user reference
             bugInfoUiDTO.setUserList(commonDao.getUserUIList(listUiInfo));
             retResult = new Result(bugInfoUiDTO);
         } catch (Exception e) {
@@ -110,6 +138,32 @@ public class BugReportDao {
         return retResult;
     }
 
+    private List<Map<String, Object>> getIssueListInfo(List<Map<String, Object>> data, Integer testSetId) {
+        List<Map<String, Object>> retData = data;
+        if (CommonUtil.isEmpty(data)) {
+            return retData;
+        }
+
+        for (Map<String, Object> mapItem : data) {
+            String strType = (String) mapItem.get(UIInfoKey.Type.getKey());
+            if (HtmlType.SelectList.getCode().equals(strType)) {
+                String strKey = (String) mapItem.get(UIInfoKey.Key.getKey());
+                if ("issueCategoryId".equals(strKey)) {
+                    mapItem.put(UIInfoKey.Data.getKey(), issueDao.getIssueCategoryUiListByTestSetId(testSetId));
+                } else if ("issueReasonId".equals(strKey)) {
+                    mapItem.put(UIInfoKey.Data.getKey(), issueDao.getIssueReasonUiListByTestSetId(testSetId));
+                }
+            }
+        }
+        return retData;
+    }
+
+    /**
+     * Divide items into two 'StepX' groups
+     *
+     * @param data
+     * @return
+     */
     private Map<String, Object> getBugInfoUiData(List<Map<String, Object>> data) {
         Map<String, Object> mapData = new HashMap<>();
 

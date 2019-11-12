@@ -1,6 +1,7 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.dao.*;
 import com.symbio.dashboard.data.repository.TestCaseRep;
 import com.symbio.dashboard.data.repository.TestResultRep;
@@ -78,14 +79,14 @@ public class ResultReviewServiceImpl implements ResultReviewService {
      * @param trLocale     Test Result locale
      * @return
      */
-    public Result getBugInfo(Integer userId, String locale, Integer id, Integer testRunId, Integer screenshotId, String trLocale) {
+    public Result getBugInfo(Integer userId, String locale, Integer id, Integer screenshotId) {
         String funcName = "ResultReviewServiceImpl.getBugInfo()";
 
         log.trace(String.format("%s Enter", funcName));
 
-        Result retResult = bugReportDao.getBugUiInfo(userId, locale, id, testRunId, screenshotId, trLocale);
+        Result retResult = bugReportDao.getBugUiInfo(userId, locale, id, screenshotId);
         if (retResult.hasError()) {
-            log.error(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+            log.error(ErrorConst.getErrorLogMsg(funcName, retResult));
         }
 
         log.trace(String.format("%s Exit", funcName));
