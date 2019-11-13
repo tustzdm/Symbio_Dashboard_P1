@@ -43,13 +43,6 @@
                     <i class="el-icon-caret-bottom el-icon--right"></i>
                 </span>
                 <el-dropdown-menu>
-                    <!-- <input class="select-search" type="text" placeholder="Search here" /> -->
-                    <!-- <el-dropdown-item>
-                        <i class="el-icon-plus"></i>Add Release
-                    </el-dropdown-item>
-                    <el-dropdown-item>
-                        <i class="el-icon-edit"></i>Edit Releases
-                    </el-dropdown-item> -->
                     <el-dropdown-item v-for="item in releaseList" :class="{selected:item.id==releaseId}" :command="item.id" :key="item.id">
                         {{item.name}}
                     </el-dropdown-item>
@@ -219,6 +212,10 @@ export default {
     },
     props: ['selectList'],
     created() {
+        this.productId=localStorage.getItem('result_productId');
+        this.releaseId=localStorage.getItem('result_releaseId');
+        this.testSetId=localStorage.getItem('result_testSetId');
+
         this.fatherSelectList = this.selectList;
         this.getNavgationList();
         this.Fetch(`/result/getTEPInfo?token=1&testSetId=1`, {
@@ -229,6 +226,8 @@ export default {
             console.log(this.tepnameList);
             this.testSelectList = res.cd.data;
         });
+
+        
     },
     mounted() {},
     watch: {
@@ -241,24 +240,16 @@ export default {
                 console.log(this.tepnameList)
                 this.testSelectList = res.cd.data
             });
+        },
+        productId:function (val) {
+            localStorage.setItem('result_productId',val)
+        },
+        releaseId:function (val) {
+            localStorage.setItem('result_releaseId',val)
+        },
+        testSetId:function (val) {  
+            localStorage.setItem('result_testSetId',val)
         }
-        // productId:function (val) {
-        //     this.releaseName = 'Release';
-        //     this.testSetName = 'TestSet';
-        //      this.releaseId = '';
-        //     this.testSetId = '';
-        //     this.getNavgationList();
-
-        // },
-        // releaseId:function (val) {
-        //     this.testSetName = 'TestSet';
-        //      this.testSetId = '';
-        //     this.getNavgationList();
-
-        // },
-        // testSetId:function (val) {
-        //     this.getNavgationList();        
-        // }
     },
     methods: {
         handleProductCommand(command) {

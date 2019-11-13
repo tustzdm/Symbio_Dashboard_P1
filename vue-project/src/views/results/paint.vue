@@ -7,28 +7,29 @@
         <el-step title="Step 2"></el-step>
         <el-step title="Step 3"></el-step>
     </el-steps>
-
-    <el-form v-model="reortForm" ref="reortForm" v-if="active==0" label-width="300px">
-        <el-form-item v-for="item in stepFormList1"  v-show="item.type!='hidden'" :label="item.label" :key="item.key">
+    <keep-alive>
+        <el-form v-model="reortForm" ref="reortForm" v-if="active==0" label-width="300px">
+            <el-form-item v-for="item in stepFormList1" v-show="item.type!='hidden'" :label="item.label" :key="item.key">
+                <el-col :span="4" v-if="item.type=='text'">
+                    <el-input v-model="reortForm[item.key]" :placeholder="item.placeHolder"></el-input>
+                </el-col>
+                <el-col :span="4" v-if="['list','user'].includes(item.type)">
+                    <el-select v-model="reortForm[item.key]">
+                        <el-option v-for="option in item.data" :key="option.value" :value="option.code" :label="option.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
+            </el-form-item>
+        </el-form>
+    </keep-alive>
+    <el-form v-model="reortForm" ref="form" v-if="active==1" label-width="300px">
+        <el-form-item v-for="item in stepFormList2" v-model="reortForm[item.key]" v-show="item.type!='hidden'" :label="item.label" :key="item.key">
             <el-col :span="4" v-if="item.type=='text'">
                 <el-input v-model="reortForm[item.key]" :placeholder="item.placeHolder"></el-input>
             </el-col>
             <el-col :span="4" v-if="['list','user'].includes(item.type)">
                 <el-select v-model="reortForm[item.key]">
-                    <el-option v-for="option in item.data" :key="option.value" :value="option.code" :label="option.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-        </el-form-item>
-    </el-form>
-    <el-form v-model="reortForm" ref="form" v-if="active==1" label-width="300px">
-        <el-form-item v-for="item in stepFormList2" v-model="reortForm[item.key]" v-show="item.type!='hidden'" :label="item.label" :key="item.key">
-            <el-col :span="4" v-if="item.type=='text'">
-                <el-input v-model="reortForm[item.key]"   :placeholder="item.placeHolder"></el-input>
-            </el-col>
-            <el-col :span="4" v-if="['list','user'].includes(item.type)">
-                <el-select v-model="reortForm[item.key]" >
-                    <el-option  v-for="option in item.data" :key="option.code" :value="option.value">
+                    <el-option v-for="option in item.data" :key="option.code" :value="option.value">
                     </el-option>
                 </el-select>
             </el-col>
@@ -40,63 +41,65 @@
     <el-button style="margin-top: 12px;" @click="prev">Previous</el-button>
     <el-button style="margin-top: 12px;" @click="next">Next</el-button>
 
-    <div id="paint" v-if="active==2">
-        <canvas id="theCanvas" @mousedown="drawAction()" width=300 height=620 style="border:1px solid gray;display:inline-block">
-            <textarea name="" id="" cols="30" rows="10"></textarea>
-        </canvas>
-        <textarea v-if="action=='text'" class="text" name="" @keydown="textEnter()" placeholder="click the postion to text" v-model="text" cols="30" rows="2" style="position:absolute;left:30px;top:85px"></textarea>
-        <div style="display:inline-block;vertical-align:top;margin-left:8px">
-            <ul>
-                <li class="line" :class="{penActive:lineWidth==2}">
-                    <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(2)">
-                        <div style="display:inlienne-block;width:19px;height:2px;background:black;margin-top:9px"></div>
-                    </div>
-                </li>
-                <li class="line" :class="{penActive:lineWidth==8}">
-                    <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(8)">
-                        <div style="display:inlienne-block;width:19px;height:4px;background:black;margin-top:7px"></div>
-                    </div>
-                </li>
-                <li class="line" :class="{penActive:lineWidth==13}">
-                    <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(13)">
-                        <div style="display:inlienne-block;width:19px;height:7px;background:black;margin-top:5px"></div>
-                    </div>
-                </li>
-                <!-- <li><i class=" pen" :class="{penActive:lineWidth==8}" @click="setLineWidth(8)" style="font-size:15px;padding:2px"></i></li>
+    <div class="paintCon" style="text-align:center">
+        <div id="paint" v-if="active==2" style="display:inline-block;">
+            <canvas id="theCanvas" @mousedown="drawAction()" width=300 height=620 style="border:1px solid gray;display:inline-block">
+                <textarea name="" id="" cols="30" rows="10"></textarea>
+            </canvas>
+            <textarea v-if="action=='text'" class="text" name="" @keydown="textEnter()" placeholder="click the postion to text" v-model="text" cols="30" rows="2" style="position:absolute;left:30px;top:85px"></textarea>
+            <div style="display:inline-block;vertical-align:top;margin-left:8px">
+                <ul>
+                    <li class="line" :class="{penActive:lineWidth==2}">
+                        <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(2)">
+                            <div style="display:inlienne-block;width:19px;height:2px;background:black;margin-top:9px"></div>
+                        </div>
+                    </li>
+                    <li class="line" :class="{penActive:lineWidth==8}">
+                        <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(8)">
+                            <div style="display:inlienne-block;width:19px;height:4px;background:black;margin-top:7px"></div>
+                        </div>
+                    </li>
+                    <li class="line" :class="{penActive:lineWidth==13}">
+                        <div style="width:19px;height:19px;overflow:hidden" @click="setLineWidth(13)">
+                            <div style="display:inlienne-block;width:19px;height:7px;background:black;margin-top:5px"></div>
+                        </div>
+                    </li>
+                    <!-- <li><i class=" pen" :class="{penActive:lineWidth==8}" @click="setLineWidth(8)" style="font-size:15px;padding:2px"></i></li>
             <li><i class=" pen" :class="{penActive:lineWidth==13}" @click="setLineWidth(13)" style="font-size:18px;"></i></li> -->
-            </ul>
-            <ul>
-                <li style="margin-bottom:6px">
-                    <el-button @click="action='line';" style="padding:4px">
-                        <i class="el-icon-edit" style="font-size:18px;"></i>
-                    </el-button>
-                </li>
-                <li style="margin-bottom:6px">
-                    <el-button @click="action='rect';" style="padding:4px">
-                        <div style="width:12px;height:12px;padding:2px;border:1px solid black;background:#99E7F7"></div>
-                    </el-button>
-                </li>
-                <li>
-                    <el-color-picker v-model="color"></el-color-picker>
-                </li>
-                <li style="margin-bottom:6px">
-                    <el-button style="padding:3px" @click="text = '';action='text';">
-                        <div style="width:19px;height:18px;line-height:16px;font-size:16px">T</div>
-                    </el-button>
-                </li>
-                <li style="margin-bottom:6px">
-                    <el-button @click="prevStep" style="padding:4px">
-                        <i class="el-icon-back" style="font-size:18px;"></i>
-                    </el-button>
-                </li>
-                <li style="margin-bottom:6px">
-                    <el-button @click="saveUpload" style="padding:4px">
-                        <i class="el-icon-upload2 " style="font-size:18px;"></i>
-                    </el-button>
-                </li>
-            </ul>
-        </div>
+                </ul>
+                <ul>
+                    <li style="margin-bottom:6px">
+                        <el-button @click="action='line';" style="padding:4px">
+                            <i class="el-icon-edit" style="font-size:18px;"></i>
+                        </el-button>
+                    </li>
+                    <li style="margin-bottom:6px">
+                        <el-button @click="action='rect';" style="padding:4px">
+                            <div style="width:12px;height:12px;padding:2px;border:1px solid black;background:#99E7F7"></div>
+                        </el-button>
+                    </li>
+                    <li>
+                        <el-color-picker v-model="color"></el-color-picker>
+                    </li>
+                    <li style="margin-bottom:6px">
+                        <el-button style="padding:3px" @click="text = '';action='text';">
+                            <div style="width:19px;height:18px;line-height:16px;font-size:16px">T</div>
+                        </el-button>
+                    </li>
+                    <li style="margin-bottom:6px">
+                        <el-button @click="prevStep" style="padding:4px">
+                            <i class="el-icon-back" style="font-size:18px;"></i>
+                        </el-button>
+                    </li>
+                    <li style="margin-bottom:6px">
+                        <el-button @click="saveUpload" style="padding:4px">
+                            <i class="el-icon-upload2 " style="font-size:18px;"></i>
+                        </el-button>
+                    </li>
+                </ul>
+            </div>
 
+        </div>
     </div>
 </div>
 </template>
@@ -124,7 +127,7 @@ export default {
             runId: this.runId,
             stepFormList1: '',
             stepFormList2: '',
-            reortForm:{}
+            reortForm: {}
         }
     },
     props: {
@@ -144,8 +147,7 @@ export default {
             alert(err);
         });
     },
-    mounted() {
-    },
+    mounted() {},
     destroyed() {},
     computed: {
 
@@ -157,7 +159,7 @@ export default {
             context.beginPath();
             context.strokeStyle = this.color;
         },
-        active: function(val){
+        active: function (val) {
             if (val == 2) {
                 let theCanvas = document.querySelector('#theCanvas');
                 this.drawPic();
@@ -322,7 +324,7 @@ export default {
             let context = theCanvas.getContext('2d');
             var saveImg = theCanvas.toDataURL('image/png');
             console.log(saveImg)
-            this.reortForm['report'] =saveImg
+            this.reortForm['report'] = saveImg
             console.log(this.reortForm)
         },
         setHistory() {
