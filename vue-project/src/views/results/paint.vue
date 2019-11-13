@@ -1,38 +1,39 @@
 <template>
 <div class="report_Pic">
     {{runId}}{{screenShotId}}
+    {{reortForm}}
     <el-steps :active="active" finish-status="success">
-        <el-step title="步骤 1"></el-step>
-        <el-step title="步骤 2"></el-step>
-        <el-step title="步骤 3"></el-step>
+        <el-step title="Step 1"></el-step>
+        <el-step title="Step 2"></el-step>
+        <el-step title="Step 3"></el-step>
     </el-steps>
 
-    <el-form ref="form" v-if="active==0" label-width="300px">
-        <el-form-item v-for="item in stepFormList1" v-show="item.type!='hidden'" :label="item.label" :key="item.key">
+    <el-form v-model="reortForm" ref="reortForm" v-if="active==0" label-width="300px">
+        <el-form-item v-for="item in stepFormList1"  v-show="item.type!='hidden'" :label="item.label" :key="item.key">
             <el-col :span="4" v-if="item.type=='text'">
-                <el-input :placeholder="item.placeHolder"></el-input>
+                <el-input v-model="reortForm[item.key]" :placeholder="item.placeHolder"></el-input>
             </el-col>
             <el-col :span="4" v-if="['list','user'].includes(item.type)">
-                <el-select>
-                    <el-option v-for="option in item.data" :key="option.code" :value="option.value">
+                <el-select v-model="reortForm[item.key]">
+                    <el-option v-for="option in item.data" :key="option.value" :value="option.code" :label="option.value">
                     </el-option>
                 </el-select>
             </el-col>
         </el-form-item>
     </el-form>
-    <el-form ref="form" v-if="active==1" label-width="300px">
-        <el-form-item v-for="item in stepFormList2" v-show="item.type!='hidden'" :label="item.label" :key="item.key">
+    <el-form v-model="reortForm" ref="form" v-if="active==1" label-width="300px">
+        <el-form-item v-for="item in stepFormList2" v-model="reortForm[item.key]" v-show="item.type!='hidden'" :label="item.label" :key="item.key">
             <el-col :span="4" v-if="item.type=='text'">
-                <el-input :placeholder="item.placeHolder"></el-input>
+                <el-input v-model="reortForm[item.key]"   :placeholder="item.placeHolder"></el-input>
             </el-col>
             <el-col :span="4" v-if="['list','user'].includes(item.type)">
-                <el-select>
-                    <el-option v-for="option in item.data" :key="option.code" :value="option.value">
+                <el-select v-model="reortForm[item.key]" >
+                    <el-option  v-for="option in item.data" :key="option.code" :value="option.value">
                     </el-option>
                 </el-select>
             </el-col>
             <el-col :span="4" v-if="item.type=='textarea'">
-                <el-input type="textarea" :placeholder="item.placeHolder"></el-input>
+                <el-input v-model="reortForm[item.key]" type="textarea" :placeholder="item.placeHolder"></el-input>
             </el-col>
         </el-form-item>
     </el-form>
@@ -115,7 +116,7 @@ export default {
             textareaX: '',
             textareaY: '',
             canvasHistory: [],
-            step: -1,//draw step
+            step: -1, //draw step
             action: 'line',
 
             // info 
@@ -123,6 +124,7 @@ export default {
             runId: this.runId,
             stepFormList1: '',
             stepFormList2: '',
+            reortForm:{}
         }
     },
     props: {
@@ -132,7 +134,7 @@ export default {
     },
     created() {
         console.log(this.runId);
-        this.Fetch(`/result/getBugInfo?token=1&id=0&testResultId=${this.runId}&screenshotId=${this.screenShotId}`, {
+        this.Fetch(`/result/getBugInfo?token=1&id=0&testResultId=1&screenshotId=1300`, {
             method: "GET",
         }).then(res => {
             console.log(res);
@@ -143,13 +145,6 @@ export default {
         });
     },
     mounted() {
-
-        let theCanvas = document.querySelector('#theCanvas');
-        this.drawPic();
-
-        let context = theCanvas.getContext('2d')
-        context.lineWidth = this.lineWidth;
-
     },
     destroyed() {},
     computed: {
@@ -162,9 +157,13 @@ export default {
             context.beginPath();
             context.strokeStyle = this.color;
         },
-        active:(val)=>{
-            if (val==2) {
+        active: function(val){
+            if (val == 2) {
+                let theCanvas = document.querySelector('#theCanvas');
                 this.drawPic();
+
+                let context = theCanvas.getContext('2d')
+                context.lineWidth = this.lineWidth;
             }
         }
     },
@@ -181,6 +180,9 @@ export default {
                 x: x - rect.left * (canvas.width / rect.width),
                 y: y - rect.top * (canvas.height / rect.height)
             }
+        },
+        initCanvas() {
+
         },
         drawPic() {
             //add img
@@ -319,7 +321,9 @@ export default {
             let theCanvas = document.querySelector('#theCanvas');
             let context = theCanvas.getContext('2d');
             var saveImg = theCanvas.toDataURL('image/png');
-            alert('Save need to wait sever port')
+            console.log(saveImg)
+            this.reortForm['report'] =saveImg
+            console.log(this.reortForm)
         },
         setHistory() {
             let theCanvas = document.querySelector('#theCanvas');
