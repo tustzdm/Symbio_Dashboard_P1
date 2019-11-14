@@ -193,7 +193,7 @@ export default {
             productName: 'Product',
             releaseName: 'Release',
             testSetName: 'TestSet',
-            productId: '480',
+            productId: '',
             releaseId: '',
             testSetId: '',
             productList: '',
@@ -212,7 +212,7 @@ export default {
     },
     props: ['selectList'],
     created() {
-        this.productId=localStorage.getItem('result_productId');
+        this.productId=localStorage.getItem('result_productId')||480;//默认初始值为上次访问的，没有记录会访问最新的，这里设置为固定的480
         this.releaseId=localStorage.getItem('result_releaseId');
         this.testSetId=localStorage.getItem('result_testSetId');
 

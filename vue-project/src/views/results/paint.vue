@@ -10,10 +10,10 @@
     <keep-alive>
         <el-form v-model="reortForm" ref="reortForm" v-if="active==0" label-width="300px">
             <el-form-item v-for="item in stepFormList1" v-show="item.type!='hidden'" :label="item.label" :key="item.key">
-                <el-col :span="4" v-if="item.type=='text'">
+                <el-col :span="8" v-if="item.type=='text'">
                     <el-input v-model="reortForm[item.key]" :placeholder="item.placeHolder"></el-input>
                 </el-col>
-                <el-col :span="4" v-if="['list','user'].includes(item.type)">
+                <el-col :span="8" v-if="['list','user'].includes(item.type)">
                     <el-select v-model="reortForm[item.key]">
                         <el-option v-for="option in item.data" :key="option.value" :value="option.code" :label="option.value">
                         </el-option>
@@ -24,16 +24,16 @@
     </keep-alive>
     <el-form v-model="reortForm" ref="form" v-if="active==1" label-width="300px">
         <el-form-item v-for="item in stepFormList2" v-model="reortForm[item.key]" v-show="item.type!='hidden'" :label="item.label" :key="item.key">
-            <el-col :span="4" v-if="item.type=='text'">
+            <el-col :span="8" v-if="item.type=='text'">
                 <el-input v-model="reortForm[item.key]" :placeholder="item.placeHolder"></el-input>
             </el-col>
-            <el-col :span="4" v-if="['list','user'].includes(item.type)">
+            <el-col :span="8" v-if="['list','user'].includes(item.type)">
                 <el-select v-model="reortForm[item.key]">
                     <el-option v-for="option in item.data" :key="option.code" :value="option.value">
                     </el-option>
                 </el-select>
             </el-col>
-            <el-col :span="4" v-if="item.type=='textarea'">
+            <el-col :span="8" v-if="item.type=='textarea'">
                 <el-input v-model="reortForm[item.key]" type="textarea" :placeholder="item.placeHolder"></el-input>
             </el-col>
         </el-form-item>
@@ -268,8 +268,10 @@ export default {
             console.log(context.lineWidth);
         },
         drawRect() {
+
             let theCanvas = document.querySelector('#theCanvas');
             let context = theCanvas.getContext('2d');
+            context.closePath();
             context.strokeStyle = this.color;
             context.beginPath();
             let x, y, w, h;
@@ -283,6 +285,9 @@ export default {
                 console.log(y)
             }
             theCanvas.onmouseup = (e) => {
+                if (this.action != 'rect') {
+                    return //很奇怪，写文字时仍然会以这个方法监听onmouseup事件，所以
+                }
                 let ele = this.windowToCanvas(theCanvas, e.clientX, e.clientY)
                 w = ele.x - x;
                 h = ele.y - y;
@@ -290,33 +295,33 @@ export default {
                 console.log(h)
                 context.rect(x, y, w, h);
                 context.stroke();
-                this.setHistory();
+                // this.setHistory();
+                console.log(234234234234121231234)
             }
         },
         drawText() {
             let theCanvas = document.querySelector('#theCanvas');
             let context = theCanvas.getContext('2d');
-            context.closePath();
             theCanvas.onmousedown = (e) => {
                 let ele = this.windowToCanvas(theCanvas, e.clientX, e.clientY)
                 this.textareaX = ele.x;
                 this.textareaY = ele.y;
                 document.querySelector('.text').style.left = this.textareaX + 25 + 'px';
                 document.querySelector('.text').style.top = this.textareaY + 50 + 'px'
-            }
+            };
         },
         textEnter(e) {
             let theCanvas = document.querySelector('#theCanvas');
             let context = theCanvas.getContext('2d');
-
             var evt = window.event || e;
             if (evt.keyCode == 13) {
                 context.font = "23px Poppins";
                 context.fillStyle = this.color;
                 context.fillText(this.text, this.textareaX, this.textareaY);
+                this.action = 'line'; 
                 this.setHistory();
 
-                this.action = 'line'; // 输入完text后默认设置为画线
+                // 输入完text后默认设置为画线
             }
         },
         saveUpload() {

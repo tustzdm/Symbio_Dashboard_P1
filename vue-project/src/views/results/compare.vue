@@ -104,7 +104,7 @@
                                     </span>
                                 </div>
                                 <div v-if="item.field=='screenshotFlag'">
-                                    <router-link :to="{ name: 'pictures', query: {  caseId:scope.row.caseId}}">
+                                    <router-link :to="{ name: 'pictures', query: {caseId:scope.row.caseId}}">
                                         <img v-if="scope.row[item.field]!=0" src="../../assets/images/screenshot-icon2.png" alt="">
                                     </router-link>
                                 </div>
