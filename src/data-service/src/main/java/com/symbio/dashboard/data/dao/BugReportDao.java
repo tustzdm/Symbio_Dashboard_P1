@@ -139,17 +139,31 @@ public class BugReportDao {
         return retResult;
     }
 
-    public Result saveBugInfo(Integer userId, String locale, BugInfo data) {
+    public Result getUIBugInfo(Integer userId, String locale, BugInfo data) {
 
-        Result<BugInfo> retSaveBugInfo = new Result();
+        Result<BugInfo> retUIBugInfo = new Result();
 
         List<UiInfo> listUiInfo = commonDao.getUIInfoByPage(UIInfoPage.BugReport.toString());
         List<String> listFields = BusinessUtil.getCamelFieldListByUIInfo(listUiInfo);
 
         BugInfo bugInfo = BugInfoFactory.cloneNewBugInfo(data, listFields);
         System.out.println(bugInfo);
-        retSaveBugInfo.setCd(bugInfo);
+        retUIBugInfo.setCd(bugInfo);
 
+        return retUIBugInfo;
+    }
+
+    public Result<BugInfo> saveBugInfo(String locale, BugInfo data) {
+        String funcName = "BugReportDao.saveBugInfo()";
+        Result<BugInfo> retSaveBugInfo = new Result();
+
+        try {
+            BugInfo updBugInfo = buginfoRep.saveAndFlush(data);
+            retSaveBugInfo.setCd(updBugInfo);
+        } catch (Exception e) {
+            log.error(ErrorConst.getExceptionLogMsg(funcName, e));
+            return ErrorConst.getExceptionResult(funcName, e);
+        }
         return retSaveBugInfo;
     }
 
@@ -314,6 +328,19 @@ public class BugReportDao {
             return commonDao.getTableNoDataArgsLocale(locale, "screen_shot", screenShotId);
         } else {
             retResult.setCd(ss.getTestResultId());
+        }
+
+        return retResult;
+    }
+
+    public Result<ScreenShot> getScreenShotById(String locale, Integer screenShotId) {
+        Result<ScreenShot> retResult = new Result<ScreenShot>();
+
+        ScreenShot ss = screenshotRep.getOne(screenShotId);
+        if (CommonUtil.isEmpty(ss)) {
+            return commonDao.getTableNoDataArgsLocale(locale, "screen_shot", screenShotId);
+        } else {
+            retResult.setCd(ss);
         }
 
         return retResult;

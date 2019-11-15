@@ -81,6 +81,32 @@ public class FileUtil {
         return dtoFilePathInfo.getThumbnailPath();
     }
 
+    public static String getCloneHttpDir(String httpFilePath) {
+        // mock/image/0_480/1076_1077_1/762/en_US/screenshots/001.png
+        // -> mock/image/0_480/1076_1077_1/762/en_US/screenshots/
+
+        if (CommonUtil.isEmpty(httpFilePath)) {
+            return "";
+        } else {
+            String retHttpPath = httpFilePath.replace("\\", "/");
+            String newHttpPath = retHttpPath.substring(0, retHttpPath.lastIndexOf("/")) + File.separator;
+            return newHttpPath.replace("\\", "/");
+        }
+    }
+
+    public static boolean checkFilePath(String strPath) {
+        try {
+            File file = new File(strPath);
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            return file.isDirectory();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     /**
      * Combine folder and filename
      *
