@@ -96,7 +96,7 @@ public class EntityUtils {
      * @param model     实体类
      * @return 属性值
      */
-    private static Object getFieldValueByName(String fieldName, Object model) {
+    public static Object getFieldValueByName(String fieldName, Object model) {
         try {
             String firstLetter = fieldName.substring(0, 1).toUpperCase();
             String getter = "get" + firstLetter + fieldName.substring(1);
@@ -508,5 +508,35 @@ public class EntityUtils {
                 }
             }
         }
+    }
+
+    /**
+     * Object to Map
+     *
+     * @param obj
+     * @return
+     * @throws Exception
+     */
+
+    public static Map<String, Object> objectToMap(Object obj) throws Exception {
+        if (obj == null) {
+            return null;
+        }
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        Field[] declaredFields = obj.getClass().getDeclaredFields();
+
+        // TODO: Field[] declaredFields =
+        /*
+            System.out.println(obj.getClass());
+            obj.getClass().getDeclaredFields();
+         */
+
+        String fieldName = null;
+        for (Field field : declaredFields) {
+            fieldName = field.getName();
+            map.put(fieldName, WebUtil.getItemValue(getFieldValueByName(fieldName, obj)));
+        }
+        return map;
     }
 }

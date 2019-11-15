@@ -360,7 +360,7 @@ public class ResultReviewController extends BaseController {
     public Result getBugInfo(@RequestParam(value = "token") String token,
                              @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                              @RequestParam(value = "id", required = false, defaultValue = "") Integer id,
-                             @RequestParam(value = "screenshotId") Integer screenshotId) {
+                             @RequestParam(value = "screenshotId", required = false, defaultValue = "") Integer screenshotId) {
         String funcName = "ResultReviewController.getBugInfo()";
         Result retResult = new Result();
 

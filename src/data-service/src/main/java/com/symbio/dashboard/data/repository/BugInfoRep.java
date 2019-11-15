@@ -21,4 +21,7 @@ public interface BugInfoRep extends JpaRepository<BugInfo, Integer> {
 
     @Query(value = "SELECT * FROM bug_info WHERE test_result_id = ?1 AND screen_shot_id = ?2 AND locale = ?3 AND validation = 1", nativeQuery = true)
     BugInfo getByTestResultScreenLocale(Integer testResultId, Integer screenshotId, String locale);
+
+    @Query(value = "SELECT * FROM bug_info WHERE screen_shot_id = ?1 AND validation = 1", nativeQuery = true)
+    BugInfo getByScreenShotId(Integer screenshotId);
 }

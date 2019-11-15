@@ -15,5 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TestResultRep extends JpaRepository<TestResult, Integer> {
 
+    TestResult getById(Integer id);
+
     TestResult getByTestRunId(Integer testRunId);
 }

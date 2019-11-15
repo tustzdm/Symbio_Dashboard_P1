@@ -64,6 +64,13 @@ public class TestResultDao {
     private final String RESULT_REVIEW_ITEM_LOCALE = "locale";
     private final String RESULT_REVIEW_ITEM_HTTPFILEPATH = "httpFilePath";
     private final String RESULT_REVIEW_ITEM_THUMBNAILHTTPPATH = "thumbnailHttpPath";
+
+    private final String RESULT_REVIEW_ITEM_REVIEW = "review";
+    private final String RESULT_REVIEW_ITEM_JIRA_TICKET_ID = "jiraTicketId";
+    private final String RESULT_REVIEW_ITEM_QA_COMMENT = "qaComment";
+    private final String RESULT_REVIEW_ITEM_STATUS = "status";
+
+
     private static String VUE_DOMAIN_ADDRESS = null;
 
     private String getVUEDomainHttp() {
@@ -382,10 +389,61 @@ public class TestResultDao {
                 mapData.put(RESULT_REVIEW_FIELD_SOURCE_LOCALE, getReviewLocaleMapData(ssId, url, thumbnail));
                 mapData.put(RESULT_REVIEW_FIELD_TARGET_LOCALE, getTargetLocaleMapData(listTarget, step));
             }
+
+            if (!CommonUtil.isEmpty(localeTarget) && listTarget != null) {
+                replaceTargetData(mapData, listTarget, step);
+            }
+
             retList.add(mapData);
         }
 
         return retList;
+    }
+
+    private void replaceTargetData(Map<String, Object> mapData, List<Map<String, Object>> list, Integer step) {
+        List<String> listItem = new ArrayList<>();
+
+        listItem.add(RESULT_REVIEW_ITEM_REVIEW);
+        listItem.add(RESULT_REVIEW_ITEM_JIRA_TICKET_ID);
+        listItem.add(RESULT_REVIEW_ITEM_QA_COMMENT);
+        listItem.add(RESULT_REVIEW_ITEM_STATUS);
+
+        for (String key : listItem) {
+            mapData.put(key, getTargetKeyData(list, step, key));
+        }
+
+    }
+
+    private Object getTargetKeyData(List<Map<String, Object>> list, Integer step, String key) {
+        Map<String, Object> mapData = getTargetMapData(list, step);
+
+        try {
+            if (mapData != null && mapData.containsKey(key)) {
+                return mapData.get(key);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    private Map<String, Object> getTargetMapData(List<Map<String, Object>> list, Integer step) {
+
+        Map<String, Object> retMap = null;
+        try {
+            Integer currStep = 0;
+            for (Map<String, Object> item : list) {
+                currStep = Integer.parseInt(CommonUtil.getMapKey(item, RESULT_REVIEW_ITEM_STEP));
+                if (currStep == step) {
+                    return item;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private Map<String, Object> getTargetLocaleMapData(List<Map<String, Object>> list, Integer step) {

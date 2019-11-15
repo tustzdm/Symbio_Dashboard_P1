@@ -13,12 +13,16 @@ import com.symbio.dashboard.model.*;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
+import com.symbio.dashboard.util.WebUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.File;
+import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -64,23 +68,35 @@ public class BugReportDao {
      * @param userId
      * @param locale
      * @param id
-     * @param screenshotId
+     * @param ssId
      * @return
      */
-    public Result getBugUiInfo(Integer userId, String locale, Integer id, Integer screenshotId) {
+    public Result getBugUiInfo(Integer userId, String locale, Integer id, Integer ssId) {
         String funcName = "BugReportDao.getBugUiInfo()";
 
         log.trace(funcName + " Enter");
         Result retResult = new Result();
 
         try {
+            // Step: get key id
+            BugInfo bugInfo = null;
+            Integer screenshotId = ssId;
+            if (!CommonUtil.isEmpty(id) && id > 0) {
+                bugInfo = buginfoRep.getOne(id);
+                if (CommonUtil.isEmpty(bugInfo)) {
+                    return commonDao.getTableNoDataArgsLocale(locale, "bug_info", id);
+                }
+                screenshotId = bugInfo.getScreenShotId();
+            }
+
             // Step1: Get Prototype data
             ScreenShot ss = screenshotRep.getOne(screenshotId);
             if (CommonUtil.isEmpty(ss)) {
                 return commonDao.getTableNoDataArgsLocale(locale, "screen_shot", screenshotId);
             }
 
-            TestResult testResult = testResultRep.getByTestRunId(ss.getTestResultId());
+            // TestResult testResult = testResultRep.getByTestRunId(ss.getTestResultId());
+            TestResult testResult = testResultRep.getById(ss.getTestResultId());
             if (CommonUtil.isEmpty(testResult)) {
                 return commonDao.getTableNoDataArgsLocale(locale, "test_result", ss.getTestResultId());
             }
@@ -112,20 +128,13 @@ public class BugReportDao {
             bugInfoUiDTO.setTestResultId(testResultId);
 
             // Step4: Get current data for update
-            BugInfo bugInfo = null;
-            if (!CommonUtil.isEmpty(id) && id > 0) { // Not add
-                bugInfo = buginfoRep.getOne(id);
-            } else if (!(CommonUtil.isEmpty(testRunId) || CommonUtil.isEmpty(screenshotId))) {
 
+            if (!CommonUtil.isEmpty(id) && id > 0) { // Not add
+                //bugInfo = buginfoRep.getOne(id);
+            } else if (!(CommonUtil.isEmpty(testRunId) || CommonUtil.isEmpty(screenshotId))) {
                 bugInfo = buginfoRep.getByTestResultScreenLocale(testResultId, screenshotId, testRun.getLocale());
             }
-
-            if (CommonUtil.isEmpty(bugInfo)) {
-                bugInfoUiDTO.setData(new HashMap<String, Object>());
-            } else {
-                // TODO: class to map
-                bugInfoUiDTO.setData(new HashMap<String, Object>());
-            }
+            bugInfoUiDTO.setData(getBugInfoMapData(bugInfo));
 
             // Step5: Get User list for user reference
             bugInfoUiDTO.setUserList(commonDao.getUserUIList(listUiInfo));
@@ -137,6 +146,40 @@ public class BugReportDao {
 
         log.trace(funcName + " Exit");
         return retResult;
+    }
+
+    public static Map<String, Object> objectToMap(Object obj) throws Exception {
+        if (obj == null) {
+            return null;
+        }
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        Field[] declaredFields = BugInfo.class.getDeclaredFields();
+
+        String fieldName = null;
+        for (Field field : declaredFields) {
+            fieldName = field.getName();
+            Object fieldValue = EntityUtils.getFieldValueByName(fieldName, obj);
+            map.put(field.getName(), WebUtil.getItemValue(fieldValue));
+        }
+
+        return map;
+    }
+
+    private Map<String, Object> getBugInfoMapData(BugInfo bugInfo) {
+        Map<String, Object> mapData = new HashMap<>();
+        try {
+            if (!CommonUtil.isEmpty(bugInfo)) {
+                mapData = objectToMap(bugInfo);
+                mapData.remove("validation");
+                mapData.remove("updateTime");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mapData;
     }
 
     public Result getUIBugInfo(Integer userId, String locale, BugInfo data) {
@@ -153,14 +196,32 @@ public class BugReportDao {
         return retUIBugInfo;
     }
 
-    public Result<BugInfo> saveBugInfo(String locale, BugInfo data) {
+    public Result<BugInfo> saveBugInfo(String locale, BugInfo data, ScreenShot ss) {
         String funcName = "BugReportDao.saveBugInfo()";
         Result<BugInfo> retSaveBugInfo = new Result();
 
         try {
-            BugInfo updBugInfo = buginfoRep.saveAndFlush(data);
-            retSaveBugInfo.setCd(updBugInfo);
+            BugInfo bugInfo = buginfoRep.getByScreenShotId(data.getScreenShotId());
+            if (!CommonUtil.isEmpty(bugInfo)) {
+                data.setId(bugInfo.getId());
+
+                // Remove files
+                FileUtil.deleteContents(new File(bugInfo.getFilePath() + File.separator + bugInfo.getFileName()));
+                FileUtil.deleteContents(new File(bugInfo.getThumbnailFilePath() + File.separator + bugInfo.getThumbnailFileName()));
+                Thread.sleep(1000);
+                bugInfo = buginfoRep.saveAndFlush(data);
+            } else {
+                bugInfo = buginfoRep.saveAndFlush(data);
+            }
+
+            ss.setStatus(EnumDef.TEST_RESULT_QA_STATUS.FAIL.getCode());
+            ss.setJiraTicket("BugInfo ID:");
+            ss.setJiraTicketId(data.getId().toString());
+            screenshotRep.saveAndFlush(ss);
+
+            retSaveBugInfo.setCd(bugInfo);
         } catch (Exception e) {
+            e.printStackTrace();
             log.error(ErrorConst.getExceptionLogMsg(funcName, e));
             return ErrorConst.getExceptionResult(funcName, e);
         }

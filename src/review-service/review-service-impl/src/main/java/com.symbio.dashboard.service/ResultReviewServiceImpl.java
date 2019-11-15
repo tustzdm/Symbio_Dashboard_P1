@@ -143,7 +143,7 @@ public class ResultReviewServiceImpl implements ResultReviewService {
         bugInfo = resSaveImage.getCd();
 
         // Step4: store the data
-        Result<BugInfo> resultSaveBugInfo = bugReportDao.saveBugInfo(locale, bugInfo);
+        Result<BugInfo> resultSaveBugInfo = bugReportDao.saveBugInfo(locale, bugInfo, ss);
         if (resultSaveBugInfo.hasError()) {
             log.error(ErrorConst.getErrorLogMsg(funcName, resSaveImage));
             return new Result(resultSaveBugInfo);
