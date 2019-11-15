@@ -8,6 +8,7 @@ import com.symbio.dashboard.dto.TEPInfoDTO;
 import com.symbio.dashboard.dto.TestRunExcelDTO;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.jenkins.JenkinsService;
+import com.symbio.dashboard.model.BugInfo;
 import com.symbio.dashboard.monitor.service.impl.MonitorServiceImpl;
 import com.symbio.dashboard.service.*;
 import com.symbio.dashboard.util.CommonUtil;
@@ -360,12 +361,30 @@ public class ResultReviewController extends BaseController {
                              @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                              @RequestParam(value = "id", required = false, defaultValue = "") Integer id,
                              @RequestParam(value = "screenshotId") Integer screenshotId) {
+        String funcName = "ResultReviewController.getBugInfo()";
         Result retResult = new Result();
 
         Integer userId = 1;
 
         retResult = resultReviewService.getBugInfo(userId, locale, id, screenshotId);
+        if (retResult.hasError()) {
+            log.error(ErrorConst.getErrorLogMsg(funcName, retResult));
+        }
 
+        return retResult;
+    }
+
+    @PostMapping("/saveBugInfo")
+    public Result saveBugInfo(@RequestParam(value = "token") String token,
+                              @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                              @RequestBody BugInfo data) {
+        String funcName = "ResultReviewController.saveBugInfo()";
+        Integer userId = 1;
+
+        Result retResult = resultReviewService.saveBugInfo(userId, locale, data);
+        if (retResult.hasError()) {
+            log.error(ErrorConst.getErrorLogMsg(funcName, retResult));
+        }
 
         return retResult;
     }

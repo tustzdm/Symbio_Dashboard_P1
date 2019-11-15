@@ -37,7 +37,7 @@ public class BugInfo implements Serializable {
     @Column(name = "bug_priority")
     private String bugPriority;
     @Column(name = "bug_type")
-    private String bugype;
+    private String bugType;
 
     @Column(name = "issue_category_id")
     private Integer issueCategoryId;

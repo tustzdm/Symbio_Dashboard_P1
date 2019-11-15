@@ -2,6 +2,7 @@ package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
+import com.symbio.dashboard.business.BugInfoFactory;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.repository.*;
 import com.symbio.dashboard.dto.BugInfoUiDTO;
@@ -136,6 +137,20 @@ public class BugReportDao {
 
         log.trace(funcName + " Exit");
         return retResult;
+    }
+
+    public Result saveBugInfo(Integer userId, String locale, BugInfo data) {
+
+        Result<BugInfo> retSaveBugInfo = new Result();
+
+        List<UiInfo> listUiInfo = commonDao.getUIInfoByPage(UIInfoPage.BugReport.toString());
+        List<String> listFields = BusinessUtil.getCamelFieldListByUIInfo(listUiInfo);
+
+        BugInfo bugInfo = BugInfoFactory.cloneNewBugInfo(data, listFields);
+        System.out.println(bugInfo);
+        retSaveBugInfo.setCd(bugInfo);
+
+        return retSaveBugInfo;
     }
 
     private List<Map<String, Object>> getIssueListInfo(List<Map<String, Object>> data, Integer testSetId) {
@@ -279,6 +294,26 @@ public class BugReportDao {
             e.printStackTrace();
             log.error("Exception happened while invoking " + funcName, e);
             retResult = new Result("000002", e.getMessage());
+        }
+
+        return retResult;
+    }
+
+    /**
+     * Get TestResult Id
+     *
+     * @param locale       locale
+     * @param screenShotId ScreenShot ID
+     * @return
+     */
+    public Result<Integer> getTestResultIdByScreenshotId(String locale, Integer screenShotId) {
+        Result<Integer> retResult = new Result<Integer>();
+
+        ScreenShot ss = screenshotRep.getOne(screenShotId);
+        if (CommonUtil.isEmpty(ss)) {
+            return commonDao.getTableNoDataArgsLocale(locale, "screen_shot", screenShotId);
+        } else {
+            retResult.setCd(ss.getTestResultId());
         }
 
         return retResult;

@@ -1,5 +1,6 @@
 package com.symbio.dashboard.util;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.imageio.IIOImage;
@@ -13,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.io.*;
+import java.util.Base64;
 import java.util.List;
 
 public class ImageSizer {
@@ -373,6 +375,27 @@ public class ImageSizer {
         return buffer;
     }
 
+    public static void writeByteArrayToFile(String path, byte[] byteArray) {
+        try {
+            FileUtils.writeByteArrayToFile(new File(path), byteArray);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeCanvasBytesToPng(String path, String data) {
+        try {
+            String strImgData = data;
+            if (strImgData.startsWith("data:image/png;base64")) {
+                strImgData = strImgData.substring("data:image/png;base64,".length());
+            }
+            byte[] decodedString = Base64.getDecoder().decode(strImgData.getBytes("UTF-8"));
+            writeByteArrayToFile(path, decodedString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static class Rect {
         int x;
         int y;
@@ -438,6 +461,25 @@ public class ImageSizer {
 
         public void setColor(Color color) {
             this.color = color;
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        try {
+            ImageSizer is = new ImageSizer();
+            byte[] arrayByte = new byte[200];
+            arrayByte = File2byte(new File("/home/shawn/new.txt"));
+            String strImgData = new String(arrayByte);
+
+            writeCanvasBytesToPng("/home/shawn/cavans.png", strImgData);
+
+            if (strImgData.startsWith("data:image/png")) {
+                strImgData = strImgData.substring("data:image/png;base64,".length());
+            }
+            byte[] decodedString = Base64.getDecoder().decode(strImgData.getBytes("UTF-8"));
+            is.writeByteArrayToFile("/home/shawn/test.png", decodedString);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

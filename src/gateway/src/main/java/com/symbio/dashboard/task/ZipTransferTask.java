@@ -26,9 +26,29 @@ public class ZipTransferTask {
     private MonitorServiceImpl monitorService;
 
     @Async
-    //@Scheduled(cron = "0 0/5 * * * ? ")
-    //@Scheduled(cron = "0/30 * * * * ? ")
-    @Scheduled(cron = "0 0 0/4 * * ? ")
+    @Scheduled(cron = "0 0/5 * * * ? ")
+    public void processZipFiles() {
+        log.debug("ZipTransferTask.processZipFiles() Enter");
+
+        try {
+            Result resultTask = monitorService.checkZipRoot();
+            if (resultTask.hasError()) {
+                log.error(ErrorConst.getWarningLogMsg("monitorService.checkZipRoot()", resultTask));
+            } else {
+                processTestResultByUnzipReportFile();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        log.debug("ZipTransferTask.processZipFiles() Exit");
+    }
+
+
+    //    @Async
+//    //@Scheduled(cron = "0 0/5 * * * ? ")
+//    //@Scheduled(cron = "0/30 * * * * ? ")
+//    @Scheduled(cron = "0 0 0/4 * * ? ")
     public void processReportZipFile() {
         log.debug("ZipTransferTask.processReportZipFile() Enter");
 
@@ -44,10 +64,10 @@ public class ZipTransferTask {
         log.debug("ZipTransferTask.processReportZipFile() Exit");
     }
 
-    @Async
-    //@Scheduled(cron = "0 0/3 * * * ? ")
-    //@Scheduled(cron = "0/10 * * * * ? ")
-    @Scheduled(cron = "0 0 0/4 * * ? ")
+    //    @Async
+//    //@Scheduled(cron = "0 0/3 * * * ? ")
+//    //@Scheduled(cron = "0/10 * * * * ? ")
+//    @Scheduled(cron = "0 0 0/4 * * ? ")
     public void processTestResultByUnzipReportFile() {
         log.debug("ZipTransferTask.processTestResultByUnzipReportFile() Enter");
         try {

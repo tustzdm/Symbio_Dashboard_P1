@@ -6,10 +6,7 @@ import com.symbio.dashboard.entity.Progress;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.ListColumns;
 import com.symbio.dashboard.enums.Locales;
-import com.symbio.dashboard.model.Product;
-import com.symbio.dashboard.model.Release;
-import com.symbio.dashboard.model.SysListSetting;
-import com.symbio.dashboard.model.User;
+import com.symbio.dashboard.model.*;
 
 import java.util.*;
 
@@ -306,6 +303,23 @@ public class BusinessUtil {
     }
     return retList;
 
+  }
+
+  /**
+   * To use reflect
+   *
+   * @param data
+   * @return
+   */
+  public static List<String> getCamelFieldListByUIInfo(List<UiInfo> data) {
+    List<String> listField = new ArrayList<>();
+    for (UiInfo item : data) {
+      if (!CommonUtil.isEmpty(item.getDbField())) {
+        listField.add(CommonUtil.getCamelField(item.getDbField()));
+      }
+    }
+
+    return listField;
   }
 
 }
