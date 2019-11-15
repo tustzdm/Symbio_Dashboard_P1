@@ -59,7 +59,7 @@ module.exports = {
         proxy: {
             '/api': {
                 target: "http://127.0.0.1:9090",//serve
-                // target: "http://172.27.24.62:9090",//haoge
+                // target: "http://172.27.24.38:9090",//haoge
                 // target: "http://192.168.170.100:9090",//local
                 changeOrigin: true,
                 pathRewrite: {

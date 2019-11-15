@@ -13,9 +13,15 @@
                 <el-col :span="8" v-if="item.type=='text'">
                     <el-input v-model="reortForm[item.key]" :placeholder="item.placeHolder"></el-input>
                 </el-col>
-                <el-col :span="8" v-if="['list','user'].includes(item.type)">
+                <el-col :span="8" v-if="['list'].includes(item.type)&&item.key!='issueReasonId'">
                     <el-select v-model="reortForm[item.key]">
                         <el-option v-for="option in item.data" :key="option.value" :value="option.id" :label="option.value">
+                        </el-option>
+                    </el-select>
+                </el-col>
+                <el-col :span="8" v-if="item.key=='issueReasonId'">
+                    <el-select v-model="reortForm[item.key]">
+                        <el-option v-for="option in item.data" v-show="(option.categoryId==reortForm['issueCategoryId'])" :key="option.value" :value="option.id" :label="option.value">
                         </el-option>
                     </el-select>
                 </el-col>
@@ -68,8 +74,6 @@
                             <div style="display:inlienne-block;width:19px;height:7px;background:black;margin-top:5px"></div>
                         </div>
                     </li>
-                    <!-- <li><i class=" pen" :class="{penActive:lineWidth==8}" @click="setLineWidth(8)" style="font-size:15px;padding:2px"></i></li>
-            <li><i class=" pen" :class="{penActive:lineWidth==13}" @click="setLineWidth(13)" style="font-size:18px;"></i></li> -->
                 </ul>
                 <ul>
                     <li style="margin-bottom:6px">
@@ -136,7 +140,7 @@ export default {
             stepFormList1: '',
             stepFormList2: '',
             userList:{},
-            reortForm: {}
+            reortForm: {issueCategoryId:''}
         }
     },
     props: {
@@ -335,11 +339,12 @@ export default {
             }
         },
         saveUpload() {
-            let theCanvas = document.querySelector('#theCanvas');
-            let context = theCanvas.getContext('2d');
-            var saveImg = theCanvas.toDataURL('image/png');
-            console.log(saveImg);
-            this.reortForm['filePath'] = saveImg;
+            // let theCanvas = document.querySelector('#theCanvas');
+            // let context = theCanvas.getContext('2d');
+            // var saveImg = theCanvas.toDataURL('image/png');
+            
+            this.reortForm['filePath'] = 'saveImg';
+            console.log(this.re);
             this.reortForm.screenShotId= this.screenShotId;
             console.log(this.reortForm);
 

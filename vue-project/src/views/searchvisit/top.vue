@@ -242,13 +242,16 @@ export default {
             });
         },
         productId:function (val) {
-            localStorage.setItem('result_productId',val)
+            localStorage.setItem('result_productId',val);
+            localStorage.setItem('result_productName',this.productName);
         },
         releaseId:function (val) {
-            localStorage.setItem('result_releaseId',val)
+            localStorage.setItem('result_releaseId',val);
+            localStorage.setItem('result_releaseName',this.releaseName);
         },
         testSetId:function (val) {  
-            localStorage.setItem('result_testSetId',val)
+            localStorage.setItem('result_testSetId',val);
+            localStorage.setItem('result_testSetName',this.testSetName);
         }
     },
     methods: {

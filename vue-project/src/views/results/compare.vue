@@ -3,16 +3,16 @@
     <el-col :span="20" :offset="2">
         <div class="compareCon">
             <el-card class="listHead" shadow="never" style="padding-right:5%">
-                <div class="headLeft" style="width:400px;height:100%;float:left">
-                    <div class="SiteSelect select">
-                        Product: <span>SSS</span>
-                    </div>
-                    <div class="SiteSelect select">
-                        Release: <span>SSS</span>
-                    </div>
-                    <div class="product-select select">
-                        TestSet: <span>SSS</span>
-                    </div>
+                <div class="headLeft" style="width:500px;height:40px;float:left;border:1px solid red;box-sizing:border-box">
+                    <span class="SiteSelect select">
+                        {{productName}}
+                    </span>
+                    <span class="SiteSelect select">
+                        / {{releaseName}}
+                    </span>
+                    <span class="product-select select">
+                      / {{testSetName}}
+                    </span>
                 </div>
 
                 <div class="headRight">
@@ -184,6 +184,10 @@ export default {
         paint: paint
     },
     created() {
+        this.productName=localStorage.getItem('result_productName');
+        this.releaseName=localStorage.getItem('result_releaseName');
+        this.testSetName=localStorage.getItem('result_testSetName');
+        alert(this.testSetName)
         console.log(22134654649687)
         console.log(this.uploadDialogVisible);
         this.runId = this.$route.query.runId;
@@ -351,10 +355,12 @@ export default {
 
     .select {
         float: left;
-        height: 40px;
+        max-width:150px;
         line-height: 40px;
-        margin-left: 20px;
+        margin-left: 15px;
         font-family: Poppins;
+        text-overflow: ellipsis;
+        border:1px solid pink;
     }
 
     .headRight {
