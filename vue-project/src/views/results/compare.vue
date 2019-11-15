@@ -5,60 +5,13 @@
             <el-card class="listHead" shadow="never" style="padding-right:5%">
                 <div class="headLeft" style="width:400px;height:100%;float:left">
                     <div class="SiteSelect select">
-                        <el-dropdown trigger="click" @command="handleProductCommand">
-                            <span class="el-dropdown-link">
-                                {{productName}}
-                                <i class="el-icon-caret-bottom el-icon--right"></i>
-                            </span>
-                            <el-dropdown-menu>
-                                <el-dropdown-item v-for="item in productList" :class="{selected:item.id==productId}" :command="item.id" :key="item.id">
-                                    {{item.name}}
-                                </el-dropdown-item>
-                                <span>
-                                    <router-link :to="{ name: 'addproject', query: { pageType: 'Product'}}" class="add_link"><i class="el-icon-plus"></i> Add Product</router-link>
-                                </span>
-                            </el-dropdown-menu>
-                        </el-dropdown>
-                        <span class="sperate-arrow">
-                            <i class="el-icon-arrow-right"></i>
-                        </span>
+                        Product: <span>SSS</span>
                     </div>
                     <div class="SiteSelect select">
-                        <el-dropdown trigger="click" @command="handleReleaseCommand">
-                            <span class="el-dropdown-link">
-                                {{releaseName}}
-                                <i class="el-icon-caret-bottom el-icon--right"></i>
-                            </span>
-                            <el-dropdown-menu>
-
-                                <el-dropdown-item v-for="item in releaseList" :class="{selected:item.id==releaseId}" :command="item.id" :key="item.id">
-                                    {{item.name}}
-                                </el-dropdown-item>
-                                <span>
-                                    <router-link :to="{ name: 'addproject', query: { pageType: 'Release',productId: this.productId}}" class="add_link"><i class="el-icon-plus"></i> Add Release</router-link>
-                                </span>
-                            </el-dropdown-menu>
-                        </el-dropdown>
-                        <span class="sperate-arrow">
-                            <i class="el-icon-arrow-right"></i>
-                        </span>
+                        Release: <span>SSS</span>
                     </div>
                     <div class="product-select select">
-                        <el-dropdown trigger="click" @command="handleTestsetCommand">
-                            <span class="el-dropdown-link">
-                                {{testSetName}}
-                                <i class="el-icon-caret-bottom el-icon--right"></i>
-                            </span>
-                            <el-dropdown-menu>
-
-                                <el-dropdown-item v-for="item in testSetList" :class="{selected:item.id==testSetId}" :command="item.id" :key="item.id">
-                                    {{item.name}}
-                                </el-dropdown-item>
-                                <span>
-                                    <router-link :to="{ name: 'addproject', query: { pageType: 'TestSet',productId: this.productId,releaseId: this.releaseId}}" class="add_link"><i class="el-icon-plus"></i> Add TestSet</router-link>
-                                </span>
-                            </el-dropdown-menu>
-                        </el-dropdown>
+                        TestSet: <span>SSS</span>
                     </div>
                 </div>
 

@@ -15,7 +15,7 @@
                 </el-col>
                 <el-col :span="8" v-if="['list','user'].includes(item.type)">
                     <el-select v-model="reortForm[item.key]">
-                        <el-option v-for="option in item.data" :key="option.value" :value="option.code" :label="option.value">
+                        <el-option v-for="option in item.data" :key="option.value" :value="option.id" :label="option.value">
                         </el-option>
                     </el-select>
                 </el-col>
@@ -27,9 +27,15 @@
             <el-col :span="8" v-if="item.type=='text'">
                 <el-input v-model="reortForm[item.key]" :placeholder="item.placeHolder"></el-input>
             </el-col>
-            <el-col :span="8" v-if="['list','user'].includes(item.type)">
+            <el-col :span="8" v-if="['list'].includes(item.type)">
                 <el-select v-model="reortForm[item.key]">
                     <el-option v-for="option in item.data" :key="option.code" :value="option.value">
+                    </el-option>
+                </el-select>
+            </el-col>
+            <el-col :span="8" v-if="['user'].includes(item.type)">
+                <el-select v-model="reortForm[item.key]">
+                    <el-option v-for="option in userList" :key="option.id" :value="option.id" :label="option.fullName">
                     </el-option>
                 </el-select>
             </el-col>
@@ -38,8 +44,6 @@
             </el-col>
         </el-form-item>
     </el-form>
-    <el-button style="margin-top: 12px;" @click="prev">Previous</el-button>
-    <el-button style="margin-top: 12px;" @click="next">Next</el-button>
 
     <div class="paintCon" style="text-align:center">
         <div id="paint" v-if="active==2" style="display:inline-block;">
@@ -101,6 +105,10 @@
 
         </div>
     </div>
+    <el-button style="margin-top: 12px;" @click="prev">Previous</el-button>
+    <el-button style="margin-top: 12px;" @click="next">Next</el-button>
+
+    
 </div>
 </template>
 
@@ -127,6 +135,7 @@ export default {
             runId: this.runId,
             stepFormList1: '',
             stepFormList2: '',
+            userList:{},
             reortForm: {}
         }
     },
@@ -143,6 +152,7 @@ export default {
             console.log(res);
             this.stepFormList1 = res.cd.uiInfo.Step1;
             this.stepFormList2 = res.cd.uiInfo.Step2;
+            this.userList = res.cd.userList;
         }).catch(err => {
             alert(err);
         });
@@ -328,9 +338,19 @@ export default {
             let theCanvas = document.querySelector('#theCanvas');
             let context = theCanvas.getContext('2d');
             var saveImg = theCanvas.toDataURL('image/png');
-            console.log(saveImg)
-            this.reortForm['report'] = saveImg
-            console.log(this.reortForm)
+            console.log(saveImg);
+            this.reortForm['filePath'] = saveImg;
+            this.reortForm.screenShotId= this.screenShotId;
+            console.log(this.reortForm);
+
+            this.Fetch(`/result/saveBugInfo?token=1`, {
+                method: "POST",
+                body: this.reortForm
+            }).then(res => {
+                console.log(res)
+            }).catch(err => {
+                alert(err);
+            });
         },
         setHistory() {
             let theCanvas = document.querySelector('#theCanvas');
