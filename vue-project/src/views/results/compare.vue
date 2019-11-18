@@ -3,16 +3,22 @@
     <el-col :span="20" :offset="2">
         <div class="compareCon">
             <el-card class="listHead" shadow="never" style="padding-right:5%">
-                <div class="headLeft" style="width:500px;height:40px;float:left;border:1px solid red;box-sizing:border-box">
-                    <span class="SiteSelect select">
-                        {{productName}}
-                    </span>
-                    <span class="SiteSelect select">
-                        / {{releaseName}}
-                    </span>
-                    <span class="product-select select">
-                      / {{testSetName}}
-                    </span>
+                <div class="headLeft" style="width:500px;height:40px;float:left;box-sizing:border-box">
+                     <el-tooltip :disabled="productName.length<17" class="item" effect="light" :content="productName" placement="bottom">
+                        <span class="SiteSelect select">
+                            {{productName}}
+                        </span>
+                    </el-tooltip>
+                    <el-tooltip :disabled="releaseName.length<17" class="item" effect="light" :content="releaseName" placement="bottom">
+                        <span class="SiteSelect select">
+                            / {{releaseName}}
+                        </span>
+                    </el-tooltip>
+                    <el-tooltip :disabled="testSetName.length<17" class="item" effect="light" :content="testSetName" placement="bottom">
+                        <span class="product-select select">
+                        / {{testSetName}}
+                        </span>
+                    </el-tooltip>
                 </div>
 
                 <div class="headRight">
@@ -102,10 +108,11 @@
                     </span>
 
                     <el-dialog title="Report Bug"  :visible.sync="reportDialog" center append-to-body width="90%">
-                        <paint v-if="reportDialog" :screenShotId="screenShotId" :url="rightImg" :runId="runId"></paint>
+                        <paint v-if="reportDialog" @reportForm="reportForm($event)" ref="paintChild" :screenShotId="screenShotId" :url="rightImg" :runId="runId"></paint>
                         <span slot="footer" class="dialog-footer">
+                            
                             <el-button @click="reportDialog = false">Cancel</el-button>
-                            <el-button type="primary" @click="submitComment">Confirm</el-button>
+                            <el-button type="primary" @click="reportConfirm">Confirm</el-button>
                         </span>
                     </el-dialog>
 
@@ -177,7 +184,8 @@ export default {
             fileList: [],
             commentDialog: false,
             reportDialog: false,
-            statusList:[]
+            statusList:[],
+            reportInfo:{} //在编辑完信息和图片后会传到这里，用reportInfo接受
         }
     },
     components: {
@@ -187,12 +195,14 @@ export default {
         this.productName=localStorage.getItem('result_productName');
         this.releaseName=localStorage.getItem('result_releaseName');
         this.testSetName=localStorage.getItem('result_testSetName');
-        alert(this.testSetName)
         console.log(22134654649687)
         console.log(this.uploadDialogVisible);
         this.runId = this.$route.query.runId;
         this.locale = this.$route.query.locale;
         this.getTableData();
+    },
+    mounted() {
+        console.log(222222222266666666)
     },
     computed: {},
     watch: {
@@ -341,6 +351,21 @@ export default {
                     duration: 800
                 });
             return;
+        },
+        reportForm(val){
+            console.log(1234)
+            console.log(val)
+            this.reportInfo=val;
+        },
+        reportConfirm(){
+            this.Fetch(`/result/saveBugInfo?token=1`, {
+                method: "POST",
+                body: this.reportInfo
+            }).then(res => {
+                console.log(res)
+            }).catch(err => {
+                alert(err);
+            });
         }
     }
 }
@@ -357,11 +382,14 @@ export default {
         float: left;
         max-width:150px;
         line-height: 40px;
+        height:40px;
         margin-left: 15px;
         font-family: Poppins;
         text-overflow: ellipsis;
-        border:1px solid pink;
+        white-space:nowrap; 
+        overflow:hidden;
     }
+
 
     .headRight {
         float: right;
