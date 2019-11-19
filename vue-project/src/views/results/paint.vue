@@ -1,7 +1,7 @@
 <template>
 <div class="report_Pic">
-    {{runId}}{{screenShotId}}
-    {{reortForm}}
+    <!-- {{runId}}{{screenShotId}}
+    {{reortForm}} -->
     <el-steps :active="active" finish-status="success">
         <el-step title="Step 1"></el-step>
         <el-step title="Step 2"></el-step>
@@ -56,7 +56,7 @@
             <canvas id="theCanvas" @mousedown="drawAction()" width=300 height=620 style="border:1px solid gray;display:inline-block">
                 <textarea name="" id="" cols="30" rows="10"></textarea>
             </canvas>
-            <textarea v-if="action=='text'" class="text" name="" @keydown="textEnter()" placeholder="click the postion to text" v-model="text" cols="30" rows="2" style="position:absolute;left:30px;top:85px"></textarea>
+            <textarea v-if="action=='text'" class="text" name="" @keydown="textEnter()" placeholder="click the postion to text" v-model="text" cols="30" rows="1" style="position:absolute;left:30px;top:85px"></textarea>
             <div style="display:inline-block;vertical-align:top;margin-left:8px">
                 <ul>
                     <li class="line" :class="{penActive:lineWidth==2}">
@@ -110,8 +110,8 @@
 
         </div>
     </div>
-    <el-button style="margin-top: 12px;" @click="prev">Previous</el-button>
-    <el-button style="margin-top: 12px;" @click="next">Next</el-button>
+    <el-button style="margin-top: 12px;" @click="prev" :disabled="active==0">Previous</el-button>
+    <el-button style="margin-top: 12px;" @click="next" :disabled="active==2">Next</el-button>
 
     
 </div>
@@ -186,10 +186,19 @@ export default {
     },
     methods: {
         next() {
-            if (this.active++ > 2) this.active = 0;
+
+            if (this.active > 1){
+                return
+            }else{
+                this.active++
+            }
         },
         prev() {
-            if (this.active-- < 0) this.active = 0;
+            if (this.active <= 0) {
+                return
+            }else{
+                this.active--
+            }
         },
         windowToCanvas: (canvas, x, y) => {
             let rect = canvas.getBoundingClientRect()
@@ -321,8 +330,8 @@ export default {
                 let ele = this.windowToCanvas(theCanvas, e.clientX, e.clientY)
                 this.textareaX = ele.x;
                 this.textareaY = ele.y;
-                document.querySelector('.text').style.left = this.textareaX + 25 + 'px';
-                document.querySelector('.text').style.top = this.textareaY + 50 + 'px'
+                document.querySelector('.text').style.left = this.textareaX + 480 + 'px';
+                document.querySelector('.text').style.top = this.textareaY + 110 + 'px'
             };
         },
         textEnter(e) {

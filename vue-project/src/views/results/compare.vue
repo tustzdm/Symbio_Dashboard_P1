@@ -76,6 +76,7 @@
             <div style="width:100%;height:150px;"></div>
             <div class="compareDia">
                 <el-dialog :visible.sync="compareDialog" fullscreen width="100%" custom-class="compare" style="background:black" :before-close="handleClose" center>
+                    <div class="picBox">
                     <div class="left" style="width:50%;float:left">
                         <div class="iBox" style="float:left;position:fixed;top:45%;left:0">
                             <i @click="beforeStep" style="color:white;font-size:45px;font-weight:bold" class="el-icon-arrow-left beforeStep"></i>
@@ -94,7 +95,7 @@
                             <i @click="nextStep" style="color:white;font-size:45px;font-weight:bold" class="el-icon-arrow-right"></i>
                         </div>
                     </div>
-
+                    </div>
                     <span slot="title" class="dialog-footer" center>
                         <span style="position:absolute;float:left;font-size:25px;color:white;left:100px;font-weight:bold">Step:&nbsp;{{stepId}}</span>
 
@@ -318,10 +319,10 @@ export default {
             rightImgObj.src= this.rightImg;
             if(leftImgObj.width>leftImgObj.height){
                 document.getElementsByClassName('bigImg')[0].style.width = leftImgObj.width+'px';
-                // document.getElementsByClassName('bigImg')[1].style.width = rightImgObj.width+'px';
+                document.getElementsByClassName('bigImg')[1].style.width = rightImgObj.width+'px';
             }else{
                 document.getElementsByClassName('bigImg')[0].style.height = '100%';
-            // document.getElementsByClassName('bigImg')[1].style.height = '100%';
+                document.getElementsByClassName('bigImg')[1].style.height = '100%';
             }
         },
         //submitComment
@@ -379,6 +380,7 @@ export default {
     }
 
     .select {
+        font-weight:bold;
         float: left;
         max-width:150px;
         line-height: 40px;

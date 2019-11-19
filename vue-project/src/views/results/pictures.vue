@@ -59,10 +59,11 @@
 
             <div class="pictures" style="padding-bottom:150px;overflow:hidden;">
                 <ul>
-                    <!-- <li v-for="item in screenshotList" :key="item.id" style="float:left;display:block;width:25%">
-                        <img class="thumbnail" src="../../assets/images/screenshot/1.png" alt="">
-                    </li> -->
-                    <li style="float:left;display:block;width:25%">
+                    <li v-for="item in screenshotList" :key="item.id" style="float:left;display:block;width:25%">
+                        <img class="thumbnail" :src="item.sourceLocale.url" alt="">
+                    </li>
+
+                    <!-- <li style="float:left;display:block;width:25%">
                         <img class="thumbnail" src="../../assets/images/vivo/mobile/1.png" alt="">
                     </li>
                     <li style="float:left;display:block;width:25%">
@@ -82,7 +83,7 @@
                     </li>
                     <li style="float:left;display:block;width:25%">
                         <img class="thumbnail" src="../../assets/images/vivo/mobile/7.png" alt="">
-                    </li>
+                    </li> -->
                 </ul>
             </div>
         </div>
@@ -114,13 +115,12 @@ export default {
             console.log(res);
             this.screenshotList = res.cd.listScreenShots;
             this.testcase = res.cd.testCase;
-            this.testrun = res.cd.testRun;
+            this.testrun = res.cd.testRun
             this.testresult = res.cd.testResult;
             this.status = this.$route.query.status;
-            console.log(this.$route.query)
             this.caseId = this.$route.query.caseId;
-        });
-            this.Fetch(`/result/getReviewList?token=123&testRunId=${this.runId}&trlocale=${this.locale}`, {
+
+            this.Fetch(`/result/getReviewList?token=123&testRunId=${this.testrun.id}&trlocale=${this.testrun.locale}`, {
                 method: "POST",
                 // body: {
                 //     "token": "123",
@@ -129,17 +129,12 @@ export default {
                 //     "testSetId": 4
                 // }
             }).then(res => {
-                console.log(res);
-                this.tableColownms = res.cd.columns;
-                this.dataList = res.cd.data;
-                console.log(11111111)
-                console.log(this.dataList);
-                this.localeList = res.cd.listLocales;
-
-                this.statusList = res.cd.listStatus;
+                console.log(res)
+                this.screenshotList=res.cd.data;
             }).catch(err => {
                 alert(err);
             });
+        });
     },
     computed: {},
     methods:{
