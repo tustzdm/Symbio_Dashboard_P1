@@ -17,4 +17,8 @@ public interface ScreenShotRep extends JpaRepository<ScreenShot, Integer> {
     void deleteByTestResultId(Integer id);
 
     List<ScreenShot> getByTestResultId(Integer testResultId);
+
+//    @Modifying
+//    @Query(value = "UPDATE screen_shot SET status = ?2 WHERE id = ?1")
+//    int updateScreenShotStatus(Integer id, Integer status);
 }

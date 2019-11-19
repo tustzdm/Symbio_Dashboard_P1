@@ -175,7 +175,7 @@ INSERT INTO `dictionary` VALUES ('287', 'JenkinsJobStatus', '7', 'error', '1', '
 
 -- 2019/10/14
 INSERT INTO `dictionary`(`id`,`type`,`code`,`value`, `description`) 
-	VALUES (300, 'ScreenShotStatus', '0', '{"en_us":"Not Run","zh_cn": "未确认"}', '');
+	VALUES (300, 'ScreenShotStatus', '0', '{"en_us":"Pending","zh_cn": "未确认"}', '');
 INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
 	VALUES ('ScreenShotStatus', '1', '{"en_us":"Pass","zh_cn": "通过"}', '');
 INSERT INTO `dictionary`(`type`,`code`,`value`, `description`) 
@@ -1291,4 +1291,19 @@ CREATE TABLE `bug_info` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_bug_info_ssid` (`screen_shot_id`, `file_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- 2019/11/19
+Drop Table IF EXISTS `comment_info`;
+CREATE TABLE `comment_info` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `comment_type` smallint(5) unsigned NOT NULL DEFAULT '1' COMMENT 'comment type. type=1, screenshot',
+  `fk_id` int(10) unsigned DEFAULT NULL COMMENT 'FK: type=1,[screen_shot].id',
+  `content` varchar(1024) DEFAULT NULL COMMENT 'content',
+  `validation` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'valid or not. 0-invalid, 1-valid',
+  `update_user_id` int(10) unsigned DEFAULT NULL COMMENT 'Update user id',
+  `update_user_name` varchar(32) DEFAULT NULL COMMENT 'Update user name',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create time',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

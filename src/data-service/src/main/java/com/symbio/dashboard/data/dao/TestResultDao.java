@@ -96,6 +96,10 @@ public class TestResultDao {
         return screenShotRep.saveAndFlush(ss);
     }
 
+//    public Integer updateScreenShotStatus(Integer id, Integer status) {
+//        return screenShotRep.updateScreenShotStatus(id, status);
+//    }
+
     public List<ScreenShot> getScreenShotsByTestResultId(Integer testResultId) {
         List<ScreenShot> listScreenShots = screenShotRep.getByTestResultId(testResultId);
         if (CommonUtil.isEmpty(listScreenShots)) {

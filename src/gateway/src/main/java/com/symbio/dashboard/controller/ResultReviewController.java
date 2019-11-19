@@ -58,6 +58,7 @@ public class ResultReviewController extends BaseController {
 
     /**
      * 得到Test Run List
+     * interface: /result/getList
      *
      * @param testRun
      * @return
@@ -89,6 +90,7 @@ public class ResultReviewController extends BaseController {
 
     /**
      * 得到 Result Review List 数据
+     * interface: /result/getReviewList
      *
      * @param token
      * @param locale
@@ -149,7 +151,7 @@ public class ResultReviewController extends BaseController {
 
     /**
      * 上传 Excel文件，用于导入Test Run / Test Result 数据
-     *
+     * interface: /result/upload
      * @param token
      * @param testSetId
      * @param locale
@@ -206,6 +208,7 @@ public class ResultReviewController extends BaseController {
 
     /**
      * Just provide zip file
+     * interface: /result/uploadTestRunZipFile
      *
      * @param token
      * @param locale
@@ -314,6 +317,14 @@ public class ResultReviewController extends BaseController {
         return retSaveFile;
     }
 
+    /**
+     * interface: /result/getTestResultInfo
+     *
+     * @param token
+     * @param locale
+     * @param testRunId
+     * @return
+     */
     @GetMapping("/getTestResultInfo")
     public Result getTestResultInfo(@RequestParam(value = "token") String token,
                                     @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
@@ -334,6 +345,15 @@ public class ResultReviewController extends BaseController {
         return retTestResult;
     }
 
+    /**
+     * interface: /result/getTEPInfo
+     *
+     * @param token
+     * @param locale
+     * @param testSetId
+     * @param tepId
+     * @return
+     */
     @RequestMapping("/getTEPInfo")
     public Result getTEPInfo(@RequestParam(value = "token") String token,
                              @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
@@ -388,6 +408,75 @@ public class ResultReviewController extends BaseController {
 
         return retResult;
     }
+
+    /**
+     * interface: /screenShot/{id}?token=1&status=Pass/Failed/Conditional Pass
+     *
+     * @param token
+     * @param locale
+     * @param id
+     * @param status
+     * @return
+     */
+    @PostMapping("/screenShot/{id}")
+    public Result changeScreenShotStatus(@RequestParam(value = "token") String token,
+                                         @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                         @PathVariable Integer id,
+                                         @RequestParam String status) {
+        String funcName = "ResultReviewController.changeScreenShotStatus()";
+        Integer userId = 1;
+
+        Result retResult = resultReviewService.changeScreenShotStatus(userId, locale, id, status);
+        if (retResult.hasError()) {
+            log.error(ErrorConst.getErrorLogMsg(funcName, retResult));
+        }
+
+        return retResult;
+    }
+
+    @PostMapping("/screenShot/comment")
+    public Result updateComment(@RequestParam(value = "token") String token,
+                                @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                @RequestParam(value = "id", required = false, defaultValue = "") Integer id,
+                                @RequestParam(value = "screenShotId", required = false, defaultValue = "") Integer screenShotId,
+                                @RequestParam(value = "content") String content) {
+        String funcName = "ResultReviewController.updateComment()";
+        Integer userId = 1;
+        Result retResult = resultReviewService.updateComment(userId, locale, id, screenShotId, content);
+        if (retResult.hasError()) {
+            log.error(ErrorConst.getErrorLogMsg(funcName, retResult));
+        }
+        return retResult;
+    }
+
+    @PostMapping("/screenShot/removeComment")
+    public Result removeComment(@RequestParam(value = "token") String token,
+                                @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                @RequestParam(value = "id") Integer id) {
+        String funcName = "ResultReviewController.removeComment()";
+        Integer userId = 1;
+        Result retResult = resultReviewService.removeComment(userId, locale, id);
+        if (retResult.hasError()) {
+            log.error(ErrorConst.getErrorLogMsg(funcName, retResult));
+        }
+        return retResult;
+    }
+
+    @GetMapping("/screenShot/getComment")
+    public Result getCommentInfo(@RequestParam(value = "token") String token,
+                                 @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                 @RequestParam(value = "id", required = false, defaultValue = "") Integer id,
+                                 @RequestParam(value = "screenShotId", required = false, defaultValue = "") Integer screenShotId) {
+        String funcName = "ResultReviewController.getCommentInfo()";
+        Integer userId = 1;
+
+        Result retResult = resultReviewService.getCommentInfo(userId, locale, id, screenShotId);
+        if (retResult.hasError()) {
+            log.error(ErrorConst.getErrorLogMsg(funcName, retResult));
+        }
+        return retResult;
+    }
+
     //==================================================================================================================
 
     /**

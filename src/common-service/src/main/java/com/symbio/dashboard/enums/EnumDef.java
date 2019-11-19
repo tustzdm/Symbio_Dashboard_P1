@@ -854,6 +854,47 @@ public class EnumDef {
         }
     }
 
+
+    // Refer to : DictionaryType.SCREEN_SHOT_STATUS_LOCALE
+    @Getter
+    public enum SCREEN_SHOT_STATUS implements IDictEnum {
+        Pending(0, "Pending"),
+        PASS(1, "Pass"),
+        FAIL(4, "Failed"),
+        CONDITION_PASS(11, "Conditional Pass");
+
+        private Integer code;
+        private String value;
+
+        SCREEN_SHOT_STATUS(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+    // Used to : [comment_info].comment_type
+    @Getter
+    public enum COMMENT_INFO_TYPE implements IDictEnum {
+        SCREEN_SHOT(1, "screen_shot"); // try to use CommonUtil.getCamelField(..+ "_id") later
+
+        private Integer code;
+        private String value;
+
+        COMMENT_INFO_TYPE(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // End of New Dashboard definition
     ///////////////////////////////////////////////////////////////////////////////////////////////////
