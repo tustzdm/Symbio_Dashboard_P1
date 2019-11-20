@@ -54,6 +54,10 @@ public class ErrorConst {
         return new Result(EXCEPTION, String.format("Exception happened while %s. Exception message: %s", strMsg, e.getMessage()));
     }
 
+    public static Result getInvokingExceptionResult(String funcName, Exception e) {
+        return getExceptionResult("invoking " + funcName, e);
+    }
+
     public final static String LOG_SYMBOL_ERROR = "!!!ERROR!!!";
     public final static String LOG_SYMBOL_WARNING = "WARNING!!!";
     public final static String LOG_SYMBOL_EXCEPTION = "!!!EXCEPTION!!!";

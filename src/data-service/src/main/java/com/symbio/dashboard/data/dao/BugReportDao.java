@@ -407,6 +407,20 @@ public class BugReportDao {
         return retResult;
     }
 
+    public Result<ScreenShot> updateScreenShot(ScreenShot ss) {
+        Result<ScreenShot> retResult = new Result<>();
+        String funcName = "BugReportDao.updateScreenShot()";
+
+        try {
+            ScreenShot newSS = screenshotRep.saveAndFlush(ss);
+            retResult.setCd(newSS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ErrorConst.getInvokingExceptionResult(funcName, e);
+        }
+
+        return retResult;
+    }
 
     //==================================================================================================================
     // No use

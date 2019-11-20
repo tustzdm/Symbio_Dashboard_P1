@@ -442,7 +442,7 @@ public class ResultReviewController extends BaseController {
                                 @RequestParam(value = "content") String content) {
         String funcName = "ResultReviewController.updateComment()";
         Integer userId = 1;
-        Result retResult = resultReviewService.updateComment(userId, locale, id, screenShotId, content);
+        Result retResult = resultReviewService.updateScreenShotComment(userId, locale, screenShotId, content);
         if (retResult.hasError()) {
             log.error(ErrorConst.getErrorLogMsg(funcName, retResult));
         }
@@ -455,7 +455,7 @@ public class ResultReviewController extends BaseController {
                                 @RequestParam(value = "id") Integer id) {
         String funcName = "ResultReviewController.removeComment()";
         Integer userId = 1;
-        Result retResult = resultReviewService.removeComment(userId, locale, id);
+        Result retResult = resultReviewService.removeScreenShotComment(userId, locale, id);
         if (retResult.hasError()) {
             log.error(ErrorConst.getErrorLogMsg(funcName, retResult));
         }
@@ -470,7 +470,7 @@ public class ResultReviewController extends BaseController {
         String funcName = "ResultReviewController.getCommentInfo()";
         Integer userId = 1;
 
-        Result retResult = resultReviewService.getCommentInfo(userId, locale, id, screenShotId);
+        Result retResult = resultReviewService.getScreenShotComment(userId, locale, id, screenShotId);
         if (retResult.hasError()) {
             log.error(ErrorConst.getErrorLogMsg(funcName, retResult));
         }

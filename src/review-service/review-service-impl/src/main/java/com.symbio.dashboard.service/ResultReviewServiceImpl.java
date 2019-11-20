@@ -12,10 +12,7 @@ import com.symbio.dashboard.model.BugInfo;
 import com.symbio.dashboard.model.CommentInfo;
 import com.symbio.dashboard.model.ScreenShot;
 import com.symbio.dashboard.model.User;
-import com.symbio.dashboard.util.CommonUtil;
-import com.symbio.dashboard.util.DateUtil;
-import com.symbio.dashboard.util.FileUtil;
-import com.symbio.dashboard.util.ImageSizer;
+import com.symbio.dashboard.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -251,6 +248,16 @@ public class ResultReviewServiceImpl implements ResultReviewService {
         return retUpdStatus;
     }
 
+    /**
+     * Use comment_info Table to store bug information
+     *
+     * @param userId
+     * @param locale
+     * @param id
+     * @param screenShotId
+     * @param content
+     * @return
+     */
     public Result updateComment(Integer userId, String locale, Integer id, Integer screenShotId, String content) {
 
         // Step1: validation args
@@ -334,6 +341,78 @@ public class ResultReviewServiceImpl implements ResultReviewService {
             retCommentList.setCd(data);
             return retCommentList;
         }
+    }
+
+    public Result updateScreenShotComment(Integer userId, String locale, Integer id, String content) {
+
+        log.trace("userId = {}", userId);
+
+        // Step1: validation args
+        if (CommonUtil.isEmpty(id)) {
+            return commonDao.getEmptyArgsLocale(locale, "id");
+        }
+
+        // Step2: update comment info record
+        Result<ScreenShot> resultSS = bugReportDao.getScreenShotById(locale, id);
+        if (resultSS.hasError()) {
+            return resultSS;
+        }
+        ScreenShot ss = resultSS.getCd();
+        ss.setQaComment(content);
+
+        resultSS = bugReportDao.updateScreenShot(ss);
+        if (resultSS.hasError()) {
+            return resultSS;
+        }
+
+        // Step3: return value
+        Map<String, Object> mapData = new HashMap<>();
+        ss = resultSS.getCd();
+        mapData.put("id", ss.getId());
+        mapData.put("comment", WebUtil.getItemValue(ss.getQaComment()));
+
+        return new Result(mapData);
+    }
+
+    public Result removeScreenShotComment(Integer userId, String locale, Integer screenShotId) {
+        // Step1: validation args
+        if (CommonUtil.isEmpty(screenShotId)) {
+            return commonDao.getEmptyArgsLocale(locale, "id");
+        }
+
+        // Step2: update comment info record
+        Result<ScreenShot> resultSS = bugReportDao.getScreenShotById(locale, screenShotId);
+        if (resultSS.hasError()) {
+            return resultSS;
+        }
+        ScreenShot ss = resultSS.getCd();
+        ss.setQaComment("");
+
+        resultSS = bugReportDao.updateScreenShot(ss);
+        if (resultSS.hasError()) {
+            return resultSS;
+        }
+
+        return new Result();
+    }
+
+    public Result getScreenShotComment(Integer userId, String locale, Integer id, Integer screenShotId) {
+        // Step1: validation args
+        if (CommonUtil.isEmpty(screenShotId)) {
+            return commonDao.getEmptyArgsLocale(locale, "id");
+        }
+
+        // Step2: update comment info record
+        Result<ScreenShot> resultSS = bugReportDao.getScreenShotById(locale, screenShotId);
+        if (resultSS.hasError()) {
+            return resultSS;
+        }
+        ScreenShot ss = resultSS.getCd();
+
+        Map<String, Object> mapData = new HashMap<>();
+        mapData.put("id", ss.getId());
+        mapData.put("comment", WebUtil.getItemValue(ss.getQaComment()));
+        return new Result(mapData);
     }
 
 }
