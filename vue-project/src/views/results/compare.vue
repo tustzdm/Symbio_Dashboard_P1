@@ -4,7 +4,7 @@
         <div class="compareCon">
             <el-card class="listHead" shadow="never" style="padding-right:5%">
                 <div class="headLeft" style="width:500px;height:40px;float:left;box-sizing:border-box">
-                     <el-tooltip :disabled="productName.length<17" class="item" effect="light" :content="productName" placement="bottom">
+                    <el-tooltip :disabled="productName.length<17" class="item" effect="light" :content="productName" placement="bottom">
                         <span class="SiteSelect select">
                             {{productName}}
                         </span>
@@ -16,7 +16,7 @@
                     </el-tooltip>
                     <el-tooltip :disabled="testSetName.length<17" class="item" effect="light" :content="testSetName" placement="bottom">
                         <span class="product-select select">
-                        / {{testSetName}}
+                            / {{testSetName}}
                         </span>
                     </el-tooltip>
                 </div>
@@ -38,19 +38,11 @@
                     <template v-for="item in tableColownms">
                         <el-table-column v-if="item.type!='hidden'" :key="item.id" :prop="item.field" sortable :label="item.label">
                             <template slot-scope="scope">
-                                <div v-if="!['sourceLocale','targetLocale','status','screenshotFlag'].includes(item.field)">
+                                <div v-if="!['sourceLocale','targetLocale','status','screenshotFlag','jiraTicketId'].includes(item.field)">
                                     {{scope.row[item.field]}}
                                 </div>
                                 <div v-if="item.field=='status'">
-                                    <!-- <span style="display:inline-block">{{statusArray[scope.row[item.field]]}}</span> -->
                                     <span style="display:inline-block">{{getValueBycode(scope.row[item.field],statusList) }}</span>
-
-                                    <!-- <span style="padding-right:10px">
-                            <img style="width:100px;height:100px" class="thumbnail" src="../../assets/images/compare/1-en.png" alt="">
-                        </span>
-                        <span >
-                            <img style="width:100px;height:100px" class="thumbnail" src="../../assets/images/compare/1-ch.png" alt="">
-                        </span> -->
                                 </div>
                                 <div v-if="item.field=='sourceLocale'">
                                     <span>
@@ -62,10 +54,8 @@
                                         <img v-if="scope.row['targetLocale'].thumbnail!=''" style="width:150px;" @click="stepId=scope.row.step;screenShotId=scope.row['targetLocale'].id;leftImg=scope.row['sourceLocale'].url;rightImg=scope.row['targetLocale'].url;compareDialog=true;" class="thumbnail" :src="scope.row['targetLocale'].thumbnail" alt="screenShot">
                                     </span>
                                 </div>
-                                <div v-if="item.field=='screenshotFlag'">
-                                    <router-link :to="{ name: 'pictures', query: {caseId:scope.row.caseId}}">
-                                        <img v-if="scope.row[item.field]!=0" src="../../assets/images/screenshot-icon2.png" alt="">
-                                    </router-link>
+                                <div v-if="item.field == 'jiraTicketId'">
+                                    <a @click="goJira" style="background:lightblue">{{scope.row[item.field]}}</a>
                                 </div>
                             </template>
                         </el-table-column>
@@ -75,43 +65,43 @@
             </el-card>
             <div style="width:100%;height:150px;"></div>
             <div class="compareDia">
-                <el-dialog :visible.sync="compareDialog" fullscreen width="100%" custom-class="compare" style="background:black" :before-close="handleClose" center>
+                <el-dialog :visible.sync="compareDialog" fullscreen width="100%" custom-class="compare" style="background:black" center>
                     <div class="picBox">
-                    <div class="left" style="width:50%;float:left">
-                        <div class="iBox" style="float:left;position:fixed;top:45%;left:0">
-                            <i @click="beforeStep" style="color:white;font-size:45px;font-weight:bold" class="el-icon-arrow-left beforeStep"></i>
-                        </div>
-                        <div style="width:85%;height:100%;float:right;padding-right:4px;box-sizing:border-box;">
-                            <img class="bigImg" style="float:right;height:100%" :src="leftImg" alt="screenShot">
-                        </div>
-                    </div>
-
-                    <div class="right" style="width:50%;float:left">
-                        <div style="width:85%;height:100%;float:left;padding-left:4px;box-sizing:border-box;">
-                            <img v-if="rightImg!=''" class="bigImg" style="float:left" :src="rightImg" alt="screenShot">
+                        <div class="left" style="width:50%;float:left">
+                            <div class="iBox" style="float:left;position:fixed;top:45%;left:0">
+                                <i @click="beforeStep" style="color:white;font-size:45px;font-weight:bold" class="el-icon-arrow-left beforeStep"></i>
+                            </div>
+                            <div style="width:85%;height:100%;float:right;padding-right:4px;box-sizing:border-box;">
+                                <img class="bigImg" style="float:right;height:100%" :src="leftImg" alt="screenShot">
+                            </div>
                         </div>
 
-                        <div class="iBox" style="float:right;top:45%;right:0;position:fixed">
-                            <i @click="nextStep" style="color:white;font-size:45px;font-weight:bold" class="el-icon-arrow-right"></i>
+                        <div class="right" style="width:50%;float:left">
+                            <div style="width:85%;height:100%;float:left;padding-left:4px;box-sizing:border-box;">
+                                <img v-if="rightImg!=''" class="bigImg" style="float:left" :src="rightImg" alt="screenShot">
+                            </div>
+
+                            <div class="iBox" style="float:right;top:45%;right:0;position:fixed">
+                                <i @click="nextStep" style="color:white;font-size:45px;font-weight:bold" class="el-icon-arrow-right"></i>
+                            </div>
                         </div>
-                    </div>
                     </div>
                     <span slot="title" class="dialog-footer" center>
                         <span style="position:absolute;float:left;font-size:25px;color:white;left:100px;font-weight:bold">Step:&nbsp;{{stepId}}</span>
 
                         <el-button icon="el-icon-zoom-in" @click="imgActualSize" style="font-size:20px"> </el-button>
                         <el-button icon="el-icon-zoom-out" @click="imgFitScreen" style="font-size:20px"></el-button>
-                        <el-button icon="el-icon-chat-line-round" @click="commentDialog=true" style="font-size:20px"></el-button>
+                        <el-button icon="el-icon-chat-line-round" @click="openComment" style="font-size:20px"></el-button>
                         <el-button icon="el-icon-crop" @click="reportDialog=true" style="font-size:20px"></el-button>
-                        <el-button icon="el-icon-circle-check" @click="hoverMsg('success', 'Pass')" style="font-size:20px"></el-button>
-                        <el-button icon="el-icon-circle-close" @click="hoverMsg('error', 'Fail')" style="font-size:20px"></el-button>
+                        <el-button icon="el-icon-circle-check" @click="hoverMsg('success', 'Pass');passOrFail('Pass')" style="font-size:20px"></el-button>
+                        <el-button icon="el-icon-circle-close" @click="hoverMsg('error', 'Fail');passOrFail('Failed')" style="font-size:20px"></el-button>
                         <el-button icon="el-icon-upload2" @click="hoverMsg('info', 'Upload or replace image for the locale')" style="font-size:20px"></el-button>
                     </span>
 
-                    <el-dialog title="Report Bug"  :visible.sync="reportDialog" center append-to-body width="90%">
+                    <el-dialog title="Report Bug" :visible.sync="reportDialog" center append-to-body width="90%">
                         <paint v-if="reportDialog" @reportForm="reportForm($event)" ref="paintChild" :screenShotId="screenShotId" :url="rightImg" :runId="runId"></paint>
                         <span slot="footer" class="dialog-footer">
-                            
+                            <el-button @click="test">Cancel</el-button>
                             <el-button @click="reportDialog = false">Cancel</el-button>
                             <el-button type="primary" @click="reportConfirm">Confirm</el-button>
                         </span>
@@ -169,7 +159,7 @@ export default {
             srcc: 'https://vue.symbio.com.cn/mock/image/0_433/434_435_1/182/en_US/screenshots/thumbnail/af1a574c-b318-4f6b-8d22-9a96e0039fff.png',
             compareDialog: false,
             stepId: '',
-            screenShotId:'',
+            screenShotId: '',
             leftImg: 'ssss',
             rightImg: 'sssss',
             productName: 'Product',
@@ -185,17 +175,19 @@ export default {
             fileList: [],
             commentDialog: false,
             reportDialog: false,
-            statusList:[],
-            reportInfo:{} //在编辑完信息和图片后会传到这里，用reportInfo接受
+            statusList: [],
+            reportInfo: {}, //在编辑完信息和图片后会传到这里，用reportInfo接受
+            multipleSelection:[]
         }
     },
     components: {
         paint: paint
     },
     created() {
-        this.productName=localStorage.getItem('result_productName');
-        this.releaseName=localStorage.getItem('result_releaseName');
-        this.testSetName=localStorage.getItem('result_testSetName');
+        console.log(2131231231234231)
+        this.productName = localStorage.getItem('result_productName');
+        this.releaseName = localStorage.getItem('result_releaseName');
+        this.testSetName = localStorage.getItem('result_testSetName');
         console.log(22134654649687)
         console.log(this.uploadDialogVisible);
         this.runId = this.$route.query.runId;
@@ -248,8 +240,8 @@ export default {
                 return
             } else {
                 this.stepId++;
-                this.leftImg = this.dataList[this.stepId-1].sourceLocale.url;
-                this.rightImg = this.dataList[this.stepId-1].targetLocale.url;
+                this.leftImg = this.dataList[this.stepId - 1].sourceLocale.url;
+                this.rightImg = this.dataList[this.stepId - 1].targetLocale.url;
             }
         },
         beforeStep() {
@@ -263,8 +255,8 @@ export default {
                 return
             } else {
                 this.stepId--;
-                this.leftImg = this.dataList[this.stepId-1].sourceLocale.url;
-                this.rightImg = this.dataList[this.stepId-1].targetLocale.url;
+                this.leftImg = this.dataList[this.stepId - 1].sourceLocale.url;
+                this.rightImg = this.dataList[this.stepId - 1].targetLocale.url;
             }
         },
         //import method
@@ -297,33 +289,45 @@ export default {
         },
         //调整图片的大小，目前是手机尺寸的类型
         imgFitScreen() {
-            let leftImgObj= new Image();
-            leftImgObj.src= this.leftImg;
-            let rightImgObj= new Image();
-            rightImgObj.src= this.rightImg;
-            if(leftImgObj.width>leftImgObj.height){
+            let leftImgObj = new Image();
+            leftImgObj.src = this.leftImg;
+            let rightImgObj = new Image();
+            rightImgObj.src = this.rightImg;
+            if (leftImgObj.width > leftImgObj.height) {
                 document.getElementsByClassName('bigImg')[0].style.width = '100%';
                 document.getElementsByClassName('bigImg')[1].style.width = '100%';
-            }else{
+            } else {
                 var winHeight = document.body.clientHeight || document.documentElement.clientHeight;
-            document.getElementsByClassName('bigImg')[0].style.height = winHeight - 105 + 'px'
-            document.getElementsByClassName('bigImg')[1].style.height = winHeight - 105 + 'px'
+                document.getElementsByClassName('bigImg')[0].style.height = winHeight - 105 + 'px'
+                document.getElementsByClassName('bigImg')[1].style.height = winHeight - 105 + 'px'
             }
-            
+
         },
         imgActualSize() {
-            let leftImgObj= new Image();
-            leftImgObj.src= this.leftImg;
+            let leftImgObj = new Image();
+            leftImgObj.src = this.leftImg;
             console.log(leftImgObj.width)
-            let rightImgObj= new Image();
-            rightImgObj.src= this.rightImg;
-            if(leftImgObj.width>leftImgObj.height){
-                document.getElementsByClassName('bigImg')[0].style.width = leftImgObj.width+'px';
-                document.getElementsByClassName('bigImg')[1].style.width = rightImgObj.width+'px';
-            }else{
+            let rightImgObj = new Image();
+            rightImgObj.src = this.rightImg;
+            if (leftImgObj.width > leftImgObj.height) {
+                document.getElementsByClassName('bigImg')[0].style.width = leftImgObj.width + 'px';
+                document.getElementsByClassName('bigImg')[1].style.width = rightImgObj.width + 'px';
+            } else {
                 document.getElementsByClassName('bigImg')[0].style.height = '100%';
                 document.getElementsByClassName('bigImg')[1].style.height = '100%';
             }
+        },
+        openComment() {
+            this.commentDialog = true
+            this.Fetch(`/result/screenShot/getComment?token=1&screenShotId=${this.screenShotId}`, {
+                method: "GET"
+            }).then((res) => {
+                console.log(2222222);
+                console.log(res);
+                this.comment_text = res.something; //获得comment内容赋给接受的变量
+            }).catch(err => {
+                alert(err);
+            });
         },
         //submitComment
         submitComment() {
@@ -331,10 +335,18 @@ export default {
             this.commentDialog = false;
             var comment_text = document.getElementById('comment_text').value;
             document.getElementsByClassName('step')[trId].getElementsByTagName('td')[4].innerHTML = `<textarea name="" id="" rows="5" style="width:95%;margin-top:0;height:100%;border-radius:3px;border:1px solid lightgray">${comment_text}</textarea>`;
-            this.$message({
-                message: 'Comment add successfully',
-                type: 'warning',
-                duration: 1300
+            this.Fetch(`/result/screenShot/updateComment?token=1&screenShotId=${this.screenShotId}`, {
+                method: "POST"
+            }).then((res) => {
+                console.log(2222222);
+                console.log(res);
+                this.$message({
+                    message: 'Comment add successfully',
+                    type: 'warning',
+                    duration: 1300
+                });
+            }).catch(err => {
+                alert(err);
             });
         },
         //getValueBycode
@@ -345,20 +357,29 @@ export default {
                 }
             }
         },
-        hoverMsg(type, msg){
+        passOrFail(status) {
+            this.Fetch(`/result/screenShot/${this.screenShotId}?token=1&status=${status}`, {
+                method: "POST"
+            }).then(res => {
+                console.log(res)
+            }).catch(err => {
+                alert(err);
+            });
+        },
+        hoverMsg(type, msg) {
             this.$message({
-                    message: msg,
-                    type: type,
-                    duration: 800
-                });
+                message: msg,
+                type: type,
+                duration: 800
+            });
             return;
         },
-        reportForm(val){
+        reportForm(val) {
             console.log(1234)
             console.log(val)
-            this.reportInfo=val;
+            this.reportInfo = val;
         },
-        reportConfirm(){
+        reportConfirm() {
             this.Fetch(`/result/saveBugInfo?token=1`, {
                 method: "POST",
                 body: this.reportInfo
@@ -367,7 +388,16 @@ export default {
             }).catch(err => {
                 alert(err);
             });
-        }
+        },
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+            console.log(this.multipleSelection);
+        },
+        goJira(){
+            
+            this.compareDialog=true;
+            this.reportDialog=true;
+        },
     }
 }
 </script>
@@ -380,18 +410,17 @@ export default {
     }
 
     .select {
-        font-weight:bold;
+        font-weight: bold;
         float: left;
-        max-width:150px;
+        max-width: 150px;
         line-height: 40px;
-        height:40px;
+        height: 40px;
         margin-left: 15px;
         font-family: Poppins;
         text-overflow: ellipsis;
-        white-space:nowrap; 
-        overflow:hidden;
+        white-space: nowrap;
+        overflow: hidden;
     }
-
 
     .headRight {
         float: right;
