@@ -1,7 +1,7 @@
 <template>
 <div class="report_Pic">
-    <!-- {{runId}}{{screenShotId}}
-    {{reortForm}} -->
+    {{runId}}{{screenShotId}}
+    {{reortForm}}
     <el-steps :active="active" finish-status="success">
         <el-step title="Step 1"></el-step>
         <el-step title="Step 2"></el-step>
@@ -137,18 +137,19 @@ export default {
             action: 'line',
 
             // info 
-            screenShotId: this.screenShotId,
-            runId: this.runId,
+            screenShotId: this.sShotId,
+            runId: this.runIndex,
             stepFormList1: '',
             stepFormList2: '',
             userList:{},
-            reortForm: {issueCategoryId:'2222222'}
+            reortForm: this.retportInfo
         }
     },
     props: {
         url: String,
-        screenShotId: String,
-        runId: String
+        sShotId: Number,
+        runIndex: String,
+        retportInfo:String
     },
     created() {
         console.log(123);
@@ -394,9 +395,6 @@ export default {
             console.log(this.step);
             console.log(this.canvasHistory)
         },
-        test(){
-            alert(this.$parent.productId)
-        }
     }
 }
 </script>

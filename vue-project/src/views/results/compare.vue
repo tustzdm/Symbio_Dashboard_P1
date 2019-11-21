@@ -55,7 +55,7 @@
                                     </span>
                                 </div>
                                 <div v-if="item.field == 'jiraTicketId'">
-                                    <a @click="goJira" style="background:lightblue">{{scope.row[item.field]}}</a>
+                                    <a @click="stepId=scope.row.step;screenShotId=scope.row['targetLocale'].id;leftImg=scope.row['sourceLocale'].url;rightImg=scope.row['targetLocale'].url;compareDialog=true;goJira()"  style="background:lightblue">{{scope.row[item.field]}}</a>
                                 </div>
                             </template>
                         </el-table-column>
@@ -75,7 +75,6 @@
                                 <img class="bigImg" style="float:right;height:100%" :src="leftImg" alt="screenShot">
                             </div>
                         </div>
-
                         <div class="right" style="width:50%;float:left">
                             <div style="width:85%;height:100%;float:left;padding-left:4px;box-sizing:border-box;">
                                 <img v-if="rightImg!=''" class="bigImg" style="float:left" :src="rightImg" alt="screenShot">
@@ -99,9 +98,8 @@
                     </span>
 
                     <el-dialog title="Report Bug" :visible.sync="reportDialog" center append-to-body width="90%">
-                        <paint v-if="reportDialog" @reportForm="reportForm($event)" ref="paintChild" :screenShotId="screenShotId" :url="rightImg" :runId="runId"></paint>
+                        <paint :reportInfo="reportInfo" v-if="reportDialog" @reportForm="reportForm($event)" ref="paintChild" :sShotId="screenShotId" :url="rightImg" :runIndex="runId"></paint>
                         <span slot="footer" class="dialog-footer">
-                            <el-button @click="test">Cancel</el-button>
                             <el-button @click="reportDialog = false">Cancel</el-button>
                             <el-button type="primary" @click="reportConfirm">Confirm</el-button>
                         </span>
@@ -110,7 +108,7 @@
                     <el-dialog title="Add comment" :visible.sync="commentDialog" center append-to-body width="30%">
                         <!-- <el-input type="textarea" :rows="5" placeholder="Input comment here" v-model="textarea">
                         </el-input> 有bug-->
-                        <textarea id="comment_text" name="" rows="10" style="width:100%;height:100%;border-radius:5px;border:1px solid lightgray"></textarea>
+                        <textarea id="comment_text" name="" v-model="comment_text" rows="10" style="width:100%;height:100%;border-radius:5px;border:1px solid lightgray"></textarea>
                         <span slot="footer" class="dialog-footer">
                             <el-button @click="commentDialog = false">Cancel</el-button>
                             <el-button type="primary" @click="submitComment">Confirm</el-button>
@@ -177,7 +175,8 @@ export default {
             reportDialog: false,
             statusList: [],
             reportInfo: {}, //在编辑完信息和图片后会传到这里，用reportInfo接受
-            multipleSelection:[]
+            multipleSelection:[],
+            comment_text:'1231234'
         }
     },
     components: {
@@ -324,25 +323,22 @@ export default {
             }).then((res) => {
                 console.log(2222222);
                 console.log(res);
-                this.comment_text = res.something; //获得comment内容赋给接受的变量
+                this.comment_text = res.cd.comment; //获得comment内容赋给接受的变量
             }).catch(err => {
                 alert(err);
             });
         },
         //submitComment
         submitComment() {
-            var trId = this.stepId - 1;
             this.commentDialog = false;
-            var comment_text = document.getElementById('comment_text').value;
-            document.getElementsByClassName('step')[trId].getElementsByTagName('td')[4].innerHTML = `<textarea name="" id="" rows="5" style="width:95%;margin-top:0;height:100%;border-radius:3px;border:1px solid lightgray">${comment_text}</textarea>`;
-            this.Fetch(`/result/screenShot/updateComment?token=1&screenShotId=${this.screenShotId}`, {
+            this.Fetch(`/result/screenShot/comment?token=1&screenShotId=${this.screenShotId}&content=${this.comment_text}`, {
                 method: "POST"
             }).then((res) => {
                 console.log(2222222);
                 console.log(res);
                 this.$message({
                     message: 'Comment add successfully',
-                    type: 'warning',
+                    type: 'success',
                     duration: 1300
                 });
             }).catch(err => {
@@ -375,8 +371,8 @@ export default {
             return;
         },
         reportForm(val) {
-            console.log(1234)
-            console.log(val)
+            console.log(1234);
+            console.log(val);
             this.reportInfo = val;
         },
         reportConfirm() {
@@ -384,7 +380,7 @@ export default {
                 method: "POST",
                 body: this.reportInfo
             }).then(res => {
-                console.log(res)
+                console.log(res);
             }).catch(err => {
                 alert(err);
             });
@@ -394,9 +390,18 @@ export default {
             console.log(this.multipleSelection);
         },
         goJira(){
-            
-            this.compareDialog=true;
-            this.reportDialog=true;
+            setTimeout(() => {
+                this.reportDialog=true;
+            }, 600);
+            this.Fetch(`/result/getBugInfo?token=1&id=5`, {
+                method: "GET"
+            }).then(res => {
+                console.log('jijjjjjjjj')
+                console.log(res);
+                this.reportInfo=res.cd.data; 
+            }).catch(err => {
+                alert(err);
+            });
         },
     }
 }
