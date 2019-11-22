@@ -6,6 +6,7 @@ public class ErrorConst {
 
     // ERROR Code corresponds to [result_message]
     // public final static String ="";
+    public final static String TOKEN_MISSING_INVALID = "000003";
     public final static String EXCEPTION = "000004";
     public final static String DB_NODATA_ARGS_TABLE_ID = "000016";
     public final static String ERROR_PARAMETER_EMPTY = "000101";

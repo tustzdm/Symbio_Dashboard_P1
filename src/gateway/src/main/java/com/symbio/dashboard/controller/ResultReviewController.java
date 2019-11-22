@@ -65,16 +65,18 @@ public class ResultReviewController extends BaseController {
      */
     @RequestMapping("/getList")
     public Result getList(@RequestBody TestRunVO testRun) {
-        log.trace("ResultReviewController.getList() Enter");
+        String funcName = "ResultReviewController.getList()";
+        log.info(funcName + " Enter");
 
         Result retResult = new Result();
         try {
             String token = testRun.getToken();
-            if (CommonUtil.isEmpty(token)) {
-
+            Result resultUserId = super.getUserIdByToken(token);
+            if (resultUserId.hasError()) {
+                return resultUserId;
             }
 
-            Integer userId = 0;
+            Integer userId = (Integer) resultUserId.getCd();
             testRun.setUserId(userId);
             if (StringUtil.isEmpty(testRun.getLocale())) {
                 testRun.setLocale(Locales.EN_US.toString());

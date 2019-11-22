@@ -1,18 +1,13 @@
 package com.symbio.dashboard.controller;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.common.CommonAuthService;
-import com.symbio.dashboard.enums.Locales;
-import com.symbio.dashboard.setting.service.CommonServiceImpl;
+import com.symbio.dashboard.auth.service.AuthUserServiceImpl;
+import com.symbio.dashboard.constant.ErrorConst;
+import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.setting.service.ResultMessageServiceImpl;
-import com.symbio.dashboard.setting.service.UserServiceImpl;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @ClassName - BaseController
@@ -23,10 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 public class BaseController {
 
-    private static Logger logger = LoggerFactory.getLogger(BaseController.class);
+    private static Logger log = LoggerFactory.getLogger(BaseController.class);
 
     @Autowired
     private ResultMessageServiceImpl messageService;
+    @Autowired
+    private AuthUserServiceImpl authUserSvr;
+
 
     public Result getResult(String code) {
         return messageService.getResultEx(code);
@@ -38,5 +36,30 @@ public class BaseController {
 
     public Result getResultArgs(String locale, String code, Object... args) {
         return messageService.getResult(locale, code, args);
+    }
+
+    public Result<User> checkUserToken(String token) {
+        String funcName = "BaseController.checkUserToken()";
+
+        Result<User> authUser = authUserSvr.getUserInfo(token);
+        if (authUser.hasError()) {
+            log.error(ErrorConst.getErrorLogMsg(funcName, authUser));
+        }
+        return authUser;
+    }
+
+    public Result getUserIdByToken(String token) {
+        String funcName = "BaseController.getUserIdByToken()";
+
+        Result retUser = new Result<>();
+
+        Result<User> authUser = authUserSvr.getUserInfo(token);
+        if (authUser.hasError()) {
+            log.error(ErrorConst.getErrorLogMsg(funcName, authUser));
+            return authUser;
+        }
+
+        User userInfo = authUser.getCd();
+        return new Result(userInfo.getId());
     }
 }
