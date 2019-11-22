@@ -21,7 +21,7 @@
                     <div v-if="item.field=='status'">
                         <div style="display:flex;align-items:center">
                             <!-- <span style="height:15px;width:15px;border-radius:50%;display:inline-block;margin-top:4px;margin-right:8px;" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></span> -->
-                            <span :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}" style="position:absolute;border-radius:5px;padding:0 3px;font-weight:bold">{{statusArray[scope.row[item.field]]}}</span>
+                            <span :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}" style="position:absolute;border-radius:5px;padding:0 3px;color:white;">{{statusArray[scope.row[item.field]]}}</span>
                         </div>
                     </div>
                     <div v-if="item.field=='screenshotFlag'" align="center">
@@ -153,7 +153,8 @@ export default {
 }
 
 .auto_pass {
-    background: #02C874;
+    // #02C874 228B22
+    background: #1da21d;
 }
 
 .auto_failed {
@@ -173,22 +174,23 @@ th .cell {
 
 .P0{
     color:white
-    background: #f3d1cd
+    background: #FF8247
 }
 .P1{
     color:white
-    background: #f9e8e0
+    // #f9e8e0
+    background: #FFAEB9
 }
 .P2{
     color:white
-    background-color: #c9d4e3
+    background-color: #8968CD
 }
 .P3{
     color:white
-    background-color: #9eadc5
+    background-color: #7a85a1
 }
 .P4{
     color:white
-    background-color: #7a85a1
+    background-color: #9AC0CD
 }
 </style>
