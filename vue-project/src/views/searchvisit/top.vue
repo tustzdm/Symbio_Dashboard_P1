@@ -273,7 +273,7 @@ export default {
             this.Fetch(`/result/getList`, {
                 method: "POST",
                 body: {
-                    "token": "123",
+                    "token": localStorage.getItem('token'),
                     "productId": this.productId,
                     "releaseId": this.releaseId,
                     "testSetId": this.testSetId

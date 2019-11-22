@@ -24,7 +24,8 @@ let menusPromise = new Promise((resolve, reject) => {
                         hidden: item.hidden ? true : false,
                         meta: {
                             title: item.name,
-                            icon: item.icon
+                            icon: item.icon,
+                            requireAuth:true,
                         }
                     }
                 ]

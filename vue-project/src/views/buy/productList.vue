@@ -72,7 +72,7 @@ export default {
     components: {},
     methods: {
         getProductList() {
-            this.Fetch("/testmgmt/getProductList?token=1", {
+            this.Fetch(`/testmgmt/getProductList?token=${localStorage.getItem('token')}`, {
                 method: "GET"
             }).then(res => {
                 console.log(res);

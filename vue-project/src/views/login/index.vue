@@ -143,7 +143,9 @@ export default {
                       offset:380
                     });
                 } else {
-                    const tonken = res.data.cd.token;
+                  console.log(res);
+                    const token = res.data.cd.token;
+                    localStorage.setItem('token',token);
                     this.handleLogin('ruleForm');
                 }
             }).catch(err => {

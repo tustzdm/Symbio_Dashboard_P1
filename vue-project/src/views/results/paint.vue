@@ -142,17 +142,19 @@ export default {
             stepFormList1: '',
             stepFormList2: '',
             userList:{},
-            reortForm: this.retportInfo
+            reortForm: this.reportInfo
         }
     },
     props: {
         url: String,
         sShotId: Number,
         runIndex: String,
-        retportInfo:String
+        reportInfo:Object
     },
     created() {
         console.log(123);
+        console.log(this.reportInfo);
+        console.log(456);
         console.log(this.runId);
         this.Fetch(`/result/getBugInfo?token=1&id=0&testResultId=1&screenshotId=1300`, {
             method: "GET",
@@ -183,7 +185,6 @@ export default {
             if (val == 2) {
                 let theCanvas = document.querySelector('#theCanvas');
                 this.drawPic();
-
                 let context = theCanvas.getContext('2d')
                 context.lineWidth = this.lineWidth;
             }
@@ -218,12 +219,11 @@ export default {
         drawPic() {
             //add img
             var imgObj = new Image();
-            imgObj.src = this.imgEdit;
+            imgObj.src = this.reortForm.fileUrl||this.imgEdit;
             //待图片加载完后，将其显示在canvas上
             imgObj.onload = function () {
                 var ctx = theCanvas.getContext('2d');
                 // ctx.drawImage(this, 0, 0); //this即是imgObj,保持图片的原始大小：470*480
-
                 theCanvas.width = imgObj.width;
                 theCanvas.height = imgObj.height;
                 ctx.drawImage(this, 0, 0); //改变图片的大小到1024*768

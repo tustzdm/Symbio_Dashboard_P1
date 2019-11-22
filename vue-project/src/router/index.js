@@ -32,6 +32,7 @@ export const constantRouterMap = [
                 meta: {
                     title: "forms",
                     icon: "",
+                    requireAuth:true
                 },
             }
         ],
@@ -49,7 +50,8 @@ export const constantRouterMap = [
                 meta: {
                     title: "editPages",
                     icon: "",
-                    keepAlive: true // 需要被缓存
+                    keepAlive: true, // 需要被缓存,
+                    requireAuth:true
                 },
             },
             {
@@ -87,6 +89,7 @@ export const constantRouterMap = [
                 meta: {
                     title: "addproject",
                     icon: "",
+                    requireAuth:true
                 },
             }
         ],
@@ -104,6 +107,7 @@ export const constantRouterMap = [
                 meta: {
                     title: "editproject",
                     icon: "",
+                    requireAuth:true
                 },
             }
         ],
@@ -121,6 +125,7 @@ export const constantRouterMap = [
                 meta: {
                     title: "addversion",
                     icon: "",
+                    requireAuth:true
                 },
             }
         ],
@@ -138,6 +143,7 @@ export const constantRouterMap = [
                 meta: {
                     title: "addcase",
                     icon: "",
+                    requireAuth:true
                 },
             }
         ],
@@ -146,6 +152,9 @@ export const constantRouterMap = [
     {
         path: "/prdvisit",
         component: Layout,
+        meta:{
+            requireAuth:true
+        },
         children: [
             {
                 path: "/prdvisit/report",
@@ -161,12 +170,18 @@ export const constantRouterMap = [
     {
         path: "/management",
         component: Layout,
+        meta:{
+            requireAuth:true
+        },
         children: [
             {
                 path: "product",
                 component: _import("buy/productInfo"),
-                
+                meta:{
+                    requireAuth:true
+                },
                 name: "productInfo",
+                
                 meta: {
                     title: "productInfo",
                     icon: "",
@@ -196,6 +211,9 @@ export const constantRouterMap = [
     {
         path: "/searchvisit",
         component: Layout,
+        meta:{
+            requireAuth:true
+        },
         children: [
             {
                 path: "results/pictures",

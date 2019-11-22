@@ -19,9 +19,9 @@
                         {{scope.row[item.field]}}
                     </span>
                     <div v-if="item.field=='status'">
-                        <div style="">
-                            <span style="height:15px;width:15px;border-radius:50%;display:inline-block;margin-top:4px;margin-right:8px;" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></span>
-                            <span style="position:absolute">{{statusArray[scope.row[item.field]]}}</span>
+                        <div style="display:flex;align-items:center">
+                            <!-- <span style="height:15px;width:15px;border-radius:50%;display:inline-block;margin-top:4px;margin-right:8px;" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></span> -->
+                            <span :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}" style="position:absolute;border-radius:5px;padding:0 3px;font-weight:bold">{{statusArray[scope.row[item.field]]}}</span>
                         </div>
                     </div>
                     <div v-if="item.field=='screenshotFlag'" align="center">
@@ -124,7 +124,7 @@ export default {
             this.tableColownms = val.cd.columns;
             console.log('tablecolumn');
             console.log(this.tableColownms);
-            console.log(this.dataList)
+            console.log(this.dataList);
             this.run = false;
         },
         runStatus(val) {

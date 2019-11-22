@@ -104,7 +104,6 @@
                             <el-button type="primary" @click="reportConfirm">Confirm</el-button>
                         </span>
                     </el-dialog>
-
                     <el-dialog title="Add comment" :visible.sync="commentDialog" center append-to-body width="30%">
                         <!-- <el-input type="textarea" :rows="5" placeholder="Input comment here" v-model="textarea">
                         </el-input> 有bug-->
