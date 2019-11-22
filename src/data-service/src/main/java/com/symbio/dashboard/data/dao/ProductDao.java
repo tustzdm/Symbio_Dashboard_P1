@@ -2,6 +2,7 @@ package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.business.CommonListDTOFactory;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.repository.ProductRep;
 import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
@@ -486,6 +487,90 @@ public class ProductDao {
         }
 
         return retResult;
+    }
+
+    public Result getNavigationListByUserRoleEx(Integer userId, String locale, Integer total) {
+        String funcName = "getNavigationListByUserRoleEx()";
+        Result retResult = new Result();
+
+        try {
+            String strFields = "id,name";
+            String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER BY id DESC", strFields);
+
+            Result<Integer> retRestrictProduct = getUserRestrictProduct(userId);
+            if (retRestrictProduct.hasError()) {
+                logger.error(ErrorConst.getErrorLogMsg(funcName, retRestrictProduct));
+                return retRestrictProduct;
+            } else {
+                Integer nProductId = retRestrictProduct.getCd();
+                if (nProductId > 0) {
+                    sql = String.format("SELECT %s FROM product WHERE display = 1 AND id = %d ORDER BY id DESC", strFields, nProductId);
+                }
+            }
+            if (total != null && total > 0) {
+                sql += String.format(" LIMIT 0,%d", total);
+            }
+            // Fetch db
+            List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+            if (CommonUtil.isEmpty(listResult)) {
+                return new Result("000120", "Product Navigation");
+            }
+            // Change to Map
+            List<Map<String, Object>> listProduct = EntityUtils.castMap(listResult, Product.class, strFields);
+            retResult = new Result(listProduct);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            retResult = new Result("000102", "Product Navigation");
+        }
+
+        return retResult;
+    }
+
+    public Result<Integer> getUserRestrictProduct(Integer userId) {
+        Result<Integer> retRestricProduct = new Result<>();
+        Integer nProductId = 0;
+
+        try {
+            String strFields = "productId";
+            String sql = String.format("SELECT DISTINCT(gi.productId) as productId from user_group_role ugr" +
+                    " join group_info gi on ugr.groupId = gi.id " +
+                    " WHERE ugr.userId = %d LIMIT 0,1", userId);
+            // Fetch db
+            List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+            if (CommonUtil.isEmpty(listResult)) {
+                retRestricProduct.setCd(nProductId);
+            } else {
+                // Change to Map
+                List<Map<String, Object>> listProduct = EntityUtils.castQuerytoMap(listResult, strFields);
+                if (!CommonUtil.isEmpty(listProduct)) {
+                    Map<String, Object> mapData = listProduct.get(0);
+                    nProductId = Integer.parseInt(mapData.get(strFields).toString());
+                }
+            }
+            retRestricProduct.setCd(nProductId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            retRestricProduct = new Result("000102", "User Restrict Product Navigation");
+        }
+
+        return retRestricProduct;
+    }
+
+    /**
+     * 根据UserId及其权限 得到Product 导航条信息
+     *
+     * @param userId
+     * @param locale
+     * @param total
+     * @return
+     */
+    public Result getNavigationListByUserRole(Integer userId, String locale, Integer total) {
+        if (CommonUtil.isEmpty(userId)) {
+            return getNavigationList(locale, total);
+        } else {
+            return getNavigationListByUserRoleEx(userId, locale, total);
+        }
     }
 
     /**

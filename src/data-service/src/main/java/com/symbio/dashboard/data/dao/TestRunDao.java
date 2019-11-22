@@ -200,20 +200,22 @@ public class TestRunDao {
             data.setTestSetId(testRun.getTestSetId());
         }
 
-        Result retProduct = productDao.getNavigationList(testRun.getLocale(), null);
+        Result retProduct = productDao.getNavigationListByUserRole(testRun.getUserId(), testRun.getLocale(), null);
         if (retProduct.isSuccess()) {
             listData = (List<Map<String, Object>>) retProduct.getCd();
             if (BusinessUtil.isIdEmpty(testRun.getProductId()) && !listData.isEmpty()) {
-                data.setProductId((Integer) listData.get(0).get("id"));
+                Integer productId = (Integer) listData.get(0).get("id");
+                data.setProductId(productId);
             }
             data.setProductList(listData);
         }
 
-        Result retRelease = releaseDao.getNavigationList(testRun.getLocale(), testRun.getProductId(), null);
+        Result retRelease = releaseDao.getNavigationList(testRun.getLocale(), data.getProductId(), null);
         if (retRelease.isSuccess()) {
             listData = (List<Map<String, Object>>) retRelease.getCd();
             if (BusinessUtil.isIdEmpty(testRun.getReleaseId()) && !listData.isEmpty()) {
-                data.setReleaseId((Integer) listData.get(0).get("id"));
+                Integer releaseId = (Integer) listData.get(0).get("id");
+                data.setReleaseId(releaseId);
             }
             data.setReleaseList(listData);
         }
