@@ -5,7 +5,6 @@ import com.symbio.dashboard.common.CommonAuthService;
 import com.symbio.dashboard.model.UiInfo;
 import com.symbio.dashboard.setting.service.CommonService;
 import com.symbio.dashboard.setting.service.PageElementService;
-import com.symbio.dashboard.ui.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,18 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class UiInfoController {
 
     @Autowired
-    private GetUiInfoListAuthService getUiInfoListAuthService;
-
-    @Autowired
     private CommonAuthService commonAuthService;
     @Autowired
     private CommonService commonService;
-
-    @Autowired
-    private UpdateUiElementAuthService updateUiElementAuthService;
-
-    @Autowired
-    private RemoveUiElementAuthService removeUiElementAuthService;
 
     @Autowired
     private PageElementService pageElementService;
@@ -60,10 +50,10 @@ public class UiInfoController {
                                 @RequestParam(value = "page") String page) {
         Result result;
         try {
-            result = getUiInfoListAuthService.getUiInfoListAuth(token);
-            if (!result.isSuccess()) {
-                return result;
-            }
+//            result = getUiInfoListAuthService.getUiInfoListAuth(token);
+//            if (!result.isSuccess()) {
+//                return result;
+//            }
 
 //            UiInfoUpload uiInfoUpload = new UiInfoUpload();
 //            uiInfoUpload.setPage(page);
@@ -134,10 +124,10 @@ public class UiInfoController {
                                   @RequestParam(value = "id") Integer id) {
         Result result;
         try {
-            result = removeUiElementAuthService.removeUiElementAuth(token);
-            if (!result.isSuccess()) {
-                return result;
-            }
+//            result = removeUiElementAuthService.removeUiElementAuth(token);
+//            if (!result.isSuccess()) {
+//                return result;
+//            }
 
             result = pageElementService.removeUiElement(locale, id);
             if (!result.isSuccess()) {

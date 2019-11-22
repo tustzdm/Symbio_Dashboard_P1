@@ -69,6 +69,11 @@ public class ResultReviewController extends BaseController {
 
         Result retResult = new Result();
         try {
+            String token = testRun.getToken();
+            if (CommonUtil.isEmpty(token)) {
+
+            }
+
             Integer userId = 0;
             testRun.setUserId(userId);
             if (StringUtil.isEmpty(testRun.getLocale())) {

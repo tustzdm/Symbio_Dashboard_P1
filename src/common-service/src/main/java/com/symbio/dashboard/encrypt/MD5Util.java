@@ -43,7 +43,7 @@ public class MD5Util {
     public static void main(String[] args) throws Exception {
         // 1: c4ca4238a0b923820dcc509a6f75849b
         // symbio123: 6dde3035474f3aaad59c25687a41cd07
-        String strText = "1";
+        String strText = "whq44533074";
         System.out.println(String.format("Content: %s, MD5: %s", strText, MD5Util.encrypt(strText)));
     }
 }

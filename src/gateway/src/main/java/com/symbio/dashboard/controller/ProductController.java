@@ -3,7 +3,6 @@ package com.symbio.dashboard.controller;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.model.Product;
 import com.symbio.dashboard.service.ProductService;
-import com.symbio.dashboard.test.service.ProductAuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +27,6 @@ public class ProductController extends BaseController {
 
     private static Logger logger = LoggerFactory.getLogger(ProductController.class);
 
-    @Autowired
-    private ProductAuthService productAuthService;
     @Autowired
     private ProductService productService;
 
@@ -64,10 +61,10 @@ public class ProductController extends BaseController {
         Result result;
         Integer userId = 0;
         try {
-            result = productAuthService.getProductListAuth(token);
-            if (result.hasError()) {
-                return result;
-            }
+//            result = productAuthService.getProductListAuth(token);
+//            if (result.hasError()) {
+//                return result;
+//            }
 
             result = productService.getProductInfo(userId, id);
             if (result.hasError()) {
@@ -87,10 +84,10 @@ public class ProductController extends BaseController {
                               @RequestBody Product product) {
         Result result;
         try {
-            result = productAuthService.editProductAuth(token);
-            if (result.hasError()) {
-                return result;
-            }
+//            result = productAuthService.editProductAuth(token);
+//            if (result.hasError()) {
+//                return result;
+//            }
 
             // Set update user id
             Integer userId = 1;
@@ -114,10 +111,10 @@ public class ProductController extends BaseController {
                                 @RequestParam(value = "id") Integer id) {
         Result result;
         try {
-            result = productAuthService.removeProductAuth(token);
-            if (result.hasError()) {
-                return result;
-            }
+//            result = productAuthService.removeProductAuth(token);
+//            if (result.hasError()) {
+//                return result;
+//            }
 
             result = productService.removeProduct(id);
             if (result.hasError()) {
@@ -170,10 +167,10 @@ public class ProductController extends BaseController {
         Result result;
         Integer userId = 0;
         try {
-            result = productAuthService.getProductListAuth(token);
-            if (result.hasError()) {
-                return result;
-            }
+//            result = productAuthService.getProductListAuth(token);
+//            if (result.hasError()) {
+//                return result;
+//            }
 
             result = productService.getProductUiInfo(userId, locale, uiInfo, id);
             if (result.hasError()) {

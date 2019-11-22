@@ -4,6 +4,7 @@ import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
 import com.symbio.dashboard.business.BugInfoFactory;
 import com.symbio.dashboard.constant.ErrorConst;
+import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.repository.*;
 import com.symbio.dashboard.dto.BugInfoUiDTO;
 import com.symbio.dashboard.dto.BugReportUiDTO;
@@ -148,7 +149,7 @@ public class BugReportDao {
         return retResult;
     }
 
-    public static Map<String, Object> objectToMap(Object obj) throws Exception {
+    public Map<String, Object> objectToMap(Object obj) throws Exception {
         if (obj == null) {
             return null;
         }
@@ -163,6 +164,9 @@ public class BugReportDao {
             Object fieldValue = EntityUtils.getFieldValueByName(fieldName, obj);
             map.put(field.getName(), WebUtil.getItemValue(fieldValue));
         }
+
+        // Add domain address for the url link
+        BusinessUtil.filterURLMapData(map, commonDao.getConfigValueByKey(ProjectConst.VUE_DOMAIN_NAME));
 
         return map;
     }

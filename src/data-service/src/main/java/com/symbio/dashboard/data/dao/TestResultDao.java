@@ -71,13 +71,14 @@ public class TestResultDao {
     private final String RESULT_REVIEW_ITEM_STATUS = "status";
 
 
-    private static String VUE_DOMAIN_ADDRESS = null;
+//    private static String VUE_DOMAIN_ADDRESS = null;
 
     private String getVUEDomainHttp() {
-        if (VUE_DOMAIN_ADDRESS == null) {
-            VUE_DOMAIN_ADDRESS = commonDao.getConfigValueByKey(ProjectConst.VUE_DOMAIN_NAME); //  "https://vue.symbio.com.cn/";
-        }
-        return VUE_DOMAIN_ADDRESS;
+//        if (VUE_DOMAIN_ADDRESS == null) {
+//            VUE_DOMAIN_ADDRESS = commonDao.getConfigValueByKey(ProjectConst.VUE_DOMAIN_NAME); //  "https://vue.symbio.com.cn/";
+//        }
+//        return VUE_DOMAIN_ADDRESS;
+        return commonDao.getConfigValueByKey(ProjectConst.VUE_DOMAIN_NAME); //  "https://vue.symbio.com.cn/";
     }
 
     public TestResult updateTestResult(TestResult tr) {

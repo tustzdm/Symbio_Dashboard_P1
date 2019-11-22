@@ -322,4 +322,23 @@ public class BusinessUtil {
     return listField;
   }
 
+  public static Map<String, Object> filterURLMapData(Map<String, Object> data, String preDomain) {
+    Map<String, Object> retMap = data;
+    try {
+      Object objValue = null;
+      for (String key : data.keySet()) {
+        if (key.toLowerCase().contains("url")) {
+          objValue = data.get(key);
+          if (objValue != null && objValue.toString().startsWith("mock/image/")) {
+            data.put(key, preDomain + objValue.toString());
+          }
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return retMap;
+  }
+
 }

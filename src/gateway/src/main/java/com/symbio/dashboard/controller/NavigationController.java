@@ -1,16 +1,13 @@
 package com.symbio.dashboard.controller;
 
 import com.symbio.dashboard.Result;
-import com.symbio.dashboard.model.Product;
 import com.symbio.dashboard.service.ProductService;
 import com.symbio.dashboard.service.ReleaseService;
 import com.symbio.dashboard.service.TestSetService;
-import com.symbio.dashboard.test.service.ProductAuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,8 +27,6 @@ public class NavigationController extends BaseController {
 
     private static Logger logger = LoggerFactory.getLogger(NavigationController.class);
 
-    @Autowired
-    private ProductAuthService productAuthService;
     @Autowired
     private ProductService productService;
     @Autowired

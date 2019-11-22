@@ -191,7 +191,7 @@ public class UserServiceImpl implements UserService {
 
         // Step3 - get Role & Menu
         Integer userId = userData.getId();
-        String token = "testToken";
+        String token = userData.getName().toLowerCase();
         UserLoginDTO dtoUserLogin = new UserLoginDTO(locale, token);
 
         return new Result(dtoUserLogin);

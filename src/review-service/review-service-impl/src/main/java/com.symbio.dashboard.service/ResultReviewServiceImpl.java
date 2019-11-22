@@ -56,7 +56,6 @@ public class ResultReviewServiceImpl implements ResultReviewService {
     private ExcelImportDao excelImportDao;
     @Autowired
     private TestResultRep testResultRep;
-
     @Autowired
     private TestResultDao testResultDao;
     @Autowired
