@@ -316,7 +316,8 @@ public class ProductDao {
      * @param listUserFields
      * @return
      */
-    public Result getProductMapInfoByField(String strFields, Integer pageIndex, Integer pageSize, List<String> listUserFields) {
+    public Result getProductMapInfoByField(Integer userId, String strFields, Integer pageIndex, Integer pageSize, List<String> listUserFields) {
+        String funcName = "ProductDao.getProductMapInfoByField()";
         Result retResult = null;
 
         try {
@@ -324,6 +325,18 @@ public class ProductDao {
             List<Map<String, Object>> listProduct = new ArrayList<Map<String, Object>>();
 
             String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER by id DESC", strFields);
+
+            Result<Integer> retRestrictProduct = getUserRestrictProduct(userId);
+            if (retRestrictProduct.hasError()) {
+                logger.error(ErrorConst.getErrorLogMsg(funcName, retRestrictProduct));
+                return retRestrictProduct;
+            } else {
+                Integer nProductId = retRestrictProduct.getCd();
+                if (nProductId > 0) {
+                    sql = String.format("SELECT %s FROM product WHERE display = 1 AND id = %d ORDER BY id DESC", strFields, nProductId);
+                }
+            }
+
             if (pageIndex != null && pageSize != null) {
                 sql += String.format(" LIMIT %d,%d", pageIndex, pageSize);
             }
@@ -394,7 +407,7 @@ public class ProductDao {
      * @param pageSize
      * @return
      */
-    public Result getProductList2(Integer role, String locale, Integer pageIndex, Integer pageSize) {
+    public Result getProductList2(Integer userId, Integer role, String locale, Integer pageIndex, Integer pageSize) {
         logger.trace("ProductDao.getProductList2() Enter.");
         logger.trace(String.format("Args: locale = %s, pageIndex = %d, pageSize = %d", locale, pageIndex, pageSize));
 
@@ -424,7 +437,7 @@ public class ProductDao {
         List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
 
         String strFields = String.join(",", listFields);
-        Result retProductResult = getProductMapInfoByField(strFields, pageIndex, pageSize, listUserFields);
+        Result retProductResult = getProductMapInfoByField(userId, strFields, pageIndex, pageSize, listUserFields);
         if (retProductResult.hasError()) {
             retResult = retProductResult;
         } else {

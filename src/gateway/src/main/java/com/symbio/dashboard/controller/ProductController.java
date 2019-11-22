@@ -146,7 +146,12 @@ public class ProductController extends BaseController {
     private Result getProductListBase(String token, String locale, Integer pageIndex, Integer pageSize) {
         logger.trace("getProductListBase() Enter. token = "+ token);
 
-        Integer userId = 0;
+        Result resultUserId = getUserIdByToken(token);
+        if (resultUserId.hasError()) {
+            return resultUserId;
+        }
+        Integer userId = (Integer) resultUserId.getCd();
+
         Result retResult = productService.getProductPageList2(userId, locale, pageIndex, pageSize);
         if(retResult.hasError()) {
             logger.debug(String.format("Get Error Info from productService. ec=%s, em=%s", retResult.getEc(), retResult.getEm()));

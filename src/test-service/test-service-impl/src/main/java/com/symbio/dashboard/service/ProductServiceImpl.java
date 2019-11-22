@@ -218,7 +218,7 @@ public class ProductServiceImpl implements ProductService {
 
         Integer role = 7;
 
-        Result retResult = productDao.getProductList2(role, locale, pageIndex, pageSize);
+        Result retResult = productDao.getProductList2(userId, role, locale, pageIndex, pageSize);
         if(retResult.hasError()) {
             logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
         }

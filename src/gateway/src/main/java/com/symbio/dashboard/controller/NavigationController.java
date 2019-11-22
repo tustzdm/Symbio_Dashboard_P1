@@ -64,7 +64,12 @@ public class NavigationController extends BaseController {
     public Result getProductNavigationList(@RequestParam(value = "token") String token,
                                            @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                            @RequestParam(value = "total", required = false, defaultValue = "") Integer total) {
-        Integer userId = 0;
+        Result resultUserId = getUserIdByToken(token);
+        if (resultUserId.hasError()) {
+            return resultUserId;
+        }
+
+        Integer userId = (Integer) resultUserId.getCd();
         return productService.getNavigationList(userId, locale, total);
     }
 
