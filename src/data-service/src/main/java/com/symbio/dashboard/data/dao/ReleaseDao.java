@@ -44,6 +44,8 @@ public class ReleaseDao {
     private EntityManager entityManager;
     @Autowired
     private CommonDao commonDao;
+    @Autowired
+    private StatisticsDao statDao;
 
     @Autowired
     private UiInfoRep uiInfoRep;
@@ -187,29 +189,29 @@ public class ReleaseDao {
         return listProduct;
     }
 
-    public List<Map<String, Object>> mergeStaticticsData(List<Map<String, Object>> entityMap) {
+    public List<Map<String, Object>> mergeStaticticsData(List<Map<String, Object>> entityMap, Integer productId) {
         List<Map<String, Object>> retMap = entityMap;
 
         try {
-            // ToDo: Product - Get actrual List statistics column info
+            // Step1: Release - Get actual List statistics column info
             List<SysListSetting> listSetting = sysListSettingRep.getStatisticsInfo(SystemListSetting.Release.toString());
             if (CommonUtil.isEmpty(listSetting)) {
                 return retMap;
             }
+
+            List<String> listFields = BusinessUtil.getFieldListInfo(listSetting);
+            if (CommonUtil.isEmpty(listFields)) {
+                return retMap;
+            }
+
+            // Step2: Get field info
+            List<StatList> listStatData = statDao.getReleaseData(productId);
+            retMap = BusinessUtil.mergeStatData(retMap, SystemListSetting.Release, listFields, listStatData);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-//        Progress progress;
-//        Random random = new Random();
-//        for (Map item : retMap) {
-//            int total = random.nextInt(500);
-//            int done = random.nextInt(500);
-//            if (done > total) done = total;
-//            progress = new Progress(done, total);
-//            item.put("progress", progress);
-//        }
-        retMap = BusinessUtil.randomProgress(retMap);
         return retMap;
     }
 
@@ -254,7 +256,7 @@ public class ReleaseDao {
 
             if (dataType == ListDataType.Map) {
                 listRelease = EntityUtils.castMap(listResult, Release.class, strFields);
-                List<Map<String, Object>> listProdInfo = mergeStaticticsData(listRelease);
+                List<Map<String, Object>> listProdInfo = mergeStaticticsData(listRelease, productId);
                 List<String> listDBFields = CommonUtil.getListByMergeString(strFields, "progress");
                 retListDTO.setFields(EntityUtils.getDTOFields(listDBFields));
                 retListDTO.setDataType(ListDataType.Map.getDataType());

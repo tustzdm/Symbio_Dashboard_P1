@@ -8,10 +8,7 @@ import com.symbio.dashboard.dto.TestSetUiDTO;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.enums.UIInfoPage;
-import com.symbio.dashboard.model.Release;
-import com.symbio.dashboard.model.SysListSetting;
-import com.symbio.dashboard.model.TestSet;
-import com.symbio.dashboard.model.UiInfo;
+import com.symbio.dashboard.model.*;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
@@ -48,6 +45,8 @@ public class TestSetDao {
     private ProductDao productDao;
     @Autowired
     private ReleaseDao releaseDao;
+    @Autowired
+    private StatisticsDao statDao;
 
     @Autowired
     private TestSetRep testSetRep;
@@ -64,15 +63,24 @@ public class TestSetDao {
     @Autowired
     private ProductRep productRep;
 
-    public List<Map<String, Object>> mergeStaticticsData(List<Map<String, Object>> entityMap) {
+    public List<Map<String, Object>> mergeStaticticsData(List<Map<String, Object>> entityMap, Integer releaseId) {
         List<Map<String, Object>> retMap = entityMap;
 
         try {
-            // ToDo: Product - Get actual List statistics column info
+            // Step1: TestSet - Get actual List statistics column info
             List<SysListSetting> listSetting = sysListSettingRep.getStatisticsInfo(SystemListSetting.TestSet.toString());
             if (CommonUtil.isEmpty(listSetting)) {
                 return retMap;
             }
+            List<String> listFields = BusinessUtil.getFieldListInfo(listSetting);
+            if (CommonUtil.isEmpty(listFields)) {
+                return retMap;
+            }
+
+            // Step2: Get field info
+            List<StatList> listStatData = statDao.getTestSetData(releaseId);
+            retMap = BusinessUtil.mergeStatData(retMap, SystemListSetting.TestSet, listFields, listStatData);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,10 +95,20 @@ public class TestSetDao {
 //            item.put("progress", progress);
 //        }
 
-        retMap = BusinessUtil.randomProgress(retMap);
+//        retMap = BusinessUtil.randomProgress(retMap);
 
         return retMap;
     }
+
+//    private List<String> getFieldListInfo(List<SysListSetting> data) {
+//        List<String> retData = new ArrayList<>();
+//
+//        for (SysListSetting item : data) {
+//            retData.add(item.getField());
+//        }
+//
+//        return retData;
+//    }
 
     /**
      * 得到TestSet List Map数据对象
@@ -118,7 +136,7 @@ public class TestSetDao {
 
             if (dataType == ListDataType.Map) {
                 listTestSet = EntityUtils.castMap(listResult, TestSet.class, strFields);
-                List<Map<String, Object>> listReleaseInfo = mergeStaticticsData(listTestSet);
+                List<Map<String, Object>> listReleaseInfo = mergeStaticticsData(listTestSet, releaseId);
 
                 List<String> listDBFields = CommonUtil.getListByMergeString(strFields, "progress");
                 retListDTO.setFields(EntityUtils.getDTOFields(listDBFields));

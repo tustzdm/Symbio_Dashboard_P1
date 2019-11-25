@@ -1307,3 +1307,32 @@ CREATE TABLE `comment_info` (
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- 2019/11/25
+Drop Table IF EXISTS `stat_list`;
+CREATE TABLE `stat_list` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type_code` smallint unsigned NOT NULL DEFAULT '2' COMMENT 'Code of type. 0: product,1:release,2:testset...',
+  `fk_id` int(10) unsigned NOT NULL COMMENT 'FK: type=0,[product].id,type=1,[release].id,type=2,[test_set].id',
+  `field` varchar(16) NOT NULL COMMENT 'sys_list_setting.is_entity = 0, [sys_list_setting].field',
+  `value_type` smallint unsigned NOT NULL DEFAULT '0' COMMENT 'Type of value.Ref: ENTITY_VALUE_TYPE',
+  `value_content` varchar(2048) DEFAULT NULL COMMENT 'String format for the value',
+  `validation` smallint unsigned NOT NULL DEFAULT '1' COMMENT 'valid or not. 0-invalid, 1-valid',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create time',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_stat_list_type_id_field` (`type_code`, `fk_id`, `field`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+Drop Table IF EXISTS `stat_chart`;
+CREATE TABLE `stat_chart` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `page_name` varchar(32) NOT NULL COMMENT 'Name of page',
+  `chart_id` int(10) unsigned NOT NULL COMMENT 'FK: [report_chart].id',
+  `content` varchar(4096) DEFAULT NULL COMMENT 'chart data',
+  `validation` smallint unsigned NOT NULL DEFAULT '1' COMMENT 'valid or not. 0-invalid, 1-valid',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create time',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_stat_chart_page_chart_id` (`page_name`, `chart_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

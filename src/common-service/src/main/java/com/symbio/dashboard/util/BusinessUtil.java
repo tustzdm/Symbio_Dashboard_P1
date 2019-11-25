@@ -1,11 +1,13 @@
 package com.symbio.dashboard.util;
 
 import com.symbio.dashboard.business.CommonListDTOFactory;
+import com.symbio.dashboard.business.StatListFactory;
 import com.symbio.dashboard.constant.ProjectConfigConst;
 import com.symbio.dashboard.entity.Progress;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.ListColumns;
 import com.symbio.dashboard.enums.Locales;
+import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.*;
 
 import java.util.*;
@@ -275,6 +277,7 @@ public class BusinessUtil {
     }
   }
 
+  @Deprecated
   public static List<Map<String, Object>> randomProgress(List<Map<String, Object>> data) {
     List<Map<String, Object>> retList = data;
 
@@ -303,6 +306,79 @@ public class BusinessUtil {
     }
     return retList;
 
+  }
+
+  public static List<Map<String, Object>> mergeStatData(List<Map<String, Object>> data, SystemListSetting systemListSetting, List<String> listFields, List<StatList> listStatData) {
+    List<Map<String, Object>> retList = data;
+
+    Progress progress;
+    boolean bProcessEmpty = false;
+    StatList statData = null;
+
+
+    for (Map item : data) {
+      bProcessEmpty = false;
+      if (item.containsKey("status")) {
+        String strStatus = item.get("status").toString();
+        if (Integer.parseInt(strStatus) == 0) {
+          bProcessEmpty = true;
+        }
+      }
+
+      for (String field : listFields) {
+        if (!item.containsKey(field)) {
+          item.put(field, "");
+        }
+      }
+
+      // Stat field: progress
+      if (item.containsKey("progress")) {
+        if (bProcessEmpty || CommonUtil.isEmpty(listStatData)) {
+          progress = new Progress(0, 0);
+        } else {
+          statData = findExactData(systemListSetting, "progress", Integer.parseInt(item.get("id").toString()), listStatData);
+          progress = StatListFactory.getProgress(statData);
+        }
+        item.put("progress", progress);
+      }
+    }
+    return retList;
+
+  }
+
+  private static StatList findExactData(SystemListSetting systemListSetting, String fieldName, Integer id, List<StatList> listStatData) {
+    StatList retStatData = null;
+
+    if (CommonUtil.isEmpty(id)) return null;
+
+    for (StatList item : listStatData) {
+
+      switch (systemListSetting) {
+        default:
+          break;
+        case Product:
+        case Release:
+        case TestSet:
+          if ((id.intValue() == item.getFkId().intValue())
+                  && (item.getTypeCode() == systemListSetting.ordinal())
+                  && item.getField().equalsIgnoreCase(fieldName.toLowerCase())) {
+            return item;
+          }
+          break;
+      }
+    }
+
+    return retStatData;
+  }
+
+  public static List<String> getFieldListInfo(List<SysListSetting> data) {
+    List<String> retData = new ArrayList<>();
+
+    for (SysListSetting item : data) {
+      retData.add(item.getField());
+    }
+
+    return retData;
   }
 
   /**

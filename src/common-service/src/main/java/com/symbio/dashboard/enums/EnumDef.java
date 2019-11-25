@@ -71,6 +71,34 @@ public class EnumDef {
             return String.valueOf(this.code);
         }
     }
+
+    /**
+     * Common Setting for ${record}.validation
+     * Same to EntityDisplay
+     */
+    @Getter
+    public enum ENTITY_VALUE_TYPE implements IDictEnum {
+        INT(0, "Int"),
+        STRING(1, "String"),
+        BOOLEAN(2, "Boolean"),
+        JSON(10, "json"),
+        JSON_ARRAY(11, "json array"),
+
+        MAP(20, "Map"); // not use for db
+
+        private Integer code;
+        private String value;
+
+        ENTITY_VALUE_TYPE(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
     ///////////////////////////////////////////////////////
 
     ///////////////////////////////////////////////////////

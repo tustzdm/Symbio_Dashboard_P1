@@ -13,10 +13,7 @@ import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.enums.UIInfoPage;
-import com.symbio.dashboard.model.Product;
-import com.symbio.dashboard.model.SysListSetting;
-import com.symbio.dashboard.model.UiInfo;
-import com.symbio.dashboard.model.User;
+import com.symbio.dashboard.model.*;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
@@ -51,6 +48,8 @@ public class ProductDao {
     private EntityManager entityManager;
     @Autowired
     private CommonDao commonDao;
+    @Autowired
+    private StatisticsDao statDao;
 
     @Autowired
     private UiInfoRep uiInfoRep;
@@ -255,39 +254,23 @@ public class ProductDao {
 
 
         try {
-            // ToDo: Product - Get actrual List statistics column info
+            // Step1: Product - Get actual List statistics column info
             List<SysListSetting> listSetting = sysListSettingRep.getStatisticsInfo(SystemListSetting.Product.toString());
             if (CommonUtil.isEmpty(listSetting)) {
                 return retMap;
             }
+            List<String> listFields = BusinessUtil.getFieldListInfo(listSetting);
+            if (CommonUtil.isEmpty(listFields)) {
+                return retMap;
+            }
+
+            // Step2: Get field info
+            List<StatList> listStatData = statDao.getProductData();
+            retMap = BusinessUtil.mergeStatData(retMap, SystemListSetting.Product, listFields, listStatData);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-//        Progress progress;
-//        Random random = new Random();
-//        boolean bProcessRandom = false;
-//        for (Map item : retMap) {
-//            bProcessRandom = true;
-//            if (item.containsKey("status")) {
-//                String strStatus = item.get("status").toString();
-//                if (Integer.parseInt(strStatus) == 0) {
-//                    bProcessRandom = false;
-//                }
-//            }
-//
-//            if (bProcessRandom) {
-//                int total = random.nextInt(500);
-//                int done = random.nextInt(500);
-//                if (done > total) done = total;
-//                progress = new Progress(done, total);
-//
-//            } else {
-//                progress = new Progress(0, 0);
-//            }
-//            item.put("progress", progress);
-//        }
-        retMap = BusinessUtil.randomProgress(retMap);
 
         return retMap;
     }

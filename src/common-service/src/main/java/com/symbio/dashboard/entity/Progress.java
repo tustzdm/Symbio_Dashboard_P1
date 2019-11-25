@@ -14,7 +14,11 @@ public class Progress implements Serializable {
         this.done = done;
         this.total = total;
         if (total > 0) {
-            this.progress = String.format("%d%%", Integer.valueOf(done * 100 / total));
+            if (done == total) {
+                this.progress = "100%";
+            } else {
+                this.progress = String.format("%d%%", Integer.valueOf(done * 100 / total));
+            }
         } else {
             this.progress = "";
         }
