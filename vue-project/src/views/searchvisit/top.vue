@@ -33,7 +33,7 @@
                 </el-dropdown-menu>
             </el-dropdown>
             <span class="sperate-arrow">
-                <i class="el-icon-arrow-right"></i>
+                <i style="color:blue;font-weight:bolder" class="el-icon-arrow-right"></i>
             </span>
         </div>
         <div class="SiteSelect select">
@@ -81,7 +81,7 @@
         <div class="manage-top-right">
             <el-button class="btn-top" @click="runDialogVisible=true" style="background-color:#5CADAD" size="mini"><i class="el-icon-caret-right"></i> Run</el-button>
             <el-button class="btn-top" style="background-color:rgb(246, 184, 184)" size="mini">Add Bug</el-button>
-            <el-button class="btn-top" style="background-color:rgb(190, 205, 223);" size="mini">Refresh</el-button>
+            <el-button class="btn-top" @click="getNavgationList" style="background-color:rgb(190, 205, 223);" size="mini">Refresh</el-button>
             <el-button class="btn-top" @click="centerDialogVisible = true" style="background-color:#FF8040;" size="mini">Import</el-button>
             <div class="select" style="float:right; margin-left:30px">
                 <el-dropdown trigger="click">

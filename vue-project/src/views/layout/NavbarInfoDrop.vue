@@ -26,7 +26,8 @@ export default {
   },
   computed: {
     username() {
-      return this.$store.state.user.name || storage.get('USER').name
+      // return this.$store.state.user.name || storage.get('USER').name
+      return  storage.get('username')
     },
     avatarUrl() {
       return this.$store.state.user.avatar || storage.get('USER').avatar

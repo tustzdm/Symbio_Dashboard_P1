@@ -146,6 +146,7 @@ export default {
                   console.log(res);
                     const token = res.data.cd.token;
                     localStorage.setItem('token',token);
+                    localStorage.setItem('username',this.ruleForm.username);
                     this.handleLogin('ruleForm');
                 }
             }).catch(err => {

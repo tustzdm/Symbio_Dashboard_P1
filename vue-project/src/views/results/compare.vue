@@ -20,7 +20,6 @@
                         </span>
                     </el-tooltip>
                 </div>
-
                 <div class="headRight">
                     <span style="font-weight:bold;padding-right:10px">Target Locale:</span>
                     <el-select v-model="locale" style="width:200px;margin-bottom:5px;padding-right:60px" placeholder="Please Choose">
@@ -87,14 +86,13 @@
                     </div>
                     <span slot="title" class="dialog-footer" center>
                         <span style="position:absolute;float:left;font-size:25px;color:white;left:100px;font-weight:bold">Step:&nbsp;{{stepId}}</span>
-
-                        <el-button icon="el-icon-zoom-in" @click="imgActualSize" style="font-size:20px"> </el-button>
-                        <el-button icon="el-icon-zoom-out" @click="imgFitScreen" style="font-size:20px"></el-button>
-                        <el-button icon="el-icon-chat-line-round" @click="openComment" style="font-size:20px"></el-button>
-                        <el-button icon="el-icon-crop" @click="reportDialog=true" style="font-size:20px"></el-button>
-                        <el-button icon="el-icon-circle-check" @click="hoverMsg('success', 'Pass');passOrFail('Pass')" style="font-size:20px"></el-button>
-                        <el-button icon="el-icon-circle-close" @click="hoverMsg('error', 'Fail');passOrFail('Failed')" style="font-size:20px"></el-button>
-                        <el-button icon="el-icon-upload2" @click="hoverMsg('info', 'Upload or replace image for the locale')" style="font-size:20px"></el-button>
+                        <el-button class="operationBtn" icon="el-icon-zoom-in" @click="imgActualSize" > </el-button>
+                        <el-button class="operationBtn" icon="el-icon-zoom-out" @click="imgFitScreen"></el-button>
+                        <el-button class="operationBtn" icon="el-icon-chat-line-round" @click="openComment" ></el-button>
+                        <el-button class="operationBtn"  @click="reportDialog=true" ><img style="width:18px;height:18px;margin-bottom:-3px;padding:1px"  src="../../assets/images/bug.jpeg"></el-button>
+                        <el-button class="operationBtn"  @click="hoverMsg('success', 'Pass');passOrFail('Pass')" >Pass</el-button>
+                        <el-button class="operationBtn"  @click="hoverMsg('error', 'Fail');passOrFail('Failed')" >Fail</el-button>
+                        <!-- <el-button icon="el-icon-upload2" @click="hoverMsg('info', 'Upload or replace image for the locale')" ></el-button> -->
                     </span>
 
                     <el-dialog title="Report Bug" :visible.sync="reportDialog" center append-to-body width="90%">
@@ -478,6 +476,11 @@ export default {
 
     .right .iBox:active {
         background-color: lightblue
+    }
+
+    .operationBtn{
+        font-size:20px;
+        padding:6px 9px;
     }
 }
 </style>

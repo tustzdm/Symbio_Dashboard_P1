@@ -1,17 +1,12 @@
 <template>
-<el-row>
+<el-row class="infoCon">
     <el-col :span="20" :offset="2">
         <div class="manage-charts">
-            <div class="chartContainer" style="text-align:center">
-                <div style="display:inline-block">
-                    <chart style="display:inline-block" :options="pie" class="panel" />
-                </div>
-            </div>
-            <div class="chartContainerRight">
-                <div style="display:inline-block">
-                    <chart :options="rect" class="panel" />
-                </div>
-            </div>
+
+            <chart :options="pie" class="panel" />
+
+            <chart :options="rect" class="panel" />
+
         </div>
         <div>
             <el-card class="listHead" shadow="never" style="padding-right:5%">
@@ -99,17 +94,14 @@ export default {
             centerDialogVisible: false,
             caseTypeList: ['', 'Automation TestCase', 'Manual TestCase', '', 'API TestCase', '', '', '', 'Performance TestCase'],
             stepContent: {},
-            index:0
+            index: 0
         }
     },
     components: {
         testsetList: testsetList,
         chart: ECharts
     },
-    mounted() {
-        document.getElementsByClassName('echarts')[0].style.width = document.body.clientWidth * (11 / 27) + 'px';
-        document.getElementsByClassName('echarts')[1].style.width = document.body.clientWidth * (11 / 27) + 'px';
-    },
+    mounted() {},
     created() {
         this.productId = this.$route.query.productId;
         this.releaseId = this.$route.query.releaseId;
@@ -188,54 +180,30 @@ export default {
 </script>
 
 <style lang="stylus">
-.manage-charts {
-    width: 100%;
-}
-
-.panel {
-    margin: 0;
-    padding: 0;
-}
-
-.chartContainer {
-    width: 48%;
-    float: left;
-    text-align: center;
-}
-
-.chartContainerRight {
-    width: 47%;
-    float: left;
-    margin-left 2.3%;
-    text-align: center;
-}
 
 .has-gutter th .cell {
     font-family Poppins
 }
 
-.P0 {
-    color: white;
-    background: #f3d1cd
+.P0{
+    color:white
+    background: #FF8247
 }
-
-.P1 {
-    color: white;
-    background: #f9e8e0
+.P1{
+    color:white
+    // #f9e8e0
+    background: #FFAEB9
 }
-
-.P2 {
-    color: white;
-    background-color: #c9d4e3
+.P2{
+    color:white
+    background-color: #8968CD
 }
-
-.P3 {
-    color: white;
-    background-color: #9eadc5
-}
-
-.P4 {
-    color: white;
+.P3{
+    color:white
     background-color: #7a85a1
+}
+.P4{
+    color:white
+    background-color: #9AC0CD
 }
 </style>

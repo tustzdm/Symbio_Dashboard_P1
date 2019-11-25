@@ -103,13 +103,17 @@ export default {
             testresult:{},
             arrowDown:true,
             status:'',
+            runId:'',
             caseId:'',
             statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
             caseTypeArray:['Automation Test','Automation Test','API Test','Performance Test']
         }
     },
     created() {
-        this.Fetch(`/result/getTestResultInfo?token=1&testRunId=483`, {
+        this.status = this.$route.query.status;
+            this.runId = this.$route.query.runId;
+            this.caseId = this.$route.query.caseId;
+        this.Fetch(`/result/getTestResultInfo?token=1&testRunId=${this.runId}`, {
             method: "GET"
         }).then(res => {
             console.log(res);
@@ -117,8 +121,7 @@ export default {
             this.testcase = res.cd.testCase;
             this.testrun = res.cd.testRun
             this.testresult = res.cd.testResult;
-            this.status = this.$route.query.status;
-            this.caseId = this.$route.query.caseId;
+            
 
             this.Fetch(`/result/getReviewList?token=123&testRunId=${this.testrun.id}&trlocale=${this.testrun.locale}`, {
                 method: "POST",
