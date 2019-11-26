@@ -8,15 +8,8 @@
             <chart :options="rect" class="panel" />
 
         </div>
-        <div>
-            <el-card class="listHead" shadow="never" style="padding-right:5%">
-                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Release List</h2>
-                <el-button @click="add" style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
-                    + Add Release
-                </el-button>
-            </el-card>
-        </div>
-        <releaseList></releaseList>
+
+        <releaseList ref="listChild"></releaseList>
     </el-col>
 </el-row>
 </template>
@@ -50,21 +43,14 @@ export default {
     created() {
         this.productId = this.$route.query.productId;
     },
-    mounted() {},
+    mounted() {
+        console.log(1111111111)
+        console.log(this.$refs.listChild);
+    },
     methods: {
         initProjet() {
             getProjectInfo().then(res => {
                 this.projectInfo = res.data
-            })
-        },
-        add() { //通过这个传给 add页面要取的值的类型比如product release
-            this.$router.push({
-                path: '/addproject/index',
-                name: 'addproject',
-                query: {
-                    pageType: 'Release',
-                    productId: this.productId
-                }
             })
         }
     },

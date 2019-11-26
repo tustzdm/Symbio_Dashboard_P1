@@ -1,6 +1,14 @@
 <template>
 <div>
     <el-card class="manage-tabel" shadow="never">
+        <div>
+            <el-card class="listHead" shadow="never" style="padding-right:5%;">
+                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Release List</h2>
+                <el-button v-if="checkRole(3)" @click="add" style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
+                    + Add Release
+                </el-button>
+            </el-card>
+        </div>
         <!-- <el-table :data="tableData"> -->
         <el-table :data="productList" align="center">
             <p>{{productList}}</p>
@@ -50,7 +58,8 @@ export default {
             productList: '',
             trIndex: '',
             tableData: '',
-            productId: ''
+            productId: '',
+            role:'',
         }
     },
     created() {
@@ -79,6 +88,7 @@ export default {
                 method: "GET"
             }).then(res => {
                 console.log(res);
+                this.role = res.cd.role;
                 this.productList = res.cd.data;
                 console.log(this.productList);
             });
@@ -125,6 +135,22 @@ export default {
                     alert(err);
                 });
             })
+        },
+        checkRole(x) {
+            return this.isRoleEnable(this.role, x);
+        },
+        add() { //通过这个传给 add页面要取的值的类型比如product release
+            this.$router.push({
+                path: '/addproject/index',
+                name: 'addproject',
+                query: {
+                    pageType: 'Release',
+                    productId: this.productId
+                }
+            })
+        },
+        checkRole(x) {
+            return this.isRoleEnable(this.role, x);
         }
     }
 }

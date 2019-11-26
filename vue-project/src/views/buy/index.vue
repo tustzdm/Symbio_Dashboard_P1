@@ -8,15 +8,8 @@
             <chart :options="rect" class="panel" />
 
         </div>
-        <div>
-            <el-card class="listHead" shadow="never" style="padding-right:5%;">
-                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Product List</h2>
-                <el-button @click="add" style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
-                    + Add Product
-                </el-button>
-            </el-card>
-        </div>
-        <productList></productList>
+        
+        <productList ref="listChild"></productList>
     </el-col>
 </el-row>
 </template>
@@ -39,7 +32,8 @@ export default {
     data() {
         return {
             pie: getPie(),
-            rect: getRect()
+            rect: getRect(),
+            role:''
         }
     },
     components: {
@@ -48,7 +42,7 @@ export default {
     },
     mounted() {
         // document.getElementsByClassName('echarts')[0].style.width = document.body.clientWidth * (11 / 27) + 'px';
-        // document.getElementsByClassName('echarts')[1].style.width = document.body.clientWidth * (11 / 27) + 'px';
+        // document.getElementsByClassName('echarts')[1].style.width = document.body.clientWidth * (11 / 27) + 'px';)
     },
     methods: {
         initProjet() {

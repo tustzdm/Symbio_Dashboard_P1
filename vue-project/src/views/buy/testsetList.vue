@@ -2,6 +2,14 @@
 <div>
     
     <el-card class="manage-tabel" shadow="never">
+        <div>
+            <el-card class="listHead" shadow="never" style="padding-right:5%;">
+                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">TestSet List</h2>
+                <el-button v-if="checkRole(3)" @click="add"  style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
+                    + Add TestSet
+                </el-button>
+            </el-card>
+        </div>
         <!-- <el-table :data="tableData"> -->
         <el-table :data="productList">
             <el-table-column prop="name" label="Name" align="center" :width="0.5*tabelWidth">
@@ -50,7 +58,8 @@ export default {
             productList: '',
             trIndex: '',
             tableData:'',
-            releaseId: ''
+            releaseId: '',
+            role:''
         }
     },
     created() {
@@ -79,6 +88,7 @@ export default {
                 method: "GET"
             }).then(res => {
                 console.log(res);
+                this.role = res.cd.role;
                 this.productList = res.cd.data;
                 console.log(this.productList);
             });
@@ -124,6 +134,20 @@ export default {
                 }).catch(err => {
                     alert(err);
                 });
+            })
+        },
+        checkRole(x){
+           return this.isRoleEnable(this.role,x);
+        },
+         add() {
+            this.$router.push({
+                path: '/addproject/index',
+                name: 'addproject',
+                query: {
+                    pageType: 'TestSet',
+                    productId: this.productId,
+                    releaseId: this.releaseId
+                }
             })
         }
     }

@@ -1,6 +1,14 @@
 <template>
 <div class="sss">
     <el-card class="manage-tabel" shadow="never">
+        <div>
+            <el-card class="listHead" shadow="never" style="padding-right:5%;">
+                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Product List</h2>
+                <el-button v-if="checkRole(3)" @click="add"  style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
+                    + Add Product
+                </el-button>
+            </el-card>
+        </div>
         <!-- <el-table :data="tableData"> -->
         <el-table :data="productList" >
             <el-table-column prop="name" label="Name" :width="0.5*tabelWidth" align="center">
@@ -23,8 +31,8 @@
             </el-table-column>
             <el-table-column align="right" label="Operation">
                 <template slot-scope="scope">
-                    <el-button :formId="scope.row.id" class="editDeleteBtn" @click="editRouter" icon="el-icon-edit" circle></el-button>
-                    <el-button :formId="scope.row.id" class="editDeleteBtn" @click="deleteTr" type="danger" icon="el-icon-delete" circle></el-button>
+                    <el-button v-if="checkRole(2)" :formId="scope.row.id" class="editDeleteBtn" @click="editRouter" icon="el-icon-edit" circle></el-button>
+                    <el-button v-if="checkRole(3)" :formId="scope.row.id" class="editDeleteBtn" @click="deleteTr" type="danger" icon="el-icon-delete" circle></el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -48,7 +56,8 @@ export default {
             currentPage: 1,
             productList: '',
             trIndex: '',
-            tableData:''
+            tableData:'',
+            role:'',
         }
     },
     created() {
@@ -76,6 +85,7 @@ export default {
                 method: "GET"
             }).then(res => {
                 console.log(res);
+                this.role = res.cd.role;
                 this.productList = res.cd.data;
                 console.log(this.productList);
             });
@@ -107,7 +117,7 @@ export default {
                 cancelButtonText: 'Cancel',
                 type: 'warning'
             }).then(() => {
-                this.$axios.post(`/testmgmt/removeProduct?token=111&id=${this.productList[this.trIndex].id}`).then(res => {
+                this.$axios.post(`/testmgmt/removeProduct?token=${localStorage.getItem('token')}&id=${this.productList[this.trIndex].id}`).then(res => {
                     // success callback
                     console.log(res);
                     var ec = res.data.ec;
@@ -121,6 +131,18 @@ export default {
                 }).catch(err => {
                     alert(err);
                 });
+            })
+        },
+        checkRole(x){
+           return this.isRoleEnable(this.role,x);
+        },
+         add() {
+            this.$router.push({
+                path: '/addproject/index',
+                name: 'addproject',
+                query: {
+                    pageType: 'Product'
+                }
             })
         }
     }

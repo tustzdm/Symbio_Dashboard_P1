@@ -111,6 +111,7 @@ export default {
         this.Fetch(`/testmgmt/getTestCaseList?token=${localStorage.getItem('token')}&testSetId=${this.testsetId}`, {
             method: "GET",
         }).then(res => {
+            console.log(res);
             this.dataList = res.cd.data;
             console.log(this.dataList)
             this.tableColownms = res.cd.columns;

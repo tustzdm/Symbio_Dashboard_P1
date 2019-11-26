@@ -11,9 +11,11 @@ import { asyncRouterMap } from "@/router/meunsRouterMap";
 import store from "@/store";
 import i18n from "@/lang";
 import Fetch from './utils/fetch';
+import isRoleEnable from './utils/role'
 import "./main.css";
 Vue.prototype.Fetch = Fetch;
 Vue.prototype.$axios = axios;
+Vue.prototype.isRoleEnable = isRoleEnable;
 axios.defaults.baseURL = '/api';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -42,7 +44,6 @@ asyncRouterMap.then(res => {
 router.beforeEach((to, from, next) => {
     if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
       if (localStorage.getItem('token')) { // 通过vuex state获取当前的token是否存在
-        console.log('11111')
         next();
       } else {
         next({

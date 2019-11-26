@@ -8,14 +8,6 @@
             <chart :options="rect" class="panel" />
 
         </div>
-        <div>
-            <el-card class="listHead" shadow="never" style="padding-right:5%">
-                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Testset List</h2>
-                <el-button @click="add" style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
-                    + Add Testset
-                </el-button>
-            </el-card>
-        </div>
         <testsetList></testsetList>
     </el-col>
 </el-row>
