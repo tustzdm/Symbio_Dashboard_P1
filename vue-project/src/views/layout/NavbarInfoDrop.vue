@@ -6,8 +6,8 @@
         <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="forms">Forms</el-dropdown-item>
-        <el-dropdown-item command="EditPages">Page Element</el-dropdown-item>
+        <el-dropdown-item v-if="this.user!='15340193294'" command="forms">Forms</el-dropdown-item>
+        <el-dropdown-item v-if="this.user!='15340193294'" command="EditPages">Page Element</el-dropdown-item>
         <el-dropdown-item command="logout">{{$t('sidebarDropDown.logout')}}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -22,12 +22,14 @@ import storage from '@/utils/storage'
 export default {
   name: 'navbarInfoDrop',
   data() {
-    return {}
+    return {
+      user:localStorage.getItem('loginUser')
+    }
   },
   computed: {
     username() {
       // return this.$store.state.user.name || storage.get('USER').name
-      return  storage.get('username')
+      return  storage.get('username')//
     },
     avatarUrl() {
       return this.$store.state.user.avatar || storage.get('USER').avatar

@@ -183,7 +183,8 @@ export default {
             let { username, password } = this.ruleForm
             this.remember ? storage.set('loginUser', username) : storage.remove('loginUser', username)
             const response = await this.$store.dispatch('loginbyUser', {
-              username: username.trim(),
+              // username: username.trim(),
+              username: username,
               password: password
             })
             this.loading = false

@@ -103,7 +103,7 @@
     </div>
     <!-- import dialog -->
     <el-dialog title="Import" :visible.sync="centerDialogVisible" width="30%" center>
-        <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/upload?token=1&testSetId=${this.testSetId}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+        <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/upload?token=${this.token}&testSetId=${this.testSetId}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
             <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.excel file only, less than 500m</div>
@@ -206,15 +206,17 @@ export default {
             tepnameList: [],
             tepId: '5',
             testSelectList: [],
-            fileList: []
+            fileList: [],
+            token:''
         }
     },
     created() {
-        this.productId=localStorage.getItem('result_productId')||480;//默认初始值为上次访问的，没有记录会访问最新的，这里设置为固定的480
+        this.token=localStorage.getItem('token');
+        this.productId=localStorage.getItem('result_productId');//默认初始值为上次访问的，没有记录会访问最新的，这里设置为固定的480
         this.releaseId=localStorage.getItem('result_releaseId');
         this.testSetId=localStorage.getItem('result_testSetId');
         this.getNavgationList();
-        this.Fetch(`/result/getTEPInfo?token=1&testSetId=1`, {
+        this.Fetch(`/result/getTEPInfo?token=${this.token}&testSetId=1`, {
             method: "GET"
         }).then(res => {
             console.log(res);
@@ -228,7 +230,7 @@ export default {
     mounted() {},
     watch: {
         tepId: function (val) {
-            this.Fetch(`/result/getTEPInfo?token=1&testSetId=1&tepId=${val}`, {
+            this.Fetch(`/result/getTEPInfo?token=${this.token}&testSetId=1&tepId=${val}`, {
                 method: "GET"
             }).then(res => {
                 console.log(res);
@@ -354,7 +356,7 @@ export default {
             this.Fetch(`/result/run`, {
                 method: "POST",
                 body: {
-                    "token": "123",
+                    "token": this.token,
                     "productId": this.productId,
                     "releaseId": this.releaseId,
                     "testSetId": this.testSetId
