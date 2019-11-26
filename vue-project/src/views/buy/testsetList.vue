@@ -75,7 +75,7 @@ export default {
     components: {},
     methods: {
         getProductList() {
-            this.Fetch(`/testmgmt/getTestSetList?token=1&releaseId=${this.releaseId}`, {//需要改成${this.releaseId}
+            this.Fetch(`/testmgmt/getTestSetList?token=${localStorage.getItem('token')}&releaseId=${this.releaseId}`, {//需要改成${this.releaseId}
                 method: "GET"
             }).then(res => {
                 console.log(res);
@@ -110,7 +110,7 @@ export default {
                 cancelButtonText: 'Cancel',
                 type: 'warning'
             }).then(() => {
-                this.$axios.post(`/testmgmt/removeTestSet?token=111&id=${this.productList[this.trIndex].id}`).then(res => {
+                this.$axios.post(`/testmgmt/removeTestSet?token=${localStorage.getItem('token')}&id=${this.productList[this.trIndex].id}`).then(res => {
                     // success callback
                     console.log(res);
                     var ec = res.data.ec;

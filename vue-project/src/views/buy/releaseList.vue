@@ -75,7 +75,7 @@ export default {
     components: {},
     methods: {
         getProductList() {
-            this.Fetch(`/testmgmt/getReleaseList?token=1&productId=${this.productId}`, {
+            this.Fetch(`/testmgmt/getReleaseList?token=${localStorage.getItem('token')}&productId=${this.productId}`, {
                 method: "GET"
             }).then(res => {
                 console.log(res);
@@ -110,7 +110,7 @@ export default {
                 cancelButtonText: 'Cancel',
                 type: 'warning'
             }).then(() => {
-                this.$axios.post(`/testmgmt/removeRelease?token=111&id=${this.productList[this.trIndex].id}`).then(res => {
+                this.$axios.post(`/testmgmt/removeRelease?token=${localStorage.getItem('token')}&id=${this.productList[this.trIndex].id}`).then(res => {
                     // success callback
                     console.log(res);
                     var ec = res.data.ec;

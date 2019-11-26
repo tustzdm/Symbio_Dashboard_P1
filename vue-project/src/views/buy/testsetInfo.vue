@@ -52,7 +52,7 @@
         </el-dialog>
 
         <el-dialog title="Import" :visible.sync="centerDialogVisible" width="30%" center>
-            <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/upload?token=1&testSetId=${this.testsetId}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+            <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/upload?token=${this.token}&testSetId=${this.testsetId}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
                 <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
                 <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.excel file only, less than 500m</div>
@@ -94,7 +94,8 @@ export default {
             centerDialogVisible: false,
             caseTypeList: ['', 'Automation TestCase', 'Manual TestCase', '', 'API TestCase', '', '', '', 'Performance TestCase'],
             stepContent: {},
-            index: 0
+            index: 0,
+            token:''
         }
     },
     components: {
@@ -103,10 +104,11 @@ export default {
     },
     mounted() {},
     created() {
+        this.token=localStorage.getItem('token');
         this.productId = this.$route.query.productId;
         this.releaseId = this.$route.query.releaseId;
         this.testsetId = this.$route.query.testsetId;
-        this.Fetch(`/testmgmt/getTestCaseList?token=1&testSetId=${this.testsetId}`, {
+        this.Fetch(`/testmgmt/getTestCaseList?token=${localStorage.getItem('token')}&testSetId=${this.testsetId}`, {
             method: "GET",
         }).then(res => {
             this.dataList = res.cd.data;
@@ -134,7 +136,7 @@ export default {
             // })
         },
         getTestCases() {
-            this.Fetch(`/testmgmt/getTestCaseList?token=1&testSetId=${this.testsetId}`, {
+            this.Fetch(`/testmgmt/getTestCaseList?token=${localStorage.getItem('token')}&testSetId=${this.testsetId}`, {
                 method: "GET",
             }).then(res => {
                 this.dataList = res.cd.data;
