@@ -59,12 +59,12 @@ public class ProductController extends BaseController {
                                  @RequestParam(value = "locale",required = false,defaultValue = "en_US") String locale,
                                  @RequestParam(value = "id") Integer id) {
         Result result;
-        Integer userId = 0;
         try {
-//            result = productAuthService.getProductListAuth(token);
-//            if (result.hasError()) {
-//                return result;
-//            }
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
 
             result = productService.getProductInfo(userId, id);
             if (result.hasError()) {
@@ -90,7 +90,12 @@ public class ProductController extends BaseController {
 //            }
 
             // Set update user id
-            Integer userId = 1;
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
             product.setUpdateUser(userId);
 
             result = productService.updateProduct(product);
@@ -111,10 +116,11 @@ public class ProductController extends BaseController {
                                 @RequestParam(value = "id") Integer id) {
         Result result;
         try {
-//            result = productAuthService.removeProductAuth(token);
-//            if (result.hasError()) {
-//                return result;
-//            }
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
 
             result = productService.removeProduct(id);
             if (result.hasError()) {
@@ -139,20 +145,25 @@ public class ProductController extends BaseController {
     @RequestMapping("/getProductChart")
     public Result getProductChart(@RequestParam(value = "token") String token,
                                      @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale) {
-        Integer userId = 0;
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
+
         return productService.getProductChart(userId, locale);
     }
 
     private Result getProductListBase(String token, String locale, Integer pageIndex, Integer pageSize) {
         logger.trace("getProductListBase() Enter. token = "+ token);
 
-        Result resultUserId = getUserIdByToken(token);
-        if (resultUserId.hasError()) {
-            return resultUserId;
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
         }
-        Integer userId = (Integer) resultUserId.getCd();
+        Integer userId = (Integer) retUserToken.getCd();
 
-        Result retResult = productService.getProductPageList2(userId, locale, pageIndex, pageSize);
+        Result retResult = productService.getProductPageList(userId, locale, pageIndex, pageSize);
         if(retResult.hasError()) {
             logger.debug(String.format("Get Error Info from productService. ec=%s, em=%s", retResult.getEc(), retResult.getEm()));
             if ("000121".equals(retResult.getEc())) {
@@ -170,12 +181,12 @@ public class ProductController extends BaseController {
                                    @RequestParam(value = "uiInfo", required = false, defaultValue = "1") Integer uiInfo,
                                    @RequestParam(value = "id", required = false, defaultValue = "0") Integer id) {
         Result result;
-        Integer userId = 0;
         try {
-//            result = productAuthService.getProductListAuth(token);
-//            if (result.hasError()) {
-//                return result;
-//            }
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
 
             result = productService.getProductUiInfo(userId, locale, uiInfo, id);
             if (result.hasError()) {

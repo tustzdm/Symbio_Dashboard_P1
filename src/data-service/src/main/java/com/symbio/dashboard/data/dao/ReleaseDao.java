@@ -290,12 +290,16 @@ public class ReleaseDao {
      * @param pageSize
      * @return
      */
-    public Result getReleaseList(String locale, Integer productId, Integer pageIndex, Integer pageSize) {
+    public Result getReleaseList(Integer userId, String locale, Integer productId, Integer pageIndex, Integer pageSize) {
         logger.trace("ReleaseDao.getReleaseList() Enter.");
         logger.trace(String.format("Args: locale = %s, productId = &d, pageIndex = %d, pageSize = %d", locale, productId, pageIndex, pageSize));
 
         CommonListDTO retProdDTO = new CommonListDTO(locale, pageIndex, pageSize);
         Result retResult = new Result(retProdDTO);
+
+        // Get Menu role
+        Integer nRole = commonDao.getUserMenuRole(userId);
+        retProdDTO.setRole(nRole);
 
         List<SysListSetting> listSetting = sysListSettingRep.getEntityInfo(SystemListSetting.Release.toString());
         if (CommonUtil.isEmpty(listSetting)) {
@@ -344,7 +348,7 @@ public class ReleaseDao {
      * @param total
      * @return
      */
-    public Result getNavigationList(String locale, Integer productId, Integer total) {
+    public Result getNavigationList(Integer userId, String locale, Integer productId, Integer total) {
         Result retResult = null;
 
         try {
@@ -359,7 +363,7 @@ public class ReleaseDao {
                 }
 
                 if (CommonUtil.isEmpty(listRelease)) {
-                    return new Result(new ArrayList<>());
+                    return commonDao.getRoleAndListResult(userId, new ArrayList<>());
                 }
 
                 List<Map<String, Object>> retList = new ArrayList<>();
@@ -367,7 +371,7 @@ public class ReleaseDao {
                     retList.add(BusinessUtil.getReleaseUIListInfo(item));
                 }
 
-                retResult = new Result(retList);
+                retResult = commonDao.getRoleAndListResult(userId, retList);
             } else {
                 String strFields = "id,name";
                 String sql = String.format("SELECT %s FROM `release` WHERE product_id = %d AND display = 1 ORDER BY update_time DESC", strFields, productId);
@@ -378,11 +382,11 @@ public class ReleaseDao {
                 // Fetch db
                 List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
                 if (CommonUtil.isEmpty(listResult)) {
-                    return new Result(new ArrayList<>());
+                    return commonDao.getRoleAndListResult(userId, new ArrayList<>());
                 }
                 // Change to Map
                 List<Map<String, Object>> listRelease = EntityUtils.castMap(listResult, Release.class, strFields);
-                retResult = new Result(listRelease);
+                retResult = commonDao.getRoleAndListResult(userId, listRelease);
             }
         } catch (Exception e) {
             e.printStackTrace();

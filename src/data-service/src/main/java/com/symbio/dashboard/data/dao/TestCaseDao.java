@@ -65,7 +65,7 @@ public class TestCaseDao {
      * @param pageSize
      * @return
      */
-    public Result getTestCaseList(String locale, Integer testSetId, Integer pageIndex, Integer pageSize) {
+    public Result getTestCaseList(Integer userId, String locale, Integer testSetId, Integer pageIndex, Integer pageSize) {
         log.trace("TestCaseDao.getTestCaseList() Enter.");
         log.debug(String.format("Args: locale = %s, testSetId = &d, pageIndex = %d, pageSize = %d", locale, testSetId, pageIndex, pageSize));
 

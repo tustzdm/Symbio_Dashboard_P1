@@ -15,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 @Slf4j
 public class AuthUserServiceImpl implements AuthUserService {
@@ -49,5 +52,22 @@ public class AuthUserServiceImpl implements AuthUserService {
 
     log.trace(funcName + " Exit");
     return retResult;
+  }
+
+  @Override
+  public Result<Integer> getUserRole(String page, Integer userId) {
+    Result<Integer> retRole = new Result<>();
+
+    Integer role = 7;
+
+    if (userId == 13) role = 1;
+    retRole.setCd(role);
+
+    return retRole;
+
+  }
+
+  private List<Map<String, Object>> getMenuRoleList(Integer userId) {
+    return null;
   }
 }

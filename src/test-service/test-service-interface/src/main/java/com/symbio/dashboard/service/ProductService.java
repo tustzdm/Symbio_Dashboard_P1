@@ -11,7 +11,7 @@ public interface ProductService {
 
     Result getProductList(Integer userId);
 
-    Result getProductPageList(Integer userId, String locale, int pageIndex, int pageSize);
+    //Result getProductPageList(Integer userId, String locale, int pageIndex, int pageSize);
 
     Result getProductPageList(Integer userId, int pageIndex, int pageSize);
 
@@ -21,8 +21,7 @@ public interface ProductService {
 
     Result removeProduct(Integer id);
 
-    // Temp
-    Result getProductPageList2(Integer userId, String locale, Integer pageIndex, Integer pageSize);
+    Result getProductPageList(Integer userId, String locale, Integer pageIndex, Integer pageSize);
 
     Result getNavigationList(Integer userId, String locale, Integer total);
 

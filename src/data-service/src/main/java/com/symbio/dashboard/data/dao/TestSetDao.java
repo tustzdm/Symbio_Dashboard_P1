@@ -174,12 +174,16 @@ public class TestSetDao {
      * @param pageSize
      * @return
      */
-    public Result getTestSetList(String locale, Integer releaseId, Integer pageIndex, Integer pageSize) {
+    public Result getTestSetList(Integer userId, String locale, Integer releaseId, Integer pageIndex, Integer pageSize) {
         logger.trace("TestSetDao.getTestSetList() Enter.");
         logger.trace(String.format("Args: locale = %s, releaseId = &d, pageIndex = %d, pageSize = %d", locale, releaseId, pageIndex, pageSize));
 
         CommonListDTO retProdDTO = new CommonListDTO(locale, pageIndex, pageSize);
         Result retResult = new Result(retProdDTO);
+
+        // Get Menu role
+        Integer nRole = commonDao.getUserMenuRole(userId);
+        retProdDTO.setRole(nRole);
 
         List<SysListSetting> listSetting = sysListSettingRep.getEntityInfo(SystemListSetting.TestSet.toString());
         if (CommonUtil.isEmpty(listSetting)) {
@@ -240,7 +244,11 @@ public class TestSetDao {
                 listUiInfo = commonDao.getUIInfoByPage(UIInfoPage.TestSet.toString());
             }
             testsetUiDto.setLocale(locale);
-            testsetUiDto.setRole(7);
+
+            // Get Menu role
+            // testsetUiDto.setRole(7);
+            Integer nRole = commonDao.getUserMenuRole(userId);
+            testsetUiDto.setRole(nRole);
 
             testsetUiDto.setUiInfo(commonDao.getUiInfoList(locale, UIInfoPage.TestSet.toString(), listUiInfo));
             testsetUiDto.setData(new HashMap<String, Object>());
@@ -279,7 +287,7 @@ public class TestSetDao {
     }
 
     public Result getNavigationList(Integer userId, String locale, Integer releaseId, Integer total) {
-        Result retResult = null;
+        Result<Map<String, Object>> retResult = new Result("");
 
         try {
             String strFields = "id,name";
@@ -291,11 +299,11 @@ public class TestSetDao {
             // Fetch db
             List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
             if (CommonUtil.isEmpty(listResult)) {
-                return new Result(new ArrayList<>());
+                return commonDao.getRoleAndListResult(userId, new ArrayList());
             }
             // Change to Map
             List<Map<String, Object>> listRelease = EntityUtils.castMap(listResult, TestSet.class, strFields);
-            retResult = new Result(listRelease);
+            retResult = commonDao.getRoleAndListResult(userId, listRelease);
         } catch (Exception e) {
             e.printStackTrace();
             retResult = commonDao.getResultArgs(locale, "000102", "getting TestSet navigation info");

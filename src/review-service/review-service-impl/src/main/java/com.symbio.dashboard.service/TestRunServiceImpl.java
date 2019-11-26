@@ -351,15 +351,15 @@ public class TestRunServiceImpl implements TestRunService {
             data.setTestSetId(testRun.getTestSetId());
         }
 
-        Result retProduct = productDao.getNavigationList(testRun.getLocale(), null);
+        Result retProduct = productDao.getNavigationList(null, testRun.getLocale(), null);
         if(retProduct.isSuccess()) {
-            data.setProductList((List<Map<String, Object>>)retProduct.getCd());
+            data.setProductList(commonDao.decodeResultListData(retProduct)); // (List<Map<String, Object>>)retProduct.getCd()
         }
 
-        Result retRelease = releaseDao.getNavigationList(testRun.getLocale(), testRun.getProductId(), null);
+        Result retRelease = releaseDao.getNavigationList(null, testRun.getLocale(), testRun.getProductId(), null);
         List<Map<String, Object>> listData = null;
         if(retRelease.isSuccess()) {
-            listData = (List<Map<String, Object>>)retRelease.getCd();
+            listData = commonDao.decodeResultListData(retRelease);//(List<Map<String, Object>>)retRelease.getCd();
             if(BusinessUtil.isIdEmpty(testRun.getReleaseId()) && !listData.isEmpty()) {
                 data.setReleaseId((Integer) listData.get(0).get("id"));
             }
@@ -367,7 +367,7 @@ public class TestRunServiceImpl implements TestRunService {
         }
         Result retTestSet = testSetDao.getNavigationList(testRun.getUserId(), testRun.getLocale(), data.getReleaseId(), null);
         if(retRelease.isSuccess()) {
-            listData = (List<Map<String, Object>>)retTestSet.getCd();
+            listData = commonDao.decodeResultListData(retTestSet);// (List<Map<String, Object>>)retTestSet.getCd();
             if(BusinessUtil.isIdEmpty(testRun.getTestSetId()) && !listData.isEmpty()) {
                 data.setTestSetId((Integer) listData.get(0).get("id"));
             }

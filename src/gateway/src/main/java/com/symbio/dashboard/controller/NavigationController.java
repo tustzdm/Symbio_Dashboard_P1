@@ -70,6 +70,7 @@ public class NavigationController extends BaseController {
         }
 
         Integer userId = (Integer) resultUserId.getCd();
+
         return productService.getNavigationList(userId, locale, total);
     }
 
@@ -78,7 +79,13 @@ public class NavigationController extends BaseController {
                                            @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                            @RequestParam(value = "productId") Integer productId,
                                            @RequestParam(value = "total", required = false, defaultValue = "") Integer total) {
-        Integer userId = 0;
+        Result resultUserId = getUserIdByToken(token);
+        if (resultUserId.hasError()) {
+            return resultUserId;
+        }
+
+        Integer userId = (Integer) resultUserId.getCd();
+
         return releaseService.getNavigationList(userId, locale, productId, total);
     }
 
@@ -87,7 +94,13 @@ public class NavigationController extends BaseController {
                                            @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                            @RequestParam(value = "releaseId") Integer releaseId,
                                            @RequestParam(value = "total", required = false, defaultValue = "") Integer total) {
-        Integer userId = 0;
+        Result resultUserId = getUserIdByToken(token);
+        if (resultUserId.hasError()) {
+            return resultUserId;
+        }
+
+        Integer userId = (Integer) resultUserId.getCd();
+
         return testSetService.getNavigationList(userId, locale, releaseId, total);
     }
 }

@@ -34,9 +34,14 @@ public class TestSetController extends BaseController {
     public Result getTestSetInfo(@RequestParam(value = "token") String token,
                                  @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                  @RequestParam(value = "id") Integer id) {
-        Integer userId = 0;
         Result result;
         try {
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
             result = testSetService.getTestSetInfo(userId, id);
             if (result.hasError()) {
                 return result;
@@ -55,7 +60,11 @@ public class TestSetController extends BaseController {
         Result result;
         try {
             // Set update user id
-            Integer userId = 1;
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
             testSet.setUpdateUser(userId);
 
             result = testSetService.updateTestSet(userId, locale, testSet);
@@ -75,6 +84,12 @@ public class TestSetController extends BaseController {
                                 @RequestParam(value = "id") Integer id) {
         Result result;
         try {
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
             result = testSetService.removeTestSet(id);
             if (result.hasError()) {
                 return result;
@@ -92,7 +107,12 @@ public class TestSetController extends BaseController {
                                  @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                  @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
                                  @RequestParam(value = "pageSize", required = false) Integer pageSize) {
-        Integer userId = 0;
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
+
         Result result = testSetService.getTestSetList(userId, locale, releaseId, pageIndex, pageSize);
         if (result.hasError()) {
             return result;
@@ -106,7 +126,12 @@ public class TestSetController extends BaseController {
                                   @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                   @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
                                   @RequestParam(value = "pageSize", required = false) Integer pageSize) {
-        Integer userId = 0;
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
+
         Result result = testSetService.getTestCaseList(userId, locale, testSetId, pageIndex, pageSize);
         if (result.hasError()) {
             return result;
@@ -120,12 +145,12 @@ public class TestSetController extends BaseController {
                                    @RequestParam(value = "uiInfo", required = false, defaultValue = "1") Integer uiInfo,
                                    @RequestParam(value = "id", required = false, defaultValue = "0") Integer id) {
         Result result;
-        Integer userId = 0;
         try {
-//            result = productAuthService.getProductListAuth(token);
-//            if (result.hasError()) {
-//                return result;
-//            }
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
 
             result = testSetService.getTestSetUiInfo(userId, locale, uiInfo, id);
             if (result.hasError()) {
@@ -142,7 +167,12 @@ public class TestSetController extends BaseController {
     @RequestMapping("/getTestSetChart")
     public Result getTestSetChart(@RequestParam(value = "token") String token,
                                   @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale) {
-        Integer userId = 0;
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
+
         return testSetService.getTestSetChart(userId, locale);
     }
 }

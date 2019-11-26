@@ -34,9 +34,14 @@ public class ReleaseController extends BaseController {
     public Result getReleaseInfo(@RequestParam(value = "token") String token,
                                  @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                  @RequestParam(value = "id") Integer id) {
-        Integer userId = 0;
         Result result;
         try {
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
             result = releaseService.getReleaseInfo(userId, id);
             if (result.hasError()) {
                 return result;
@@ -54,7 +59,12 @@ public class ReleaseController extends BaseController {
                                 @RequestBody Release release) {
         Result result;
         // Set update user id
-        Integer userId = 1;
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
+
         release.setUpdateUser(userId);
         try {
             result = releaseService.updateRelease(release);
@@ -74,6 +84,12 @@ public class ReleaseController extends BaseController {
                                 @RequestParam(value = "id") Integer id) {
         Result result;
         try {
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
             result = releaseService.removeRelease(id);
             if (result.hasError()) {
                 return result;
@@ -91,7 +107,12 @@ public class ReleaseController extends BaseController {
                                  @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                  @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
                                  @RequestParam(value = "pageSize", required = false) Integer pageSize) {
-        Integer userId = 0;
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
+
         Result result = releaseService.getReleaseList(userId, locale, productId, pageIndex, pageSize);
         if (result.hasError()) {
             return result;
@@ -105,8 +126,13 @@ public class ReleaseController extends BaseController {
                                    @RequestParam(value = "uiInfo", required = false, defaultValue = "1") Integer uiInfo,
                                    @RequestParam(value = "id") Integer id) {
         Result result;
-        Integer userId = 0;
         try {
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
             result = releaseService.getReleaseUiInfo(userId, locale, uiInfo, id);
             if (result.hasError()) {
                 return result;
@@ -122,7 +148,12 @@ public class ReleaseController extends BaseController {
     @RequestMapping("/getReleaseChart")
     public Result getReleaseChart(@RequestParam(value = "token") String token,
                                   @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale) {
-        Integer userId = 0;
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
+
         return releaseService.getReleaseChart(userId, locale);
     }
 }

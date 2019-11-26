@@ -69,7 +69,7 @@ public class ReleaseServiceImpl implements ReleaseService {
 
     @Override
     public Result getReleaseList(Integer userId, String locale, Integer productId, Integer pageIndex, Integer pageSize) {
-        Result retResult = releaseDao.getReleaseList(locale, productId, pageIndex, pageSize);
+        Result retResult = releaseDao.getReleaseList(userId, locale, productId, pageIndex, pageSize);
         if(retResult.hasError()) {
             logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
         }
@@ -82,7 +82,7 @@ public class ReleaseServiceImpl implements ReleaseService {
             return commonDao.getResult("000101", "Product Id");
         }
 
-        return releaseDao.getNavigationList(locale, productId, total);
+        return releaseDao.getNavigationList(userId, locale, productId, total);
     }
 
     @Override

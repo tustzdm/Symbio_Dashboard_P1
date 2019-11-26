@@ -10,4 +10,6 @@ import com.symbio.dashboard.Result;
 
 public interface AuthUserService {
   Result getUserInfo(String token);
+
+  Result<Integer> getUserRole(String page, Integer userId);
 }

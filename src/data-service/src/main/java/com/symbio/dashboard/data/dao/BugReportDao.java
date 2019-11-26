@@ -575,18 +575,18 @@ public class BugReportDao {
             data.setTestSetId(testRun.getTestSetId());
         }
 
-        Result retProduct = productDao.getNavigationList(testRun.getLocale(), null);
+        Result retProduct = productDao.getNavigationList(null, testRun.getLocale(), null);
         if (retProduct.isSuccess()) {
-            listData = (List<Map<String, Object>>) retProduct.getCd();
+            listData = commonDao.decodeResultListData(retProduct);//(List<Map<String, Object>>) retProduct.getCd();
             if (BusinessUtil.isIdEmpty(testRun.getProductId()) && !listData.isEmpty()) {
                 data.setProductId((Integer) listData.get(0).get("id"));
             }
             data.setProductList(listData);
         }
 
-        Result retRelease = releaseDao.getNavigationList(testRun.getLocale(), testRun.getProductId(), null);
+        Result retRelease = releaseDao.getNavigationList(null, testRun.getLocale(), testRun.getProductId(), null);
         if (retRelease.isSuccess()) {
-            listData = (List<Map<String, Object>>) retRelease.getCd();
+            listData = commonDao.decodeResultListData(retRelease); //(List<Map<String, Object>>) retRelease.getCd();
             if (BusinessUtil.isIdEmpty(testRun.getReleaseId()) && !listData.isEmpty()) {
                 data.setReleaseId((Integer) listData.get(0).get("id"));
             }
@@ -594,7 +594,7 @@ public class BugReportDao {
         }
         Result retTestSet = testSetDao.getNavigationList(testRun.getUserId(), testRun.getLocale(), data.getReleaseId(), null);
         if (retRelease.isSuccess()) {
-            listData = (List<Map<String, Object>>) retTestSet.getCd();
+            listData = commonDao.decodeResultListData(retTestSet); //(List<Map<String, Object>>) retTestSet.getCd();
             if (BusinessUtil.isIdEmpty(testRun.getTestSetId()) && !listData.isEmpty()) {
                 data.setTestSetId((Integer) listData.get(0).get("id"));
             }

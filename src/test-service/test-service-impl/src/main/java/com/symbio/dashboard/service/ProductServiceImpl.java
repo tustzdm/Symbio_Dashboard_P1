@@ -4,6 +4,7 @@ import com.symbio.dashboard.Result;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.charts.BarChart;
 import com.symbio.dashboard.data.charts.PieChart;
+import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.dao.IssueDao;
 import com.symbio.dashboard.data.dao.ProductDao;
 import com.symbio.dashboard.data.dao.UserDao;
@@ -37,6 +38,8 @@ public class ProductServiceImpl implements ProductService {
     private static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Autowired
+    private CommonDao commonDao;
+    @Autowired
     private IssueDao issueDao;
     @Autowired
     private ProductDao productDao;
@@ -64,12 +67,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Result getProductList(Integer userId) {
         return getProductList(userId, Locales.EN_US.toString());
-    }
-
-    @Override
-    public Result getProductPageList(Integer userId, String locale, int pageIndex, int pageSize) {
-
-        return null;
     }
 
     @Override
@@ -214,11 +211,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Result getProductPageList2(Integer userId, String locale, Integer pageIndex, Integer pageSize) {
+    public Result getProductPageList(Integer userId, String locale, Integer pageIndex, Integer pageSize) {
 
-        Integer role = 7;
-
-        Result retResult = productDao.getProductList2(userId, role, locale, pageIndex, pageSize);
+        Result retResult = productDao.getProductList2(userId, null, locale, pageIndex, pageSize);
         if(retResult.hasError()) {
             logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
         }
@@ -229,7 +224,7 @@ public class ProductServiceImpl implements ProductService {
     public Result getNavigationList(Integer userId, String locale, Integer total){
         logger.trace("ProductServiceImpl.getNavitionList Enter. total = %d", total);
 
-        Result retResult = productDao.getNavigationList(locale, total);
+        Result retResult = productDao.getNavigationList(userId, locale, total);
         if(retResult.hasError()) {
             logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
         }

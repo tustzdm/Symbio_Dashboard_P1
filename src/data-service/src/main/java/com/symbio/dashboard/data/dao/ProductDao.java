@@ -398,6 +398,12 @@ public class ProductDao {
                 CommonListDTOFactory.createNewCommonListDTO(locale, pageIndex, pageSize);
         Result retResult = new Result(retProdDTO);
 
+        // Get Menu role
+        if (role == null) {
+            role = commonDao.getUserMenuRole(userId);
+        }
+        retProdDTO.setRole(role);
+
         List<SysListSetting> listSetting = sysListSettingRep.getEntityInfo(SystemListSetting.Product.toString());
         if (CommonUtil.isEmpty(listSetting)) {
             return retResult;
@@ -444,8 +450,8 @@ public class ProductDao {
      * @param total
      * @return
      */
-    public Result getNavigationList(String locale, Integer total) {
-        Result retResult = new Result("");
+    public Result getNavigationList(Integer userId, String locale, Integer total) {
+        Result<Map<String, Object>> retResult = new Result("");
 
         try {
             int nFetchDataMode = 2; // 1 - Product， 2-Map
@@ -461,7 +467,7 @@ public class ProductDao {
                 if (CommonUtil.isEmpty(listProduct)) {
                     return new Result("000120", "Product Navigation");
                 }
-                retResult = new Result(listProduct);
+                retResult = commonDao.getRoleAndListResult(userId, listProduct);
             } else {
                 String strFields = "id,name";
                 String sql = String.format("SELECT %s FROM product WHERE display = 1 ORDER BY id DESC", strFields);
@@ -475,7 +481,7 @@ public class ProductDao {
                 }
                 // Change to Map
                 List<Map<String, Object>> listProduct = EntityUtils.castMap(listResult, Product.class, strFields);
-                retResult = new Result(listProduct);
+                retResult = commonDao.getRoleAndListResult(userId, listProduct);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -513,7 +519,7 @@ public class ProductDao {
             }
             // Change to Map
             List<Map<String, Object>> listProduct = EntityUtils.castMap(listResult, Product.class, strFields);
-            retResult = new Result(listProduct);
+            retResult = commonDao.getRoleAndListResult(userId, listProduct);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -563,7 +569,7 @@ public class ProductDao {
      */
     public Result getNavigationListByUserRole(Integer userId, String locale, Integer total) {
         if (CommonUtil.isEmpty(userId)) {
-            return getNavigationList(locale, total);
+            return getNavigationList(null, locale, total);
         } else {
             return getNavigationListByUserRoleEx(userId, locale, total);
         }

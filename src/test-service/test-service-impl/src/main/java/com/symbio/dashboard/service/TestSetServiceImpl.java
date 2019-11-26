@@ -52,7 +52,7 @@ public class TestSetServiceImpl implements TestSetService {
 
     @Override
     public Result getTestCaseList(Integer userId, String locale, Integer testSetId, Integer pageIndex, Integer pageSize) {
-        Result retResult = testCaseDao.getTestCaseList(locale, testSetId, pageIndex, pageSize);
+        Result retResult = testCaseDao.getTestCaseList(userId, locale, testSetId, pageIndex, pageSize);
         if (retResult.hasError()) {
             logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
         }
@@ -61,7 +61,7 @@ public class TestSetServiceImpl implements TestSetService {
 
     @Override
     public Result getTestSetList(Integer userId, String locale, Integer releaseId, Integer pageIndex, Integer pageSize) {
-        Result retResult = testsetDao.getTestSetList(locale, releaseId, pageIndex, pageSize);
+        Result retResult = testsetDao.getTestSetList(userId, locale, releaseId, pageIndex, pageSize);
         if(retResult.hasError()) {
             logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
         }

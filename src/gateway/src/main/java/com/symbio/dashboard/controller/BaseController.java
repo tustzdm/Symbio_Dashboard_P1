@@ -62,4 +62,15 @@ public class BaseController {
         User userInfo = authUser.getCd();
         return new Result(userInfo.getId());
     }
+
+    public Result<Integer> getUserMenuRole(String page, Integer userId) {
+        String funcName = "BaseController.getUserRoleByPage()";
+
+        Result<Integer> resultRole = authUserSvr.getUserRole(page, userId);
+        if (resultRole.hasError()) {
+            log.error(ErrorConst.getErrorLogMsg(funcName, resultRole));
+            return resultRole;
+        }
+        return resultRole;
+    }
 }

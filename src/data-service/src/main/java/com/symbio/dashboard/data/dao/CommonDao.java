@@ -45,6 +45,67 @@ public class CommonDao {
   }
 
   /**
+   * Menu Role
+   *
+   * @param userId
+   * @return
+   */
+  public static Integer getUserMenuRole(Integer userId) {
+    Integer nRole = 7;
+
+    if (userId == 13) nRole = 1;
+
+    return nRole;
+  }
+
+  /**
+   * Result Data formatter
+   *
+   * @param userId
+   * @param data
+   * @return
+   */
+  public static Result<Map<String, Object>> getRoleAndListResult(Integer userId, List data) {
+    Map<String, Object> mapData = new HashMap<>();
+
+    Integer nRole = 0;
+    if (userId != null && userId > 0) {
+      nRole = getUserMenuRole(userId);
+    }
+
+    mapData.put("role", nRole);
+    mapData.put("data", data);
+
+    return new Result(mapData);
+  }
+
+  /**
+   * For fetching data from getRoleAndListResult()
+   *
+   * @param result
+   * @return
+   */
+  public List<Map<String, Object>> decodeResultListData(Result result) {
+    List<Map<String, Object>> retListData = new ArrayList<>();
+
+    try {
+      if (result.isSuccess()) {
+        Map<String, Object> mapData = (Map<String, Object>) result.getCd();
+
+        if (mapData.containsKey("data")) {
+          retListData = (List<Map<String, Object>>) mapData.get("data");
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      log.error("CommonDao.decodeResultListData() ERROR!!!", e);
+    }
+
+    return retListData;
+
+  }
+
+  /**
    * 得到User参照的field
    * @param listSetting
    * @return
