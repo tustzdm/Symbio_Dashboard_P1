@@ -168,7 +168,7 @@
                                 <span style="font-family:Poppins;">{{item.name}}</span>
                             </div>
                             <div style="float:left; text-align:left;">
-                                <el-input placeholder="repository" style="margin-left:20px;width:300px" :value="item.defaultValue"></el-input>
+                                <el-input v-model="tepParameters[item.name]" placeholder="repository" style="margin-left:20px;width:300px"></el-input>
                             </div>
                         </div>
                     </td>
@@ -207,15 +207,22 @@ export default {
             tepId: '5',
             testSelectList: [],
             fileList: [],
-            token:'',
-            role:''
+            token: '',
+            role: '',
+            tepParameters: {},
+            ids:this.selectedIds
+        }
+    },
+    props: {
+        selectedIds: {
+            type: Array
         }
     },
     created() {
-        this.token=localStorage.getItem('token');
-        this.productId=localStorage.getItem('result_productId');//默认初始值为上次访问的，没有记录会访问最新的，这里设置为固定的480
-        this.releaseId=localStorage.getItem('result_releaseId');
-        this.testSetId=localStorage.getItem('result_testSetId');
+        this.token = localStorage.getItem('token');
+        this.productId = localStorage.getItem('result_productId'); //默认初始值为上次访问的，没有记录会访问最新的，这里设置为固定的480
+        this.releaseId = localStorage.getItem('result_releaseId');
+        this.testSetId = localStorage.getItem('result_testSetId');
         this.getNavgationList();
         this.Fetch(`/result/getTEPInfo?token=${this.token}&testSetId=1`, {
             method: "GET"
@@ -224,9 +231,11 @@ export default {
             this.tepnameList = res.cd.nameList;
             console.log(this.tepnameList);
             this.testSelectList = res.cd.data;
+            for (const iterator of this.testSelectList) {
+                    this.tepParameters[iterator.name]=iterator.defaultValue
+                }
         });
 
-        
     },
     mounted() {},
     watch: {
@@ -237,20 +246,25 @@ export default {
                 console.log(res);
                 this.tepnameList = res.cd.nameList;
                 console.log(this.tepnameList)
-                this.testSelectList = res.cd.data
+                this.testSelectList = res.cd.data;
+                console.log(66666666666)
+                console.log(this.testSelectList);
+                for (const iterator of this.testSelectList) {
+                    this.tepParameters[iterator.name]=iterator.defaultValue
+                }
             });
         },
-        productId:function (val) {
-            localStorage.setItem('result_productId',val);
-            localStorage.setItem('result_productName',this.productName);
+        productId: function (val) {
+            localStorage.setItem('result_productId', val);
+            localStorage.setItem('result_productName', this.productName);
         },
-        releaseId:function (val) {
-            localStorage.setItem('result_releaseId',val);
-            localStorage.setItem('result_releaseName',this.releaseName);
+        releaseId: function (val) {
+            localStorage.setItem('result_releaseId', val);
+            localStorage.setItem('result_releaseName', this.releaseName);
         },
-        testSetId:function (val) {  
-            localStorage.setItem('result_testSetId',val);
-            localStorage.setItem('result_testSetName',this.testSetName);
+        testSetId: function (val) {
+            localStorage.setItem('result_testSetId', val);
+            localStorage.setItem('result_testSetName', this.testSetName);
         }
     },
     methods: {
@@ -356,23 +370,25 @@ export default {
         //run method
         runConfirm() {
             this.runDialogVisible = false;
-            this.Fetch(`/result/run`, {
+            this.Fetch(`/result/runJob`, {
                 method: "POST",
                 body: {
                     "token": this.token,
-                    "productId": this.productId,
-                    "releaseId": this.releaseId,
-                    "testSetId": this.testSetId
+                    "testSetId": this.testSetId,
+                    "tepId": this.tepId,
+                    "ids":  localStorage.getItem('selectedIds').toString(),
+                    "parameters": this.tepParameters
                 }
             }).then(res => {
+                console.log(res);
                 this.$emit('runStatus', true);
                 setTimeout(() => {
                     this.$emit('getTableData', res);
                 }, 3000);
             })
         },
-        checkRole(x){
-           return this.isRoleEnable(this.role,x);
+        checkRole(x) {
+            return this.isRoleEnable(this.role, x);
         }
     }
 }

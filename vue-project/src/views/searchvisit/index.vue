@@ -1,7 +1,7 @@
 <template>
 <div class="buy-root" style="width:85%;margin-left:7.5%">
     <!-- 两个部分mabage-top和(表格、翻页)，两者之间都用flex布局-->
-    <top @runStatus="runStatus($event)" @getTableData="getTableData($event)"></top>
+    <top  @runStatus="runStatus($event)" @getTableData="getTableData($event)"></top>
     <!-- manage-top end -->
 
     <el-card class="caseTabel" shadow="hover" style="border:none">
@@ -69,7 +69,8 @@ export default {
             tableColownms: {},
             statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
             run: false,
-            multipleSelection: []
+            multipleSelection: [],
+            selectIds:[]
         }
     },
     components: {
@@ -117,7 +118,13 @@ export default {
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
+            this.selectIds=[];
+            for(let i = 0; i < this.multipleSelection.length; i++){
+                this.selectIds.push(this.multipleSelection[i].id);
+            }
+            localStorage.setItem('selectedIds',this.selectIds);
             console.log(this.multipleSelection);
+            console.log(this.selectIds);
         },
         getTableData(val) {
             this.dataList = val.cd.data;

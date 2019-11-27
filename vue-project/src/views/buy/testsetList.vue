@@ -32,8 +32,8 @@
             </el-table-column>
             <el-table-column align="right" label="Operation">
                 <template slot-scope="scope">
-                    <el-button :formId="scope.row.id" class="editDeleteBtn" @click="editRouter" icon="el-icon-edit" circle></el-button>
-                    <el-button :formId="scope.row.id" class="editDeleteBtn" @click="deleteTr" type="danger" icon="el-icon-delete" circle></el-button>
+                    <el-button v-if="checkRole(2)" :formId="scope.row.id" class="editDeleteBtn" @click="editRouter" icon="el-icon-edit" circle></el-button>
+                    <el-button v-if="checkRole(3)" :formId="scope.row.id" class="editDeleteBtn" @click="deleteTr" type="danger" icon="el-icon-delete" circle></el-button>
                 </template>
             </el-table-column>
         </el-table>
