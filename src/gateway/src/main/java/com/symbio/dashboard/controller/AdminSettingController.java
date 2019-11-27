@@ -2,12 +2,6 @@ package com.symbio.dashboard.controller;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.common.CommonAuthService;
-import com.symbio.dashboard.data.dao.CommonDao;
-import com.symbio.dashboard.service.ProductService;
-import com.symbio.dashboard.service.ReleaseService;
-import com.symbio.dashboard.service.ReleaseServiceImpl;
-import com.symbio.dashboard.service.TestSetService;
-import com.symbio.dashboard.setting.service.CommonService;
 import com.symbio.dashboard.setting.service.CommonServiceImpl;
 import com.symbio.dashboard.setting.service.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +38,13 @@ public class AdminSettingController extends BaseController {
     @RequestMapping("/getDictionary")
     public Result getDictionary(@RequestParam(value = "token") String token,
                                 @RequestParam(value = "type") String type) {
+        // Step1: Check user token
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
+
         return commonService.getDictionaryByType(type);
     }
 
@@ -52,6 +53,13 @@ public class AdminSettingController extends BaseController {
                                 @RequestParam(value = "type") String type) {
         Result result;
         try {
+            // Step1: Check user token
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
             result = commonAuthService.getPageNamesDictionary(token);
             if (result.hasError()) {
                 return result;
@@ -75,6 +83,13 @@ public class AdminSettingController extends BaseController {
                               @RequestParam(value = "table") String table) {
         Result result;
         try {
+            // Step1: Check user token
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
             result = commonService.getUserDefinedFields(locale, table);
             if (result.hasError()) {
                logger.error(String.format("ec:%s, em:%s",result.getEc(),result.getEm()));
@@ -100,6 +115,13 @@ public class AdminSettingController extends BaseController {
                               @RequestParam(value = "status", required = false, defaultValue = "1") Integer status) {
         Result result;
         try {
+            // Step1: Check user token
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
             result = new Result(userService.getUserListByStatus(locale, status));
             if (result.hasError()) {
                 return result;

@@ -60,6 +60,7 @@ public class ProductController extends BaseController {
                                  @RequestParam(value = "id") Integer id) {
         Result result;
         try {
+            // Step1: Check user token
             Result retUserToken = getUserIdByToken(token);
             if (retUserToken.hasError()) {
                 return retUserToken;
@@ -89,7 +90,7 @@ public class ProductController extends BaseController {
 //                return result;
 //            }
 
-            // Set update user id
+            // Step1: Check user token
             Result retUserToken = getUserIdByToken(token);
             if (retUserToken.hasError()) {
                 return retUserToken;
@@ -116,6 +117,7 @@ public class ProductController extends BaseController {
                                 @RequestParam(value = "id") Integer id) {
         Result result;
         try {
+            // Step1: Check user token
             Result retUserToken = getUserIdByToken(token);
             if (retUserToken.hasError()) {
                 return retUserToken;
@@ -145,6 +147,7 @@ public class ProductController extends BaseController {
     @RequestMapping("/getProductChart")
     public Result getProductChart(@RequestParam(value = "token") String token,
                                      @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale) {
+        // Step1: Check user token
         Result retUserToken = getUserIdByToken(token);
         if (retUserToken.hasError()) {
             return retUserToken;
@@ -157,6 +160,7 @@ public class ProductController extends BaseController {
     private Result getProductListBase(String token, String locale, Integer pageIndex, Integer pageSize) {
         logger.trace("getProductListBase() Enter. token = "+ token);
 
+        // Step1: Check user token
         Result retUserToken = getUserIdByToken(token);
         if (retUserToken.hasError()) {
             return retUserToken;
@@ -182,6 +186,7 @@ public class ProductController extends BaseController {
                                    @RequestParam(value = "id", required = false, defaultValue = "0") Integer id) {
         Result result;
         try {
+            // Step1: Check user token
             Result retUserToken = getUserIdByToken(token);
             if (retUserToken.hasError()) {
                 return retUserToken;

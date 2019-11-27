@@ -12,6 +12,7 @@ import com.symbio.dashboard.data.repository.TestCaseRep;
 import com.symbio.dashboard.data.repository.TestResultRep;
 import com.symbio.dashboard.data.repository.TestRunRep;
 import com.symbio.dashboard.data.repository.TestSetRep;
+import com.symbio.dashboard.dto.TestRunDTO;
 import com.symbio.dashboard.dto.TestRunExcelDTO;
 import com.symbio.dashboard.dto.TestRunUiDTO;
 import com.symbio.dashboard.enums.EnumDef;
@@ -119,6 +120,31 @@ public class TestRunServiceImpl implements TestRunService {
         }
 
         log.trace("TestRunServiceImpl.runTestRun() Exit");
+        return retResult;
+    }
+
+    @Override
+    public Result runTestRun(TestRunDTO testRun) {
+        String funcName = "TestRunServiceImpl.runTestRun(TestRunDTO)";
+        log.trace(funcName + " Enter");
+        log.trace(testRun.toString());
+
+        Result<TestRunUiDTO> retResult = new Result<>();
+        String locale = testRun.getLocale();
+
+        try {
+//            retResult = testRunDao.getList(locale, testRun);
+//            if (retResult.isSuccess()) {
+//                // Demo result
+//                retResult = testRunDao.demoRunResult(retResult);
+//            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(ErrorConst.getExceptionLogMsg(funcName, e));
+            retResult = ErrorConst.getInvokingExceptionResult(funcName, e);
+        }
+
+        log.trace(funcName + " Exit");
         return retResult;
     }
 

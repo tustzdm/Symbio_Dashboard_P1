@@ -2,6 +2,7 @@ package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
+import com.symbio.dashboard.dto.TestRunDTO;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.model.JenkinsJobHistoryMain;
 import com.symbio.dashboard.model.TestResult;
@@ -14,6 +15,8 @@ public interface TestRunService {
     Result getTestRunList(String locale, TestRunVO testRun);
 
     Result runTestRun(String locale, TestRunVO testRun);
+
+    Result runTestRun(TestRunDTO testRun);
 
     Result getTestRunDemoList(String locale, TestRunVO testRun);
 

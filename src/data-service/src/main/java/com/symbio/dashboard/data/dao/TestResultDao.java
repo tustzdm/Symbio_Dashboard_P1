@@ -117,7 +117,7 @@ public class TestResultDao {
      * @param trLocale
      * @return
      */
-    public Result<ResultReviewUiDTO> getResultReviewList(String locale, Integer testRunId, String trLocale, Integer pageIndex, Integer pageSize) {
+    public Result<ResultReviewUiDTO> getResultReviewList(Integer userId, String locale, Integer testRunId, String trLocale, Integer pageIndex, Integer pageSize) {
         log.trace("TestResultDao.getResultReviewList() Enter");
 
         ResultReviewUiDTO resultReviewDTO = new ResultReviewUiDTO(locale, pageIndex, pageSize);
@@ -138,7 +138,11 @@ public class TestResultDao {
             return retResult;
         }
 
-        resultReviewDTO.setRole(7);
+        // Get Menu role
+        Integer nRole = commonDao.getUserMenuRole(userId);
+        if (nRole == 7) nRole = 63;
+        resultReviewDTO.setRole(nRole);
+
         resultReviewDTO.setSourceLocale(Locales.EN_US.toString());
         resultReviewDTO.setTargetLocale(trLocale);
         resultReviewDTO.setTestRunId(testRunId);

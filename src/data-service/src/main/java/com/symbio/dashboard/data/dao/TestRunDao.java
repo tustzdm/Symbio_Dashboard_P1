@@ -73,7 +73,11 @@ public class TestRunDao {
         }
 
         List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
-        testRunUiDTO.setRole(7);
+
+        // Get Menu role
+        Integer nRole = commonDao.getUserMenuRole(testRun.getUserId());
+        testRunUiDTO.setRole(nRole);
+
         testRunUiDTO.setLocale(testRun.getLocale());
         getData(testRunUiDTO, testRun);
 

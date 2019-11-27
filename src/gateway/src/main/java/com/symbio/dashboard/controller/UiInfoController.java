@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/ui")
 @RestController
 @Slf4j
-public class UiInfoController {
+public class UiInfoController extends BaseController {
 
     @Autowired
     private CommonAuthService commonAuthService;

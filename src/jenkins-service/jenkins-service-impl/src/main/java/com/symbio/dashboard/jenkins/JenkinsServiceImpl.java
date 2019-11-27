@@ -283,26 +283,26 @@ public class JenkinsServiceImpl implements JenkinsService {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
-    public Result<String> runJob(Integer runCaseType, Map<String, String> params) {
+    public Result<String> runJob(Integer runCaseType, Map<String, Object> params) {
 
         if (runCaseType != EnumDef.CASE_TYPE.AUTOMATION.getCode()) {
             log.warn("Do not support this runCaseType: " + runCaseType);
-            return commonDao.getResult("");
+            return commonDao.getResult("300600", runCaseType);
         }
 
         Result<String> retResult = new Result<>();
 
-        Map<String, String> mapData = params;
-        Integer userId = Integer.parseInt(mapData.get("userId"));
-        String locale = mapData.get("locale");
-        Integer testRunId = Integer.parseInt(mapData.get("testRunId"));
-        Integer tepId = Integer.parseInt(mapData.get("tepId"));
+        Map<String, Object> mapData = params;
+        Integer userId = Integer.parseInt(mapData.get("userId").toString());
+        String locale = mapData.get("locale").toString();
+        Integer testRunId = Integer.parseInt(mapData.get("testRunId").toString());
+        Integer tepId = Integer.parseInt(mapData.get("tepId").toString());
 
         return this.runJob(userId, locale, null, testRunId, tepId, mapData);
     }
 
     @Override
-    public Result<String> runJob(Integer userId, String locale, Integer testSetId, Integer testRunId, Integer tepId, Map<String, String> params) {
+    public Result<String> runJob(Integer userId, String locale, Integer testSetId, Integer testRunId, Integer tepId, Map<String, Object> params) {
         Result<String> retResult = new Result<>();
 
         // Step1 - Get JSI info
@@ -329,7 +329,7 @@ public class JenkinsServiceImpl implements JenkinsService {
             List<JenkinsJobArgs> listJJA = retJJA.getCd();
 
             String jobRunToken = commonDao.getConfigValueByKey(ProjectConst.JENKINS_JOB_TOKEN);
-            mapRunArgs = JenkinsJobArgsFactory.buildRunMap(listJJA, jobRunToken);
+            mapRunArgs = JenkinsJobArgsFactory.buildRunMapWithMap(listJJA, jobRunToken, params);
 
             // Step3 - run job
             try {

@@ -50,7 +50,13 @@ public class NavigationController extends BaseController {
         logger.trace("getProductNavigator() Enter. token = "+ token);
         logger.trace(String.format("locale = %s, total = %d", locale, total));
 
-        Integer userId = 0;
+        // Step1: Check user token
+        Result resultUserId = getUserIdByToken(token);
+        if (resultUserId.hasError()) {
+            return resultUserId;
+        }
+        Integer userId = (Integer) resultUserId.getCd();
+
         Result retResult = productService.getNavigationList(userId, locale, total);
         if(retResult.hasError()) {
             logger.debug(String.format("Get Error Info from productService. ec=%s, em=%s", retResult.getEc(), retResult.getEm()));
@@ -64,11 +70,11 @@ public class NavigationController extends BaseController {
     public Result getProductNavigationList(@RequestParam(value = "token") String token,
                                            @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                            @RequestParam(value = "total", required = false, defaultValue = "") Integer total) {
+        // Step1: Check user token
         Result resultUserId = getUserIdByToken(token);
         if (resultUserId.hasError()) {
             return resultUserId;
         }
-
         Integer userId = (Integer) resultUserId.getCd();
 
         return productService.getNavigationList(userId, locale, total);
@@ -79,6 +85,7 @@ public class NavigationController extends BaseController {
                                            @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                            @RequestParam(value = "productId") Integer productId,
                                            @RequestParam(value = "total", required = false, defaultValue = "") Integer total) {
+        // Step1: Check user token
         Result resultUserId = getUserIdByToken(token);
         if (resultUserId.hasError()) {
             return resultUserId;
@@ -94,6 +101,7 @@ public class NavigationController extends BaseController {
                                            @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                            @RequestParam(value = "releaseId") Integer releaseId,
                                            @RequestParam(value = "total", required = false, defaultValue = "") Integer total) {
+        // Step1: Check user token
         Result resultUserId = getUserIdByToken(token);
         if (resultUserId.hasError()) {
             return resultUserId;

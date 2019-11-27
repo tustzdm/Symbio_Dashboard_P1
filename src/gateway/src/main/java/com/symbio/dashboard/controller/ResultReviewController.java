@@ -2,9 +2,11 @@ package com.symbio.dashboard.controller;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
+import com.symbio.dashboard.business.JenkinsJobArgsFactory;
 import com.symbio.dashboard.constant.CommonDef;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.dto.TEPInfoDTO;
+import com.symbio.dashboard.dto.TestRunDTO;
 import com.symbio.dashboard.dto.TestRunExcelDTO;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.jenkins.JenkinsService;
@@ -25,6 +27,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName - ResultReviewController
@@ -118,7 +121,13 @@ public class ResultReviewController extends BaseController {
 
         Result retResult = new Result();
         try {
-            Integer userId = 0;
+            // Step1: Check user token
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
             retResult = resultReviewService.getList(userId, locale, testRunId, trlocale, pageIndex, pageSize);
             if (retResult.hasError()) {
                 log.error(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
@@ -131,22 +140,47 @@ public class ResultReviewController extends BaseController {
         return retResult;
     }
 
-    @RequestMapping("/run")
-    public Result runTestRun(@RequestBody TestRunVO testRun) {
-        log.trace("ResultReviewController.runTestRun() Enter");
+    @RequestMapping("/runJob")
+    public Result runTestRun(@RequestBody TestRunDTO testRun) {
+        String funcName = "ResultReviewController.runTestRun()";
+        log.trace(funcName + " Enter");
 
         Result retResult = new Result();
         try {
-            Integer userId = 0;
-            testRun.setUserId(userId);
-            if (StringUtil.isEmpty(testRun.getLocale())) {
-                testRun.setLocale(Locales.EN_US.toString());
+            String locale = testRun.getLocale();
+            if (CommonUtil.isEmpty(locale)) {
+                locale = Locales.EN_US.toString();
+                testRun.setLocale(locale);
             }
 
-            retResult = testRunService.runTestRun(testRun.getLocale(), testRun);
+            // Step1: check user token
+            Result retUserToken = getUserIdByToken(testRun.getToken());
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+            testRun.setUserId(userId);
 
-            if (retResult.hasError()) {
-                log.error(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+            // Step2: trigger job
+            String testRunIds = testRun.getIds();
+            if (CommonUtil.isEmpty(testRunIds)) {
+                return getResultArgs(locale, ErrorConst.ERROR_PARAMETER_EMPTY, "Test run id");
+            }
+            Integer tepId = testRun.getTepId();
+
+
+            // Step3: run Job
+            Result<String> resultJobRun = null;
+            Map<String, Object> mapData = null;
+            Integer testRunId = null;
+            String[] arrTestRunId = testRunIds.split(",");
+            for (int i = 0; i < arrTestRunId.length; i++) {
+                testRunId = Integer.parseInt(arrTestRunId[i]);
+                mapData = JenkinsJobArgsFactory.getExactJobParams(testRun.getParameters(), testRunId);
+                resultJobRun = jenkinsService.runJob(userId, locale, testRun.getTestSetId(), testRunId, tepId, mapData);
+                if (resultJobRun.hasError()) {
+                    retResult = new Result(resultJobRun);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -177,6 +211,13 @@ public class ResultReviewController extends BaseController {
         Result<String> retSaveFile = new Result<String>();
 
         try {
+            // Step1: Check user token
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
             retSaveFile = fileService.saveExcel(request, CommonDef.FOLDER_PATH_IMPORT_TESTCASE);
             if (retSaveFile.hasError()) {
                 log.info(ErrorConst.getWarningLogMsg(funcName, retSaveFile));
@@ -232,6 +273,13 @@ public class ResultReviewController extends BaseController {
         Result<String> retUploadFile = new Result<String>();
 
         try {
+            // Step1: Check user token
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
             retUploadFile = fileService.uploadZipFile(request, CommonDef.FOLDER_PATH_DASHBOARD_ZIP_ROOT);
             if (retUploadFile.hasError()) {
                 log.info(ErrorConst.getWarningLogMsg(funcName, retUploadFile));
@@ -340,7 +388,12 @@ public class ResultReviewController extends BaseController {
         log.debug(funcName + " Enter");
         log.debug("token = {}, locale = {}, testRunId = {}", token, locale, testRunId);
 
-        Integer userId = 0;
+        // Step1: Check user token
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
 
         Result retTestResult = testResultService.getTestResultInfoByTestRunId(userId, locale, testRunId);
         if (retTestResult.hasError()) {
@@ -368,7 +421,13 @@ public class ResultReviewController extends BaseController {
                              @RequestParam(value = "tepId", required = false, defaultValue = "") Integer tepId) {
         Result retResult = new Result();
         try {
-            Integer userId = 1;
+            // Step1: Check user token
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
             Result<TEPInfoDTO> resultJenkins = jenkinsService.getTEPInfo(userId, locale, testSetId, tepId);
             if (resultJenkins.hasError()) {
                 retResult = new Result(resultJenkins);
@@ -391,7 +450,12 @@ public class ResultReviewController extends BaseController {
         String funcName = "ResultReviewController.getBugInfo()";
         Result retResult = new Result();
 
-        Integer userId = 1;
+        // Step1: Check user token
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
 
         retResult = resultReviewService.getBugInfo(userId, locale, id, screenshotId);
         if (retResult.hasError()) {
@@ -406,7 +470,13 @@ public class ResultReviewController extends BaseController {
                               @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                               @RequestBody BugInfo data) {
         String funcName = "ResultReviewController.saveBugInfo()";
-        Integer userId = 1;
+
+        // Step1: Check user token
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
 
         Result retResult = resultReviewService.saveBugInfo(userId, locale, data);
         if (retResult.hasError()) {
@@ -431,7 +501,13 @@ public class ResultReviewController extends BaseController {
                                          @PathVariable Integer id,
                                          @RequestParam String status) {
         String funcName = "ResultReviewController.changeScreenShotStatus()";
-        Integer userId = 1;
+
+        // Step1: Check user token
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
 
         Result retResult = resultReviewService.changeScreenShotStatus(userId, locale, id, status);
         if (retResult.hasError()) {
@@ -448,7 +524,14 @@ public class ResultReviewController extends BaseController {
                                 @RequestParam(value = "screenShotId", required = false, defaultValue = "") Integer screenShotId,
                                 @RequestParam(value = "content") String content) {
         String funcName = "ResultReviewController.updateComment()";
-        Integer userId = 1;
+
+        // Step1: Check user token
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
+
         Result retResult = resultReviewService.updateScreenShotComment(userId, locale, screenShotId, content);
         if (retResult.hasError()) {
             log.error(ErrorConst.getErrorLogMsg(funcName, retResult));
@@ -461,7 +544,13 @@ public class ResultReviewController extends BaseController {
                                 @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                 @RequestParam(value = "id") Integer id) {
         String funcName = "ResultReviewController.removeComment()";
-        Integer userId = 1;
+        // Step1: Check user token
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
+
         Result retResult = resultReviewService.removeScreenShotComment(userId, locale, id);
         if (retResult.hasError()) {
             log.error(ErrorConst.getErrorLogMsg(funcName, retResult));
@@ -475,7 +564,13 @@ public class ResultReviewController extends BaseController {
                                  @RequestParam(value = "id", required = false, defaultValue = "") Integer id,
                                  @RequestParam(value = "screenShotId", required = false, defaultValue = "") Integer screenShotId) {
         String funcName = "ResultReviewController.getCommentInfo()";
-        Integer userId = 1;
+
+        // Step1: Check user token
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
 
         Result retResult = resultReviewService.getScreenShotComment(userId, locale, id, screenShotId);
         if (retResult.hasError()) {
@@ -565,29 +660,29 @@ public class ResultReviewController extends BaseController {
         return retResult;
     }
 
-    @Deprecated
-    @RequestMapping("/addProductIssue")
-    public Result addProductIssue(@RequestParam(value = "productId") Integer productId) {
-        log.trace("ResultReviewController.addBug() Enter");
-        Result<String> retResult = new Result();
-
-        if (productId != 0) {
-            retResult = issueService.addProductIssue(productId);
-        }
-
-        return retResult;
-    }
-
-    @Deprecated
-    @RequestMapping("/addNewCategory")
-    public Result addNewCategory(@RequestParam(value = "productId") Integer productId) {
-        log.trace("ResultReviewController.addBug() Enter");
-        Result<String> retResult = new Result();
-
-        if (productId != 0) {
-
-        }
-
-        return retResult;
-    }
+//    @Deprecated
+//    @RequestMapping("/addProductIssue")
+//    public Result addProductIssue(@RequestParam(value = "productId") Integer productId) {
+//        log.trace("ResultReviewController.addBug() Enter");
+//        Result<String> retResult = new Result();
+//
+//        if (productId != 0) {
+//            retResult = issueService.addProductIssue(productId);
+//        }
+//
+//        return retResult;
+//    }
+//
+//    @Deprecated
+//    @RequestMapping("/addNewCategory")
+//    public Result addNewCategory(@RequestParam(value = "productId") Integer productId) {
+//        log.trace("ResultReviewController.addBug() Enter");
+//        Result<String> retResult = new Result();
+//
+//        if (productId != 0) {
+//
+//        }
+//
+//        return retResult;
+//    }
 }

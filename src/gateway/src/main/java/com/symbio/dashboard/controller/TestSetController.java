@@ -36,6 +36,7 @@ public class TestSetController extends BaseController {
                                  @RequestParam(value = "id") Integer id) {
         Result result;
         try {
+            // Step1: Check user token
             Result retUserToken = getUserIdByToken(token);
             if (retUserToken.hasError()) {
                 return retUserToken;
@@ -59,7 +60,7 @@ public class TestSetController extends BaseController {
                                 @RequestBody TestSet testSet) {
         Result result;
         try {
-            // Set update user id
+            // Step1: Check user token
             Result retUserToken = getUserIdByToken(token);
             if (retUserToken.hasError()) {
                 return retUserToken;
@@ -84,6 +85,7 @@ public class TestSetController extends BaseController {
                                 @RequestParam(value = "id") Integer id) {
         Result result;
         try {
+            // Step1: Check user token
             Result retUserToken = getUserIdByToken(token);
             if (retUserToken.hasError()) {
                 return retUserToken;
@@ -107,6 +109,7 @@ public class TestSetController extends BaseController {
                                  @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                  @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
                                  @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        // Step1: Check user token
         Result retUserToken = getUserIdByToken(token);
         if (retUserToken.hasError()) {
             return retUserToken;
@@ -126,6 +129,7 @@ public class TestSetController extends BaseController {
                                   @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                   @RequestParam(value = "pageIndex", required = false) Integer pageIndex,
                                   @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+        // Step1: Check user token
         Result retUserToken = getUserIdByToken(token);
         if (retUserToken.hasError()) {
             return retUserToken;
@@ -146,6 +150,7 @@ public class TestSetController extends BaseController {
                                    @RequestParam(value = "id", required = false, defaultValue = "0") Integer id) {
         Result result;
         try {
+            // Step1: Check user token
             Result retUserToken = getUserIdByToken(token);
             if (retUserToken.hasError()) {
                 return retUserToken;
@@ -167,6 +172,7 @@ public class TestSetController extends BaseController {
     @RequestMapping("/getTestSetChart")
     public Result getTestSetChart(@RequestParam(value = "token") String token,
                                   @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale) {
+        // Step1: Check user token
         Result retUserToken = getUserIdByToken(token);
         if (retUserToken.hasError()) {
             return retUserToken;

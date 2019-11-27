@@ -71,7 +71,7 @@ public class ResultReviewServiceImpl implements ResultReviewService {
 
         Result<ResultReviewUiDTO> retResult;
         try {
-            retResult = testResultDao.getResultReviewList(locale, testRunId, trLocale, pageIndex, pageSize);
+            retResult = testResultDao.getResultReviewList(userId, locale, testRunId, trLocale, pageIndex, pageSize);
         } catch (Exception e) {
             e.printStackTrace();
             retResult = commonDao.getResultArgs(locale, "000102", "getting Result Review List");

@@ -121,4 +121,42 @@ public class JenkinsJobArgsFactory {
 
         return map;
     }
+
+    public static Map<String, String> buildRunMapWithMap(List<JenkinsJobArgs> data, String jobToken, Map<String, Object> mapData) {
+        Map<String, String> map = new HashMap<>();
+
+        for (JenkinsJobArgs item : data) {
+            String key = item.getName();
+            String type = item.getType();
+            String runValue = item.getLastRunValue();
+            String defaultValue = item.getDefaultValue();
+
+            if (!JenkinsParameter.FileType.toString().equals(type)) {
+                if (mapData.containsKey(key)) {
+                    map.put(key, mapData.get(key).toString());
+                } else {
+                    map.put(key, getActualRunValue(runValue, defaultValue));
+                }
+            } else {
+                // File Type
+                map.put(key, getActualRunValue(runValue, defaultValue));
+            }
+        }
+
+        // Append job token
+        if (!CommonUtil.isEmpty(jobToken)) {
+            map.put("token", jobToken);
+        }
+
+        return map;
+    }
+
+    public static Map<String, Object> getExactJobParams(Map<String, Object> mapData, Integer testRunId) {
+        Map<String, Object> retMap = mapData;
+
+        if (retMap != null && retMap.containsKey("TestRunID")) {
+            retMap.put("TestRunID", testRunId);
+        }
+        return mapData;
+    }
 }
