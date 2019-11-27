@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @ClassName - TestResultRep
- * @Author - admin
  * @Description
  * @Date - 2019/8/22 14:57
  * @Version 1.0

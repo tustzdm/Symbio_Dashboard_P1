@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 /**
  * Page Object
  * 
- * @author Shawn
- * 
  */
 
 @Data

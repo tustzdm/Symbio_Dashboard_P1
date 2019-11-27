@@ -11,7 +11,6 @@ import java.util.zip.GZIPOutputStream;
 /**
  * 压缩类
  *
- * @author Util
  * @version 1.0
  * @since
  */

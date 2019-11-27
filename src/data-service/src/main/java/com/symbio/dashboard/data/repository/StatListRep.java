@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * @ClassName - StatListRep
- * @Author - Shawn
  * @Description
  * @Date - 2019/11/25
  * @Version 1.0

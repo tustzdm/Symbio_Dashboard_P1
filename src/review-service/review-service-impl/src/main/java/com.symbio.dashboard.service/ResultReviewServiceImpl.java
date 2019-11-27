@@ -25,7 +25,6 @@ import java.util.Map;
 
 /**
  * @ClassName - ResultReviewServiceImpl
- * @Author - Shawn
  * @Description - Result Review Service
  * @Date - 2019/10/11
  * @Version 1.0

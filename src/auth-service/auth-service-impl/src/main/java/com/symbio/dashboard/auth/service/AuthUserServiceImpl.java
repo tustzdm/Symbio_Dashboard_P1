@@ -1,7 +1,6 @@
 package com.symbio.dashboard.auth.service;
 
 /**
- * @Author: Shawn
  * @version: 1.0
  * @Date: 2019/11/22
  */

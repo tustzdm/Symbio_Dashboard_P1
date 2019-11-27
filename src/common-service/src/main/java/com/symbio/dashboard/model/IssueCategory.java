@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**
  * @ClassName - IssueCategory
- * @Author - admin
  * @Description
  * @Date - 2019/8/27 16:23
  * @Version 1.0

@@ -9,7 +9,6 @@ import java.util.BitSet;
 /**
  * 安全类工具类
  *
- * @author Util
  * @version 1.0
  * @since
  */

@@ -63,7 +63,6 @@ public class Result<T> implements java.io.Serializable {
 
     /**
      * @return boolean
-     * @Author - Danny
      * @Description - 判断是否为成功信息
      * @Date - 2019/7/5
      * @Param - []

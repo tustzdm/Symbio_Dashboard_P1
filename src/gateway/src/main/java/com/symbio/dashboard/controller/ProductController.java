@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @ClassName - ProductController
- * @Author - admin
  * @Description - Product UI controller
  * @Date - 2019/7/17 16:34
  * @Version 1.0

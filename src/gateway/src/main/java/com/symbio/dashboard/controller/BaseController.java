@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @ClassName - BaseController
- * @Author - admin
  * @Description - 控制器
  * @Date - 2019/7/24
  * @Version 1.0

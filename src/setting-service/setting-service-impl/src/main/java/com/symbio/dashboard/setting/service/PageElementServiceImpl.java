@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 
 /**
  * @ClassName - PageElementServiceImpl
- * @Author - Admin
  * @Description -
  * @Date - 2019/8/1
  * @Version 1.0
@@ -41,7 +40,6 @@ public class PageElementServiceImpl implements PageElementService {
 
     /**
      * @return com.symbio.dashboard.Result
-     * @Author - Danny
      * @Description - 获取对应页面元素列表
      * @Date - 2019/7/9
      * @Param - page
@@ -74,7 +72,6 @@ public class PageElementServiceImpl implements PageElementService {
 
     /**
      * @return com.symbio.dashboard.Result
-     * @Author - Danny
      * @Description - 根据id删除相应元素
      * @Date - 2019/7/9
      * @Param - [uiInfoUpload]
@@ -110,7 +107,6 @@ public class PageElementServiceImpl implements PageElementService {
 
     /**
      * @return com.symbio.dashboard.Result
-     * @Author - Danny
      * @Description - 添加或更新页面元素信息
      * @Date - 2019/7/9
      * @Param - [uiInfoUpload]

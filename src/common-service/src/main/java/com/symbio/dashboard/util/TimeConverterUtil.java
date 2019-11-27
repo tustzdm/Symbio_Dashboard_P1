@@ -11,7 +11,6 @@ import java.util.TimeZone;
 /**
  * 时间格式转换工具类(utc时间和本地时间两者的转换)
  *
- * @author Shawn
  * <p>
  * Refer: https://blog.csdn.net/u013412772/article/details/73610803
  */

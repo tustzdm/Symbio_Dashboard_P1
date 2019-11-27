@@ -596,7 +596,6 @@ public class EnumDef {
 //    }
 
     /**
-     * @Author - Danny
      * @Description - Whether replace respective result in success of test run while importing test case
      * @Date - 2019/8/13
      * @Param -

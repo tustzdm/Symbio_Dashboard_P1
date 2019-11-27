@@ -26,7 +26,6 @@ import java.util.*;
 
 /**
  * @ClassName - ReleaseServiceImpl
- * @Author - admin
  * @Description - Release service
  * @Date - 2019/7/26 10:38
  * @Version 1.0

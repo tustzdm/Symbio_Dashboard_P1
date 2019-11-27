@@ -252,7 +252,6 @@ public class CommonUtil {
 
     /**
      * @return boolean
-     * @Author - Danny
      * @Description - Approximate string match
      * @Date - 2019/7/26
      * @Param - [text - The String you are going to match

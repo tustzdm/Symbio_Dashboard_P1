@@ -2,24 +2,14 @@ package com.symbio.dashboard.setting.service;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.data.dao.CommonDao;
-import com.symbio.dashboard.data.repository.ResultMessageRep;
-import com.symbio.dashboard.entity.Message;
 import com.symbio.dashboard.enums.Locales;
-import com.symbio.dashboard.model.ResultMessage;
-import com.symbio.dashboard.util.StringUtil;
-import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @ClassName - ResultMessageServiceImpl
- * @Author - Admin
  * @Description -
  * @Date - 2019/7/31
  * @Version 1.1

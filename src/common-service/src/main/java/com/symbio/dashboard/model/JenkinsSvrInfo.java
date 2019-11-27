@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**
  * @ClassName - JenkinsSvrInfo
- * @Author - admin
  * @Description - jenkins_svr_info实体类
  * @Date - 2019/8/5 15:27
  * @Version 1.0

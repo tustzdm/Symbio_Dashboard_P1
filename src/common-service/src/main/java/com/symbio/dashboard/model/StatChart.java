@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**
  * @ClassName - Stat Chart
- * @Author - Shawn
  * @Description - stat_chart 实体类
  * @Date - 2019/11/25
  * @Version 1.0

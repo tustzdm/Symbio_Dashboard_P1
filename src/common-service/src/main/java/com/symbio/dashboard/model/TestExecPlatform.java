@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**
  * @ClassName - TestExecPlatform
- * @Author - admin
  * @Description - test_exec-platform实体类
  * @Date - 2019/8/5 15:11
  * @Version 1.0

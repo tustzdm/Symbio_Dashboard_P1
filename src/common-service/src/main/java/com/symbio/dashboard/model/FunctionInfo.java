@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**F
  * @ClassName - FunctionInfo
- * @Author -
  * @Description - 此类是数据库[function_info]的实体类
  * @Date - 2019/8/2
  * @Version 1.0

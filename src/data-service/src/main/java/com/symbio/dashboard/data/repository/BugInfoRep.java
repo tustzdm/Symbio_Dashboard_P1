@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @ClassName - BugInfoRep
- * @Author - Shawn
  * @Description
  * @Date - 2019/11/08
  * @Version 1.0

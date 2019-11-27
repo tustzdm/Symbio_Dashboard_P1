@@ -25,7 +25,6 @@ import java.util.*;
 
 /**
  * @ClassName - ProductServiceImpl
- * @Author - Danny
  * @Description - Implementation of Product Service: show product list, add/edit/remove product
  * @Date - 2019/7/17 16:52
  * @Version 1.0

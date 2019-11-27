@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**
  * @ClassName - JenkinsJobParameter
- * @Author - Shawn
  * @Description - jenkins_job_parameter实体类
  * @Date - 2019/8/5 15:18
  * @Version 1.0

@@ -4,7 +4,6 @@ import java.security.MessageDigest;
 import java.security.SecureRandom;
 
 /**
- * @Author: Shawn
  * @Description: HashKit
  * @Date: Created in 2019-07-24
  * @Modified By:

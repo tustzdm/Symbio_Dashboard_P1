@@ -8,7 +8,6 @@ import java.io.Serializable;
 
 /**
  * @ClassName - Dictionary
- * @Author - admin
  * @Description - 数据库dictionary表实体类
  * @Date - 2019/7/15 18:39
  * @Version 1.0

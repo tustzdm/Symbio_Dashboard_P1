@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**
  * @ClassName - JenkinsJobHistoryMain
- * @Author - admin
  * @Description - jenkins_job_history_main实体类
  * @Date - 2019/8/5 16:29
  * @Version 1.0

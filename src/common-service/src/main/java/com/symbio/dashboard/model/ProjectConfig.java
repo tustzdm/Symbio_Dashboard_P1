@@ -8,7 +8,6 @@ import java.io.Serializable;
 
 /**
  * @ClassName - ProjectConfig
- * @Author -
  * @Description - 此类是数据库[project_config]的实体类
  * @Date - 2019/8/2
  * @Version 1.0

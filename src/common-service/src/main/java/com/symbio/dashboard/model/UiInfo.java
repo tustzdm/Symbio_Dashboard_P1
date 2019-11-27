@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**
  * @ClassName - UiInfo
- * @Author - Danny
  * @Description - 此类是数据库ui_info的实体类
  * @Date - 2019/7/5 16:50
  * @Version 1.0

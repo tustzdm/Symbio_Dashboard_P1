@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * @ClassName - SettingServiceImpl
- * @Author - Admin - Setting
  * @Description -
  * @Date - 2019/7/16
  * @Version 1.0

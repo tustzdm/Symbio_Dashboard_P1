@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 /**
  * @ClassName - StatChartRep
- * @Author - Shawn
  * @Description
  * @Date - 2019/11/25
  * @Version 1.0

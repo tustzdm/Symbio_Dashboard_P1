@@ -27,7 +27,6 @@ import java.util.Random;
 
 /**
  * @ClassName - TestRunDao
- * @Author - admin
  * @Description
  * @Date - 2019/8/5 16:53
  * @Version 1.0

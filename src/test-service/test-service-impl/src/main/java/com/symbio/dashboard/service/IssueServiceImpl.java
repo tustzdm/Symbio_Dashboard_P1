@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * @ClassName - IssueServiceImpl
- * @Author - Shawn
  * @Description
  * @Date - 2019/10/23
  * @Version 1.0

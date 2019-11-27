@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @ClassName - AdminSettingController
- * @Author - admin
  * @Description - 控制器
  * @Date - 2019/7/16
  * @Version 1.0

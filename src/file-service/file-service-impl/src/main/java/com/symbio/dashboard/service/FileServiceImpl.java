@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author Shawn
  * @since 2019-08
  */
 

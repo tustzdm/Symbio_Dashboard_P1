@@ -3,8 +3,6 @@ package com.symbio.dashboard.bean;
 /**
  * Page Object
  * 
- * @author Shawn
- * 
  */
 public class Paging implements java.io.Serializable {
 

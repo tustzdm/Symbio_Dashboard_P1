@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**
  * @ClassName - BugInfo
- * @Author - Shawn
  * @Description - bug_info 实体类
  * @Date - 2019/11/08
  * @Version 1.0

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * @ClassName - CommonAuthServiceImpl
- * @Author - admin
  * @Description
  * @Date - 2019/7/17 10:29
  * @Version 1.0

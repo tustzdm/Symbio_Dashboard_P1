@@ -3,7 +3,6 @@ package com.symbio.dashboard.util;
 import java.util.UUID;
 
 /**
- * @Author: Shawn
  * @Description: 处理String的工具类
  * @Date: Created in 2019-07-24
  * @Modified By:

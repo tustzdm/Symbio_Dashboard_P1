@@ -30,7 +30,6 @@ import java.util.Map;
 /**
  * 本类用于对QualityOverview的一个控制，用于控制返回的内容信息
  *
- * @author daizongheng
  */
 
 

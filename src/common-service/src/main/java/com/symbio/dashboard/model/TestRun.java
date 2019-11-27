@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**
  * @ClassName - TestRun
- * @Author - admin
  * @Description - test_run实体类
  * @Date - 2019/8/5 10:24
  * @Version 1.0

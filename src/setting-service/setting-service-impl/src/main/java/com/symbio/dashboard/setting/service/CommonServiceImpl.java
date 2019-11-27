@@ -18,7 +18,6 @@ import java.util.Map;
 
 /**
  * @ClassName - CommonServiceImpl
- * @Author - Admin
  * @Description -
  * @Date - 2019/7/16
  * @Version 1.0
@@ -134,6 +133,7 @@ public class CommonServiceImpl implements CommonService {
      * @param key
      * @return
      */
+    @Override
     public String getConfigValue(String key) {
         String strValue = commonDao.getConfigValueByKey(key);
         return StringUtil.isEmpty(strValue) ? "" : strValue;

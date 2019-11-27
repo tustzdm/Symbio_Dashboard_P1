@@ -9,7 +9,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * @Author: Shawn
  * @Description: 处理Date的工具类
  * @Date: Created in 2019-07-24
  * @Modified By:

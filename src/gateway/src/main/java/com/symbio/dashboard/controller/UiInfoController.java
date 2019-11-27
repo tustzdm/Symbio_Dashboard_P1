@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @ClassName - UiInfoController
- * @Author - admin
  * @Description - UI Info 控制器
  * @Date - 2019/7/5 15:30
  * @Version 1.0
@@ -36,7 +35,6 @@ public class UiInfoController extends BaseController {
      * @InterfaceNumber 5.1
      *
      * @return com.symbio.dashboard.Result
-     * @Author - Danny
      * @Description - 5.1 返回页面所有UI元素
      * @Date - 2019/7/5
      * @Param - [token, page]
@@ -74,7 +72,6 @@ public class UiInfoController extends BaseController {
      * @InterfaceNumber 5.2
      *
      * @return com.symbio.dashboard.Result
-     * @Author - Danny
      * @Description - 添加或跟新页面元素接口
      * @Date - 2019/7/9
      * @Param - [uiInfoUpload]
@@ -110,7 +107,6 @@ public class UiInfoController extends BaseController {
      * @InterfaceNumber 5.3
      *
      * @return com.symbio.dashboard.Result
-     * @Author - Danny
      * @Description - 删除页面元素接口
      * @Date - 2019/7/9
      * @Param - [token, id]

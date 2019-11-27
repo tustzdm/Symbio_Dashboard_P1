@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @ClassName - NavigationController
- * @Author - admin
  * @Description - Navigation controller
  * @Date - 2019/7/26
  * @Version 1.0

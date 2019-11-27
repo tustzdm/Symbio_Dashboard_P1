@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**
  * @ClassName - ParseResultSummary
- * @Author - Shawn
  * @Description - 此类是数据库[parse_result_summary]的实体类
  * @Date - 2019/8/20
  * @Version 1.0

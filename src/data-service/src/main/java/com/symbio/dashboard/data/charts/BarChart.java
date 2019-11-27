@@ -14,7 +14,6 @@ import java.util.Map;
 
 /**
  * @ClassName - BarChart
- * @Author - admin
  * @Description
  * @Date - 2019/7/31 16:32
  * @Version 1.0

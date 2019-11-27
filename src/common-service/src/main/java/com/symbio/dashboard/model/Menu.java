@@ -9,7 +9,6 @@ import java.util.Date;
 
 /**
  * @ClassName - Menu
- * @Author -
  * @Description - 此类是数据库[menu]的实体类
  * @Date - 2019/8/2
  * @Version 1.0

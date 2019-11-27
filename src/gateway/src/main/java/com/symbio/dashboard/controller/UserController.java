@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * @ClassName - UserController
- * @Author - Shawn
  * @Description - User 控制器
  * @Date - 2019/9/10
  * @Version 1.0
@@ -33,7 +32,6 @@ public class UserController extends BaseController {
     /**
      * @return Result
      * @InterfaceNumber
-     * @Author - Shawn
      * @Description -
      * @Date - 2019/9/10
      * @Param -

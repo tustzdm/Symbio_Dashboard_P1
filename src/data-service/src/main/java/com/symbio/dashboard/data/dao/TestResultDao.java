@@ -22,7 +22,6 @@ import java.util.Map;
 
 /**
  * @ClassName - TestResultDao
- * @Author - Shawn
  * @Description
  * @Date - 2019/8/23
  * @Version 1.0

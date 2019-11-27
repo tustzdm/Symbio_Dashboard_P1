@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  * @ClassName - CommentInfoRep
- * @Author - Shawn
  * @Description
  * @Date - 2019/11/19
  * @Version 1.0

@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * @author Shawn
  * @since 2019-08
  */
 public interface FileService {

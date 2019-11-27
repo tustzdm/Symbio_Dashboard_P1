@@ -22,7 +22,6 @@ import java.util.Map;
 
 /**
  * @ClassName - AutomationReportFileServiceImpl
- * @Author - Shawn
  * @Description - Automation Reprot file relevant Service
  * @Date - 2019/8/23
  * @Version 1.0
