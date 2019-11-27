@@ -156,7 +156,7 @@ export default {
         console.log(this.reportInfo);
         console.log(456);
         console.log(this.runId);
-        this.Fetch(`/result/getBugInfo?token=1&id=0&testResultId=1&screenshotId=1300`, {
+        this.Fetch(`/result/getBugInfo?token=${localStorage.getItem('token')}&id=0&testResultId=1&screenshotId=1300`, {
             method: "GET",
         }).then(res => {
             console.log(res);
@@ -364,7 +364,7 @@ export default {
 
             this.$emit('reportForm',this.reortForm)
             console.log(666666666666)
-            // this.Fetch(`/result/saveBugInfo?token=1`, {
+            // this.Fetch(`/result/saveBugInfo?token=${localStorage.getItem('token')}`, {
             //     method: "POST",
             //     body: this.reortForm
             // }).then(res => {

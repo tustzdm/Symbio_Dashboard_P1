@@ -60,7 +60,7 @@ export default {
     created() {
         this.id = this.$route.query.id;
         this.editPageType = this.$route.query.editPageType;
-        this.Fetch(`/testmgmt/get${this.editPageType}UiInfo?token=1&uiInfo=1&id=${this.id}`, { //将所有的数据集合到一个借口里了，id对应Product或者release的值
+        this.Fetch(`/testmgmt/get${this.editPageType}UiInfo?token=${localStorage.getItem('token')}&uiInfo=1&id=${this.id}`, { //将所有的数据集合到一个借口里了，id对应Product或者release的值
             method: "GET"
         }).then(res => {
 
@@ -81,19 +81,19 @@ export default {
 
         });
 
-        // this.Fetch(`/ui/getUiInfoList?token=111&page=product`, {
+        // this.Fetch(`/ui/getUiInfoList?token=${localStorage.getItem('token')}&page=product`, {
         //     method: "GET"
         // }).then(res => {
         //     console.log(res.cd);
         //     this.uiList = res.cd;
         // });
-        // this.Fetch(`/setting/getDictionary?token=1&type=ProductStatus`, {
+        // this.Fetch(`/setting/getDictionary?token=${localStorage.getItem('token')}&type=ProductStatus`, {
         //     method: "GET"
         // }).then(res => {
         //     console.log(res.cd);
         //     this.statusList = res.cd;
         // });
-        // this.Fetch(`/setting/getUserList?token=1`, {
+        // this.Fetch(`/setting/getUserList?token=${localStorage.getItem('token')}`, {
         //     method: "GET"
         // }).then(res => {
         //     console.log(res.cd.cd);
@@ -106,7 +106,7 @@ export default {
     },
     watch: {
         'product.productId': function (val) {
-            this.Fetch(`/navigation/getReleaseList?token=1&productId=${val}`, { 
+            this.Fetch(`/navigation/getReleaseList?token=${localStorage.getItem('token')}&productId=${val}`, { 
                 method: "GET"
             }).then(res => {
 
@@ -119,7 +119,7 @@ export default {
     },
     methods: {
         onSubmit() {
-            this.$axios.post(`/testmgmt/update${this.editPageType}?token=111`, this.product).then(res => {
+            this.$axios.post(`/testmgmt/update${this.editPageType}?token=${localStorage.getItem('token')}`, this.product).then(res => {
                 // success callback
                 console.log(this.product);
                 console.log(res.data);

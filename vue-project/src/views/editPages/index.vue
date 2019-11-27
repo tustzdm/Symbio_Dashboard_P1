@@ -55,7 +55,7 @@ export default {
         }
     },
     created() {
-        this.Fetch('/setting/getUiInfoPage?token=111&type=Page_Element_Setting', {
+        this.Fetch(`/setting/getUiInfoPage?token=${localStorage.getItem('token')}&type=Page_Element_Setting`, {
             method: 'GET'
         }).then(res => {
             this.pageList = res.cd;
@@ -87,7 +87,7 @@ export default {
     },
     methods: {
         getTableData() {
-            this.Fetch(`/ui/getUiInfoList?token=111&page=${this.page}`, {
+            this.Fetch(`/ui/getUiInfoList?token=${localStorage.getItem('token')}&page=${this.page}`, {
                 method: "GET"
             }).then(data => {
                 console.log(data.cd);
@@ -138,7 +138,7 @@ export default {
                 cancelButtonText: 'Cancel',
                 type: 'warning'
             }).then(() => {
-                this.$axios.post(`/ui/removeUiElement?token=111&id=${this.tableData[this.trIndex].id}`).then(res => {
+                this.$axios.post(`/ui/removeUiElement?token=${localStorage.getItem('token')}&id=${this.tableData[this.trIndex].id}`).then(res => {
                     // success callback
                     console.log(res);
                     var ec = res.data.ec;

@@ -106,13 +106,13 @@ export default {
     created() {
         this.form = this.$route.params.tr;
         console.log(this.form);
-        this.Fetch("/setting/getDictionary?token=1&type=HtmlType", {
+        this.Fetch("/setting/getDictionary?token=${localStorage.getItem('token')}&type=HtmlType", {
             method: "GET"
         }).then(res => {
             console.log(res);
             this.typeList = res.cd;
         });
-        this.Fetch(`setting/getDBFields?table=${this.form.page.toLowerCase()}&token=1`, {
+        this.Fetch(`setting/getDBFields?table=${this.form.page.toLowerCase()}&token=${localStorage.getItem('token')}`, {
             method: "GET"
         }).then(res => {
             console.log(res);
@@ -144,13 +144,13 @@ export default {
         },
         submit() {
             var formData = this.form;
-            // this.Fetch('/ui/updateUiElement?token=111&page=product', {
+            // this.Fetch('/ui/updateUiElement?token=${localStorage.getItem('token')}&page=product', {
             //     formData
             // }).then(res => {
             //     console.log(res);
             // });
             // axios
-            this.$axios.post(`/ui/updateUiElement?token=111&page=${this.form.page.toLowerCase()}`, formData).then(res => {
+            this.$axios.post(`/ui/updateUiElement?token=${localStorage.getItem('token')}&page=${this.form.page.toLowerCase()}`, formData).then(res => {
                 // success callback
                 console.log(formData);
                 console.log(res);

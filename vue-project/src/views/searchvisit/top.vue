@@ -27,7 +27,7 @@
                     <el-dropdown-item v-for="item in productList" :class="{selected:item.id==productId}" :command="item.id" :key="item.id">
                         {{item.name}}
                     </el-dropdown-item>
-                    <span>
+                    <span v-if="checkRole(3)">
                         <router-link :to="{ name: 'addproject', query: { pageType: 'Product'}}" class="add_link"><i class="el-icon-plus"></i> Add Product</router-link>
                     </span>
                 </el-dropdown-menu>
@@ -46,7 +46,7 @@
                     <el-dropdown-item v-for="item in releaseList" :class="{selected:item.id==releaseId}" :command="item.id" :key="item.id">
                         {{item.name}}
                     </el-dropdown-item>
-                    <span>
+                    <span v-if="checkRole(3)">
                         <router-link :to="{ name: 'addproject', query: { pageType: 'Release',productId: this.productId}}" class="add_link"><i class="el-icon-plus"></i> Add Release</router-link>
                     </span>
                 </el-dropdown-menu>
@@ -72,7 +72,7 @@
                     <el-dropdown-item v-for="item in testSetList" :class="{selected:item.id==testSetId}" :command="item.id" :key="item.id">
                         {{item.name}}
                     </el-dropdown-item>
-                    <span>
+                    <span v-if="checkRole(3)">
                         <router-link :to="{ name: 'addproject', query: { pageType: 'TestSet',productId: this.productId,releaseId: this.releaseId}}" class="add_link"><i class="el-icon-plus"></i> Add TestSet</router-link>
                     </span>
                 </el-dropdown-menu>
@@ -207,7 +207,8 @@ export default {
             tepId: '5',
             testSelectList: [],
             fileList: [],
-            token:''
+            token:'',
+            role:''
         }
     },
     created() {
@@ -281,7 +282,9 @@ export default {
                     "testSetId": this.testSetId
                 }
             }).then(res => {
+                console.log("getnav")
                 console.log(res);
+                this.role = res.cd.role;
                 this.productId = res.cd.productId;
                 this.releaseId = res.cd.releaseId;
                 this.testSetId = res.cd.testSetId;
@@ -367,6 +370,9 @@ export default {
                     this.$emit('getTableData', res);
                 }, 3000);
             })
+        },
+        checkRole(x){
+           return this.isRoleEnable(this.role,x);
         }
     }
 }

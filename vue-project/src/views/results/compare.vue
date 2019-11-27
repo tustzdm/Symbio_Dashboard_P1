@@ -119,7 +119,7 @@
             <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="dataList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin: 10px 0" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
         </div> -->
         <el-dialog title="UpLoad" :visible.sync="uploadDialogVisible" width="30%" center>
-            <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/uploadTestRunZipFile?token=123`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+            <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/uploadTestRunZipFile?token=${this.token}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
                 <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
                 <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.zip file only, less than 50m</div>
@@ -173,7 +173,8 @@ export default {
             statusList: [],
             reportInfo: {}, //在编辑完信息和图片后会传到这里，用reportInfo接受
             multipleSelection:[],
-            comment_text:'1231234'
+            comment_text:'1231234',
+            token:''
         }
     },
     components: {
@@ -181,6 +182,7 @@ export default {
     },
     created() {
         console.log(2131231231234231)
+        this.token = localStorage.getItem('token');
         this.productName = localStorage.getItem('result_productName');
         this.releaseName = localStorage.getItem('result_releaseName');
         this.testSetName = localStorage.getItem('result_testSetName');
@@ -204,7 +206,7 @@ export default {
             this.$router.go(-1)
         },
         getTableData() {
-            this.Fetch(`/result/getReviewList?token=123&testRunId=${this.runId}&trlocale=${this.locale}`, {
+            this.Fetch(`/result/getReviewList?token=${localStorage.getItem('token')}&testRunId=${this.runId}&trlocale=${this.locale}`, {
                 method: "POST",
                 // body: {
                 //     "token": "123",
@@ -315,7 +317,7 @@ export default {
         },
         openComment() {
             this.commentDialog = true
-            this.Fetch(`/result/screenShot/getComment?token=1&screenShotId=${this.screenShotId}`, {
+            this.Fetch(`/result/screenShot/getComment?token=${localStorage.getItem('token')}&screenShotId=${this.screenShotId}`, {
                 method: "GET"
             }).then((res) => {
                 console.log(2222222);
@@ -328,7 +330,7 @@ export default {
         //submitComment
         submitComment() {
             this.commentDialog = false;
-            this.Fetch(`/result/screenShot/comment?token=1&screenShotId=${this.screenShotId}&content=${this.comment_text}`, {
+            this.Fetch(`/result/screenShot/comment?token=${localStorage.getItem('token')}&screenShotId=${this.screenShotId}&content=${this.comment_text}`, {
                 method: "POST"
             }).then((res) => {
                 console.log(2222222);
@@ -351,7 +353,7 @@ export default {
             }
         },
         passOrFail(status) {
-            this.Fetch(`/result/screenShot/${this.screenShotId}?token=1&status=${status}`, {
+            this.Fetch(`/result/screenShot/${this.screenShotId}?token=${localStorage.getItem('token')}&status=${status}`, {
                 method: "POST"
             }).then(res => {
                 console.log(res)
@@ -373,7 +375,7 @@ export default {
             this.reportInfo = val;
         },
         reportConfirm() {
-            this.Fetch(`/result/saveBugInfo?token=1`, {
+            this.Fetch(`/result/saveBugInfo?token=${localStorage.getItem('token')}`, {
                 method: "POST",
                 body: this.reportInfo
             }).then(res => {
@@ -390,7 +392,7 @@ export default {
             setTimeout(() => {
                 this.reportDialog=true;
             }, 600);
-            this.Fetch(`/result/getBugInfo?token=1&id=5`, {
+            this.Fetch(`/result/getBugInfo?token=${localStorage.getItem('token')}&id=5`, {
                 method: "GET"
             }).then(res => {
                 console.log('jijjjjjjjj')

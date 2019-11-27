@@ -74,7 +74,7 @@ export default {
         this.fatherProductId = this.$route.query.productId;
         this.fatherReleaseId = this.$route.query.releaseId;
 
-        this.Fetch(`/testmgmt/get${this.pageType}UiInfo?token=1&uiInfo=1&id=`, { //将所有的数据集合到一个借口里了，uiInfod对应pageType,id对应Product或者release的值
+        this.Fetch(`/testmgmt/get${this.pageType}UiInfo?token=${localStorage.getItem('token')}&uiInfo=1&id=`, { //将所有的数据集合到一个借口里了，uiInfod对应pageType,id对应Product或者release的值
             method: "GET"
         }).then(res => {
             console.log(res.cd);
@@ -90,7 +90,7 @@ export default {
     },
     watch: {
         product: function (val) {
-            this.Fetch(`/navigation/getReleaseList?token=1&productId=${this.product.productId}`, {
+            this.Fetch(`/navigation/getReleaseList?token=${localStorage.getItem('token')}&productId=${this.product.productId}`, {
                 method: "GET"
             }).then(res => {
                 console.log(res.cd);
@@ -112,7 +112,7 @@ export default {
             return (locale == 'en_US' || typeof locale == 'undefined') ? "Please input " + msg : "Please input" + msg;
         },
         onSubmit() {
-            let url = `/testmgmt/update${this.pageType}?token=111`;
+            let url = `/testmgmt/update${this.pageType}?token=${localStorage.getItem('token')}`;
             this.$axios.post(url, this.product).then(res => {
                 // success callback
                 console.log(this.product);
@@ -167,7 +167,7 @@ export default {
             this.fatherProductId = this.$route.query.productId;
             this.fatherReleaseId = this.$route.query.releaseId;
 
-            this.Fetch(`/testmgmt/get${this.pageType}UiInfo?token=1&uiInfo=1&id=`, { //将所有的数据集合到一个借口里了，uiInfod对应pageType,id对应Product或者release的值
+            this.Fetch(`/testmgmt/get${this.pageType}UiInfo?token=${localStorage.getItem('token')}&uiInfo=1&id=`, { //将所有的数据集合到一个借口里了，uiInfod对应pageType,id对应Product或者release的值
                 method: "GET"
             }).then(res => {
                 console.log(res.cd);

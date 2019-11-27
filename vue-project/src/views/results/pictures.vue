@@ -109,7 +109,7 @@ export default {
         }
     },
     created() {
-        this.Fetch(`/result/getTestResultInfo?token=1&testRunId=483`, {
+        this.Fetch(`/result/getTestResultInfo?token=${localStorage.getItem('token')}&testRunId=483`, {
             method: "GET"
         }).then(res => {
             console.log(res);
@@ -120,7 +120,7 @@ export default {
             this.status = this.$route.query.status;
             this.caseId = this.$route.query.caseId;
 
-            this.Fetch(`/result/getReviewList?token=123&testRunId=${this.testrun.id}&trlocale=${this.testrun.locale}`, {
+            this.Fetch(`/result/getReviewList?token=${localStorage.getItem('token')}&testRunId=${this.testrun.id}&trlocale=${this.testrun.locale}`, {
                 method: "POST",
                 // body: {
                 //     "token": "123",

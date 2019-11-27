@@ -126,13 +126,13 @@ export default {
     created() {
         console.log(this.$route.params)
         this.form.page = this.$route.params.page;
-        this.Fetch("/setting/getDictionary?token=1&type=HtmlType", {
+        this.Fetch("/setting/getDictionary?token=${localStorage.getItem('token')}&type=HtmlType", {
             method: "GET"
         }).then(res => {
             console.log(res);
             this.typeList = res.cd;
         });
-        let url = `setting/getDBFields?table=${this.form.page.toLowerCase()}&token=1`; //这里取的是page的value值，实际上应该去code，先用value转小写，后面还需要把空格也删了
+        let url = `setting/getDBFields?table=${this.form.page.toLowerCase()}&token=${localStorage.getItem('token')}`; //这里取的是page的value值，实际上应该去code，先用value转小写，后面还需要把空格也删了
         this.Fetch(url, {
             method: "GET"
         }).then(res => {
@@ -167,7 +167,7 @@ export default {
             var formData = this.form;
             // var formData = JSON.stringify(this.form);
             console.log(formData);
-            this.$axios.post(`/ui/updateUiElement?token=111&page=${this.form.page}`, formData).then(res => {
+            this.$axios.post(`/ui/updateUiElement?token=${localStorage.getItem('token')}&page=${this.form.page}`, formData).then(res => {
                 // success callback
                 console.log(formData);
                 console.log(res.data);
