@@ -10,7 +10,7 @@
             <el-table-column v-if="run" label="" width="80">
                 <i class="el-icon-loading"></i>
             </el-table-column>
-            <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" :width="['id'].includes(item.field )? '100px':['status','screenshotFlag','locale','priority'].includes(item.field )? '120px':''" sortable :label="item.label">
+            <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" :width="['id'].includes(item.field )? '100px':['status','screenshotFlag','locale','priority'].includes(item.field )? '120px':''" :sortable="['ID','Status','Priority','Case ID'].includes(item.label)" :align="item.label=='ScreenShot'?'center':'left'" :label="item.label">
                 <template slot-scope="scope">
                     <div v-if="!['status','screenshotFlag','priority'].includes(item.field)">
                         {{scope.row[item.field]}}
@@ -26,7 +26,7 @@
                     </div>
                     <div v-if="item.field=='screenshotFlag'" align="center">
                         <router-link :to="{ name: 'pictures', query: { status:scope.row.status, caseId:scope.row.caseId,runId:scope.row.id}}">
-                            <img v-if="scope.row[item.field]!=0" src="../../assets/images/screenshot-icon2.png" alt="">
+                            <img  v-if="scope.row[item.field]!=0" src="../../assets/images/screenshot-icon2.png" alt="">
                         </router-link>
                     </div>
                 </template>

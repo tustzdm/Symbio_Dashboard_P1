@@ -217,17 +217,17 @@ export default {
 
         },
         drawPic() {
-            //add img
-            var imgObj = new Image();
-            imgObj.src = this.reortForm.fileUrl||this.imgEdit;
-            //待图片加载完后，将其显示在canvas上
-            imgObj.onload = function () {
-                var ctx = theCanvas.getContext('2d');
-                // ctx.drawImage(this, 0, 0); //this即是imgObj,保持图片的原始大小：470*480
-                theCanvas.width = imgObj.width;
-                theCanvas.height = imgObj.height;
-                ctx.drawImage(this, 0, 0); //改变图片的大小到1024*768
-            }
+            // //add img
+            // var imgObj = new Image();
+            // imgObj.src = this.reortForm.fileUrl||this.imgEdit;
+            // //待图片加载完后，将其显示在canvas上
+            // imgObj.onload = function () {
+            //     var ctx = theCanvas.getContext('2d');
+            //     // ctx.drawImage(this, 0, 0); //this即是imgObj,保持图片的原始大小：470*480
+            //     theCanvas.width = imgObj.width;
+            //     theCanvas.height = imgObj.height;
+            //     ctx.drawImage(this, 0, 0); //改变图片的大小到1024*768
+            // }
         },
         drawAction() {
             switch (this.action) {
@@ -297,10 +297,9 @@ export default {
             console.log(context.lineWidth);
         },
         drawRect() {
-
             let theCanvas = document.querySelector('#theCanvas');
             let context = theCanvas.getContext('2d');
-            context.closePath();
+            
             context.strokeStyle = this.color;
             context.beginPath();
             let x, y, w, h;
@@ -324,7 +323,7 @@ export default {
                 console.log(h)
                 context.rect(x, y, w, h);
                 context.stroke();
-                // this.setHistory();
+                this.setHistory();
                 console.log(234234234234121231234)
             }
         },

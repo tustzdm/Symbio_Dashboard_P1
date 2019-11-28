@@ -5,7 +5,7 @@
             <el-card class="listHead" shadow="never" style="padding-right:5%">
                 <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Test Result Detail
                     <i @click="show3 = !show3;arrowDown=!arrowDown" v-show="arrowDown" class="el-icon-caret-bottom"></i>
-                    <i @click="show3 = !show3;arrowDown=!arrowDown"  v-show="!arrowDown" class="el-icon-caret-top"></i>
+                    <i @click="show3 = !show3;arrowDown=!arrowDown" v-show="!arrowDown" class="el-icon-caret-top"></i>
                 </h2>
                 <div class="headRight">
                     <el-button class="btn-top" @click="back" style="background-color: rgb(190, 205, 223);" size="mini"><i class="el-icon-back"></i> Back</el-button>
@@ -26,14 +26,24 @@
                                 <!-- <li v-if="item!=null" v-for="(item,index) in testcase" :key="item">{{index}}:</li> -->
                             </ul>
                             <ul class="rightUl">
-                              <li>
-                                <span :class="{auto_pass:status=='1',auto_block:status=='0',auto_failed:status=='4',auto_skip:status=='5'}">{{statusArray[status]}}</span>
-                              </li>
-                              <li>{{caseId}}</li>
-                              <li>{{testcase.priority}}</li>
-                              <li>{{testcase.featureArea}}</li>
-                              <li>{{caseTypeArray[testcase.caseType]}}</li>
-                               <!-- <li v-if="item!=null" v-for="(item) in testcase" :key="item">{{item}}</li> -->
+                                <li>
+                                    <el-select v-model="status" placeholder="请选择">
+                                        <el-option label="Success" value="1">
+                                        </el-option>
+                                        <el-option label="Not Run" value="0">
+                                        </el-option>
+                                        <el-option label="Skip" value="5">
+                                        </el-option>
+                                        <el-option label="Fail" value="4">
+                                        </el-option>
+                                    </el-select>
+                                    <!-- <span :class="{auto_pass:status=='1',auto_block:status=='0',auto_failed:status=='4',auto_skip:status=='5'}">{{statusArray[status]}}</span> -->
+                                </li>
+                                <li>{{caseId}}</li>
+                                <li>{{testcase.priority}}</li>
+                                <li>{{testcase.featureArea}}</li>
+                                <li>{{caseTypeArray[testcase.caseType]}}</li>
+                                <!-- <li v-if="item!=null" v-for="(item) in testcase" :key="item">{{item}}</li> -->
                             </ul>
                         </div>
                         <div class="ulCon">
@@ -47,10 +57,19 @@
                             <ul class="rightUl">
                                 <!-- <li v-if="item!=null" v-for="(item) in testrun" :key="item">{{item}}</li> -->
                                 <li>{{testrun.id}}</li>
-                              <li>{{testrun.locale}}</li>
-                              <li>{{testresult.qaStatus}}</li>
-                              <li>{{testresult.bugReportId}}</li>
-                               <li>{{testresult.bugReportTitle}}</li>
+                                <li>{{testrun.locale}}</li>
+                                <li><el-select v-model="qaStatus" placeholder="请选择">
+                                        <el-option label="Success" value="1">
+                                        </el-option>
+                                        <el-option label="Not Run" value="0">
+                                        </el-option>
+                                        <el-option label="Skip" value="5">
+                                        </el-option>
+                                        <el-option label="Fail" value="4">
+                                        </el-option>
+                                    </el-select>{{testresult.qaStatus}}</li>
+                                <li>{{testresult.bugReportId}}</li>
+                                <li>{{testresult.bugReportTitle}}</li>
                             </ul>
                         </div>
                     </div>
@@ -98,18 +117,21 @@ export default {
         return {
             show3: true,
             screenshotList: [],
-            testcase:{},
-            testrun:{},
-            testresult:{},
-            arrowDown:true,
-            status:'',
-            caseId:'',
+            testcase: {},
+            testrun: {},
+            testresult: {},
+            arrowDown: true,
+            status: '',
+            caseId: '',
             statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
-            caseTypeArray:['Automation Test','Automation Test','API Test','Performance Test']
+            caseTypeArray: ['Automation Test', 'Automation Test', 'API Test', 'Performance Test'],
+            runId: '',
+            qaStatus:'1'
         }
     },
     created() {
-        this.Fetch(`/result/getTestResultInfo?token=${localStorage.getItem('token')}&testRunId=483`, {
+        this.runId = this.$route.query.runId;
+        this.Fetch(`/result/getTestResultInfo?token=${localStorage.getItem('token')}&testRunId=${this.runId}`, {
             method: "GET"
         }).then(res => {
             console.log(res);
@@ -130,17 +152,17 @@ export default {
                 // }
             }).then(res => {
                 console.log(res)
-                this.screenshotList=res.cd.data;
+                this.screenshotList = res.cd.data;
             }).catch(err => {
                 alert(err);
             });
         });
     },
     computed: {},
-    methods:{
-      back(){
-        this.$router.go(-1)
-      }
+    methods: {
+        back() {
+            this.$router.go(-1)
+        }
     }
 }
 </script>
@@ -156,27 +178,33 @@ export default {
     font-weight: bold;
     margin-top 15px
 }
+.transition-box{
+    display:flex;
+}
 
-.ulCon{
-  width:50%;
-  float left
-  margin-top 15px
+.ulCon {
+    width: 50%;
+    float left margin-top 15px
 }
-.ulCon .leftUl{
-  width:35%;
-  float left
+
+.ulCon .leftUl {
+    width: 35%;
+    float left
 }
-.ulCon .rightUl{
-  width:65%;
-  float left
+
+.ulCon .rightUl {
+    width: 65%;
+    float left
 }
-.ulCon li{
-  height 35px
-  line-height 35px
+
+.ulCon li {
+    height 35px;
+    line-height 35px;
 }
-.ulCon .leftUl li{
-  text-align:right;
-  padding-right:10px
+
+.ulCon .leftUl li {
+    text-align: right;
+    padding-right: 10px
 }
 
 .pictures {

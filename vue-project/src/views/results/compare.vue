@@ -11,12 +11,12 @@
                     </el-tooltip>
                     <el-tooltip :disabled="releaseName.length<17" class="item" effect="light" :content="releaseName" placement="bottom">
                         <span class="SiteSelect select">
-                            / {{releaseName}}
+                             <i style="font-weight:bolder;margin-right:10px" class="el-icon-arrow-right"></i>{{releaseName}}
                         </span>
                     </el-tooltip>
                     <el-tooltip :disabled="testSetName.length<17" class="item" effect="light" :content="testSetName" placement="bottom">
                         <span class="product-select select">
-                            / {{testSetName}}
+                             <i style="font-weight:bolder;margin-right:10px" class="el-icon-arrow-right"></i>{{testSetName}}
                         </span>
                     </el-tooltip>
                 </div>
@@ -37,7 +37,7 @@
                     <template v-for="item in tableColownms">
                         <el-table-column v-if="item.type!='hidden'" :key="item.id" :prop="item.field" sortable :label="item.label">
                             <template slot-scope="scope">
-                                <div v-if="!['sourceLocale','targetLocale','status','screenshotFlag','jiraTicketId'].includes(item.field)">
+                                <div v-if="!['sourceLocale','targetLocale','status','screenshotFlag','jiraTicketId','jiraTicket'].includes(item.field)">
                                     {{scope.row[item.field]}}
                                 </div>
                                 <div v-if="item.field=='status'">
@@ -53,7 +53,7 @@
                                         <img v-if="scope.row['targetLocale'].thumbnail!=''" style="width:150px;" @click="stepId=scope.row.step;screenShotId=scope.row['targetLocale'].id;leftImg=scope.row['sourceLocale'].url;rightImg=scope.row['targetLocale'].url;compareDialog=true;" class="thumbnail" :src="scope.row['targetLocale'].thumbnail" alt="screenShot">
                                     </span>
                                 </div>
-                                <div v-if="item.field == 'jiraTicketId'">
+                                <div v-if="item.field == 'jiraTicket'">
                                     <a @click="stepId=scope.row.step;screenShotId=scope.row['targetLocale'].id;leftImg=scope.row['sourceLocale'].url;rightImg=scope.row['targetLocale'].url;compareDialog=true;jiraId=scope.row['jiraTicketId'];goJira()"  style="background:lightblue">{{scope.row[item.field]}}</a>
                                 </div>
                             </template>
