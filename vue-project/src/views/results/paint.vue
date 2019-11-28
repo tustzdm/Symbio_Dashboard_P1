@@ -1,7 +1,7 @@
 <template>
 <div class="report_Pic">
-    {{runId}}{{screenShotId}}
-    {{reortForm}}
+    <!-- {{runId}}{{screenShotId}}
+    {{reortForm}} -->
     <el-steps :active="active" finish-status="success">
         <el-step title="Step 1"></el-step>
         <el-step title="Step 2"></el-step>
@@ -354,11 +354,11 @@ export default {
             }
         },
         saveUpload() {
-            // let theCanvas = document.querySelector('#theCanvas');
-            // let context = theCanvas.getContext('2d');
-            // var saveImg = theCanvas.toDataURL('image/png');
+            let theCanvas = document.querySelector('#theCanvas');
+            let context = theCanvas.getContext('2d');
+            var saveImg = theCanvas.toDataURL('image/png');
             
-            this.reortForm['filePath'] = 'saveImg';
+            this.reortForm['filePath'] = saveImg;
             this.reortForm.screenShotId= this.screenShotId;
             console.log(this.reortForm);
 
