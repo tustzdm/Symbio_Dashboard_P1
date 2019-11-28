@@ -54,7 +54,7 @@
                                     </span>
                                 </div>
                                 <div v-if="item.field == 'jiraTicketId'">
-                                    <a @click="stepId=scope.row.step;screenShotId=scope.row['targetLocale'].id;leftImg=scope.row['sourceLocale'].url;rightImg=scope.row['targetLocale'].url;compareDialog=true;goJira()"  style="background:lightblue">{{scope.row[item.field]}}</a>
+                                    <a @click="stepId=scope.row.step;screenShotId=scope.row['targetLocale'].id;leftImg=scope.row['sourceLocale'].url;rightImg=scope.row['targetLocale'].url;compareDialog=true;jiraId=scope.row['jiraTicketId'];goJira()"  style="background:lightblue">{{scope.row[item.field]}}</a>
                                 </div>
                             </template>
                         </el-table-column>
@@ -174,7 +174,8 @@ export default {
             reportInfo: {}, //在编辑完信息和图片后会传到这里，用reportInfo接受
             multipleSelection:[],
             comment_text:'1231234',
-            token:''
+            token:'',
+            jiraId:''
         }
     },
     components: {
@@ -379,6 +380,7 @@ export default {
                 method: "POST",
                 body: this.reportInfo
             }).then(res => {
+                console.log(this.reportInfo);
                 console.log(res);
             }).catch(err => {
                 alert(err);
@@ -389,10 +391,8 @@ export default {
             console.log(this.multipleSelection);
         },
         goJira(){
-            setTimeout(() => {
-                this.reportDialog=true;
-            }, 600);
-            this.Fetch(`/result/getBugInfo?token=${localStorage.getItem('token')}&id=5`, {
+            
+            this.Fetch(`/result/getBugInfo?token=${localStorage.getItem('token')}&id=${this.jiraId}`, {
                 method: "GET"
             }).then(res => {
                 console.log('jijjjjjjjj')
@@ -401,6 +401,9 @@ export default {
             }).catch(err => {
                 alert(err);
             });
+            setTimeout(() => {
+                this.reportDialog=true;
+            }, 600);
         },
     }
 }
