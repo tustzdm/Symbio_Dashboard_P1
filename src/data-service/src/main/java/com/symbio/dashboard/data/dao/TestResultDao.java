@@ -68,6 +68,7 @@ public class TestResultDao {
     private final String RESULT_REVIEW_ITEM_JIRA_TICKET_ID = "jiraTicketId";
     private final String RESULT_REVIEW_ITEM_QA_COMMENT = "qaComment";
     private final String RESULT_REVIEW_ITEM_STATUS = "status";
+    private final String RESULT_REVIEW_ITEM_JIRA_TICKET = "jiraTicket";
 
 
 //    private static String VUE_DOMAIN_ADDRESS = null;
@@ -415,6 +416,7 @@ public class TestResultDao {
         listItem.add(RESULT_REVIEW_ITEM_JIRA_TICKET_ID);
         listItem.add(RESULT_REVIEW_ITEM_QA_COMMENT);
         listItem.add(RESULT_REVIEW_ITEM_STATUS);
+        listItem.add(RESULT_REVIEW_ITEM_JIRA_TICKET);
 
         for (String key : listItem) {
             mapData.put(key, getTargetKeyData(list, step, key));

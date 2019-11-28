@@ -23,7 +23,6 @@ public class ScreenShotFactory {
         ss.setImage(log.getImage());
         ss.setMessage(log.getMessage());
 
-        // http://192.168.170.100:8863/mock/0_1/1_1/1.png
         if (!CommonUtil.isEmpty(log.getImage())) {
             // FileName in work path
             ss.setOriginalName(FileUtil.getCombineAbsolutePath(workPath, log.getImage()));
@@ -32,12 +31,10 @@ public class ScreenShotFactory {
             ss.setHttpFilePath(
                     FileUtil.getCombineHttpPath(
                             FileUtil.getScreenShotAccessHttpDir(dtoFilePathInfo), strSSFileName));
-            //ss.setFilePath(FileUtil.getCombineAbsolutePath(FileUtil.getScreenShotAbsolutePath(dtoFilePathInfo), strSSFileName));
             ss.setFilePath(FileUtil.getScreenShotAbsolutePath(dtoFilePathInfo));
             ss.setFileName(strSSFileName);
             ss.setFileSize(0);
 
-            // ss.setThumbnailFilePath(FileUtil.getCombineAbsolutePath(FileUtil.getThumbnailAbsolutePath(dtoFilePathInfo), strSSFileName));
             ss.setThumbnailHttpPath(FileUtil.getCombineHttpPath(
                     FileUtil.getScreenShotThumbnailAccessHttpDir(dtoFilePathInfo), strSSFileName));
             ss.setThumbnailFilePath(FileUtil.getThumbnailAbsolutePath(dtoFilePathInfo));

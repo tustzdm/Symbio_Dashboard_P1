@@ -21,15 +21,6 @@ public class BugInfoFactory {
         }
         newBugInfo.setScreenShotId(data.getScreenShotId());
 
-
-//        newBugInfo.set(data.get());
-//        newBugInfo.set(data.get());
-//        newBugInfo.set(data.get());
-//        newBugInfo.set(data.get());
-//        newBugInfo.set(data.get());
-//        newBugInfo.set(data.get());
-//        newBugInfo.set(data.get());
-
         newBugInfo.setValidation(1);
         newBugInfo.setCreateTime(new Date());
 

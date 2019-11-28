@@ -44,7 +44,7 @@ logging:
     #    dateformat: #设置日志日期格式
     #    file: #定义输出到日志文件的日志格式
     #  config: #日志配置文件的位置。例如，classpath:logback.xml。
-    file: dashboard.log #设置保存日志的日志文件
+    #  file: dashboard.log #设置保存日志的日志文件
     #    max-history:
     #    max-size: #设置日志文件最大大小 #设置日志等级
     #path: / #日志文件的位置，例如/var/log
