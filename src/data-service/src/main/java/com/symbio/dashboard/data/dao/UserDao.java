@@ -1,8 +1,12 @@
 package com.symbio.dashboard.data.dao;
 
+import com.symbio.dashboard.Result;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.repository.UserRep;
 import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.util.BusinessUtil;
+import com.symbio.dashboard.util.CommonUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +14,12 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
 @Repository
+@Slf4j
 public class UserDao {
 
   private static Logger logger = LoggerFactory.getLogger(UserDao.class);
@@ -75,6 +79,28 @@ public class UserDao {
    */
   public User getUserById(Integer id){
     return userRep.getOne(id);
+  }
+
+  /**
+   * Get User by Id
+   *
+   * @param id
+   * @return
+   */
+
+  public Result<User> getById(Integer id) {
+    Result<User> retUserInfo = new Result<>();
+    String funcName = "UserDao.getUserById()";
+
+    User tr = getUserById(id);
+    if (CommonUtil.isEmpty(tr)) {
+      log.error(ErrorConst.getWarningLogMsg(funcName, "Could not find User record by Id: " + id));
+      return new Result<>("000016", String.format("Could not find relative data in table [%s]. id = [%d]", "User", id));
+    } else {
+      retUserInfo.setCd(tr);
+    }
+
+    return retUserInfo;
   }
 
 }

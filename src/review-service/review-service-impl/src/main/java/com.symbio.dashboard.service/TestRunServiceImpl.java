@@ -205,7 +205,7 @@ public class TestRunServiceImpl implements TestRunService {
 
     @Override
     public TestRun updateTestRun(TestRun testRun) {
-        return testRunRep.saveAndFlush(testRun);
+        return testRunDao.updateTestRun(testRun);
     }
 
     private Result<TestRun> saveNewTestRunInfo(Integer testSetId, TestCase testCase, String locale) {
@@ -216,7 +216,7 @@ public class TestRunServiceImpl implements TestRunService {
         try {
             if (testRun == null) {
                 testRun = TestRunFactory.createNewTestRun(testCase, testSetId, locale);
-                testRun = testRunRep.saveAndFlush(testRun);
+                testRun = testRunDao.updateTestRun(testRun);
             } else {
                 testResult = testResultRep.getByTestRunId(testRun.getId());
             }

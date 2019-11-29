@@ -41,6 +41,8 @@ import java.util.Map;
 public class TestResultServiceImpl implements TestResultService {
 
     @Autowired
+    private UserDao userDao;
+    @Autowired
     private CommonDao commonDao;
     @Autowired
     private ProductDao productDao;
@@ -347,28 +349,31 @@ public class TestResultServiceImpl implements TestResultService {
     }
 
     @Override
-    public Result<TestResultUiDTO> getTestResultInfoByTestRunId(Integer userId, String locale, Integer testRunId) {
+    public Result getTestResultInfoByTestRunId(Integer userId, String locale, Integer testRunId) {
         String funcName = "TestResultServiceImpl.getTestResultInfoByTestRunId()";
 
         Result<TestResultUiDTO> retResult = new Result();
 
-        TestRun testRun = testRunDao.getTestRunById(testRunId);
-        if (CommonUtil.isEmpty(testRun)) {
-            log.warn(ErrorConst.getWarningLogMsg(funcName, "Could not find TestRun record by Id " + testRunId));
-            return retResult;
+        // Get TestRun record
+        Result<TestRun> resultTestRun = testRunDao.getTestRunById(locale, testRunId);
+        if (resultTestRun.hasError()) {
+            return resultTestRun;
         }
+        TestRun testRun = resultTestRun.getCd();
 
-        TestResult tResult = testResultDao.getTestResultByTestRunId(testRunId);
-        if (CommonUtil.isEmpty(tResult)) {
-            log.warn(ErrorConst.getWarningLogMsg(funcName, "Could not find TestResult record by TestRun Id " + testRunId));
-            return retResult;
+        // Get TestResult record
+        Result<TestResult> resultTestResult = testResultDao.getTestResultByTestRunId(locale, testRunId);
+        if (resultTestResult.hasError()) {
+            return resultTestResult;
         }
+        TestResult tResult = resultTestResult.getCd();
 
-        TestCase testCase = testCaseDao.getById(testRun.getTestcaseId());
-        if (CommonUtil.isEmpty(testCase)) {
-            log.warn(ErrorConst.getWarningLogMsg(funcName, "Could not find TestCase record by TestRun Id " + testRunId));
-            return retResult;
+        // Get TestCase record
+        Result<TestCase> resultTestCase = testCaseDao.getById(locale, testRun.getTestcaseId());
+        if (resultTestCase.hasError()) {
+            return resultTestCase;
         }
+        TestCase testCase = resultTestCase.getCd();
 
         TestResultUiDTO testResultDTO = new TestResultUiDTO(locale, testRunId);
 
@@ -386,6 +391,85 @@ public class TestResultServiceImpl implements TestResultService {
         testResultDTO.setListScreenShots(ScreenShotFactory.getScreenshotUIList(listScreenShots));
 
         retResult.setCd(testResultDTO);
+
+        return retResult;
+    }
+
+    @Override
+    public Result updateTestResultInfo(Integer userId, String locale, Integer testRunId, Integer autoStatus, String qaStatus) {
+        Result retResult = new Result();
+        String funcName = "TestResultServiceImpl.updateTestResultInfo()";
+
+        // Validation
+        Result<Boolean> resultValidation = validationUpdateTestResult(locale, autoStatus, qaStatus);
+        if (resultValidation.hasError()) {
+            log.error(ErrorConst.getErrorLogMsg(funcName, resultValidation));
+            return resultValidation;
+        }
+
+        // Get Record
+        Result<TestRun> resultTestRun = testRunDao.getTestRunById(locale, testRunId);
+        if (resultTestRun.hasError()) {
+            return resultTestRun;
+        }
+        TestRun tr = resultTestRun.getCd();
+
+        // TestResult info
+        Result<TestResult> resultTestResult = testResultDao.getTestResultByTestRunId(locale, testRunId);
+        if (resultTestResult.hasError()) {
+            return resultTestResult;
+        }
+        TestResult tResult = resultTestResult.getCd();
+
+        // User info
+        Result<User> resultUser = userDao.getById(userId);
+        if (resultUser.hasError()) {
+            return resultUser;
+        }
+        User userInfo = resultUser.getCd();
+
+        // Sync up data if need
+        if (autoStatus != tResult.getAutoRunStatus()) {
+            tr.setStatus(autoStatus);
+            tr.setUpdateUser(userId);
+            tr.setUpdateUserName(userInfo.getFullName());
+            testRunDao.updateTestRun(tr);
+        }
+
+        if (autoStatus != tResult.getAutoRunStatus() || !qaStatus.equals(tResult.getQaStatus())) {
+            tResult.setAutoRunStatus(autoStatus);
+            tResult.setQaStatus(qaStatus);
+            tResult.setUpdateUser(userId);
+            tResult.setUpdateUserName(userInfo.getFullName());
+            testResultDao.updateTestResult(tResult);
+        }
+        return retResult;
+    }
+
+    private Result<Boolean> validationUpdateTestResult(String locale, Integer autoStatus, String qaStatus) {
+        Result<Boolean> retResult = new Result<>();
+        String funcName = "TestResultServiceImpl.validationUpdateTestResult()";
+
+        EnumDef.TEST_RUN_STATUS enumAutoStatus = null;
+        EnumDef.TEST_RESULT_QA_STATUS enumQAStatus = null;
+
+        try {
+            enumAutoStatus = EnumDef.getEnumTypeByCode(EnumDef.TEST_RUN_STATUS.class, autoStatus);
+            if (enumAutoStatus == null) {
+                log.warn(commonDao.getMessage(locale, ErrorConst.EXCEPTION_ENUM_CONVERT_ERROR_CODE, "TEST_RUN_STATUS", autoStatus.toString()));
+                return commonDao.getResult(ErrorConst.EXCEPTION_ENUM_CONVERT_ERROR_CODE, "TEST_RUN_STATUS", autoStatus);
+            }
+
+            enumQAStatus = EnumDef.getEnumTypeByCode(EnumDef.TEST_RESULT_QA_STATUS.class, Integer.parseInt(qaStatus));
+            if (enumQAStatus == null) {
+                log.warn(commonDao.getMessage(locale, ErrorConst.EXCEPTION_ENUM_CONVERT_ERROR_CODE, "TEST_RESULT_QA_STATUS", qaStatus));
+                return commonDao.getResult(ErrorConst.EXCEPTION_ENUM_CONVERT_ERROR_CODE, "TEST_RESULT_QA_STATUS", qaStatus);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(ErrorConst.getExceptionLogMsg(funcName, e));
+            return ErrorConst.getExceptionResult(funcName, e);
+        }
 
         return retResult;
     }

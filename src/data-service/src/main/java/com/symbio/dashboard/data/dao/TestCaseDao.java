@@ -201,8 +201,29 @@ public class TestCaseDao {
         return retList;
     }
 
-
-    public TestCase getById(Integer id) {
+    private TestCase getById(Integer id) {
         return testCaseRep.getById(id);
+    }
+
+    /**
+     * Get Test Case by Id
+     *
+     * @param locale
+     * @param id
+     * @return
+     */
+    public Result<TestCase> getById(String locale, Integer id) {
+        Result<TestCase> retTestRun = new Result<>();
+        String funcName = "TestCaseDao.getById()";
+
+        TestCase tc = getById(id);
+        if (CommonUtil.isEmpty(tc)) {
+            log.error(ErrorConst.getWarningLogMsg(funcName, "Could not find TestCase record by Id: " + id));
+            return commonDao.getTableNoDataArgsLocale(locale, "test_case", id);
+        } else {
+            retTestRun.setCd(tc);
+        }
+
+        return retTestRun;
     }
 }

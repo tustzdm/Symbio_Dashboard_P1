@@ -1,6 +1,7 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.repository.*;
 import com.symbio.dashboard.dto.ResultReviewUiDTO;
@@ -85,12 +86,44 @@ public class TestResultDao {
         return testResultRep.saveAndFlush(tr);
     }
 
+    @Deprecated
     public TestResult getTestResultById(Integer id) {
         return testResultRep.getOne(id);
     }
 
+    public Result<TestResult> getTestResultById(String locale, Integer id) {
+        Result<TestResult> retResult = new Result<>();
+        String funcName = "TestResultDao.getTestResultById()";
+
+        TestResult tResult = testResultRep.getOne(id);
+        if (CommonUtil.isEmpty(tResult)) {
+            log.error(ErrorConst.getWarningLogMsg(funcName, "Could not find TestResult record by id " + id));
+            return commonDao.getTableNoDataArgsLocale(locale, "test_result", id);
+        } else {
+            retResult.setCd(tResult);
+        }
+
+        return retResult;
+    }
+
+    @Deprecated
     public TestResult getTestResultByTestRunId(Integer testRunId) {
         return testResultRep.getByTestRunId(testRunId);
+    }
+
+    public Result<TestResult> getTestResultByTestRunId(String locale, Integer testRunId) {
+        Result<TestResult> retResult = new Result<>();
+        String funcName = "TestResultDao.getTestResultByTestRunId()";
+
+        TestResult tResult = testResultRep.getByTestRunId(testRunId);
+        if (CommonUtil.isEmpty(tResult)) {
+            log.error(ErrorConst.getWarningLogMsg(funcName, "Could not find TestResult record by TestRunId " + testRunId));
+            return commonDao.getTableNoDataArgsLocale(locale, "test_result.test_run_id", testRunId);
+        } else {
+            retResult.setCd(tResult);
+        }
+
+        return retResult;
     }
 
     public ScreenShot updateScreenShot(ScreenShot ss) {

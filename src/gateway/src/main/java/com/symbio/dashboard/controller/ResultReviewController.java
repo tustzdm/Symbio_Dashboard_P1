@@ -404,6 +404,33 @@ public class ResultReviewController extends BaseController {
         return retTestResult;
     }
 
+    @PostMapping("/updateTestResultInfo")
+    public Result updateTestResultInfo(@RequestParam(value = "token") String token,
+                                       @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                       @RequestParam(value = "testRunId") Integer testRunId,
+                                       @RequestParam(value = "autoStatus") Integer autoStatus, @RequestParam(value = "qaStatus") String qaStatus) {
+        String funcName = "ResultReviewController.updateTestResultInfo()";
+        log.info(funcName + " Enter");
+        log.info("token = {}, locale = {}, testRunId = {}， autoStatus = {}, qaStatus = {}", token, locale, testRunId, autoStatus, qaStatus);
+
+        // Step1: Check user token
+        Result retUserToken = getUserIdByToken(token);
+        if (retUserToken.hasError()) {
+            return retUserToken;
+        }
+        Integer userId = (Integer) retUserToken.getCd();
+
+        // Step2: Update data
+        Result retTestResult = testResultService.updateTestResultInfo(userId, locale, testRunId, autoStatus, qaStatus);
+        if (retTestResult.hasError()) {
+            log.error(ErrorConst.getErrorLogMsg(funcName, retTestResult));
+            return retTestResult;
+        }
+
+        log.info(funcName + " Exit");
+        return retTestResult;
+    }
+
     /**
      * interface: /result/getTEPInfo
      *

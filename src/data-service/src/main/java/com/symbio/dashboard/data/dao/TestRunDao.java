@@ -243,8 +243,36 @@ public class TestRunDao {
         }
     }
 
+    @Deprecated
     public TestRun getTestRunById(Integer id) {
         return testRunRep.getById(id);
+    }
+
+    /**
+     * Get Test Run by Id
+     *
+     * @param locale
+     * @param id
+     * @return
+     */
+
+    public Result<TestRun> getTestRunById(String locale, Integer id) {
+        Result<TestRun> retTestRun = new Result<>();
+        String funcName = "TestRunDao.getTestRunById()";
+
+        TestRun tr = testRunRep.getById(id);
+        if (CommonUtil.isEmpty(tr)) {
+            log.error(ErrorConst.getWarningLogMsg(funcName, "Could not find TestRun record by Id " + id));
+            return commonDao.getTableNoDataArgsLocale(locale, "test_run", id);
+        } else {
+            retTestRun.setCd(tr);
+        }
+
+        return retTestRun;
+    }
+
+    public TestRun updateTestRun(TestRun testRun) {
+        return testRunRep.saveAndFlush(testRun);
     }
 
     public String getLocalesInfoSQLById(Integer testRunId) {
