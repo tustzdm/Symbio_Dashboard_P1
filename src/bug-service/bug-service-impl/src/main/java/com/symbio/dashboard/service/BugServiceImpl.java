@@ -2,6 +2,7 @@ package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.ListQueryVO;
+import com.symbio.dashboard.data.dao.BugReportDao;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.dto.CommonListDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,9 @@ public class BugServiceImpl implements BugService {
 
     @Autowired
     private CommonDao commonDao;
+    @Autowired
+    private BugReportDao bugDao;
+
 
     @Override
     public Result getList(Integer userId, ListQueryVO query) {
@@ -29,6 +33,7 @@ public class BugServiceImpl implements BugService {
 
         CommonListDTO bugListDTO = new CommonListDTO(query.getLocale(), query.getPageIndex(), query.getPageSize());
 
+        Result<CommonListDTO> resultBugList = bugDao.getList(userId, query);
 
         retResult.setCd(bugListDTO);
 

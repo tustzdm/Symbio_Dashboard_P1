@@ -67,7 +67,7 @@ public class BusinessUtil {
   }
 
   public static boolean hasOverReadRole(Integer role) {
-    return (role > 1) ? true : false;
+    return (role != null && role > 1) ? true : false;
   }
 
   public static boolean hasWriteRole(Integer role, Integer bit) {

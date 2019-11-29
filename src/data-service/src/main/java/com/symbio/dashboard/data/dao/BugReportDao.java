@@ -1,6 +1,7 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.bean.ListQueryVO;
 import com.symbio.dashboard.bean.TestRunVO;
 import com.symbio.dashboard.business.BugInfoFactory;
 import com.symbio.dashboard.constant.ErrorConst;
@@ -8,6 +9,7 @@ import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.repository.*;
 import com.symbio.dashboard.dto.BugInfoUiDTO;
 import com.symbio.dashboard.dto.BugReportUiDTO;
+import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.dto.TestRunUiDTO;
 import com.symbio.dashboard.enums.*;
 import com.symbio.dashboard.model.*;
@@ -623,6 +625,53 @@ public class BugReportDao {
                 + " AND tr.display = 1 AND tr.validation = 1"
                 + " ORDER BY locale";
     }
+
+    public Result<CommonListDTO> getList(Integer userId, ListQueryVO query) {
+        String funcName = "BugReportDao.getList()";
+        String locale = query.getLocale();
+
+        CommonListDTO resultBugDTO = new CommonListDTO(locale, query.getPageIndex(), query.getPageSize());
+        Result retResult = new Result(resultBugDTO);
+
+        // Get column info
+        List<SysListSetting> listSetting = sysListSettingRep.getEntityInfoNonUi(SystemListSetting.BugList.toString());
+        if (CommonUtil.isEmpty(listSetting)) {
+            return retResult;
+        } else {
+            List<Map<String, Object>> listColumns = BusinessUtil.getListColumnInfo(locale, listSetting);
+            resultBugDTO.setColumns(listColumns);
+        }
+
+        List<String> listFields = CommonDao.getQueryFields(SystemListSetting.BugList, listSetting);
+        if (CommonUtil.isEmpty(listFields)) {
+            log.debug("There is no field to query");
+            return retResult;
+        }
+
+        // Get Menu role
+        Integer nRole = commonDao.getUserMenuRole(userId);
+        resultBugDTO.setRole(nRole);
+
+        List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
+
+        // Fetch data from db
+        String strFields = String.join(",", listFields);
+//        Result retProductResult = getProductMapInfoByField(userId, strFields, pageIndex, pageSize, listUserFields);
+//        if (retProductResult.hasError()) {
+//            retResult = retProductResult;
+//        } else {
+//            CommonListDTO retProduct = (CommonListDTO) retProductResult.getCd();
+//            retProdDTO.setTotalRecord(retProduct.getTotalRecord());
+//            retProdDTO.setFields(retProduct.getFields());
+//            retProdDTO.setDataType(retProduct.getDataType());
+//            retProdDTO.setData(BusinessUtil.AppendOperation(EnumDef.OPERATION_TYPE.PRODUCT, role, retProduct.getData()));
+//            retProdDTO.setRole(role);
+//            retResult = new Result(retProdDTO);
+//        }
+
+        return retResult;
+    }
+
 }
 
 
