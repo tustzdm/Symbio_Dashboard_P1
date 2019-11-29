@@ -9,7 +9,8 @@
                 </h2>
                 <div class="headRight">
                     <el-button class="btn-top" @click="back" style="background-color: rgb(190, 205, 223);" size="mini"><i class="el-icon-back"></i> Back</el-button>
-                    <el-button class="btn-top" style="background-color:rgb(246, 184, 184);" size="mini"><i class="el-icon-edit"></i> Edit</el-button>
+                    <el-button v-if="checkRole(3)" @click="edit=!edit" class="btn-top" style="background-color:rgb(246, 184, 184);" size="mini"><i class="el-icon-edit"></i> Edit</el-button>
+                    <el-button v-if="checkRole(3)" @click="edit=false;updateTestResultInfo()" class="btn-top" style="background-color:rgb(92, 173, 173);" size="mini">Save</el-button>
                 </div>
             </el-card>
 
@@ -27,17 +28,11 @@
                             </ul>
                             <ul class="rightUl">
                                 <li>
-                                    <el-select v-model="status" placeholder="请选择">
-                                        <el-option label="Success" value="1">
-                                        </el-option>
-                                        <el-option label="Not Run" value="0">
-                                        </el-option>
-                                        <el-option label="Skip" value="5">
-                                        </el-option>
-                                        <el-option label="Fail" value="4">
+                                    <el-select v-if="edit" v-model="status" placeholder="Please choose">
+                                        <el-option v-for="item in listAutoStatus" :label="item.value" :value="item.code" :key="item.id">
                                         </el-option>
                                     </el-select>
-                                    <!-- <span :class="{auto_pass:status=='1',auto_block:status=='0',auto_failed:status=='4',auto_skip:status=='5'}">{{statusArray[status]}}</span> -->
+                                    <span v-if="!edit" :class="{auto_pass:status=='1',auto_block:status=='0',auto_failed:status=='4',auto_skip:status=='5'}">{{statusArray[status]}}</span>
                                 </li>
                                 <li>{{caseId}}</li>
                                 <li>{{testcase.priority}}</li>
@@ -58,16 +53,13 @@
                                 <!-- <li v-if="item!=null" v-for="(item) in testrun" :key="item">{{item}}</li> -->
                                 <li>{{testrun.id}}</li>
                                 <li>{{testrun.locale}}</li>
-                                <li><el-select v-model="qaStatus" placeholder="请选择">
-                                        <el-option label="Success" value="1">
+                                <li>
+                                    <el-select v-if="edit" v-model="qaStatus" placeholder="Please choose">
+                                        <el-option v-for="item in listQAStatus" :label="item.value" :value="item.code" :key="item.id">
                                         </el-option>
-                                        <el-option label="Not Run" value="0">
-                                        </el-option>
-                                        <el-option label="Skip" value="5">
-                                        </el-option>
-                                        <el-option label="Fail" value="4">
-                                        </el-option>
-                                    </el-select>{{testresult.qaStatus}}</li>
+                                    </el-select>
+                                    <span v-if="!edit">{{qaStatusValue}}</span>
+                                </li>
                                 <li>{{testresult.bugReportId}}</li>
                                 <li>{{testresult.bugReportTitle}}</li>
                             </ul>
@@ -126,7 +118,11 @@ export default {
             statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
             caseTypeArray: ['Automation Test', 'Automation Test', 'API Test', 'Performance Test'],
             runId: '',
-            qaStatus:'1'
+            qaStatus: '',
+            role: '',
+            edit: false,
+            listAutoStatus: [],
+            listQAStatus: []
         }
     },
     created() {
@@ -141,6 +137,9 @@ export default {
             this.testresult = res.cd.testResult;
             this.status = this.$route.query.status;
             this.caseId = this.$route.query.caseId;
+            this.listAutoStatus = res.cd.listAutoStatus;
+            this.listQAStatus = res.cd.listQAStatus;
+            this.role = res.cd.role;
 
             this.Fetch(`/result/getReviewList?token=${localStorage.getItem('token')}&testRunId=${this.testrun.id}&trlocale=${this.testrun.locale}`, {
                 method: "POST",
@@ -158,10 +157,38 @@ export default {
             });
         });
     },
-    computed: {},
+    computed: {
+        qaStatusValue: function(){
+            for (const iterator of object) {
+                if (iterator.code == this.qaStatus) {
+                        return iterator.value;
+                    }
+            }
+        }
+    },
+    watch: {},
     methods: {
         back() {
             this.$router.go(-1)
+        },
+        checkRole(x) {
+            return this.isRoleEnable(this.role, x);
+        },
+        updateTestResultInfo() {
+            this.Fetch(`/result/updateTestResultInfo?token=${localStorage.getItem('token')}&testRunId=${this.runId}&autoStatus=${this.status}&qaStatus=${this.qaStatus}`, {
+                method: "POST"
+            }).then(res => {
+                console.log(res)
+            }).catch(err => {
+                alert(err);
+            });
+        },
+        turnQaStatusValue() {
+                this.listQAStatus.array.forEach(element => {
+                    if (element.code == this.qaStatus) {
+                        this.qaStatusValue = element.value;
+                    }
+                });
         }
     }
 }
@@ -178,8 +205,9 @@ export default {
     font-weight: bold;
     margin-top 15px
 }
-.transition-box{
-    display:flex;
+
+.transition-box {
+    display: flex;
 }
 
 .ulCon {
