@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 本类作为数据库product表的实体类
+ * 本类作为 List 数据的实体类
  */
 @Data
 @NoArgsConstructor
@@ -17,12 +17,13 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommonListDTO implements Serializable {
 
+  private String locale;
+  private Integer role;
+
   private Integer pageIndex;
   private Integer pageSize;
   private Integer totalRecord;
   private Integer dataType;  // 1: Array[Array], 2: Array[Map]
-  private String locale;
-  private Integer role;
   private List columns;
   private List<String> fields;
   private List data;

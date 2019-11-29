@@ -7,7 +7,8 @@ public enum SystemListSetting {
   TestCase("testcase"),
   ResultReview("resultreview"),
   ImageCompare("ImageComp"),
-  BugReport("BugReport");
+  BugReport("BugReport"),
+  BugList("BugList");
 
   private SystemListSetting(String page){
     this.page = page;
