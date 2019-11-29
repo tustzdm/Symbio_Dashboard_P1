@@ -384,8 +384,8 @@ public class ResultReviewController extends BaseController {
                                     @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
                                     @RequestParam(value = "testRunId") Integer testRunId) {
         String funcName = "ResultReviewController.getTestResultInfo()";
-        log.debug(funcName + " Enter");
-        log.debug("token = {}, locale = {}, testRunId = {}", token, locale, testRunId);
+        log.info(funcName + " Enter");
+        log.info("token = {}, locale = {}, testRunId = {}", token, locale, testRunId);
 
         // Step1: Check user token
         Result retUserToken = getUserIdByToken(token);
@@ -400,7 +400,7 @@ public class ResultReviewController extends BaseController {
             return retTestResult;
         }
 
-        log.debug(funcName + " Exit");
+        log.info(funcName + " Exit");
         return retTestResult;
     }
 

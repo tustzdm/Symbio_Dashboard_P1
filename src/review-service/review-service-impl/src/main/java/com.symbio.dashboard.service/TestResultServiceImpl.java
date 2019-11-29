@@ -7,6 +7,7 @@ import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.dao.*;
 import com.symbio.dashboard.dto.FilePathDTO;
 import com.symbio.dashboard.dto.TestResultUiDTO;
+import com.symbio.dashboard.enums.DictionaryType;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.model.*;
@@ -57,8 +58,8 @@ public class TestResultServiceImpl implements TestResultService {
     @Autowired
     private FileServiceImpl fileService;
 
-//    @Autowired
-//    private FileServiceImpl fileService;
+    @Autowired
+    private DictionaryDao dictionaryDao;
 
     @Override
     public TestResult getTestResultByTestRunId(Integer testRunId) {
@@ -370,11 +371,16 @@ public class TestResultServiceImpl implements TestResultService {
         }
 
         TestResultUiDTO testResultDTO = new TestResultUiDTO(locale, testRunId);
-        testResultDTO.setRole(7);
+
+        //testResultDTO.setRole(7);
+        testResultDTO.setRole(commonDao.getUserMenuRole(userId));
         testResultDTO.setTestRunId(testRunId);
         testResultDTO.setTestResult(tResult);
         testResultDTO.setTestCase(testCase);
         testResultDTO.setTestRun(testRun);
+
+        testResultDTO.setListAutoStatus(dictionaryDao.getDicMapDataByType(DictionaryType.TestRunStatus.getType()));
+        testResultDTO.setListQAStatus(dictionaryDao.getDicMapDataByTypeLocale(DictionaryType.TEST_RESULT_STATUS_LOCALE.getType(), locale));
 
         List<ScreenShot> listScreenShots = testResultDao.getScreenShotsByTestResultId(tResult.getId());
         testResultDTO.setListScreenShots(ScreenShotFactory.getScreenshotUIList(listScreenShots));

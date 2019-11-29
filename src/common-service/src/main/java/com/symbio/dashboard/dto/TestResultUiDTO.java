@@ -30,7 +30,8 @@ public class TestResultUiDTO implements Serializable {
     private Map<String, Object> mapTestResult;
     private List<Map<String, Object>> listScreenShots;
 
-    //private List<Map<String, Object>> productList;
+    private List<Map<String, Object>> listAutoStatus;
+    private List<Map<String, Object>> listQAStatus;
 
     public TestResultUiDTO(String locale, Integer testRunId) {
         this.locale = locale;
