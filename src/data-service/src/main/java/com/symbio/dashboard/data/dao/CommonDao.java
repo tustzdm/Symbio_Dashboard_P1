@@ -58,6 +58,14 @@ public class CommonDao {
     return nRole;
   }
 
+  public static Integer getUserPageRole(EnumDef.DASHBOARD_PAGE page, Integer userId) {
+    Integer nRole = 7;
+
+    if (userId == 13) nRole = 1;
+
+    return nRole;
+  }
+
   /**
    * Result Data formatter
    *
@@ -212,6 +220,9 @@ public class CommonDao {
                 // not support src./dest.
                 strFieldInfo = "";
                 break;
+              case BugList:
+                strFieldInfo = CommonUtil.getAliasTableName(listType, arrField[0]) + arrField[1];
+                break;
             }
           }
         } else {
@@ -226,6 +237,9 @@ public class CommonDao {
               break;
             case ImageCompare:
               strFieldInfo = "ss." + strFieldInfo;
+              break;
+            case BugList:
+              strFieldInfo = "bug." + strFieldInfo;
               break;
           }
         }

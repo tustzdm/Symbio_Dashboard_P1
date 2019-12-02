@@ -145,7 +145,7 @@ public class CommonUtil {
     public static String checkKeyFieldName(String name) {
         String retFieldName = name;
 
-        if ("key,type,status,release,search,data,".contains(name)) {
+        if ("key,type,status,release,search,data,name".contains(name)) {
             retFieldName = String.format("`%s`", name);
         }
 
@@ -162,18 +162,28 @@ public class CommonUtil {
         return retFieldName;
     }
 
+    public static String getAliasTableName(SystemListSetting listType, String table) {
+        String retFieldName = table;
+
+        switch (listType) {
+            default:
+                break;
+            case BugList: // Equals to EnumDef.DASHBOARD_PAGE.BUGS_OVERVIEW
+                retFieldName = table.replace("test_set", "ts");
+                break;
+        }
+
+        return retFieldName;
+    }
+
     private static String getListFieldName(SystemListSetting listType, String entityField) {
         String retFieldName = entityField;
+        String prefix = "";
 
         switch (listType) {
             default:
                 break;
             case ImageCompare:
-//                if ("thumbnailHttpPath,httpFilePath".contains(entityField)) {
-//
-//                } else {
-//
-//                }
                 if (entityField.contains(".")) {
                     String[] arrField = entityField.split("\\.");
                     if (arrField.length == 2) {
@@ -181,6 +191,21 @@ public class CommonUtil {
                     }
                 } else if ("thumbnailHttpPath,httpFilePath,id,".contains(entityField + ",")) {
                     retFieldName = "";
+                }
+                break;
+            case BugList: // Equals to EnumDef.DASHBOARD_PAGE.BUGS_OVERVIEW
+                prefix = "bug.";
+                if (entityField.contains(".")) {
+                    String[] arrField = entityField.split("\\.");
+                    if (arrField.length == 2) {
+                        if ("test_set".equalsIgnoreCase(arrField[0])) {
+                            retFieldName = "ts." + arrField[1];
+                        } else {
+                            retFieldName = entityField;
+                        }
+                    }
+                } else {
+                    retFieldName = prefix + entityField;
                 }
                 break;
         }
@@ -198,6 +223,7 @@ public class CommonUtil {
                     listFields = Arrays.asList(arrEntityFields);
                     break;
                 case ImageCompare:
+                case BugList: // Equals to EnumDef.DASHBOARD_PAGE.BUGS_OVERVIEW
                     String fieldName = null;
                     for (int i = 0; i < arrEntityFields.length; i++) {
                         fieldName = getListFieldName(listType, arrEntityFields[i]);

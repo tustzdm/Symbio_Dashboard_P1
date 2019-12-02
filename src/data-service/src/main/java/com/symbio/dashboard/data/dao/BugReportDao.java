@@ -2,11 +2,14 @@ package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.ListQueryVO;
+import com.symbio.dashboard.bean.NavigatorQueryVO;
 import com.symbio.dashboard.bean.TestRunVO;
 import com.symbio.dashboard.business.BugInfoFactory;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.repository.*;
+import com.symbio.dashboard.data.service.CommonService;
+import com.symbio.dashboard.data.utils.SQLUtils;
 import com.symbio.dashboard.dto.BugInfoUiDTO;
 import com.symbio.dashboard.dto.BugReportUiDTO;
 import com.symbio.dashboard.dto.CommonListDTO;
@@ -39,6 +42,9 @@ import java.util.*;
 @Slf4j
 @SuppressWarnings("unchecked")
 public class BugReportDao {
+
+    @Autowired
+    private CommonService commonService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -515,6 +521,7 @@ public class BugReportDao {
             TestRunUiDTO testRunUiDTO = new TestRunUiDTO();
             List<Map<String, Object>> listTestRun;
 
+            // Refer to : SQLUtils.buildSql(TEST_RESULT, strFields)
             String sql = String.format("SELECT %s FROM test_run tr " +
                     " JOIN test_case tc ON tr.testcase_id = tc.id " +
                     " WHERE tr.testset_id = %d AND tr.display = 1 AND tr.validation = 1", strFields, testSetId);
@@ -551,7 +558,7 @@ public class BugReportDao {
             retResult = new Result(testRunUiDTO);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("Exception happened while invoking TestRunDao.getTestRunMapInfoByField()", e);
+            log.error("Exception happened while invoking BugReportDao.getTestRunMapInfoByField()", e);
             retResult = new Result("000002", e.getMessage());
         }
 
@@ -649,25 +656,69 @@ public class BugReportDao {
         }
 
         // Get Menu role
-        Integer nRole = commonDao.getUserMenuRole(userId);
+        Result resultRole = commonService.getUserPageRole(funcName, EnumDef.DASHBOARD_PAGE.BUGS_OVERVIEW, userId);
+        if (resultRole.hasError()) {
+            return resultRole;
+        }
+
+        Integer nRole = (Integer) resultRole.getCd();
         resultBugDTO.setRole(nRole);
 
         List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
 
         // Fetch data from db
         String strFields = String.join(",", listFields);
-//        Result retProductResult = getProductMapInfoByField(userId, strFields, pageIndex, pageSize, listUserFields);
-//        if (retProductResult.hasError()) {
-//            retResult = retProductResult;
-//        } else {
-//            CommonListDTO retProduct = (CommonListDTO) retProductResult.getCd();
-//            retProdDTO.setTotalRecord(retProduct.getTotalRecord());
-//            retProdDTO.setFields(retProduct.getFields());
-//            retProdDTO.setDataType(retProduct.getDataType());
-//            retProdDTO.setData(BusinessUtil.AppendOperation(EnumDef.OPERATION_TYPE.PRODUCT, role, retProduct.getData()));
-//            retProdDTO.setRole(role);
-//            retResult = new Result(retProdDTO);
-//        }
+        Result retProductResult = getBugListMapInfoByField(query, strFields, listUserFields);
+        if (retProductResult.hasError()) {
+            retResult = retProductResult;
+        } else {
+            CommonListDTO retProduct = (CommonListDTO) retProductResult.getCd();
+            resultBugDTO.setTotalRecord(retProduct.getTotalRecord());
+            resultBugDTO.setFields(retProduct.getFields());
+            resultBugDTO.setDataType(retProduct.getDataType());
+            //resultBugDTO.setData(BusinessUtil.AppendOperation(EnumDef.OPERATION_TYPE.PRODUCT, role, retProduct.getData()));
+            resultBugDTO.setData(retProduct.getData());
+            retResult = new Result(resultBugDTO);
+        }
+
+        return retResult;
+    }
+
+    private Result getBugListMapInfoByField(ListQueryVO query, String strFields, List<String> listUserFields) {
+        log.debug("strField = " + strFields);
+        Result retResult;
+
+        try {
+            CommonListDTO bugListDTO = new CommonListDTO();
+            List<Map<String, Object>> listBug;
+
+            // Get exact sql statement
+            NavigatorQueryVO queryVO = new NavigatorQueryVO(strFields, query);
+            String sql = SQLUtils.buildSql(EnumDef.DASHBOARD_PAGE.BUGS_OVERVIEW, queryVO);
+
+            List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+            ListDataType dataType = ListDataType.Map;
+
+            listBug = EntityUtils.castQuerytoMap(listResult, strFields);
+            bugListDTO.setFields(CommonUtil.getListByMergeString(strFields));
+            bugListDTO.setDataType(dataType.getDataType());
+
+            if (CommonUtil.isEmpty(listUserFields)) {
+                bugListDTO.setData(listBug);
+            } else {
+                //listTestRun = commonDao.setUserMapInfo(listTestRun, listUserFields);
+                bugListDTO.setData(listBug);
+            }
+
+            long nCount = 0;//testRunRep.getCountByTestSetId(testSetId);
+            bugListDTO.setTotalRecord(new Long(nCount).intValue());
+
+            retResult = new Result(bugListDTO);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("Exception happened while invoking BugReportDao.getBugListMapInfoByField()", e);
+            retResult = new Result("000002", e.getMessage());
+        }
 
         return retResult;
     }
