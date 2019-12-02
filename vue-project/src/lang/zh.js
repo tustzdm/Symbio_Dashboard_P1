@@ -43,6 +43,46 @@ export default {
   },
   sidebarDropDown: {
     profile: "个人中心",
-    logout: "退出登录"
+    logout: "退出登录",
+    form: "表单样式",
+    pageElement:"页面元素"
+  },
+  navBar:{
+    qualityOverview: "项目概况",
+    testManagement: "测试管理",
+    resultReview: "执行&审核",
+    bugsOverview: "Bug管理"
+  },
+  bugsoverview: {
+    customize: "自定义",
+    report: {
+      piePriority: "优先级",
+      barPriority: "优先级/状态"
+    },
+    list: {
+      id: "ID号",
+      summary: "描述",
+      Assignee: "责任人",
+      Reporter: "报告者",
+      Priority: "优先级",
+      Status: "状态"
+    }
+  },
+  listOfPRT:{
+    productList: "产品列表",
+    releaseList: "版本列表",
+    testsetList: "测试集列表",
+    addProduct: "添加产品",
+    addRelease: "添加版本",
+    addTestset: "添加测试集",
+    caseList: "测试用例",
+    addCase: "添加测试用例"
+  },
+  funcBtns:{
+    run: "运行",
+    addBug: "标记bug",
+    refresh: "刷新",
+    import: "导入",
+    filter: "筛选"
   }
 };

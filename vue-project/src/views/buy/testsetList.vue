@@ -4,9 +4,9 @@
     <el-card class="manage-tabel" shadow="never">
         <div>
             <el-card class="listHead" shadow="never" style="padding-right:5%;">
-                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">TestSet List</h2>
+                <h2 style="float:left;margin:0 0 0 80px;line-height:60px"> {{$t('listOfPRT.testsetList')}}</h2>
                 <el-button v-if="checkRole(3)" @click="add"  style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
-                    + Add TestSet
+                    + {{$t('listOfPRT.addTestset')}}
                 </el-button>
             </el-card>
         </div>

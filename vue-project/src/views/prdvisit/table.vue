@@ -4,7 +4,7 @@
     <table>
       <thead>
         <tr class="tableHeader">
-          <th v-for="tableItem,index in tableHeader">
+          <th v-for="tableItem,index in tableHeaderTitle">
             <a @click="sorting(data,tableItem.toLowerCase());sortingPosition = index">
               <p>{{tableItem}}</p>
               <span v-show="sortingPosition==index && sortingDerection == 1">&#9650</span>
@@ -38,7 +38,7 @@
 <script>
 import data from './data'
 export default {
-  props: { tableHeader: Array, displayPerPage: Number },
+  props: { tableHeader: Array, displayPerPage: Number, tableHeaderTitle: Array },
   data() {
     return {
       data, //need to store to DB

@@ -159,7 +159,7 @@ export default {
     },
     computed: {
         qaStatusValue: function(){
-            for (const iterator of object) {
+            for (const iterator of this.listQAStatus) {
                 if (iterator.code == this.qaStatus) {
                         return iterator.value;
                     }

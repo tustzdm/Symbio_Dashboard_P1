@@ -47,6 +47,46 @@ export default {
   sidebarDropDown: {
     profile: "Profile",
     lock: "Lock",
-    logout: "Logout"
+    logout: "Logout",
+    form: "Form",
+    pageElement:"Page Element"
+  },
+  navBar:{
+    qualityOverview: "Quality Overview",
+    testManagement: "Test Management",
+    resultReview: "Execute & Review",
+    bugsOverview: "Bugs Overview"
+  },
+  bugsoverview: {
+    customize: "Customize",
+    report: {
+      piePriority: "Priority",
+      barPriority: "Priority per Status"
+    },
+    list: {
+      id: "ID",
+      Summary: "Summary",
+      Assignee: "Assignee",
+      Reporter: "Reporter",
+      Priority: "Priority",
+      Status: "Status"
+    }
+  },
+  listOfPRT:{
+    productList: "Product List",
+    releaseList: "Release List",
+    testsetList: "TestSet List",
+    addProduct: "Add Product",
+    addRelease: "Add Release",
+    addProduct: "Add TestSet",
+    caseList: "Test Case List",
+    addCase: "Add Test Case"
+  },
+  funcBtns:{
+    run: "Run",
+    addBug: "Add Bug",
+    refresh: "Refresh",
+    import: "Import",
+    filter: "filter"
   }
 };

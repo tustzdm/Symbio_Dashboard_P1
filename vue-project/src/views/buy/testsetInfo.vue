@@ -10,9 +10,9 @@
         </div>
         <div>
             <el-card class="listHead" shadow="never" style="padding-right:5%">
-                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Test Case List</h2>
+                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">{{$t('listOfPRT.caseList')}}</h2>
                 <el-button @click="add" style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
-                    + Import Test Case
+                    + {{$t('listOfPRT.addCase')}}
                 </el-button>
             </el-card>
         </div>

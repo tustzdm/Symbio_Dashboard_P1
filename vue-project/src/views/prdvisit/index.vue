@@ -21,17 +21,17 @@
     <div class="bugs-charts">
         <div class="bugs-chartContainer">
             <chart :options="pie" class="panel" id="bugs-chartItem" />
-            <button class="bugs-customize" @click="displayCustomPie = true">Customize</button>
+            <button class="bugs-customize" @click="displayCustomPie = true">{{$t('bugsoverview.customize')}}</button>
         </div>
         <div>
             <chart :options="bar" class="panel" />
-            <button class="bugs-customize" @click="displayCustomBar = true">Customize</button>
+            <button class="bugs-customize" @click="displayCustomBar = true">{{$t('bugsoverview.customize')}}</button>
         </div>
     </div>
     <bugs-custom-table class="bugs-edit" :displayCustomTable="displayCustomTable" :tableHeader="tableHeader" :displayPerPage="displayPerPage" v-if="displayCustomTable" @closeDisplayCustomTable="displayCustomTable = $event.displayCustomTable;tableHeader = $event.CustomTableSelected;displayPerPage = $event.displayPerPage" @cancelDisplayCustomTable="displayCustomTable = $event"></bugs-custom-table>
     <div class="bugs-table">
-        <bugs-table class="tableItem panel" :tableHeader="tableHeader" :displayPerPage="displayPerPage"></bugs-table>
-        <button class="bugs-customize" @click="displayCustomTable = true">Customize</button>
+        <bugs-table class="tableItem panel" :tableHeaderTitle="tableHeaderTitle" :tableHeader="tableHeader" :displayPerPage="displayPerPage"></bugs-table>
+        <button class="bugs-customize" @click="displayCustomTable = true">{{$t('bugsoverview.customize')}}</button>
     </div>
     <div>
         <p style="margin-top:50px">&nbsp;</p>
@@ -66,6 +66,15 @@ export default {
             customBarSelected: undefined,
             displayCustomTable: false,
             displayPerPage: 30,
+            tableHeaderTitle: [
+                //need to store to DB
+                this.$t('bugsoverview.list.id'),
+                this.$t('bugsoverview.list.summary'),
+                this.$t('bugsoverview.list.Assignee'),
+                this.$t('bugsoverview.list.Reporter'),
+                this.$t('bugsoverview.list.Priority'),
+                this.$t('bugsoverview.list.Status')
+            ],
             tableHeader: [
                 //need to store to DB
                 'ID',
@@ -90,6 +99,10 @@ export default {
             width = document.querySelector('.bugs-chartContainer').style.width
             consoe.log(width)
         }
+    },
+    mounted(){
+      this.bar.title.text = this.$t('bugsoverview.report.barPriority');
+      this.pie.title.text = this.$t('bugsoverview.report.piePriority');
     },
     watch: {
         customPieSelected() {

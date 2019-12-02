@@ -84,7 +84,10 @@ export default {
   },
   components: {
     chart: ECharts
-  }
+  },
+  mounted() {
+    console.log(this.bar.title.text)
+    this.bar.title.text='ssssss'},
 }
 </script>
 

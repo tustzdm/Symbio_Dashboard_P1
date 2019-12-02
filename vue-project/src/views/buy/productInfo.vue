@@ -53,6 +53,7 @@ export default {
                 this.projectInfo = res.data
             })
         }
+
     },
 }
 </script>

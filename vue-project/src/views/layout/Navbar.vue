@@ -3,19 +3,19 @@
     <img src="../../assets/images/logo.png" alt class="logo">
     <router-link class="headerQualityOverview headeritems" to="/index/index">
       <icon class="headerIcon" name="qualityOverview"></icon>
-      <div class="headerTitle">Quality Overview</div>
+      <div class="headerTitle">{{$t('navBar.qualityOverview')}}</div>
     </router-link>
     <router-link class="headerTestManagement headeritems" to="/management/index">
       <icon class="headerIcon" name="testManagement"></icon>
-      <div class="headerTitle">Test Management</div>
+      <div class="headerTitle">{{$t('navBar.testManagement')}}</div>
     </router-link>
     <router-link class="headerResultReview headeritems" to="/searchvisit/index">
       <icon class="headerIcon" name="resultReview"></icon>
-      <div class="headerTitle">Execute & Review</div>
+      <div class="headerTitle">{{$t('navBar.resultReview')}}</div>
     </router-link>
     <router-link class="headerBugs headeritems" to="/prdvisit/index">
       <icon class="headerIcon" name="bugs"></icon>
-      <div class="headerTitle">Bugs Overview</div>
+      <div class="headerTitle">{{$t('navBar.bugsOverview')}}</div>
     </router-link>
     <global-search class="globalSearch"></global-search>
     <notice class="bell"/>
