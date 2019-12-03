@@ -30,7 +30,7 @@
                     <!-- <el-progress :text-inside="true" :stroke-width="20" :percentage="90"></el-progress> -->
                 </template>
             </el-table-column>
-            <el-table-column align="right" :label="$t('testManagement.name')">
+            <el-table-column align="right" :label="$t('testManagement.operation')">
                 <template slot-scope="scope">
                     <el-button v-if="checkRole(2)" :formId="scope.row.id" class="editDeleteBtn" @click="editRouter" icon="el-icon-edit" circle></el-button>
                     <el-button v-if="checkRole(3)" :formId="scope.row.id" class="editDeleteBtn" @click="deleteTr" type="danger" icon="el-icon-delete" circle></el-button>

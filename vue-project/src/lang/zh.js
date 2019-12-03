@@ -66,9 +66,10 @@ export default {
   executeReview: {
     tepTitle: "选择测试平台",
     tepName: '平台名称',
+    review: "审核"
   },
   testManagement:{
-    name: "产品名",
+    name: "名称",
     progress: "进度",
     operation: "操作"
   },
@@ -93,9 +94,25 @@ export default {
     testsetList: "测试集列表",
     addProduct: "添加产品",
     addRelease: "添加版本",
-    addTestset: "添加测试集",
+    addTestSet: "添加测试集",
     caseList: "测试用例",
     addCase: "添加测试用例"
+  },
+  resultPicures:{
+    testResultDetail: "测试结果",
+    autoStatus: "运行结果",
+    caseID: "测试名",
+    priority: "优先级",
+    fetureArea: "功能点",
+    caseType: "测试类型",
+    testRunID: "运行ID",
+    locale: "国家地区",
+    qaStatus: "QA结果",
+    bugId: "Bug Id",
+    bugReport: "Bug 信息"
+  },
+  comparePage:{
+    targetLocale: "选择语言"
   },
   funcBtns:{
     run: "运行",
@@ -107,7 +124,10 @@ export default {
     upload: "上传",
     cancel: "取消",
     confirm: "确认",
-    save: "保存"
+    save: "保存",
+    back: "回退",
+    edit: "编辑",
+    upload:"上传"
   },
   chart: {
     platforms: '测试平台',

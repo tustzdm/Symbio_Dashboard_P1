@@ -31,7 +31,7 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column label="Review" width="80" align="center">
+            <el-table-column :label="$t('executeReview.review')" width="80" align="center">
                 <template slot-scope="scope">
 
                     <router-link :to="{ name: 'compare', query: {locale:scope.row.locale, runId:scope.row.id}}">

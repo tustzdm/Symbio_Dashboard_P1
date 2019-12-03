@@ -3,14 +3,14 @@
     <el-col :span="20" :offset="2">
         <div>
             <el-card class="listHead" shadow="never" style="padding-right:5%">
-                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">Test Result Detail
+                <h2 style="float:left;margin:0 0 0 80px;line-height:60px">{{$t('resultPicures.testResultDetail')}}
                     <i @click="show3 = !show3;arrowDown=!arrowDown" v-show="arrowDown" class="el-icon-caret-bottom"></i>
                     <i @click="show3 = !show3;arrowDown=!arrowDown" v-show="!arrowDown" class="el-icon-caret-top"></i>
                 </h2>
                 <div class="headRight">
-                    <el-button class="btn-top" @click="back" style="background-color: rgb(190, 205, 223);" size="mini"><i class="el-icon-back"></i> Back</el-button>
-                    <el-button v-if="checkRole(3)" @click="edit=!edit" class="btn-top" style="background-color:rgb(246, 184, 184);" size="mini"><i class="el-icon-edit"></i> Edit</el-button>
-                    <el-button v-if="checkRole(3)" @click="edit=false;updateTestResultInfo()" class="btn-top" style="background-color:rgb(92, 173, 173);" size="mini">Save</el-button>
+                    <el-button class="btn-top" @click="back" style="background-color: rgb(190, 205, 223);" size="mini"><i class="el-icon-back"></i>{{$t('funcBtns.back')}}</el-button>
+                    <el-button v-if="checkRole(3)" @click="edit=!edit" class="btn-top" style="background-color:rgb(246, 184, 184);" size="mini"><i class="el-icon-edit"></i> {{$t('funcBtns.edit')}}</el-button>
+                    <el-button v-if="checkRole(3)" @click="edit=false;updateTestResultInfo()" class="btn-top" style="background-color:rgb(92, 173, 173);" size="mini">{{$t('funcBtns.save')}}</el-button>
                 </div>
             </el-card>
 
@@ -19,11 +19,11 @@
                     <div class="transition-box" style="width:100%;overflow:hidden">
                         <div class="ulCon">
                             <ul class="leftUl">
-                                <li>Auto Status :</li>
-                                <li>Case ID :</li>
-                                <li>Priority :</li>
-                                <li>Feture Area :</li>
-                                <li>Case Type:</li>
+                                <li>{{$t('resultPicures.autoStatus')}} :</li>
+                                <li>{{$t('resultPicures.caseID')}} :</li>
+                                <li>{{$t('resultPicures.priority')}} :</li>
+                                <li>{{$t('resultPicures.fetureArea')}} :</li>
+                                <li>{{$t('resultPicures.caseType')}} :</li>
                                 <!-- <li v-if="item!=null" v-for="(item,index) in testcase" :key="item">{{index}}:</li> -->
                             </ul>
                             <ul class="rightUl">
@@ -43,11 +43,11 @@
                         </div>
                         <div class="ulCon">
                             <ul class="leftUl">
-                                <li>Test Run ID :</li>
-                                <li>Locale :</li>
-                                <li>QA Status :</li>
-                                <li>Bug Id:</li>
-                                <li>Bug Report :</li>
+                                <li>{{$t('resultPicures.testRunID')}} :</li>
+                                <li>{{$t('resultPicures.locale')}} :</li>
+                                <li>{{$t('resultPicures.qaStatus')}} :</li>
+                                <li>{{$t('resultPicures.bugId')}} :</li>
+                                <li>{{$t('resultPicures.bugReport')}} :</li>
                             </ul>
                             <ul class="rightUl">
                                 <!-- <li v-if="item!=null" v-for="(item) in testrun" :key="item">{{item}}</li> -->

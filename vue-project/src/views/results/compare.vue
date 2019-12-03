@@ -21,13 +21,13 @@
                     </el-tooltip>
                 </div>
                 <div class="headRight">
-                    <span style="font-weight:bold;padding-right:10px">Target Locale:</span>
+                    <span style="font-weight:bold;padding-right:10px">{{$t('comparePage.targetLocale')}} :</span>
                     <el-select v-model="locale" style="width:200px;margin-bottom:5px;padding-right:60px" placeholder="Please Choose">
                         <el-option v-for="item in localeList" :key="item.value" :label="item.label" :value="item.code">
                         </el-option>
                     </el-select>
-                    <el-button class="btn-top" @click="uploadDialogVisible = true" style="background-color:rgb(246, 184, 184);" size="mini"><i class="el-icon-upload2"></i> Upload</el-button>
-                    <el-button class="btn-top" @click="back" style="background-color: rgb(190, 205, 223);" size="mini"><i class="el-icon-back"></i>Back</el-button>
+                    <el-button class="btn-top" @click="uploadDialogVisible = true" style="background-color:rgb(246, 184, 184);" size="mini"><i class="el-icon-upload2"></i> {{$t('funcBtns.upload')}}</el-button>
+                    <el-button class="btn-top" @click="back" style="background-color: rgb(190, 205, 223);" size="mini"><i class="el-icon-back"></i>{{$t('funcBtns.back')}}</el-button>
                 </div>
 
             </el-card>
@@ -175,7 +175,8 @@ export default {
             multipleSelection:[],
             comment_text:'1231234',
             token:'',
-            jiraId:''
+            jiraId:'',
+            lang:''
         }
     },
     components: {
@@ -183,6 +184,7 @@ export default {
     },
     created() {
         console.log(2131231231234231)
+        this.lang = this.$store.state.app.language=='zh'? 'zh_CN':'en_US';
         this.token = localStorage.getItem('token');
         this.productName = localStorage.getItem('result_productName');
         this.releaseName = localStorage.getItem('result_releaseName');
@@ -207,7 +209,7 @@ export default {
             this.$router.go(-1)
         },
         getTableData() {
-            this.Fetch(`/result/getReviewList?token=${localStorage.getItem('token')}&testRunId=${this.runId}&trlocale=${this.locale}`, {
+            this.Fetch(`/result/getReviewList?token=${localStorage.getItem('token')}&testRunId=${this.runId}&trlocale=${this.locale}&locale=${this.lang}`, {
                 method: "POST",
                 // body: {
                 //     "token": "123",

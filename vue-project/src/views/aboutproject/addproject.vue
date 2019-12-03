@@ -1,7 +1,7 @@
 <template>
 <el-col :span="12" :offset="6">
     <el-card style="padding-bottom:100px;font-family:Poppins;">
-        <h2 style="width:100%;padding-left:150px">Add {{pageType}}</h2>
+        <h2 style="width:100%;padding-left:150px">{{$t(`listOfPRT.add${pageType}`)}} </h2>
         <el-divider></el-divider>
         <el-form :model="product" ref="product" label-width="300px">
             <!-- <p>{{product}}</p> -->
@@ -66,15 +66,17 @@ export default {
             fatherReleaseId: '',
             toNextPage: false,
             newId: '',
-            childPage: ["Release", "TestSet"]
+            childPage: ["Release", "TestSet"],
+            lang:''
         }
     },
     created() {
         this.pageType = this.$route.query.pageType;
         this.fatherProductId = this.$route.query.productId;
         this.fatherReleaseId = this.$route.query.releaseId;
+        this.lang = this.$store.state.app.language=='zh'? 'zh_CN':'en_US';
 
-        this.Fetch(`/testmgmt/get${this.pageType}UiInfo?token=${localStorage.getItem('token')}&uiInfo=1&id=`, { //将所有的数据集合到一个借口里了，uiInfod对应pageType,id对应Product或者release的值
+        this.Fetch(`/testmgmt/get${this.pageType}UiInfo?token=${localStorage.getItem('token')}&locale=${this.lang}&uiInfo=1&id=`, { //将所有的数据集合到一个借口里了，uiInfod对应pageType,id对应Product或者release的值
             method: "GET"
         }).then(res => {
             console.log(res.cd);

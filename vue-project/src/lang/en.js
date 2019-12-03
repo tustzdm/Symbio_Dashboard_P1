@@ -70,6 +70,7 @@ export default {
   executeReview: {
     tepTitle: "Select TEP",
     tepName: 'TEP Name',
+    review: "Review"
   },
   testManagement:{
     name: "Name",
@@ -97,9 +98,25 @@ export default {
     testsetList: "TestSet List",
     addProduct: "Add Product",
     addRelease: "Add Release",
-    addTestset: "Add TestSet",
+    addTestSet: "Add TestSet",
     caseList: "Test Case List",
     addCase: "Add Test Case"
+  },
+  resultPicures:{
+    testResultDetail: "Test Result Detail",
+    autoStatus: "Auto Status",
+    caseID: "Case ID",
+    priority: "Priority",
+    fetureArea: "Feture Area",
+    caseType: "Case Type",
+    testRunID: "Test Run ID",
+    locale: "Locale",
+    qaStatus: "QA Status",
+    bugId: "Bug Id",
+    bugReport: "Bug Report"
+  },
+  comparePage:{
+    targetLocale: "Target Locale"
   },
   funcBtns:{
     run: "Run",
@@ -111,6 +128,10 @@ export default {
     upload: "Upload",
     cancel: "Cancel",
     confirm: "Confirm",
+    save: "Save",
+    back: "Back",
+    edit: "edit",
+    upload:"upload"
   },
   chart: {
     platforms: 'Platforms',

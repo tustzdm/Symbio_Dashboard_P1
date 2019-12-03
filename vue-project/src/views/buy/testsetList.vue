@@ -6,7 +6,7 @@
             <el-card class="listHead" shadow="never" style="padding-right:5%;">
                 <h2 style="float:left;margin:0 0 0 80px;line-height:60px"> {{$t('listOfPRT.testsetList')}}</h2>
                 <el-button v-if="checkRole(3)" @click="add"  style="float:right;margin:10px 80px 0 0;background-color:#7a85a1" type="info" size="med">
-                    + {{$t('listOfPRT.addTestset')}}
+                    + {{$t('listOfPRT.addTestSet')}}
                 </el-button>
             </el-card>
         </div>
@@ -20,7 +20,7 @@
                     <div>{{scope.row.description}}</div>
                 </template>
             </el-table-column>
-            <el-table-column prop="progress" align="center" :label="$t('testManagement.name')" :width="0.25*tabelWidth">
+            <el-table-column prop="progress" align="center" :label="$t('testManagement.progress')" :width="0.25*tabelWidth">
                 <template slot-scope="scope">
                     <div style="float:left;border:1px solid white;width:80%;height:100%;border-radius:10px;background-color:#e8ebf1">
                         <div v-bind:style="{width:scope.row.progress.progress}" style="float:left;background-color:#b1c9f7;border-radius:10px"><span v-if="scope.row.progress.done/scope.row.progress.total >1 ">{{scope.row.progress.done}}</span>{{scope.row.progress.done}}</div>
@@ -30,7 +30,7 @@
                     <!-- <el-progress :text-inside="true" :stroke-width="20" :percentage="90"></el-progress> -->
                 </template>
             </el-table-column>
-            <el-table-column align="right" :label="$t('testManagement.name')">
+            <el-table-column align="right" :label="$t('testManagement.operation')">
                 <template slot-scope="scope">
                     <el-button v-if="checkRole(2)" :formId="scope.row.id" class="editDeleteBtn" @click="editRouter" icon="el-icon-edit" circle></el-button>
                     <el-button v-if="checkRole(3)" :formId="scope.row.id" class="editDeleteBtn" @click="deleteTr" type="danger" icon="el-icon-delete" circle></el-button>
