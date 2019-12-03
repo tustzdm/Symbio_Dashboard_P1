@@ -1,7 +1,7 @@
 <template>
 <div class="gridContainer">
     <div style="position:relative;display:flex">
-        <top></top>
+        <top :page="page" style="width:100%"></top>
         <!-- <div v-if="basicHeader" class="bugs-header">
             <div>Project Type >>></div>
             <div style="margin-left:30px">Release >>></div>
@@ -83,7 +83,8 @@ export default {
                 'Reporter',
                 'Priority',
                 'Status'
-            ]
+            ],
+            page:'bugReview'
         }
     },
     components: {

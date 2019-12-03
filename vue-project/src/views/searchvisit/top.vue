@@ -78,7 +78,7 @@
                 </el-dropdown-menu>
             </el-dropdown>
         </div>
-        <div class="manage-top-right">
+        <div class="manage-top-right" v-if="page=='executeReview'">
             <el-button class="btn-top" @click="runDialogVisible=true" style="background-color:#5CADAD" size="mini"><i class="el-icon-caret-right"></i> {{$t('funcBtns.run')}}</el-button>
             <el-button class="btn-top" style="background-color:rgb(246, 184, 184)" size="mini">{{$t('funcBtns.addBug')}}</el-button>
             <el-button class="btn-top" @click="getNavgationList" style="background-color:rgb(190, 205, 223);" size="mini">{{$t('funcBtns.refresh')}}</el-button>
@@ -217,7 +217,8 @@ export default {
     props: {
         selectedIds: {
             type: Array
-        }
+        },
+        page:{type:String}
     },
     created() {
         this.lang = this.$store.state.app.language=='zh'? 'zh_CN':'en_US';

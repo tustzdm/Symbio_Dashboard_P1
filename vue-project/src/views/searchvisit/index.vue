@@ -1,7 +1,7 @@
 <template>
 <div class="buy-root" style="width:85%;margin-left:7.5%">
     <!-- 两个部分mabage-top和(表格、翻页)，两者之间都用flex布局-->
-    <top  @runStatus="runStatus($event)" @getTableData="getTableData($event)"></top>
+    <top :page="page"  @runStatus="runStatus($event)" @getTableData="getTableData($event)"></top>
     <!-- manage-top end -->
 
     <el-card class="caseTabel" shadow="hover" style="border:none">
@@ -70,7 +70,8 @@ export default {
             statusArray: ['Not Run', 'Success', '', '', 'Fail', 'Skip'],
             run: false,
             multipleSelection: [],
-            selectIds:[]
+            selectIds:[],
+            page:'executeReview'
         }
     },
     components: {

@@ -41,6 +41,13 @@ export default {
         chart: ECharts
     },
     mounted() {
+        // i18n
+        this.pie.title.text = this.$t('chart.productWorkload');
+        this.rect.title.text = this.$t('chart.dailyTestCases');
+
+        this.rect.legend.data =  [this.$t('terms.pass'), this.$t('terms.failed')];
+        this.rect.series[0].name =  this.$t('terms.pass');
+        this.rect.series[1].name =  this.$t('terms.failed');
     },
     created() {
         this.productId = this.$route.query.productId;

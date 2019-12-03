@@ -1,10 +1,6 @@
 <template>
   <div class="gridContainer">
-    <div class="dropdown">
-      <div><span>{{$t('terms.product')}}</span>&nbsp;&nbsp;>>></div>
-      <div style="margin-left:20px"><span>{{$t('terms.release')}}</span>&nbsp;&nbsp;>>></div>
-      <div style="margin-left:10px"><span>{{$t('terms.testSet')}}</span></div>
-    </div>
+    <top></top>
     <div class="cards">
       <div class="card panel" style="background-color: #8396a2">
         <div class="cardTitle">{{$t('qualityOverview.productOverview')}}</div>
@@ -67,6 +63,7 @@ import getstackedArea from './stackedArea'
 import getBar from './bar'
 import polar from './polar'
 import radar from './radar'
+import top from '../searchvisit/top'
 // Map of China
 import chinaMap from './china.json'
 // registering map data
@@ -83,7 +80,8 @@ export default {
     }
   },
   components: {
-    chart: ECharts
+    chart: ECharts,
+    top:top
   },
 
   created(){
