@@ -51,15 +51,15 @@
             </span>
         </el-dialog>
 
-        <el-dialog title="Import" :visible.sync="centerDialogVisible" width="30%" center>
+        <el-dialog :title="$t('funcBtns.import')" :visible.sync="centerDialogVisible" width="30%" center>
             <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/upload?token=${this.token}&testSetId=${this.testsetId}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
-                <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
-                <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.excel file only, less than 500m</div>
+                <el-button slot="trigger" size="small" type="primary">{{$t('funcBtns.chooseFile')}}</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">{{$t('funcBtns.upload')}}</el-button>
+                <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">{{$t('tips.maxFileSize')}}</div>
             </el-upload>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="centerDialogVisible = false">cancel</el-button>
-                <el-button type="primary" @click="centerDialogVisible = false">Confirm</el-button>
+                <el-button @click="centerDialogVisible = false">{{$t('funcBtns.cancel')}}</el-button>
+                <el-button type="primary" @click="centerDialogVisible = false">{{$t('funcBtns.confirm')}}</el-button>
             </span>
         </el-dialog>
     </el-col>
