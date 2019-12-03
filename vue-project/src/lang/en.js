@@ -116,6 +116,8 @@ export default {
     totalCases: 'Total cases',
     passCases: 'Passed cases',
     product: 'Product',
+    release: 'Release',
+    testSet: 'Test set',
     bugReported: 'Bugs reported',
     testRunExecuted: 'Test Runs executed',
   }

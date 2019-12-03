@@ -1,9 +1,9 @@
 <template>
   <div class="gridContainer">
     <div class="dropdown">
-      <div>Project Type >>></div>
-      <div style="margin-left:30px">Release >>></div>
-      <div style="margin-left:30px">Test set >>></div>
+      <div><span>{{$t('terms.product')}}</span>&nbsp;&nbsp;>>></div>
+      <div style="margin-left:20px"><span>{{$t('terms.release')}}</span>&nbsp;&nbsp;>>></div>
+      <div style="margin-left:10px"><span>{{$t('terms.testSet')}}</span></div>
     </div>
     <div class="cards">
       <div class="card panel" style="background-color: #8396a2">

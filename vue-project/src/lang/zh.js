@@ -112,6 +112,8 @@ export default {
     totalCases: '总用例',
     passCases: '通过用例',
     product: '产品',
+    release: '版本',
+    testSet: '测试集',
     bugReported: '已上报Bug数',
     testRunExecuted: '已执行的测试用例',
   }
