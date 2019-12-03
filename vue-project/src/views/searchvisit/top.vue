@@ -102,19 +102,19 @@
         </div>
     </div>
     <!-- import dialog -->
-    <el-dialog title="Import" :visible.sync="centerDialogVisible" width="30%" center>
+    <el-dialog :title="$t('funcBtns.import')" :visible.sync="centerDialogVisible" width="30%" center>
         <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/upload?token=${this.token}&testSetId=${this.testSetId}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
-            <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
-            <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.excel file only, less than 500m</div>
+            <el-button slot="trigger" size="small" type="primary">{{$t('funcBtns.chooseFile')}}</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">{{$t('funcBtns.upload')}}</el-button>
+            <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">{{$t('tips.maxFileSize')}}</div>
         </el-upload>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="centerDialogVisible = false">Cancel</el-button>
-            <el-button type="primary" @click="centerDialogVisible = false">Confirm</el-button>
+            <el-button @click="centerDialogVisible = false">{{$t('funcBtns.cancel')}}</el-button>
+            <el-button type="primary" @click="centerDialogVisible = false">{{$t('funcBtns.confirm')}}</el-button>
         </span>
     </el-dialog>
     <!-- run dialog -->
-    <el-dialog title="Select TEP" :visible.sync="runDialogVisible" width="50%" center>
+    <el-dialog :title="$t('executeReview.tepTitle')" :visible.sync="runDialogVisible" width="50%" center>
         <div class="top" style="margin:25px 0;">
 
             <!-- <ul class="runUl" style="text-align:center">
@@ -151,7 +151,7 @@
                     <td>
                         <div>
                             <div style="width: 40%; float:left; text-align: right; margin-right:10px;margin-top:8px;height:30px;">
-                                <span style="font-family:Poppins;">TEP Name</span>
+                                <span style="font-family:Poppins;">{{$t('executeReview.tepName')}}</span>
                             </div>
                             <div style="float:left; text-align:left;">
                                 <select v-model="tepId" id="" style="margin-left:20px;height:30px;width:300px">
@@ -177,8 +177,8 @@
 
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button @click="runDialogVisible = false">Cancel</el-button>
-            <el-button type="primary" @click="runConfirm">Run</el-button>
+            <el-button @click="runDialogVisible = false">{{$t('funcBtns.cancel')}}</el-button>
+            <el-button type="primary" @click="runConfirm">{{$t('funcBtns.run')}}</el-button>
         </span>
     </el-dialog>
 </el-card>
