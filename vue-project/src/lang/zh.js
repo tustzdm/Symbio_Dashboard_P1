@@ -63,6 +63,10 @@ export default {
     testCaseOverview: '测试用例概况',
     bugFixRate: 'Bug 解决率',
   },
+  executeReview: {
+    tepTitle: "选择测试平台",
+    tepName: '平台名称',
+  },
   bugsoverview: {
     customize: "自定义",
     report: {
@@ -93,7 +97,11 @@ export default {
     addBug: "标记Bug",
     refresh: "刷新",
     import: "导入",
-    filter: "筛选"
+    filter: "筛选",
+    chooseFile: '选择文件',
+    upload: "上传",
+    cancel: "取消",
+    confirm: "确认",
   },
   chart: {
     platforms: '测试平台',
@@ -116,5 +124,8 @@ export default {
     testSet: '测试集',
     bugReported: '已上报Bug数',
     testRunExecuted: '已执行的测试用例',
+  },
+  tips: {
+    maxFileSize: '只支持Excel文件, 不超过500M大小',
   }
 };

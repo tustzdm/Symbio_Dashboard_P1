@@ -67,6 +67,10 @@ export default {
     testCaseOverview: 'Test Cases Overview',
     bugFixRate: 'Bug Fix Rate',
   },
+  executeReview: {
+    tepTitle: "Select TEP",
+    tepName: 'TEP Name',
+  },
   bugsoverview: {
     customize: "Customize",
     report: {
@@ -97,7 +101,11 @@ export default {
     addBug: "Add Bug",
     refresh: "Refresh",
     import: "Import",
-    filter: "filter"
+    filter: "filter",
+    chooseFile: 'Choose file',
+    upload: "Upload",
+    cancel: "Cancel",
+    confirm: "Confirm",
   },
   chart: {
     platforms: 'Platforms',
@@ -120,5 +128,8 @@ export default {
     testSet: 'Test set',
     bugReported: 'Bugs reported',
     testRunExecuted: 'Test Runs executed',
+  },
+  tips: {
+    maxFileSize: 'Only support excel file, less than 500M',
   }
 };
