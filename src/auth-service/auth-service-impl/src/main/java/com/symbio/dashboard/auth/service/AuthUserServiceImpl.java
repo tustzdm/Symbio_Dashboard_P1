@@ -59,7 +59,7 @@ public class AuthUserServiceImpl implements AuthUserService {
 
     Integer role = 7;
 
-    if (userId == 13) role = 1;
+    if (userId == 13 || userId == 14) role = 1;
     retRole.setCd(role);
 
     return retRole;

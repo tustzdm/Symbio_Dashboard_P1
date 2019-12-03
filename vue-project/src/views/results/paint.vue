@@ -110,8 +110,8 @@
 
         </div>
     </div>
-    <el-button style="margin-top: 12px;" @click="prev" :disabled="active==0">Previous</el-button>
-    <el-button style="margin-top: 12px;" @click="next" :disabled="active==2">Next</el-button>
+    <el-button style="margin-top: 12px;" @click="prev" :disabled="active==0">{{$t('funcBtns.prevoius')}}</el-button>
+    <el-button style="margin-top: 12px;" @click="next" :disabled="active==2">{{$t('funcBtns.next')}}</el-button>
 
     
 </div>

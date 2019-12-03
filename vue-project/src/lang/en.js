@@ -70,7 +70,8 @@ export default {
   executeReview: {
     tepTitle: "Select TEP",
     tepName: 'TEP Name',
-    review: "Review"
+    review: "Review",
+    uploadDialog: "Upload",
   },
   testManagement:{
     name: "Name",
@@ -131,7 +132,9 @@ export default {
     save: "Save",
     back: "Back",
     edit: "edit",
-    upload:"upload"
+    upload:"upload",
+    prevoius: "Previous",
+    next: "Next",
   },
   chart: {
     platforms: 'Platforms',
@@ -157,5 +160,6 @@ export default {
   },
   tips: {
     maxFileSize: 'Only support excel file, less than 500M',
+    maxZipFileSize: 'Only support zip file, less than 50M',
   }
 };

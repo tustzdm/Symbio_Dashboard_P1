@@ -98,8 +98,8 @@
                     <el-dialog title="Report Bug" :visible.sync="reportDialog" center append-to-body width="90%">
                         <paint :reportInfo="reportInfo" v-if="reportDialog" @reportForm="reportForm($event)" ref="paintChild" :sShotId="screenShotId" :url="rightImg" :runIndex="runId"></paint>
                         <span slot="footer" class="dialog-footer">
-                            <el-button @click="reportDialog = false">Cancel</el-button>
-                            <el-button type="primary" @click="reportConfirm">Confirm</el-button>
+                            <el-button @click="reportDialog = false">{{$t('funcBtns.cancel')}}</el-button>
+                            <el-button type="primary" @click="reportConfirm">{{$t('funcBtns.confirm')}}</el-button>
                         </span>
                     </el-dialog>
                     <el-dialog title="Add comment" :visible.sync="commentDialog" center append-to-body width="30%">
@@ -107,8 +107,8 @@
                         </el-input> 有bug-->
                         <textarea id="comment_text" name="" v-model="comment_text" rows="10" style="width:100%;height:100%;border-radius:5px;border:1px solid lightgray"></textarea>
                         <span slot="footer" class="dialog-footer">
-                            <el-button @click="commentDialog = false">Cancel</el-button>
-                            <el-button type="primary" @click="submitComment">Confirm</el-button>
+                            <el-button @click="commentDialog = false">{{$t('funcBtns.cancel')}}</el-button>
+                            <el-button type="primary" @click="submitComment">{{$t('funcBtns.confirm')}}</el-button>
                         </span>
                     </el-dialog>
                 </el-dialog>
@@ -118,15 +118,15 @@
         <!-- <div class="fanye" style="padding-bottom:50px;margin-top:15px">
             <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="dataList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin: 10px 0" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
         </div> -->
-        <el-dialog title="UpLoad" :visible.sync="uploadDialogVisible" width="30%" center>
+        <el-dialog :title="$t('executeReview.uploadDialog')" :visible.sync="uploadDialogVisible" width="30%" center>
             <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/uploadTestRunZipFile?token=${this.token}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
-                <el-button slot="trigger" size="small" type="primary">Choose File</el-button>
-                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">Upload</el-button>
-                <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">.zip file only, less than 50m</div>
+                <el-button slot="trigger" size="small" type="primary">{{$t('funcBtns.chooseFile')}}</el-button>
+                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">{{$t('funcBtns.upload')}}</el-button>
+                <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">{{$t('tips.maxZipFileSize')}}</div>
             </el-upload>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="uploadDialogVisible = false">Cancel</el-button>
-                <el-button type="primary" @click="uploadDialogVisible = false">Confirm</el-button>
+                <el-button @click="uploadDialogVisible = false">{{$t('funcBtns.cancel')}}</el-button>
+                <el-button type="primary" @click="uploadDialogVisible = false">{{$t('funcBtns.confirm')}}</el-button>
             </span>
         </el-dialog>
     </el-col>

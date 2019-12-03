@@ -53,7 +53,7 @@ public class CommonDao {
   public static Integer getUserMenuRole(Integer userId) {
     Integer nRole = 7;
 
-    if (userId == 13) nRole = 1;
+    if (userId == 13 || userId == 14) nRole = 1;
 
     return nRole;
   }
@@ -61,7 +61,7 @@ public class CommonDao {
   public static Integer getUserPageRole(EnumDef.DASHBOARD_PAGE page, Integer userId) {
     Integer nRole = 7;
 
-    if (userId == 13) nRole = 1;
+    if (userId == 13 || userId == 14) nRole = 1;
 
     return nRole;
   }

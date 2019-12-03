@@ -64,9 +64,10 @@ export default {
     bugFixRate: 'Bug 解决率',
   },
   executeReview: {
-    tepTitle: "选择测试平台",
+    tepTitle: "选择测试执行平台",
     tepName: '平台名称',
-    review: "审核"
+    review: "审核",
+    uploadDialog: "文件上传",
   },
   testManagement:{
     name: "名称",
@@ -127,7 +128,9 @@ export default {
     save: "保存",
     back: "回退",
     edit: "编辑",
-    upload:"上传"
+    upload:"上传",
+    prevoius: "前一页",
+    next: "后一页",
   },
   chart: {
     platforms: '测试平台',
@@ -153,5 +156,6 @@ export default {
   },
   tips: {
     maxFileSize: '只支持Excel文件, 不超过500M大小',
+    maxZipFileSize: '只支持zip文件, 不超过50M大小',
   }
 };
