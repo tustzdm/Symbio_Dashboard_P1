@@ -45,8 +45,8 @@ export default {
         // document.getElementsByClassName('echarts')[1].style.width = document.body.clientWidth * (11 / 27) + 'px';)
 
         // i18n
-        this.pie.title.text = this.$t('chart.platforms');
-        this.rect.title.text = this.$t('chart.testingType');
+        this.pie.title.text = this.$t('chart.productWorkload');
+        this.rect.title.text = this.$t('chart.dailyTestCases');
 
         this.rect.legend.data =  [this.$t('terms.pass'), this.$t('terms.failed')];
         this.rect.series[0].name =  this.$t('terms.pass');

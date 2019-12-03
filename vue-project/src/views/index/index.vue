@@ -85,9 +85,36 @@ export default {
   components: {
     chart: ECharts
   },
+
+  created(){
+      this.bar.dataset.source[0] = this.$t('chart.testingTypeItems');
+
+
+  },
+
   mounted() {
-    console.log(this.bar.title.text)
-    this.bar.title.text='ssssss'},
+
+    // i18n
+    this.pie.title.text = this.$t('chart.platforms');
+
+    this.bar.title.text = this.$t('chart.testingType');
+    this.bar.dataset.source.map(v => {
+      v[0] = v[0].replace('Product', this.$t('terms.product'));
+    });
+    
+    this.stackedArea.title.text = this.$t('chart.testRunAndBug');
+
+    // chart4
+    this.radar.title.text = this.$t('chart.passRateByProduct');
+    this.radar.legend.data = this.$t('chart.radarData');
+    this.radar.series[0].data[0].name = this.$t('terms.totalCases');
+    this.radar.series[0].data[1].name = this.$t('terms.passCases');
+    
+    this.polar.title.text = this.$t('chart.breakdown');
+    this.polar.yAxis.data.map(v => {
+      v = v.replace('Product', this.$t('terms.product'));
+    });
+  }
 }
 </script>
 

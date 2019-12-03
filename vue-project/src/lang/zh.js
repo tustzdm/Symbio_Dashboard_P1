@@ -94,11 +94,19 @@ export default {
     testingType: '测试类型',
     testRunAndBug: '测试用例与Bug',
     passRateByProduct: '测试通过率/产品',
+    breakdown: 'Bug 分布',
     productWorkload: '产品工作量',
     dailyTestCases: '日均测试用例',
+
+    radarData: ['总用例', '通过用例'],
+    testingTypeItems: ['Product', '单元测试', '整合测试', '系统测试'],
   },
   terms: {
     pass: '通过',
-    failed: '失败'
+    failed: '失败',
+
+    totalCases: '总用例',
+    passCases: '通过用例',
+    product: '产品',
   }
 };

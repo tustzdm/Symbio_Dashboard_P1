@@ -98,11 +98,19 @@ export default {
     testingType: 'Testing Type',
     testRunAndBug: 'Test Run vs Bug',
     passRateByProduct: 'Pass rate per Product',
+    breakdown: 'Bug Breakdown',
     productWorkload: 'Product Workload',
     dailyTestCases: 'Daily Test Cases',
+
+    radarData: ['Total cases', 'Passed cases'],
+    testingTypeItems: ['Product', 'Unit Testing', 'Integration Testing', 'System Testing'],
   },
   terms: {
     pass: 'Passed',
-    failed: 'Failed'
+    failed: 'Failed',
+
+    totalCases: 'Total cases',
+    passCases: 'Passed cases',
+    product: 'Product',
   }
 };

@@ -1,4 +1,5 @@
 export default function getData() {
+    props:
     return {
         title: { text: 'Testing type', left: '10px', y: '10px' },
         color: ['#7A85A1', '#C9D4E3', '#E8E8E8', '#9EADC5', '#F3D1CD', '#F9E8E0'],
