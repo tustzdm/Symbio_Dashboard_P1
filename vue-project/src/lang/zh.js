@@ -57,6 +57,12 @@ export default {
       placehold: '输入搜索内容'
     }
   },
+  qualityOverview: {
+    productOverview: '产品概况',
+    releaseOverview: '版本概况',
+    testCaseOverview: '测试用例概况',
+    bugFixRate: 'Bug 解决率',
+  },
   bugsoverview: {
     customize: "自定义",
     report: {
@@ -97,16 +103,16 @@ export default {
     breakdown: 'Bug 分布',
     productWorkload: '产品工作量',
     dailyTestCases: '日均测试用例',
-
     radarData: ['总用例', '通过用例'],
     testingTypeItems: ['Product', '单元测试', '整合测试', '系统测试'],
   },
   terms: {
     pass: '通过',
     failed: '失败',
-
     totalCases: '总用例',
     passCases: '通过用例',
     product: '产品',
+    bugReported: '已上报Bug数',
+    testRunExecuted: '已执行的测试用例',
   }
 };

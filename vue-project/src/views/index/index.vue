@@ -7,25 +7,25 @@
     </div>
     <div class="cards">
       <div class="card panel" style="background-color: #8396a2">
-        <div class="cardTitle">Product Overview</div>
+        <div class="cardTitle">{{$t('qualityOverview.productOverview')}}</div>
         <div class="cardNumber">32</div>
         <div class="cardPercentage">49%</div>
         <icon class="cardIcon" name="qualityOverview"></icon>
       </div>
       <div class="card panel" style="background-color: #BECDDF">
-        <div class="cardTitle">Release Overview</div>
+        <div class="cardTitle">{{$t('qualityOverview.releaseOverview')}}</div>
         <div class="cardNumber">44</div>
         <div class="cardPercentage">23%</div>
         <icon class="cardIcon" name="testManagement"></icon>
       </div>
       <div class="card panel" style="background-color: #E9CECE">
-        <div class="cardTitle">Test Cases Overview</div>
+        <div class="cardTitle">{{$t('qualityOverview.testCaseOverview')}}</div>
         <div class="cardNumber">140</div>
         <div class="cardPercentage">77%</div>
         <icon class="cardIcon" name="resultReview"></icon>
       </div>
       <div class="card panel" style="background-color: #F6B8B8">
-        <div class="cardTitle">Bug Fix Rate</div>
+        <div class="cardTitle">{{$t('qualityOverview.bugFixRate')}}</div>
         <div class="cardNumber">13</div>
         <div class="cardPercentage">8%</div>
         <icon class="cardIcon" name="bugs"></icon>
@@ -87,8 +87,11 @@ export default {
   },
 
   created(){
-      this.bar.dataset.source[0] = this.$t('chart.testingTypeItems');
-
+    this.bar.dataset.source[0] = this.$t('chart.testingTypeItems');
+    
+    // this.stackedArea.legend.data = [this.$t('terms.testRunExecuted'), this.$t('terms.bugReported')];
+    // this.stackedArea.series[0].name = this.$t('terms.bugReported');
+    // this.stackedArea.series[1].name = this.$t('terms.testRunExecuted');
 
   },
 
@@ -103,6 +106,10 @@ export default {
     });
     
     this.stackedArea.title.text = this.$t('chart.testRunAndBug');
+    this.stackedArea.legend.data = [this.$t('terms.testRunExecuted'), this.$t('terms.bugReported')];
+    this.stackedArea.series[0].name = this.$t('terms.bugReported');
+    this.stackedArea.series[1].name = this.$t('terms.testRunExecuted');
+    console.log(this.stackedArea.series[0].name);
 
     // chart4
     this.radar.title.text = this.$t('chart.passRateByProduct');

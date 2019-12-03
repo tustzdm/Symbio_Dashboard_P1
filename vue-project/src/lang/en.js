@@ -61,6 +61,12 @@ export default {
       placehold: 'Search your data..'
     }
   },
+  qualityOverview: {
+    productOverview: 'Product Overview',
+    releaseOverview: 'Release Overview',
+    testCaseOverview: 'Test Cases Overview',
+    bugFixRate: 'Bug Fix Rate',
+  },
   bugsoverview: {
     customize: "Customize",
     report: {
@@ -101,16 +107,16 @@ export default {
     breakdown: 'Bug Breakdown',
     productWorkload: 'Product Workload',
     dailyTestCases: 'Daily Test Cases',
-
     radarData: ['Total cases', 'Passed cases'],
     testingTypeItems: ['Product', 'Unit Testing', 'Integration Testing', 'System Testing'],
   },
   terms: {
     pass: 'Passed',
     failed: 'Failed',
-
     totalCases: 'Total cases',
     passCases: 'Passed cases',
     product: 'Product',
+    bugReported: 'Bugs reported',
+    testRunExecuted: 'Test Runs executed',
   }
 };
