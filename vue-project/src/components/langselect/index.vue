@@ -25,6 +25,7 @@ export default {
       this.$i18n.locale = lang;
       this.$store.dispatch("setLanguage", lang);
       const message = this.$t("app.switchlang");
+      localStorage.setItem('lang',lang);
       this.$message({
         message,
         type: "success"
@@ -41,7 +42,7 @@ export default {
     cursor pointer
   &__icon
     vertical-align middle
-    color #ffffff
+    color #fa7b30
     transition color .28s
     &:hover
       color #41b883

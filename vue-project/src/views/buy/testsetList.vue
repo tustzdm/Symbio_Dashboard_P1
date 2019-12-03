@@ -12,7 +12,7 @@
         </div>
         <!-- <el-table :data="tableData"> -->
         <el-table :data="productList">
-            <el-table-column prop="name" label="Name" align="center" :width="0.5*tabelWidth">
+            <el-table-column prop="name" :label="$t('testManagement.name')" align="center" :width="0.5*tabelWidth">
                 <template slot-scope="scope">
                     <div>
                         <router-link :to="{ name: 'testsetInfo', query: { productId:productId, releaseId:scope.row.id, testsetId:scope.row.id}}">{{scope.row.name}}</router-link>
@@ -20,7 +20,7 @@
                     <div>{{scope.row.description}}</div>
                 </template>
             </el-table-column>
-            <el-table-column prop="progress" align="center" label="Progress" :width="0.25*tabelWidth">
+            <el-table-column prop="progress" align="center" :label="$t('testManagement.name')" :width="0.25*tabelWidth">
                 <template slot-scope="scope">
                     <div style="float:left;border:1px solid white;width:80%;height:100%;border-radius:10px;background-color:#e8ebf1">
                         <div v-bind:style="{width:scope.row.progress.progress}" style="float:left;background-color:#b1c9f7;border-radius:10px"><span v-if="scope.row.progress.done/scope.row.progress.total >1 ">{{scope.row.progress.done}}</span>{{scope.row.progress.done}}</div>
@@ -30,7 +30,7 @@
                     <!-- <el-progress :text-inside="true" :stroke-width="20" :percentage="90"></el-progress> -->
                 </template>
             </el-table-column>
-            <el-table-column align="right" label="Operation">
+            <el-table-column align="right" :label="$t('testManagement.name')">
                 <template slot-scope="scope">
                     <el-button v-if="checkRole(2)" :formId="scope.row.id" class="editDeleteBtn" @click="editRouter" icon="el-icon-edit" circle></el-button>
                     <el-button v-if="checkRole(3)" :formId="scope.row.id" class="editDeleteBtn" @click="deleteTr" type="danger" icon="el-icon-delete" circle></el-button>

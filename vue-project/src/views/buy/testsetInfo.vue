@@ -95,7 +95,8 @@ export default {
             caseTypeList: ['', 'Automation TestCase', 'Manual TestCase', '', 'API TestCase', '', '', '', 'Performance TestCase'],
             stepContent: {},
             index: 0,
-            token:''
+            token:'',
+            lang:''
         }
     },
     components: {
@@ -104,11 +105,12 @@ export default {
     },
     mounted() {},
     created() {
+        this.lang = this.$store.state.app.language=='zh'? 'zh_CN':'en_US';
         this.token=localStorage.getItem('token');
         this.productId = this.$route.query.productId;
         this.releaseId = this.$route.query.releaseId;
         this.testsetId = this.$route.query.testsetId;
-        this.Fetch(`/testmgmt/getTestCaseList?token=${localStorage.getItem('token')}&testSetId=${this.testsetId}`, {
+        this.Fetch(`/testmgmt/getTestCaseList?token=${localStorage.getItem('token')}&locale=${this.lang}&testSetId=${this.testsetId}`, {
             method: "GET",
         }).then(res => {
             console.log(res);

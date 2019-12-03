@@ -6,7 +6,7 @@ const app = {
   state: {
     firstLogin: storage.get("firstLogin") || "yep",
     version: "V1.0.0",
-    language: Cookies.get("language") || "zh",
+    language: Cookies.get("language") || "en",
     sidebar: {
       sliderState: storage.get("sliderState")
     }

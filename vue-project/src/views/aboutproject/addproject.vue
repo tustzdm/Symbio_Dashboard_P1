@@ -29,8 +29,8 @@
         </el-form>
         <div class="sbumitArea">
             <span>
-                <el-button class="saveButton" type="primary" @click="onSubmit">Save</el-button>
-                <el-button class="cancelButton" @click="onCancel">Cancel</el-button>
+                <el-button class="saveButton" type="primary" @click="onSubmit">{{$t('funcBtns.save')}}</el-button>
+                <el-button class="cancelButton" @click="onCancel">{{$t('funcBtns.cancel')}}</el-button>
             </span>
         </div>
     </el-card>

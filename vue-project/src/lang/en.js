@@ -71,6 +71,11 @@ export default {
     tepTitle: "Select TEP",
     tepName: 'TEP Name',
   },
+  testManagement:{
+    name: "Name",
+    progress: "Progress",
+    operation: "Operation"
+  },
   bugsoverview: {
     customize: "Customize",
     report: {
@@ -92,7 +97,7 @@ export default {
     testsetList: "TestSet List",
     addProduct: "Add Product",
     addRelease: "Add Release",
-    addProduct: "Add TestSet",
+    addTestset: "Add TestSet",
     caseList: "Test Case List",
     addCase: "Add Test Case"
   },

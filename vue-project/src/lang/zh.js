@@ -67,6 +67,11 @@ export default {
     tepTitle: "选择测试平台",
     tepName: '平台名称',
   },
+  testManagement:{
+    name: "产品名",
+    progress: "进度",
+    operation: "操作"
+  },
   bugsoverview: {
     customize: "自定义",
     report: {
@@ -102,6 +107,7 @@ export default {
     upload: "上传",
     cancel: "取消",
     confirm: "确认",
+    save: "保存"
   },
   chart: {
     platforms: '测试平台',

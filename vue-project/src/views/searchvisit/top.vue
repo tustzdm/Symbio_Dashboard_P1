@@ -210,7 +210,8 @@ export default {
             token: '',
             role: '',
             tepParameters: {},
-            ids:this.selectedIds
+            ids:this.selectedIds,
+            lang:''
         }
     },
     props: {
@@ -219,6 +220,7 @@ export default {
         }
     },
     created() {
+        this.lang = this.$store.state.app.language=='zh'? 'zh_CN':'en_US';
         this.token = localStorage.getItem('token');
         this.productId = localStorage.getItem('result_productId'); //默认初始值为上次访问的，没有记录会访问最新的，这里设置为固定的480
         this.releaseId = localStorage.getItem('result_releaseId');
@@ -293,7 +295,8 @@ export default {
                     "token": localStorage.getItem('token'),
                     "productId": this.productId,
                     "releaseId": this.releaseId,
-                    "testSetId": this.testSetId
+                    "testSetId": this.testSetId,
+                    "locale": this.lang
                 }
             }).then(res => {
                 console.log("getnav")
