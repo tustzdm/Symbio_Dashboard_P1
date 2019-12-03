@@ -3,15 +3,17 @@ package com.symbio.dashboard.data.service.impl;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.dao.CommonDao;
-import com.symbio.dashboard.data.service.CommonService;
+import com.symbio.dashboard.data.service.DataCommonService;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 @Slf4j
 @SuppressWarnings("unchecked")
-public class CommonServiceImpl implements CommonService {
+public class DataCommonServiceImpl implements DataCommonService {
     @Autowired
     private CommonDao commonDao;
 

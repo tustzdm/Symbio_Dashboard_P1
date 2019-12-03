@@ -10,7 +10,7 @@ export default {
     data(){
         return{
             isActive:false,
-            val:"Search..",
+            val: this.$t('navBar.search.tip'),
             inputwidth: "100px",
             userData:""
         }
@@ -19,13 +19,13 @@ export default {
             closeInput(){
                 if(this.userData==""){
                     this.inputwidth = "100px";
-                    this.val='Search..';
+                    this.val = this.$t('navBar.search.tip');
                     this.isActive = false;
                     }
             },
             openInput(){
                 this.inputwidth = "200px";
-                this.val="Search your data..";
+                this.val = this.$t('navBar.search.placehold');
             },
             userInput(){
                 this.isActive = true;

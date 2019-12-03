@@ -55,7 +55,11 @@ export default {
     qualityOverview: "Quality Overview",
     testManagement: "Test Management",
     resultReview: "Execute & Review",
-    bugsOverview: "Bugs Overview"
+    bugsOverview: "Bugs Overview",
+    search: {
+      tip: 'Search..',
+      placehold: 'Search your data..'
+    }
   },
   bugsoverview: {
     customize: "Customize",
@@ -88,5 +92,17 @@ export default {
     refresh: "Refresh",
     import: "Import",
     filter: "filter"
+  },
+  chart: {
+    platforms: 'Platforms',
+    testingType: 'Testing Type',
+    testRunAndBug: 'Test Run vs Bug',
+    passRateByProduct: 'Pass rate per Product',
+    productWorkload: 'Product Workload',
+    dailyTestCases: 'Daily Test Cases',
+  },
+  terms: {
+    pass: 'Passed',
+    failed: 'Failed'
   }
 };

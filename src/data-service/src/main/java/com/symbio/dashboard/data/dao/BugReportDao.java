@@ -8,7 +8,7 @@ import com.symbio.dashboard.business.BugInfoFactory;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.repository.*;
-import com.symbio.dashboard.data.service.CommonService;
+import com.symbio.dashboard.data.service.DataCommonService;
 import com.symbio.dashboard.data.utils.SQLUtils;
 import com.symbio.dashboard.dto.BugInfoUiDTO;
 import com.symbio.dashboard.dto.BugReportUiDTO;
@@ -44,7 +44,7 @@ import java.util.*;
 public class BugReportDao {
 
     @Autowired
-    private CommonService commonService;
+    private DataCommonService commonService;
 
     @PersistenceContext
     private EntityManager entityManager;

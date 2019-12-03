@@ -50,17 +50,21 @@ export default {
   navBar:{
     qualityOverview: "项目概况",
     testManagement: "测试管理",
-    resultReview: "执行&审核",
-    bugsOverview: "Bug管理"
+    resultReview: "执行 & 审核",
+    bugsOverview: "Bug概况",
+    search: {
+      tip: '搜索..',
+      placehold: '输入搜索内容'
+    }
   },
   bugsoverview: {
     customize: "自定义",
     report: {
       piePriority: "优先级",
-      barPriority: "优先级/状态"
+      barPriority: "优先级 / 状态"
     },
     list: {
-      id: "ID号",
+      id: "Bug ID",
       summary: "描述",
       Assignee: "责任人",
       Reporter: "报告者",
@@ -80,9 +84,21 @@ export default {
   },
   funcBtns:{
     run: "运行",
-    addBug: "标记bug",
+    addBug: "标记Bug",
     refresh: "刷新",
     import: "导入",
     filter: "筛选"
+  },
+  chart: {
+    platforms: '测试平台',
+    testingType: '测试类型',
+    testRunAndBug: '测试用例与Bug',
+    passRateByProduct: '测试通过率/产品',
+    productWorkload: '产品工作量',
+    dailyTestCases: '日均测试用例',
+  },
+  terms: {
+    pass: '通过',
+    failed: '失败'
   }
 };
