@@ -43,7 +43,6 @@
     </div>
 </div>
 </template>
-
 <script>
 import storage from '@/utils/storage'
 
@@ -144,6 +143,12 @@ export default {
                     pageType: 'Product'
                 }
             })
+        },
+        currentChange(currentPage) {
+            this.currentPage = currentPage
+        },
+        sizeChange(size) {
+            this.pageSize = size
         }
     }
 }

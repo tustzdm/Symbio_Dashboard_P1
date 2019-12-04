@@ -1,7 +1,4 @@
 
-
-
-
 //前置拼接url
 let api = '/api';
 

@@ -2,11 +2,8 @@
 <el-row class="infoCon">
     <el-col :span="20" :offset="2">
         <div class="manage-charts">
-
             <chart :options="pie" class="panel" />
-
             <chart :options="rect" class="panel" />
-
         </div>
         <div>
             <el-card class="listHead" shadow="never" style="padding-right:5%">
@@ -17,7 +14,7 @@
             </el-card>
         </div>
         <el-card shadow="hover" style="border:none">
-            <el-table :data="dataList" @selection-change="handleSelectionChange" style="width: 100%;height: 100%;text-align:center">
+            <el-table :data="dataList" style="width: 100%;height: 100%;text-align:center">
                 <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" :width="['caseId', 'caseType'].includes(item.field )? '150px':['priority'].includes(item.field )? '120px':''" sortable :label="item.label">
                     <template slot-scope="scope">
                         <div v-if="!['detailSteps','caseType','priority'].includes(item.field)">
@@ -96,7 +93,9 @@ export default {
             stepContent: {},
             index: 0,
             token:'',
-            lang:''
+            lang:'',
+            pageSize: 20,
+            fileList:[]
         }
     },
     components: {
@@ -187,6 +186,12 @@ export default {
         },
         getStepContent() {
             document.getElementById('stepCon').innerHTML = val;
+        },
+        currentChange(currentPage) {
+            this.currentPage = currentPage
+        },
+        sizeChange(size) {
+            this.pageSize = size
         }
     },
 }

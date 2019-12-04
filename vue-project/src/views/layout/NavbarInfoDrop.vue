@@ -50,7 +50,8 @@ export default {
       }
     },
     async logouthandle() {
-      await this.$store.dispatch('logout')
+      await this.$store.dispatch('logout');
+      localStorage.clear();
       this.$router.push({
         path: '/'
       })

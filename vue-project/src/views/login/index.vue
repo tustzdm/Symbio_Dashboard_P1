@@ -9,7 +9,7 @@
             <div  class="title">
                 <!-- <span>{{$t('login.sysName')}}</span> -->
                 <img style="width:25%;float:left;margin:40px 7px 0 10px;" src="../../assets/images/symbio.png" alt="">
-                <span style="width:68%;float:left;margin-top:40px;">Smart Test Ops</span>
+                <span style="width:68%;float:left;margin-top:40px;" :class="lang">{{$t('login.header')}}</span>
             </div>
           </div>
 
@@ -111,7 +111,8 @@ export default {
         email: '',
         newPassword: '',
         confirmPassword: ''
-      }
+      },
+      lang:''
     }
   },
   computed: {
@@ -129,6 +130,9 @@ export default {
         'switch-right': this.switchLeft
       }
     }
+  },
+  created(){
+    this.lang = this.$store.state.app.language || 'zh'
   },
   methods: {
     checkLogin(){
@@ -217,6 +221,9 @@ export default {
 </script>
 
 <style lang="stylus">
+.zh{
+      font-size: 40px;
+}
 .forget-form,
 .login-form
   .el-form-item__content

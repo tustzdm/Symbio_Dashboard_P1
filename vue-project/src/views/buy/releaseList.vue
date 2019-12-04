@@ -151,6 +151,12 @@ export default {
         },
         checkRole(x) {
             return this.isRoleEnable(this.role, x);
+        },
+        currentChange(currentPage) {
+            this.currentPage = currentPage
+        },
+        sizeChange(size) {
+            this.pageSize = size
         }
     }
 }

@@ -21,6 +21,7 @@ export default {
     switchlang: "Switch Language Success"
   },
   login: {
+    header:"Smart Test Ops",
     edenPart1: "VUE",
     edenPart2: "EDEN",
     title: "Login Form",
@@ -117,7 +118,8 @@ export default {
     bugReport: "Bug Report"
   },
   comparePage:{
-    targetLocale: "Target Locale"
+    targetLocale: "Target Locale",
+    addCommentDialog: "Add Comment"
   },
   funcBtns:{
     run: "Run",

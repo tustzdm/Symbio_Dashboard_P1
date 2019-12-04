@@ -19,6 +19,7 @@ export default {
     switchlang: "切换语言成功"
   },
   login: {
+    header:"优测质量运营系统",
     sysName: "智能测试系统",
     title: "系统登录",
     btn: "登录",
@@ -113,7 +114,8 @@ export default {
     bugReport: "Bug 信息"
   },
   comparePage:{
-    targetLocale: "选择语言"
+    targetLocale: "选择语言",
+    addCommentDialog: "添加评论"
   },
   funcBtns:{
     run: "运行",

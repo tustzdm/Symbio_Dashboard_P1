@@ -102,7 +102,7 @@
                             <el-button type="primary" @click="reportConfirm">{{$t('funcBtns.confirm')}}</el-button>
                         </span>
                     </el-dialog>
-                    <el-dialog title="Add comment" :visible.sync="commentDialog" center append-to-body width="30%">
+                    <el-dialog :title="$t('comparePage.addCommentDialog')" :visible.sync="commentDialog" center append-to-body width="30%">
                         <!-- <el-input type="textarea" :rows="5" placeholder="Input comment here" v-model="textarea">
                         </el-input> 有bug-->
                         <textarea id="comment_text" name="" v-model="comment_text" rows="10" style="width:100%;height:100%;border-radius:5px;border:1px solid lightgray"></textarea>
@@ -118,11 +118,11 @@
         <!-- <div class="fanye" style="padding-bottom:50px;margin-top:15px">
             <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="dataList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin: 10px 0" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
         </div> -->
-        <el-dialog :title="$t('executeReview.uploadDialog')" :visible.sync="uploadDialogVisible" width="30%" center>
+        <el-dialog :title="$t('funcBtns.upload')" :visible.sync="uploadDialogVisible" width="30%" center>
             <el-upload class="upload-demo" :on-success="uploadSuccess" ref="upload" :action="`/api/result/uploadTestRunZipFile?token=${this.token}`" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
                 <el-button slot="trigger" size="small" type="primary">{{$t('funcBtns.chooseFile')}}</el-button>
                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">{{$t('funcBtns.upload')}}</el-button>
-                <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">{{$t('tips.maxZipFileSize')}}</div>
+                <div slot="tip" class="el-upload__tip" style="text-align:center;font-size:16px">{{$t('tips.maxFileSize')}}</div>
             </el-upload>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="uploadDialogVisible = false">{{$t('funcBtns.cancel')}}</el-button>

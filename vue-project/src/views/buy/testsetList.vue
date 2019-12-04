@@ -149,6 +149,12 @@ export default {
                     releaseId: this.releaseId
                 }
             })
+        },
+        currentChange(currentPage) {
+            this.currentPage = currentPage
+        },
+        sizeChange(size) {
+            this.pageSize = size
         }
     }
 }
