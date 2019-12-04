@@ -29,15 +29,13 @@ public class BugServiceImpl implements BugService {
 
     @Override
     public Result getList(Integer userId, ListQueryVO query) {
-        Result<CommonListDTO> retResult = new Result<>();
-
-        CommonListDTO bugListDTO = new CommonListDTO(query.getLocale(), query.getPageIndex(), query.getPageSize());
 
         Result<CommonListDTO> resultBugList = bugDao.getList(userId, query);
+        if (resultBugList.hasError()) {
+            return resultBugList;
+        }
 
-        retResult.setCd(bugListDTO);
-
-        return retResult;
+        return resultBugList;
     }
 
 

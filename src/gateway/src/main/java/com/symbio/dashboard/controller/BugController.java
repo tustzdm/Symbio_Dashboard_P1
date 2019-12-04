@@ -41,8 +41,16 @@ public class BugController extends BaseController {
                 return resultUserId;
             }
             Integer userId = (Integer) resultUserId.getCd();
+
+            // default value
             if (CommonUtil.isEmpty(query.getLocale())) {
                 query.setLocale(Locales.EN_US.toString());
+            }
+            if (CommonUtil.isEmpty(query.getPageIndex())) {
+                query.setPageIndex(0);
+            }
+            if (CommonUtil.isEmpty(query.getPageSize())) {
+                query.setPageSize(20);
             }
 
             retResult = bugService.getList(userId, query);

@@ -118,6 +118,7 @@ public class CommonDao {
    * @param listSetting
    * @return
    */
+  @Deprecated
   public static List<String> getQueryUserRefFields(List<SysListSetting> listSetting) {
     List<String> dbFields = new ArrayList<>();
 
@@ -221,7 +222,7 @@ public class CommonDao {
                 strFieldInfo = "";
                 break;
               case BugList:
-                strFieldInfo = CommonUtil.getAliasTableName(listType, arrField[0]) + arrField[1];
+                strFieldInfo = CommonUtil.getAliasTableName(listType, arrField[0]) + "." + arrField[1];
                 break;
             }
           }

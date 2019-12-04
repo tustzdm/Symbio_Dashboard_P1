@@ -358,6 +358,10 @@ public class EntityUtils {
         return retList;
     }
 
+    public static List<String> getCamelFieldList(String entityFields) {
+        return getMapKeys(entityFields.split(","));
+    }
+
     /**
      * 直接将字段转成Map 对象
      *

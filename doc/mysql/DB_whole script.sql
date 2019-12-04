@@ -246,7 +246,19 @@ INSERT INTO `dictionary`(`type`,`code`,`value`, `description`)
 
 
 -- Next 380	
-
+Drop Table IF EXISTS `dictionary_local`;
+CREATE TABLE `dictionary_local` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(50) DEFAULT NULL COMMENT 'team name',
+  `code` varchar(64) NOT NULL COMMENT '',
+  `en_us` VARCHAR(255) DEFAULT NULL COMMENT 'Message for en_US',
+  `zh_cn` VARCHAR(255) DEFAULT NULL COMMENT 'Message for zh_cn',
+  `idx` smallint(5) unsigned DEFAULT '9' COMMENT 'item index',
+  `validation` smallint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1-true, 0-false',
+  `description` varchar(255) DEFAULT '' COMMENT 'description',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniqe_dict_local_name_code` (`name`, `code`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `report_chart`;
 CREATE TABLE `report_chart` (
@@ -1255,6 +1267,7 @@ CREATE TABLE `bug_info` (
   `bug_type` varchar(32) DEFAULT NULL COMMENT 'Bug type',
   `issue_category_id` int(10) unsigned COMMENT 'FK: [issue_category].id',
   `issue_reason_id` int(10) unsigned COMMENT 'FK: [issue_reason].id',
+  `status` smallint(5) NOT NULL DEFAULT '0' COMMENT  'Bug Status',
   
   `jira_project_id` int(10) unsigned COMMENT 'FK: [dictionary].id',
   `jira_labels` varchar(64) DEFAULT NULL COMMENT 'Jira labels',

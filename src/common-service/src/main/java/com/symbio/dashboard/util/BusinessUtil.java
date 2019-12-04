@@ -4,10 +4,7 @@ import com.symbio.dashboard.business.CommonListDTOFactory;
 import com.symbio.dashboard.business.StatListFactory;
 import com.symbio.dashboard.constant.ProjectConfigConst;
 import com.symbio.dashboard.entity.Progress;
-import com.symbio.dashboard.enums.EnumDef;
-import com.symbio.dashboard.enums.ListColumns;
-import com.symbio.dashboard.enums.Locales;
-import com.symbio.dashboard.enums.SystemListSetting;
+import com.symbio.dashboard.enums.*;
 import com.symbio.dashboard.model.*;
 
 import java.util.*;
@@ -415,6 +412,41 @@ public class BusinessUtil {
     }
 
     return retMap;
+  }
+
+  public static List<Map<String, Object>> filterURLListData(List<Map<String, Object>> data, String preDomain) {
+    List<Map<String, Object>> retData = data;
+
+    for (Map<String, Object> item : data) {
+      filterURLMapData(item, preDomain);
+    }
+
+    return retData;
+  }
+
+  /**
+   * 得到User参照的field
+   *
+   * @param listSetting
+   * @return
+   */
+  public static List<String> getQueryUserRefFields(List<SysListSetting> listSetting) {
+    List<String> dbFields = new ArrayList<>();
+
+    try {
+      String strFieldType = null;
+      for (SysListSetting item : listSetting) {
+        strFieldType = item.getType().trim();
+        if (ColumnType.User.getCode().equals(strFieldType)) {
+        }
+        dbFields.add(CommonUtil.getCamelField(item.getField()));
+
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return dbFields;
   }
 
 }

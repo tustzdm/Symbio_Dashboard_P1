@@ -42,6 +42,8 @@ public class BugInfo implements Serializable {
     private Integer issueCategoryId;
     @Column(name = "issue_reason_id")
     private Integer issueReasonId;
+    @Column(name = "status")
+    private Integer status;
 
     @Column(name = "jira_project_id")
     private Integer jiraProjectId;

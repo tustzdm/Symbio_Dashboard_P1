@@ -44,7 +44,7 @@ import java.util.*;
 public class BugReportDao {
 
     @Autowired
-    private DataCommonService commonService;
+    private DataCommonService dataCommonService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -649,26 +649,26 @@ public class BugReportDao {
             resultBugDTO.setColumns(listColumns);
         }
 
-        List<String> listFields = CommonDao.getQueryFields(SystemListSetting.BugList, listSetting);
+        List<String> listFields = dataCommonService.getQueryFields(SystemListSetting.BugList, listSetting);
         if (CommonUtil.isEmpty(listFields)) {
             log.debug("There is no field to query");
             return retResult;
         }
 
         // Get Menu role
-        Result resultRole = commonService.getUserPageRole(funcName, EnumDef.DASHBOARD_PAGE.BUGS_OVERVIEW, userId);
+        Result resultRole = dataCommonService.getUserPageRole(funcName, EnumDef.DASHBOARD_PAGE.BUGS_OVERVIEW, userId);
         if (resultRole.hasError()) {
             return resultRole;
         }
-
         Integer nRole = (Integer) resultRole.getCd();
         resultBugDTO.setRole(nRole);
 
-        List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
+        // Check if has User type field or not
+        //List<String> listUserFields = BusinessUtil.getQueryUserRefFields(listSetting);
 
         // Fetch data from db
         String strFields = String.join(",", listFields);
-        Result retProductResult = getBugListMapInfoByField(query, strFields, listUserFields);
+        Result retProductResult = getBugListMapInfoByField(query, strFields);
         if (retProductResult.hasError()) {
             retResult = retProductResult;
         } else {
@@ -684,7 +684,7 @@ public class BugReportDao {
         return retResult;
     }
 
-    private Result getBugListMapInfoByField(ListQueryVO query, String strFields, List<String> listUserFields) {
+    private Result getBugListMapInfoByField(ListQueryVO query, String strFields) {
         log.debug("strField = " + strFields);
         Result retResult;
 
@@ -700,17 +700,17 @@ public class BugReportDao {
             ListDataType dataType = ListDataType.Map;
 
             listBug = EntityUtils.castQuerytoMap(listResult, strFields);
-            bugListDTO.setFields(CommonUtil.getListByMergeString(strFields));
-            bugListDTO.setDataType(dataType.getDataType());
+            bugListDTO.setFields(EntityUtils.getCamelFieldList(strFields));
 
-            if (CommonUtil.isEmpty(listUserFields)) {
-                bugListDTO.setData(listBug);
-            } else {
-                //listTestRun = commonDao.setUserMapInfo(listTestRun, listUserFields);
-                bugListDTO.setData(listBug);
+            // Add domain address for the url link
+            if (strFields.contains("url")) {
+                BusinessUtil.filterURLListData(listBug, commonDao.getConfigValueByKey(ProjectConst.VUE_DOMAIN_NAME));
             }
 
-            long nCount = 0;//testRunRep.getCountByTestSetId(testSetId);
+            bugListDTO.setDataType(dataType.getDataType());
+            bugListDTO.setData(listBug);
+
+            long nCount = dataCommonService.getSqlCount(SQLUtils.buildSqlCount(EnumDef.DASHBOARD_PAGE.BUGS_OVERVIEW, queryVO));
             bugListDTO.setTotalRecord(new Long(nCount).intValue());
 
             retResult = new Result(bugListDTO);

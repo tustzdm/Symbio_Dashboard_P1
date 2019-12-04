@@ -5,10 +5,17 @@ import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.service.DataCommonService;
 import com.symbio.dashboard.enums.EnumDef;
+import com.symbio.dashboard.enums.SystemListSetting;
+import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.math.BigInteger;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -16,6 +23,9 @@ import org.springframework.stereotype.Service;
 public class DataCommonServiceImpl implements DataCommonService {
     @Autowired
     private CommonDao commonDao;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Result getUserPageRole(EnumDef.DASHBOARD_PAGE page, Integer userId) {
@@ -40,5 +50,26 @@ public class DataCommonServiceImpl implements DataCommonService {
         retResult.setCd(nRole);
 
         return retResult;
+    }
+
+    @Override
+    public List<String> getQueryFields(SystemListSetting listType, List<SysListSetting> listSetting) {
+        return commonDao.getQueryFields(listType, listSetting);
+    }
+
+    @Override
+    public Integer getSqlCount(String sql) {
+        Integer nCount = 0;
+
+        try {
+            List<Object> listResult = entityManager.createNativeQuery(sql).getResultList();
+            if (listResult != null) {
+                BigInteger nBigInt = (BigInteger) listResult.get(0);
+                nCount = nBigInt.intValue();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return nCount;
     }
 }

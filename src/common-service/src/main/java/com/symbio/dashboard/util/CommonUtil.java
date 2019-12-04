@@ -129,7 +129,6 @@ public class CommonUtil {
         return listFields;
     }
 
-    @Deprecated
     public static List<String> getListByMergeString(String entityFields) {
         List<String> listFields = new ArrayList<String>();
 
@@ -145,7 +144,7 @@ public class CommonUtil {
     public static String checkKeyFieldName(String name) {
         String retFieldName = name;
 
-        if ("key,type,status,release,search,data,name".contains(name)) {
+        if ("key,type,release,search,data,name".contains(name)) {//status,
             retFieldName = String.format("`%s`", name);
         }
 
@@ -169,7 +168,9 @@ public class CommonUtil {
             default:
                 break;
             case BugList: // Equals to EnumDef.DASHBOARD_PAGE.BUGS_OVERVIEW
-                retFieldName = table.replace("test_set", "ts");
+                retFieldName = table.replace("test_set", "ts")
+                        .replace("product", "prod")
+                        .replace("release", "rel");
                 break;
         }
 
