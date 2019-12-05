@@ -14,8 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName - BugServiceImpl
@@ -67,6 +66,33 @@ public class BugServiceImpl implements BugService {
 
     @Override
     public Result getBarChartData(Integer userId, ListQueryVO query) {
-        return null;
+
+        // Step1: query data
+        String strFields = "priority,status,count";
+        NavigatorQueryVO queryVO = new NavigatorQueryVO(strFields, query);
+        String sql = SQLUtils.buildSql(EnumDef.CHARTS.BUGS_BAR, queryVO);
+
+        Result<List<Map<String, Object>>> resultQuery = dataCommService.executeSqlClause(sql, strFields);
+        if (resultQuery.hasError()) {
+            return resultQuery;
+        }
+
+        // Step2: return result
+        List<Map<String, Object>> listData = resultQuery.getCd();
+        Map<String, Object> mapData = new HashMap<>();
+
+        Set<String> setSerias = new TreeSet<>();
+        Set<String> setStatus = new TreeSet<>();
+
+        for (Map<String, Object> item : listData) {
+            setSerias.add(item.get("priority").toString());
+            setStatus.add(item.get("status").toString());
+        }
+
+        mapData.put("serials", setSerias.toArray());
+        mapData.put("status", setStatus.toArray());
+        mapData.put("data", listData);
+
+        return new Result(mapData);
     }
 }

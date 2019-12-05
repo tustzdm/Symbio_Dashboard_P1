@@ -13,9 +13,11 @@ public class SQLUtils {
             default:
                 break;
             case BUGS_PIE:
-                //sql = getResultReviewQuerySQL(queryVo, bOrderBy);
-            case BUGS_BAR:
                 sql = getBugChartPieSQL(queryVo);
+                break;
+            case BUGS_BAR:
+                sql = getBugChartBarSQL(queryVo);
+                break;
         }
 
         return sql;
@@ -103,7 +105,6 @@ public class SQLUtils {
             sbCondition.append(" LEFT JOIN dictionary dic2 on dic2.`type` = 'BugType' AND dic2.`code` = bug.bug_type");
         }
 
-        //sb.append("SELECT ").append(strFields)
         if (bOrderBy) {
             sb.append("SELECT ").append(strFields);
         } else {
@@ -173,6 +174,44 @@ public class SQLUtils {
             sb.append(" AND ts.id = ").append(tsId);
         }
         sb.append(" GROUP BY priority");
+
+        return sb.toString();
+    }
+
+    private static String getBugChartBarSQL(NavigatorQueryVO queryVo) {
+        StringBuffer sb = new StringBuffer();
+        Integer tsId = queryVo.getTestSetId();
+
+        String strStatusField = String.format("dicLocal.%s as 'status'", queryVo.getLocale().toLowerCase());
+
+        // Build clause ...
+        sb.append(String.format("SELECT dic1.value as priority, %s, count(*) as count", strStatusField))
+                .append(" FROM bug_info bug")
+                .append(" INNER JOIN test_result tr ON bug.test_result_id = tr.id")
+                .append(" INNER JOIN test_run trun ON trun.id = tr.test_run_id")
+                .append(" INNER JOIN test_set ts on ts.id = trun.testset_id");
+
+        if (!CommonUtil.isEmpty(queryVo.getProductId())) {
+            sb.append(" INNER JOIN `release` rel on rel.id = ts.release_id")
+                    .append(" INNER JOIN product prod on prod.id = rel.product_id");
+        } else if (!CommonUtil.isEmpty(queryVo.getReleaseId())) {
+            sb.append(" INNER JOIN `release` rel on rel.id = ts.release_id");
+        }
+
+        // Add extra condition
+        sb.append(" INNER JOIN dictionary dic1 on dic1.`type` = 'BugPriority' AND dic1.`code` = bug.bug_priority")
+                .append(" LEFT JOIN dictionary_local dicLocal on dicLocal.name = 'BugStatus' AND bug.status = dicLocal.code");
+
+        // Where clause
+        sb.append(" WHERE 1=1");
+        if (!CommonUtil.isEmpty(queryVo.getProductId())) {
+            sb.append(" AND prod.id = ").append(queryVo.getProductId());
+        } else if (!CommonUtil.isEmpty(queryVo.getReleaseId())) {
+            sb.append(" AND rel.id = ").append(queryVo.getReleaseId());
+        } else if (!CommonUtil.isEmpty(tsId)) {
+            sb.append(" AND ts.id = ").append(tsId);
+        }
+        sb.append(" GROUP BY priority, status");
 
         return sb.toString();
     }

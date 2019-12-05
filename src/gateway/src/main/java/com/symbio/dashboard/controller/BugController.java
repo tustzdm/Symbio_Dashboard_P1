@@ -88,4 +88,34 @@ public class BugController extends BaseController {
         return retResult;
     }
 
+    @GetMapping("/getBarData")
+    public Result getBarData(@RequestParam(value = "token") String token,
+                             @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                             @RequestParam(value = "productId", required = false, defaultValue = "") Integer productId,
+                             @RequestParam(value = "releaseId", required = false, defaultValue = "") Integer releaseId,
+                             @RequestParam(value = "testSetId", required = false, defaultValue = "") Integer testSetId) {
+        String funcName = "BugController.getBarData()";
+        Result retResult = new Result();
+
+        try {
+            Result resultUserId = super.getUserIdByToken(token);
+            if (resultUserId.hasError()) {
+                return resultUserId;
+            }
+            Integer userId = (Integer) resultUserId.getCd();
+
+
+            ListQueryVO query = new ListQueryVO(token, locale, productId, releaseId, testSetId, null, null);
+            retResult = bugService.getBarChartData(userId, query);
+            if (retResult.hasError()) {
+                log.error(ErrorConst.getErrorLogMsg(funcName, retResult));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        log.trace(funcName + " Exit");
+        return retResult;
+    }
+
 }
