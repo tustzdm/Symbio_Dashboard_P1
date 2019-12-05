@@ -92,7 +92,8 @@ export default {
       Reporter: "Reporter",
       Priority: "Priority",
       Status: "Status"
-    }
+    },
+    image: "image"
   },
   listOfPRT:{
     productList: "Product List",

@@ -88,7 +88,8 @@ export default {
       Reporter: "报告者",
       Priority: "优先级",
       Status: "状态"
-    }
+    },
+    image: "缩略图"
   },
   listOfPRT:{
     productList: "产品列表",

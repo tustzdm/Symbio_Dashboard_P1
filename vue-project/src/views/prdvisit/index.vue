@@ -31,7 +31,7 @@
     <bugs-custom-table class="bugs-edit" :displayCustomTable="displayCustomTable" :tableHeader="tableHeader" :displayPerPage="displayPerPage" v-if="displayCustomTable" @closeDisplayCustomTable="displayCustomTable = $event.displayCustomTable;tableHeader = $event.CustomTableSelected;displayPerPage = $event.displayPerPage" @cancelDisplayCustomTable="displayCustomTable = $event"></bugs-custom-table>
     <div class="bugs-table">
         <bugs-table class="tableItem panel" :tableHeaderTitle="tableHeaderTitle" :tableHeader="tableHeader" :displayPerPage="displayPerPage"></bugs-table>
-        <button class="bugs-customize" @click="displayCustomTable = true">{{$t('bugsoverview.customize')}}</button>
+        <!-- <button class="bugs-customize" @click="displayCustomTable = true">{{$t('bugsoverview.customize')}}</button> -->
     </div>
     <div>
         <p style="margin-top:50px">&nbsp;</p>
