@@ -9,6 +9,7 @@ import com.symbio.dashboard.data.service.DataCommonService;
 import com.symbio.dashboard.data.utils.SQLUtils;
 import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.enums.EnumDef;
+import com.symbio.dashboard.util.EntityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,7 +59,10 @@ public class BugServiceImpl implements BugService {
             return resultQuery;
         }
 
-        return null;
+        List<Map<String, Object>> listData = resultQuery.getCd();
+        Map<String, List<Object>> mapData = EntityUtils.toChartData(listData, strFields);
+        return new Result(mapData);
+
     }
 
     @Override

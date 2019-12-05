@@ -543,4 +543,21 @@ public class EntityUtils {
         }
         return map;
     }
+
+    public static Map<String, List<Object>> toChartData(List<Map<String, Object>> listData, String fields) {
+        Map<String, List<Object>> mapData = new HashMap<>();
+
+        String[] arrFields = fields.split(",");
+
+        for (String field : arrFields) {
+            List<Object> listObj = new ArrayList<>();
+            for (Map<String, Object> item : listData) {
+                if (item.containsKey(field)) {
+                    listObj.add(item.get(field));
+                }
+            }
+            mapData.put(field, listObj);
+        }
+        return mapData;
+    }
 }
