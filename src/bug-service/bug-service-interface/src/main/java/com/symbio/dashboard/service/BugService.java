@@ -15,4 +15,8 @@ public interface BugService {
 
     Result getList(Integer userId, ListQueryVO query);
 
+    Result getPieChartData(Integer userId, ListQueryVO query);
+
+    Result getBarChartData(Integer userId, ListQueryVO query);
+
 }

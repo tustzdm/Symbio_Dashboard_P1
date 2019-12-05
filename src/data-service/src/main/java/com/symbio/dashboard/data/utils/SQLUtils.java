@@ -7,6 +7,20 @@ import com.symbio.dashboard.util.CommonUtil;
 @SuppressWarnings("unchecked")
 public class SQLUtils {
 
+    public static String buildSql(EnumDef.CHARTS chart, NavigatorQueryVO queryVo) {
+        String sql = "";
+        switch (chart) {
+            default:
+                break;
+            case BUGS_PIE:
+                //sql = getResultReviewQuerySQL(queryVo, bOrderBy);
+            case BUGS_BAR:
+                sql = getBugChartPieSQL(queryVo);
+        }
+
+        return sql;
+    }
+
     public static String buildSql(EnumDef.DASHBOARD_PAGE page, NavigatorQueryVO queryVo) {
         String sql = buildSqlBase(page, queryVo, true);
 
@@ -52,31 +66,6 @@ public class SQLUtils {
 
     public static String getBugListQuerySQL(NavigatorQueryVO queryVo, boolean bOrderBy) {
         if (CommonUtil.isEmpty(queryVo.getFields())) return "";
-        /*
-        SELECT
-        ts.id,ts.name,
-                bug.assignee,
-                bug.bug_priority,bug.bug_type,bug.file_url,
-                bug.id,bug.issue_category_id,bug.issue_reason_id,bug.thumbnail_url,bug.title,
-
-                bug.verifier
-        FROM bug_info bug
-        INNER JOIN test_result tr ON bug.test_result_id = tr.id
-        INNER JOIN test_run trun ON trun.id = tr.test_run_id
-        INNER JOIN test_set ts on ts.id = trun.testset_id
-
-        LEFT JOIN issue_category ic on ic.id = bug.issue_category_id
-        LEFT JOIN issue_reason ir on ir.id = bug.issue_reason_id
-
-        LEFT JOIN `user` us1 on us1.id = bug.assignee
-        LEFT JOIN `user` us2 on us2.id = bug.verifier
-
-        LEFT JOIN dictionary dic1 on dic1.`type` = 'BugPriority' AND dic1.`code` = bug.bug_priority
-        LEFT JOIN dictionary dic2 on dic2.`type` = 'BugType' AND dic2.`code` = bug.bug_type
-
-        -- WHERE ts.id = 1330
-        ORDER BY ts.id, bug.id;
-        */
 
         StringBuffer sb = new StringBuffer();
         StringBuffer sbCondition = new StringBuffer();
@@ -154,4 +143,38 @@ public class SQLUtils {
 
         return sb.toString();
     }
+
+    private static String getBugChartPieSQL(NavigatorQueryVO queryVo) {
+        StringBuffer sb = new StringBuffer();
+        Integer tsId = queryVo.getTestSetId();
+
+        sb.append("SELECT dic1.value as priority, count(*) as count")
+                .append(" FROM bug_info bug")
+                .append(" INNER JOIN test_result tr ON bug.test_result_id = tr.id")
+                .append(" INNER JOIN test_run trun ON trun.id = tr.test_run_id")
+                .append(" INNER JOIN test_set ts on ts.id = trun.testset_id");
+
+        if (!CommonUtil.isEmpty(queryVo.getProductId())) {
+            sb.append(" INNER JOIN `release` rel on rel.id = ts.release_id")
+                    .append(" INNER JOIN product prod on prod.id = rel.product_id");
+        } else if (!CommonUtil.isEmpty(queryVo.getReleaseId())) {
+            sb.append(" INNER JOIN `release` rel on rel.id = ts.release_id");
+        }
+
+        // Add extra condition
+        sb.append(" INNER JOIN dictionary dic1 on dic1.`type` = 'BugPriority' AND dic1.`code` = bug.bug_priority");
+        // Where clause
+        sb.append(" WHERE 1=1");
+        if (!CommonUtil.isEmpty(queryVo.getProductId())) {
+            sb.append(" AND prod.id = ").append(queryVo.getProductId());
+        } else if (!CommonUtil.isEmpty(queryVo.getReleaseId())) {
+            sb.append(" AND rel.id = ").append(queryVo.getReleaseId());
+        } else if (!CommonUtil.isEmpty(tsId)) {
+            sb.append(" AND ts.id = ").append(tsId);
+        }
+        sb.append(" GROUP BY priority");
+
+        return sb.toString();
+    }
+
 }

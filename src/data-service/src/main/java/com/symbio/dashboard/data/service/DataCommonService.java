@@ -16,4 +16,6 @@ public interface DataCommonService {
     List<String> getQueryFields(SystemListSetting listType, List<SysListSetting> listSetting);
 
     Integer getSqlCount(String sql);
+
+    Result executeSqlClause(String sql, String fields);
 }

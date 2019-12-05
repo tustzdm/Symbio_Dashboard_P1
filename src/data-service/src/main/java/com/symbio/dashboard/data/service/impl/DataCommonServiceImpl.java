@@ -8,6 +8,7 @@ import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.util.CommonUtil;
+import com.symbio.dashboard.util.EntityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,9 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -71,5 +74,23 @@ public class DataCommonServiceImpl implements DataCommonService {
             e.printStackTrace();
         }
         return nCount;
+    }
+
+    @Override
+    public Result executeSqlClause(String sql, String fields) {
+        String funcName = "DataCommonServiceImpl.executeSqlClause()";
+
+        List<Map<String, Object>> mapData = new ArrayList<>();
+        try {
+            List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+            mapData = EntityUtils.castQuerytoMap(listResult, fields);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("sql = {}, fields = {}", sql, fields);
+            log.error(ErrorConst.getExceptionLogMsg(funcName, e));
+            return ErrorConst.getExceptionResult(funcName, e);
+        }
+
+        return new Result(mapData);
     }
 }

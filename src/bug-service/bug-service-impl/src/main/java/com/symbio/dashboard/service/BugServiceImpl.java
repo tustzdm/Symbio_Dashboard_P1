@@ -2,12 +2,19 @@ package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.ListQueryVO;
+import com.symbio.dashboard.bean.NavigatorQueryVO;
 import com.symbio.dashboard.data.dao.BugReportDao;
 import com.symbio.dashboard.data.dao.CommonDao;
+import com.symbio.dashboard.data.service.DataCommonService;
+import com.symbio.dashboard.data.utils.SQLUtils;
 import com.symbio.dashboard.dto.CommonListDTO;
+import com.symbio.dashboard.enums.EnumDef;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName - BugServiceImpl
@@ -25,7 +32,8 @@ public class BugServiceImpl implements BugService {
     private CommonDao commonDao;
     @Autowired
     private BugReportDao bugDao;
-
+    @Autowired
+    private DataCommonService dataCommService;
 
     @Override
     public Result getList(Integer userId, ListQueryVO query) {
@@ -38,5 +46,23 @@ public class BugServiceImpl implements BugService {
         return resultBugList;
     }
 
+    @Override
+    public Result getPieChartData(Integer userId, ListQueryVO query) {
 
+        String strFields = "priority,count";
+        NavigatorQueryVO queryVO = new NavigatorQueryVO(strFields, query);
+        String sql = SQLUtils.buildSql(EnumDef.CHARTS.BUGS_PIE, queryVO);
+
+        Result<List<Map<String, Object>>> resultQuery = dataCommService.executeSqlClause(sql, strFields);
+        if (resultQuery.hasError()) {
+            return resultQuery;
+        }
+
+        return null;
+    }
+
+    @Override
+    public Result getBarChartData(Integer userId, ListQueryVO query) {
+        return null;
+    }
 }

@@ -390,6 +390,41 @@ public class EnumDef {
         }
     }
 
+    /**
+     * Refer to : [Menu].groupName = Menu
+     */
+    @Getter
+    public enum CHARTS implements IDictEnum {
+//        QUALITY_OVERVIEW(100, "Quality Overview"),
+//
+//        TEST_MANAGEMENT(200, "Test Management"), // PRODUCT
+//        PRODUCT(210, "Product"),
+//        RELEASE(220, "Release"),
+//        TEST_SET(230, "Test Set"),
+//        TEST_CASE(240, "Test Case"),
+//
+//        EXECUTE_REVIEW(300, "Execute Review"),
+//        TEST_RUN(310, "Test Run"),
+//        TEST_RESULT(320, "Test Result"),
+//        IMAGE_COMPARE(330, "Image Compare"),
+
+        BUGS_PIE(401, "Bugs Pie"),
+        BUGS_BAR(402, "Bugs Bar");
+
+        private Integer code;
+        private String value;
+
+        CHARTS(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
     @Getter
     public enum MENU_TYPE implements IDictEnum {
         PAGE_ELEMENT(1, "Page_Element"),
