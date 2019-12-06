@@ -5,6 +5,7 @@ import com.symbio.dashboard.business.UserFactory;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.repository.UserRep;
+import com.symbio.dashboard.data.service.RedisService;
 import com.symbio.dashboard.dto.UserLoginDTO;
 import com.symbio.dashboard.encrypt.MD5Util;
 import com.symbio.dashboard.enums.Locales;
@@ -32,6 +33,9 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private static Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    @Autowired
+    private RedisService redisService;
 
     @Autowired
     private UserRep userRep;
@@ -190,7 +194,7 @@ public class UserServiceImpl implements UserService {
 
         // Step3 - get Role & Menu
         Integer userId = userData.getId();
-        String token = userData.getName().toLowerCase();
+        String token = redisService.saveUserToken(userId);
         UserLoginDTO dtoUserLogin = new UserLoginDTO(locale, token);
 
         return new Result(dtoUserLogin);

@@ -24,6 +24,18 @@ public class CommonDef {
         checkDirectories();
     }
 
+    public final static String FAIL_LOGIN_USER_ID = "FAIL_USER_ID-";
+    public final static String USERID_PRE = "DB-USER-ID-";
+    public final static String USER_TOKEN = "DB-TOKEN-";
+    public final static String USER_ID_TOKEN_MAPPING = "ID_TOKEN-";
+
+    public final static String ENV_DEV = "dev";
+    public static final String ANGULAR_DEBUG = "angular_debug";
+
+    public static boolean isDEVEnvironment() {
+        return (CommonDef.ENV_DEV.equals(CommonDef.LOGIN_ENV) || CommonDef.ANGULAR_DEBUG.equals(CommonDef.LOGIN_ENV));
+    }
+
     public static final String FOLDER_NAME_ZIP_ROOT = "ziproot";
     public static final String FOLDER_NAME_WORK_ROOT = "testrunroot";
     public static final String FOLDER_NAME_ZIP_BACKUP = "bakzip";
@@ -46,7 +58,7 @@ public class CommonDef {
         LOGIN_ENV = "dev";
         // LOGIN_ENV = "angular_debug";
         COOKIE_DOMAIN = "autodash";
-        USER_EXPIRE_TIME = 24 * 60;
+        USER_EXPIRE_TIME = 24 * 60; // 24 hours, 1 day
         PIC_ROOT = rootDirectory;
         PIC_UPLOAD = PIC_ROOT + "/upload/";
         FOLDER_PATH_IMPORT = PIC_ROOT + "/import/";
