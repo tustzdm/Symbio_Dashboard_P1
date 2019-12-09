@@ -3,6 +3,7 @@ package com.symbio.dashboard.service;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.ListQueryVO;
 import com.symbio.dashboard.bean.NavigatorQueryVO;
+import com.symbio.dashboard.business.ChartFactory;
 import com.symbio.dashboard.data.dao.BugReportDao;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.service.DataCommonService;
@@ -60,7 +61,12 @@ public class BugServiceImpl implements BugService {
 
         List<Map<String, Object>> listData = resultQuery.getCd();
         Map<String, List<Object>> mapData = EntityUtils.toChartData(listData, strFields);
-        return new Result(mapData);
+
+        ChartFactory cf = new ChartFactory();
+        String locale = query.getLocale();
+        Map<String, Object> retMap = cf.getChartMapData(locale, EnumDef.CHARTS.BUGS_PIE, mapData);
+
+        return new Result(retMap);
 
     }
 

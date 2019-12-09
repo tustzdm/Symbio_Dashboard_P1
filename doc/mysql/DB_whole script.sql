@@ -1349,3 +1349,17 @@ CREATE TABLE `stat_chart` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_stat_chart_page_chart_id` (`page_name`, `chart_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- 2019/12/9
+Drop Table IF EXISTS `chart_data`;
+CREATE TABLE `chart_data` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `chart_key` varchar(32) NOT NULL COMMENT 'key of chart',
+  `title` varchar(128) NOT NULL COMMENT 'title of chart',
+  `data` varchar(4096) DEFAULT NULL COMMENT 'chart data formatter',
+  `validation` smallint unsigned NOT NULL DEFAULT '1' COMMENT 'valid or not. 0-invalid, 1-valid',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create time',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_chart_data_key` (`key`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
