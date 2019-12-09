@@ -15,7 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName - BugServiceImpl
@@ -85,19 +86,23 @@ public class BugServiceImpl implements BugService {
 
         // Step2: return result
         List<Map<String, Object>> listData = resultQuery.getCd();
-        Map<String, Object> mapData = new HashMap<>();
+//        Map<String, Object> mapData = new HashMap<>();
+//
+//        Set<String> setSerials = new TreeSet<>();
+//        Set<String> setStatus = new TreeSet<>();
+//
+//        for (Map<String, Object> item : listData) {
+//            setSerials.add(item.get("priority").toString());
+//            setStatus.add(item.get("status").toString());
+//        }
+//
+//        mapData.put("serials", setSerials.toArray());
+//        mapData.put("status", setStatus.toArray());
+//        mapData.put("data", listData);
 
-        Set<String> setSerias = new TreeSet<>();
-        Set<String> setStatus = new TreeSet<>();
-
-        for (Map<String, Object> item : listData) {
-            setSerias.add(item.get("priority").toString());
-            setStatus.add(item.get("status").toString());
-        }
-
-        mapData.put("serials", setSerias.toArray());
-        mapData.put("status", setStatus.toArray());
-        mapData.put("data", listData);
+        ChartFactory cf = new ChartFactory();
+        String locale = query.getLocale();
+        Map<String, Object> mapData = cf.getChartMapData(locale, EnumDef.CHARTS.BUGS_BAR, listData);
 
         return new Result(mapData);
     }

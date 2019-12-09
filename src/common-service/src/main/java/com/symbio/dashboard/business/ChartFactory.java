@@ -12,16 +12,19 @@ import java.util.Map;
 
 public class ChartFactory {
 
-    public Map<String, Object> getChartMapData(String locale, EnumDef.CHARTS chart, Map<String, List<Object>> data) {
+    public Map<String, Object> getChartMapData(String locale, EnumDef.CHARTS chart, Object data) {
         Map<String, Object> retMap = new HashMap<>();
 
         switch (chart) {
             default:
                 break;
             case BUGS_PIE: // "PieReferer"
-                retMap = getPieReferMapData(locale, data);
+                Map<String, List<Object>> bugPieData = (Map<String, List<Object>>) data;
+                retMap = getPieReferMapData(locale, bugPieData);
                 break;
-            case BUGS_BAR:
+            case BUGS_BAR: // SimpleBar
+                List<Map<String, Object>> bugBarData = (List<Map<String, Object>>) data;
+                retMap = getSimpleBarMapData(locale, chart, bugBarData);
                 break;
         }
 
@@ -52,6 +55,43 @@ public class ChartFactory {
         return retString;
     }
 
+    private Map<String, Object> getSimpleBarMapData(String locale, EnumDef.CHARTS chart, List<Map<String, Object>> data) {
+        Map<String, Object> retMap = new HashMap<>();
+
+        try {
+            String category = "Priority";
+            String title = "Priority per Status";
+            if (Locales.ZH_CN.toString().equals(locale)) {
+                title = "优先级 / 状态";
+                category = "优先级";
+            }
+
+            retMap.put("title", buildTitle(chart, title));
+            retMap.put("color", buildColor(chart));
+            retMap.put("legend", buildLegend(chart, null));
+            retMap.put("tooltip", buildToolTip(chart));
+
+            Map<String, Object> mapData = new HashMap<>();
+            List<List<Object>> listSource = buildDataSetSource(chart, data, category);
+            mapData.put("source", listSource);
+            retMap.put("dataset", mapData);
+
+            retMap.put("grid", buildGrid(chart));
+
+            mapData = new HashMap<>();
+            retMap.put("yAxis", mapData);
+            mapData = new HashMap<>();
+            mapData.put("type", "category");
+            retMap.put("xAxis", mapData);
+
+            retMap.put("series", buildSeries(chart, listSource));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return retMap;
+    }
+
     private static List<Map<String, Object>> getListNameValueMap() {
         List<Map<String, Object>> listSerialData = new ArrayList<>();
 
@@ -77,9 +117,11 @@ public class ChartFactory {
         String serialName = "#serialName#";
         List<Map<String, Object>> listSerialData = getListNameValueMap();
 
-        retMap.put("title", buildTitle(null));
-        retMap.put("tooltip", buildToolTip());
-        retMap.put("legend", buildLengend(arrLegendData));
+        String[] arrColor = {"#7A85A1", "#9EADC5", "#C9D4E3", "#E8E8E8", "#F3D1CD", "#F9E8E0"};
+        retMap.put("color", arrColor);
+        retMap.put("title", buildTitle(EnumDef.CHARTS.BUGS_PIE, null));
+        retMap.put("tooltip", buildToolTip(EnumDef.CHARTS.BUGS_PIE));
+        retMap.put("legend", buildLegend(EnumDef.CHARTS.BUGS_PIE, arrLegendData));
         retMap.put("series", getSerials(serialName, listSerialData));
 
         return retMap;
@@ -145,9 +187,12 @@ public class ChartFactory {
             String serialName = title;
             List<Map<String, Object>> listSerialData = getSerialData(data);
 
-            retMap.put("title", buildTitle(title));
-            retMap.put("tooltip", buildToolTip());
-            retMap.put("legend", buildLengend(arrLegendData));
+            retMap.put("title", buildTitle(EnumDef.CHARTS.BUGS_PIE, title));
+            retMap.put("tooltip", buildToolTip(EnumDef.CHARTS.BUGS_PIE));
+            // color: ['#7A85A1', '#9EADC5', '#C9D4E3', '#E8E8E8', '#F3D1CD', '#F9E8E0'],
+            //String[] arrColor = {"#7A85A1", "#9EADC5", "#C9D4E3", "#E8E8E8", "#F3D1CD", "#F9E8E0"};
+            retMap.put("color", buildColor(EnumDef.CHARTS.BUGS_PIE));
+            retMap.put("legend", buildLegend(EnumDef.CHARTS.BUGS_PIE, arrLegendData));
             retMap.put("series", getSerials(serialName, listSerialData));
 
         } catch (Exception e) {
@@ -185,39 +230,233 @@ public class ChartFactory {
         return retListData;
     }
 
-    private Map<String, Object> buildTitle(String title) {
+    private Map<String, Object> buildTitle(EnumDef.CHARTS chart, String title) {
         Map<String, Object> retMap = new HashMap<>();
 
-        retMap.put("text", CommonUtil.isEmpty(title) ? "#title#" : title);
-        retMap.put("subtext", "");
-        retMap.put("x", "center");
+        switch (chart) {
+            default:
+                break;
+            case BUGS_PIE: // "PieReferer"
+                retMap.put("text", CommonUtil.isEmpty(title) ? "#title#" : title);
+                retMap.put("subtext", "");
+                retMap.put("x", "center");
+                break;
+            case BUGS_BAR: // SimpleBar
+                retMap.put("text", CommonUtil.isEmpty(title) ? "#title#" : title);
+                retMap.put("x", "20px");
+                retMap.put("x", "5px");
+                break;
+        }
+
         return retMap;
     }
 
-    private Map<String, Object> buildToolTip() {
+    private String[] buildColor(EnumDef.CHARTS chart) {
+        String[] arrColor = {};
+
+        switch (chart) {
+            default:
+                break;
+            case BUGS_PIE: // "PieReferer"
+                arrColor = new String[]{"#7A85A1", "#9EADC5", "#C9D4E3", "#E8E8E8", "#F3D1CD", "#F9E8E0"};
+                break;
+            case BUGS_BAR: // SimpleBar
+                arrColor = new String[]{"#7A85A1", "#C9D4E3", "#E8E8E8", "#9EADC5", "#F3D1CD", "#F9E8E0"};
+                break;
+        }
+
+        return arrColor;
+    }
+
+    private Map<String, Object> buildToolTip(EnumDef.CHARTS chart) {
         Map<String, Object> retMap = new HashMap<>();
 
-        retMap.put("trigger", "item");
-        retMap.put("formatter", "{a} <br/>{b} : {c} ({d}%)");
+        switch (chart) {
+            default:
+                break;
+            case BUGS_PIE: // "PieReferer"
+                retMap.put("trigger", "item");
+                retMap.put("formatter", "{a} <br/>{b} : {c} ({d}%)");
+                break;
+            case BUGS_BAR: // SimpleBar
+                break;
+        }
+
         return retMap;
     }
 
-    private Map<String, Object> buildLengend(String[] legendData) {
+    private Map<String, Object> buildLegend(EnumDef.CHARTS chart, String[] legendData) {
         Map<String, Object> retMap = new HashMap<>();
 
-        retMap.put("orient", "vertical");
-        retMap.put("left", "left");
-        retMap.put("data", legendData);
-//        retMap.put("x", "20px");
-//        retMap.put("y", "10px");
+        switch (chart) {
+            default:
+                break;
+            case BUGS_PIE: // "PieReferer"
+                retMap.put("orient", "vertical");
+                retMap.put("left", "left");
+                retMap.put("data", legendData);
+                //retMap.put("x", "20px");
+                //retMap.put("y", "10px");
+                break;
+            case BUGS_BAR: // SimpleBar
+                retMap.put("y", "30px");
+                retMap.put("right", "20px");
+                break;
+        }
         return retMap;
+    }
+
+    private Map<String, Object> buildGrid(EnumDef.CHARTS chart) {
+        Map<String, Object> retMap = new HashMap<>();
+
+        switch (chart) {
+            default:
+                break;
+            case BUGS_BAR: // SimpleBar
+                retMap.put("left", "3%");
+                retMap.put("right", "3%");
+                retMap.put("bottom", "3%");
+                retMap.put("containLabel", true);
+                break;
+        }
+        return retMap;
+
+    }
+
+    private Object buildSeries(EnumDef.CHARTS chart, Object data) {
+        Object retObject = null;
+
+        try {
+            switch (chart) {
+                default:
+                    break;
+                case BUGS_BAR: // SimpleBar
+                    List<Map<String, String>> listSimpleBar = new ArrayList<>();
+
+                    List<List<Object>> listData = (List<List<Object>>) data;
+                    if (!CommonUtil.isEmpty(listData)) {
+                        List<Object> listCategory = listData.get(0);
+                        if (!CommonUtil.isEmpty(listCategory) && listCategory.size() > 1) {
+                            Integer nCount = listCategory.size() - 1;
+                            for (int i = 0; i < nCount; i++) {
+                                Map<String, String> mapData = new HashMap<>();
+                                mapData.put("type", "bar");
+                                listSimpleBar.add(mapData);
+                            }
+                        }
+                    }
+
+                    retObject = listSimpleBar;
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return retObject;
+    }
+
+    private Integer getValueByCategoryAndStatus(List<Map<String, Object>> data, String priority, String status) {
+        Integer nCount = 0;
+        try {
+            for (Map<String, Object> mapData : data) {
+                String strPriority = mapData.get("priority").toString();
+                String strStatus = mapData.get("status").toString();
+                if (priority.equals(strPriority) && status.equals(strStatus)) {
+                    nCount = Integer.parseInt(mapData.get("count").toString());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return nCount;
+    }
+
+    private List<Object> getListStatusData(List<Map<String, Object>> data, List<Object> listCategory, String status) {
+        List<Object> retData = new ArrayList<>();
+
+        try {
+            for (Object category : listCategory) {
+                String priority = category.toString();
+                Integer nCount = getValueByCategoryAndStatus(data, priority, status);
+                retData.add(nCount);
+            }
+
+            if (retData.size() > 0) {
+                retData.add(0, status);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return retData;
+    }
+
+    private List<List<Object>> buildDataSetSource(EnumDef.CHARTS chart, List<Map<String, Object>> data, String category) {
+        List<List<Object>> retData = new ArrayList<>();
+
+        switch (chart) {
+            default:
+                break;
+            case BUGS_BAR: // SimpleBar
+                List<Object> listHeader = new ArrayList<>();
+                List<String> listStatus = new ArrayList<>();
+                for (Map<String, Object> mapItem : data) {
+                    listHeader.add(mapItem.get("priority").toString());
+                    listStatus.add(mapItem.get("status").toString());
+                }
+                if (listHeader.size() > 0) {
+//                    listHeader.add(0, category);
+//                    retData.add(listHeader);
+
+                    List<Object> listStatusData = new ArrayList<>();
+                    for (String status : listStatus) {
+                        listStatusData = getListStatusData(data, listHeader, status);
+
+                        if (listStatusData.size() > 0) {
+                            retData.add(listStatusData);
+                        }
+                    }
+
+                    if (retData.size() > 0) {
+                        listHeader.add(0, category);
+                        retData.add(0, listHeader);
+                    }
+                }
+                break;
+        }
+        return retData;
+
     }
 
     public static void main(String[] args) throws Exception {
         ChartFactory cf = new ChartFactory();
         String strResult = cf.getChartData("PieReferer");
-
         System.out.println(strResult);
+
+        //Map<String, Object> mapData = getChartMapData("en_US", , null);
+
+        List<Map<String, Object>> simpleData = new ArrayList<>();
+        Map<String, Object> mapBar = new HashMap<>();
+        mapBar.put("count", 1);
+        mapBar.put("priority", "P0");
+        mapBar.put("status", "Closed");
+        simpleData.add(mapBar);
+        mapBar = new HashMap<>();
+        mapBar.put("count", 1);
+        mapBar.put("priority", "P1");
+        mapBar.put("status", "Fixed");
+        simpleData.add(mapBar);
+
+        mapBar = new HashMap<>();
+        mapBar.put("count", 1);
+        mapBar.put("priority", "P3");
+        mapBar.put("status", "New");
+        simpleData.add(mapBar);
+
+        System.out.println(JSONUtil.mapToString(cf.getChartMapData("en_US", EnumDef.CHARTS.BUGS_BAR, simpleData)));
     }
 
 }
