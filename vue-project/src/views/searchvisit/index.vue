@@ -33,7 +33,6 @@
             </el-table-column>
             <el-table-column :label="$t('executeReview.review')" width="80" align="center">
                 <template slot-scope="scope">
-
                     <router-link :to="{ name: 'compare', query: {locale:scope.row.locale, runId:scope.row.id}}">
                         <img style="width:15px" src="../../assets/images/eye.jpeg" alt="">
                     </router-link>
@@ -46,7 +45,6 @@
     </div>
     <div style="width:100%;height:80px"></div>
     <!-- tabel和翻页要写到一个div里然后和manage-top flex布局 -->
-
 </div>
 </template>
 

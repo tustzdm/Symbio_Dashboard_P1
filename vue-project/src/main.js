@@ -49,7 +49,7 @@ router.beforeEach((to, from, next) => {
         next({
           path: '/',
           query: {
-            redirect: to.fullPath
+            redirect: router.currentRoute.fullPath
           } // 将跳转的路由path作为参数，登录成功后跳转到该路由
         })
       }
@@ -58,3 +58,19 @@ router.beforeEach((to, from, next) => {
     }  
   
 });
+
+//http response 拦截器
+axios.interceptors.response.use(
+  response => {
+    if(response.data.ec == '000003'){ //判断token是否过期，如果过期就返回登录页面
+      router.push({
+        path:"/",
+        querry:{redirect:router.currentRoute.fullPath}//从哪个页面跳转
+      })
+    }
+    return response;
+  },
+  error => {
+    return Promise.reject(error)
+  }
+)

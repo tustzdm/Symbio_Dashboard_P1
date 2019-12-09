@@ -42,6 +42,7 @@ let Fetch = (url, option = {}) => {
       .then(response => {
         response.status = status;
         if (response.status >= 401) {
+          alert(123132)
           if (response.state == 8888) {
             //登陆超时返回状态吗
 

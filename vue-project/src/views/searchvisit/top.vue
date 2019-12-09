@@ -210,35 +210,52 @@ export default {
             token: '',
             role: '',
             tepParameters: {},
-            ids:this.selectedIds,
-            lang:''
+            ids: this.selectedIds,
+            lang: ''
         }
     },
     props: {
         selectedIds: {
             type: Array
         },
-        page:{type:String}
+        page: {
+            type: String
+        }
     },
     created() {
-        this.lang = this.$store.state.app.language=='zh'? 'zh_CN':'en_US';
+        this.lang = this.$store.state.app.language == 'zh' ? 'zh_CN' : 'en_US';
         this.token = localStorage.getItem('token');
         this.productId = localStorage.getItem('result_productId'); //默认初始值为上次访问的，没有记录会访问最新的，这里设置为固定的480
         this.releaseId = localStorage.getItem('result_releaseId');
         this.testSetId = localStorage.getItem('result_testSetId');
         this.getNavgationList();
-        this.Fetch(`/result/getTEPInfo?token=${this.token}&testSetId=1`, {
-            method: "GET"
-        }).then(res => {
+        // this.Fetch(`/result/getTEPInfo?token=${this.token}&testSetId=1`, {
+        //     method: "GET"
+        // }).then(res => {
+        //     console.log(11111)
+        //     console.log(res);
+        //     console.log(22222)
+        //     this.tepnameList = res.cd.nameList;
+        //     console.log(this.tepnameList);
+        //     this.testSelectList = res.cd.data;
+        //     for (const iterator of this.testSelectList) {
+        //         this.tepParameters[iterator.name] = iterator.defaultValue
+        //     }
+        // });
+        this.$axios({
+                method: "get",
+                url: `/result/getTEPInfo?token=${this.token}&testSetId=1`
+            }).then(res => {
+            console.log(11111)
             console.log(res);
-            this.tepnameList = res.cd.nameList;
+            console.log(22222)
+            this.tepnameList = res.data.cd.nameList;
             console.log(this.tepnameList);
-            this.testSelectList = res.cd.data;
+            this.testSelectList = res.data.cd.data;
             for (const iterator of this.testSelectList) {
-                    this.tepParameters[iterator.name]=iterator.defaultValue
-                }
+                this.tepParameters[iterator.name] = iterator.defaultValue
+            }
         });
-
     },
     mounted() {},
     watch: {
@@ -253,7 +270,7 @@ export default {
                 console.log(66666666666)
                 console.log(this.testSelectList);
                 for (const iterator of this.testSelectList) {
-                    this.tepParameters[iterator.name]=iterator.defaultValue
+                    this.tepParameters[iterator.name] = iterator.defaultValue
                 }
             });
         },
@@ -290,47 +307,94 @@ export default {
             this.getNavgationList();
         },
         getNavgationList() {
-            this.Fetch(`/result/getList`, {
-                method: "POST",
-                body: {
-                    "token": localStorage.getItem('token'),
+            this.$axios({
+                method: "post",
+                url: "/result/getList",
+                data:{
+                     "token": localStorage.getItem('token'),
                     "productId": this.productId,
                     "releaseId": this.releaseId,
                     "testSetId": this.testSetId,
                     "locale": this.lang
                 }
             }).then(res => {
+                if(res.data.ec == '000003'){
+                    alert('Login Timeout')
+                    return
+                }
                 console.log("getnav")
                 console.log(res);
-                this.role = res.cd.role;
-                this.productId = res.cd.productId;
-                this.releaseId = res.cd.releaseId;
-                this.testSetId = res.cd.testSetId;
-                this.productList = res.cd.productList;
+                this.role = res.data.cd.role;
+                this.productId = res.data.cd.productId;
+                this.releaseId = res.data.cd.releaseId;
+                this.testSetId = res.data.cd.testSetId;
+                this.productList = res.data.cd.productList;
                 for (let i in this.productList) {
                     if (this.productList[i].id == this.productId) {
                         this.productName = this.productList[i].name;
                     }
                 }
-                this.releaseList = res.cd.releaseList;
+                this.releaseList = res.data.cd.releaseList;
                 for (let i in this.releaseList) {
                     if (this.releaseList[i].id == this.releaseId) {
                         this.releaseName = this.releaseList[i].name;
                     }
                 }
-                this.testSetList = res.cd.testSetList;
+                this.testSetList = res.data.cd.testSetList;
                 for (let i in this.testSetList) {
                     if (this.testSetList[i].id == this.testSetId) {
                         this.testSetName = this.testSetList[i].name;
                     }
                 }
-                this.tableColumn = res.cd.columns;
-                this.tableData = res.cd.data;
+                this.tableColumn = res.data.cd.columns;
+                this.tableData = res.data.cd.data;
                 console.log(this.tableData);
-                this.$emit('getTableData', res);
+                this.$emit('getTableData', res.data);
             }).catch(err => {
                 alert(err);
             });
+            //将fetch方法改成axios，不用fetch了
+            // this.Fetch(`/result/getList`, {
+            //     method: "POST",
+            //     body: {
+            //         "token": localStorage.getItem('token'),
+            //         "productId": this.productId,
+            //         "releaseId": this.releaseId,
+            //         "testSetId": this.testSetId,
+            //         "locale": this.lang
+            //     }
+            // }).then(res => {
+            //     console.log("getnav")
+            //     console.log(res);
+            //     this.role = res.cd.role;
+            //     this.productId = res.cd.productId;
+            //     this.releaseId = res.cd.releaseId;
+            //     this.testSetId = res.cd.testSetId;
+            //     this.productList = res.cd.productList;
+            //     for (let i in this.productList) {
+            //         if (this.productList[i].id == this.productId) {
+            //             this.productName = this.productList[i].name;
+            //         }
+            //     }
+            //     this.releaseList = res.cd.releaseList;
+            //     for (let i in this.releaseList) {
+            //         if (this.releaseList[i].id == this.releaseId) {
+            //             this.releaseName = this.releaseList[i].name;
+            //         }
+            //     }
+            //     this.testSetList = res.cd.testSetList;
+            //     for (let i in this.testSetList) {
+            //         if (this.testSetList[i].id == this.testSetId) {
+            //             this.testSetName = this.testSetList[i].name;
+            //         }
+            //     }
+            //     this.tableColumn = res.cd.columns;
+            //     this.tableData = res.cd.data;
+            //     console.log(this.tableData);
+            //     this.$emit('getTableData', res);
+            // }).catch(err => {
+            //     alert(err);
+            // });
         },
 
         //import method
@@ -380,7 +444,7 @@ export default {
                     "token": this.token,
                     "testSetId": this.testSetId,
                     "tepId": this.tepId,
-                    "ids":  localStorage.getItem('selectedIds').toString(),
+                    "ids": localStorage.getItem('selectedIds').toString(),
                     "parameters": this.tepParameters
                 }
             }).then(res => {

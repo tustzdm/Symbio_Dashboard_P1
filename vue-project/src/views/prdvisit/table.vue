@@ -40,7 +40,7 @@ export default {
             this.tableData = res.data.cd.data;          
             console.log(3333333333333)
         }).catch(err => {
-            alert(err);
+            console.log(err);
         });
         
         // this.Fetch(`/bug/getList?token=${this.token}`, {

@@ -57,7 +57,8 @@ export default function getData(filter = defaultValue) {
                 type: 'pie',
                 radius: '55%',
                 center: ['50%', '60%'],
-                data: sortData(data, filter.toLowerCase()),
+                // data: sortData(data, filter.toLowerCase()),
+                data: [],
                 color: ['#7A85A1', '#9EADC5', '#C9D4E3', '#E8E8E8', '#F3D1CD', '#F9E8E0'],
                 itemStyle: {
                     emphasis: {

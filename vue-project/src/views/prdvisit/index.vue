@@ -21,11 +21,11 @@
     <div class="bugs-charts">
         <div class="bugs-chartContainer">
             <chart :options="pie" class="panel" id="bugs-chartItem" />
-            <button class="bugs-customize" @click="displayCustomPie = true">{{$t('bugsoverview.customize')}}</button>
+            <!-- <button class="bugs-customize" @click="displayCustomPie = true">{{$t('bugsoverview.customize')}}</button> -->
         </div>
         <div>
             <chart :options="bar" class="panel" />
-            <button class="bugs-customize" @click="displayCustomBar = true">{{$t('bugsoverview.customize')}}</button>
+            <!-- <button class="bugs-customize" @click="displayCustomBar = true">{{$t('bugsoverview.customize')}}</button> -->
         </div>
     </div>
     <bugs-custom-table class="bugs-edit" :displayCustomTable="displayCustomTable" :tableHeader="tableHeader" :displayPerPage="displayPerPage" v-if="displayCustomTable" @closeDisplayCustomTable="displayCustomTable = $event.displayCustomTable;tableHeader = $event.CustomTableSelected;displayPerPage = $event.displayPerPage" @cancelDisplayCustomTable="displayCustomTable = $event"></bugs-custom-table>
@@ -51,14 +51,13 @@ import bugsCustomBar from './customBar'
 import bugsCustomTable from './customTable'
 import top from '../searchvisit/top'
 
-import getPie from './pie'
 import getBar from './bar'
 
 export default {
     data() {
         return {
-            pie: getPie(),
-            bar: getBar(),
+            pie: [],
+            bar: {},
             basicHeader: true,
             displayCustomPie: false,
             customPieSelected: undefined,
@@ -84,7 +83,8 @@ export default {
                 'Priority',
                 'Status'
             ],
-            page:'bugReview'
+            page:'bugReview',
+             token: ''
         }
     },
     components: {
@@ -100,6 +100,23 @@ export default {
             width = document.querySelector('.bugs-chartContainer').style.width
             consoe.log(width)
         }
+    },
+    created(){
+        this.token = localStorage.getItem('token');
+        this.$axios.get(`/bug/getPieData?token=${this.token}`).then(res => {
+            console.log(8888888888888888);
+            console.log(res);
+            this.pie = res.data.cd;
+            console.log(8888888888888888);     
+        }).catch(err => {
+            alert(err);
+        });
+        this.$axios.get(`/bug/getBarData?token=${this.token}`).then(res => {
+            console.log(res);
+            this.bar = res.data.cd;
+        }).catch(err => {
+            alert(err);
+        });
     },
     mounted(){
       this.bar.title.text = this.$t('bugsoverview.report.barPriority');

@@ -80,12 +80,13 @@ export default {
     components: {},
     methods: {
         getProductList() {
-            this.Fetch(`/testmgmt/getProductList?token=${localStorage.getItem('token')}`, {
-                method: "GET"
+            this.$axios({
+                method: "get",
+                url:`/testmgmt/getProductList?token=${localStorage.getItem('token')}`
             }).then(res => {
                 console.log(res);
-                this.role = res.cd.role;
-                this.productList = res.cd.data;
+                this.role = res.data.cd.role;
+                this.productList = res.data.cd.data;
                 console.log(this.productList);
             });
         },
