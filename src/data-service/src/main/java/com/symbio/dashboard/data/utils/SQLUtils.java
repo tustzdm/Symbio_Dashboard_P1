@@ -7,6 +7,41 @@ import com.symbio.dashboard.util.CommonUtil;
 @SuppressWarnings("unchecked")
 public class SQLUtils {
 
+    public static String buildSql(EnumDef.SQL_TYPE sqlType) {
+        String sql = "";
+        switch (sqlType) {
+            default:
+                break;
+            case STAT_PROGRESS_TEST_SET:
+                sql = "SELECT ts.id, COUNT(if(tr.`status` != 0,true,null)) as done, count(tr.id) as total from test_run tr" +
+                        " INNER JOIN test_set ts on ts.id = tr.testset_id" +
+                        " INNER JOIN `release` rel on rel.id = ts.release_id" +
+                        " INNER JOIN product prod on prod.id = rel.product_id" +
+                        " WHERE prod.display = 1 AND prod.status != 3 " +
+                        " GROUP BY ts.id";
+                break;
+            case STAT_PROGRESS_RELEASE:
+                sql = "SELECT rel.id, COUNT(if(tr.`status` != 0,true,null)) as done, count(tr.id) as total from test_run tr" +
+                        " INNER JOIN test_set ts on ts.id = tr.testset_id" +
+                        " INNER JOIN `release` rel on rel.id = ts.release_id" +
+                        " INNER JOIN product prod on prod.id = rel.product_id" +
+                        " WHERE prod.display = 1 AND prod.status != 3 " +
+                        " GROUP BY rel.id";
+                ;
+                break;
+            case STAT_PROGRESS_PRODUCT:
+                sql = "SELECT prod.id, COUNT(if(tr.`status` != 0,true,null)) as done, count(tr.id) as total from test_run tr" +
+                        " INNER JOIN test_set ts on ts.id = tr.testset_id" +
+                        " INNER JOIN `release` rel on rel.id = ts.release_id" +
+                        " INNER JOIN product prod on prod.id = rel.product_id" +
+                        " WHERE prod.display = 1 AND prod.status != 3 " +
+                        " GROUP BY prod.id";
+                break;
+        }
+
+        return sql;
+    }
+
     public static String buildSql(EnumDef.CHARTS chart, NavigatorQueryVO queryVo) {
         String sql = "";
         switch (chart) {

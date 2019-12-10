@@ -991,6 +991,45 @@ public class EnumDef {
             return String.valueOf(this.code);
         }
     }
+
+    @Getter
+    public enum SQL_TYPE implements IDictEnum {
+        STAT_PROGRESS_TEST_SET(1, "Statistics progress of Test set"),
+        STAT_PROGRESS_RELEASE(2, "Statistics progress of Release"),
+        STAT_PROGRESS_PRODUCT(3, "Statistics progress of Product");
+
+        private Integer code;
+        private String value;
+
+        SQL_TYPE(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+    @Getter
+    public enum STAT_LIST_FIELD implements IDictEnum {
+        PROGRESS(1, "progress"),
+        TEST_CASE(2, "testcase");
+
+        private Integer code;
+        private String value;
+
+        STAT_LIST_FIELD(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // End of New Dashboard definition
     ///////////////////////////////////////////////////////////////////////////////////////////////////

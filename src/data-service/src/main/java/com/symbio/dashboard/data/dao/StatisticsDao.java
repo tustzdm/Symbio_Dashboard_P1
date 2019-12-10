@@ -2,6 +2,7 @@ package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.data.repository.StatChartRep;
 import com.symbio.dashboard.data.repository.StatListRep;
+import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.StatList;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,13 @@ public class StatisticsDao {
     @Autowired
     private StatChartRep statChartRep;
 
+    public StatList getProgressStatData(Integer type, Integer fkId) {
+        return statListRep.getByTypeIdField(type, fkId, EnumDef.STAT_LIST_FIELD.PROGRESS.getValue());
+    }
+
+    public void saveStatisticsData(StatList data) {
+        statListRep.saveAndFlush(data);
+    }
 
     public List<StatList> getTestSetData(Integer releaseId) {
         return getStatListData(SystemListSetting.TestSet, null, releaseId, null);

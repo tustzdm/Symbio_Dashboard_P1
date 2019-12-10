@@ -20,6 +20,9 @@ public interface StatListRep extends JpaRepository<StatList, Integer> {
     @Override
     StatList getOne(Integer id);
 
+    @Query(value = "SELECT * FROM stat_list WHERE type_code = ?1 AND fk_id = ?2 AND field = ?3 LIMIT 0,1", nativeQuery = true)
+    StatList getByTypeIdField(Integer typeCode, Integer fkId, String fieldName);
+
     @Query(value = "SELECT sl.* FROM stat_list sl" +
             " INNER JOIN product prod ON sl.fk_id = prod.id" +
             " INNER JOIN (SELECT name, field FROM sys_list_setting WHERE display = 1 AND is_entity = 0) sls ON sls.field = sl.field" +

@@ -32,6 +32,9 @@ public class CommonDef {
     public final static String ENV_DEV = "dev";
     public static final String ANGULAR_DEBUG = "angular_debug";
 
+    // Use dev login method development, online using the online
+    public static String LOGIN_ENV = "dev"; // online
+
     public static boolean isDEVEnvironment() {
         return (CommonDef.ENV_DEV.equals(CommonDef.LOGIN_ENV) || CommonDef.ANGULAR_DEBUG.equals(CommonDef.LOGIN_ENV));
     }
@@ -55,7 +58,7 @@ public class CommonDef {
     }
 
     private void manualInitProperty() {
-        LOGIN_ENV = "dev";
+        // LOGIN_ENV = "dev";
         // LOGIN_ENV = "angular_debug";
         COOKIE_DOMAIN = "autodash";
         USER_EXPIRE_TIME = 24 * 60; // 24 hours, 1 day
@@ -189,9 +192,6 @@ public class CommonDef {
     public static final String CONTENTDISPOSITION = "Content-Disposition";
     public static final String ATTACHMENT = "attachment;fileName=";
     public static final String EML = ".eml";
-
-    // Use dev login method development, online using the online
-    public static String LOGIN_ENV = "angular_debug";
 
     public static String EMAIL_SERVICE;
 
