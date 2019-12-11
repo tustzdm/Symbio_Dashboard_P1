@@ -114,7 +114,11 @@ public class SQLUtils {
             bAddTableJenkinsJobHisMain = true;
         }
         if (strFields.contains("jjhm.jobpath")) {
-            strFields = strFields.replace("jjhm.jobpath", "IFNULL(jjhm.jobpath,'') as jobLink");
+            // strFields = strFields.replace("jjhm.jobpath", "IFNULL(jjhm.jobpath,'') as jobLink");
+            String jobLink = String.format("IFNULL(CONCAT(pc.configValue,jjhm.jobname,'/',jjhm.buildId),'') as jobLink");
+            strFields = strFields.replace("jjhm.jobpath", jobLink);
+
+            sbCondition.append(" INNER JOIN project_config pc on pc.configName = 'JenkinsServer.jobLink'");
             bAddTableJenkinsJobHisMain = true;
         }
 
