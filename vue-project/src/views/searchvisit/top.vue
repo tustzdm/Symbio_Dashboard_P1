@@ -79,7 +79,7 @@
             </el-dropdown>
         </div>
         <div class="manage-top-right" v-if="page=='executeReview'">
-            <el-button class="btn-top" @click="runDialogVisible=true" style="background-color:#5CADAD" size="mini"><i class="el-icon-caret-right"></i> {{$t('funcBtns.run')}}</el-button>
+            <el-button class="btn-top" @click="runClick()" style="background-color:#5CADAD" size="mini"><i class="el-icon-caret-right"></i> {{$t('funcBtns.run')}}</el-button>
             <el-button class="btn-top" style="background-color:rgb(246, 184, 184)" size="mini">{{$t('funcBtns.addBug')}}</el-button>
             <el-button class="btn-top" @click="getNavgationList" style="background-color:rgb(190, 205, 223);" size="mini">{{$t('funcBtns.refresh')}}</el-button>
             <el-button class="btn-top" @click="centerDialogVisible = true" style="background-color:#FF8040;" size="mini">{{$t('funcBtns.import')}}</el-button>
@@ -210,14 +210,10 @@ export default {
             token: '',
             role: '',
             tepParameters: {},
-            ids: this.selectedIds,
-            lang: ''
+            lang: '',
         }
     },
     props: {
-        selectedIds: {
-            type: Array
-        },
         page: {
             type: String
         }
@@ -286,6 +282,9 @@ export default {
             localStorage.setItem('result_testSetId', val);
             localStorage.setItem('result_testSetName', this.testSetName);
         }
+    },
+    destroyed(){
+        localStorage.removeItem('selectedIds');
     },
     methods: {
         handleProductCommand(command) {
@@ -448,6 +447,10 @@ export default {
                     "parameters": this.tepParameters
                 }
             }).then(res => {
+                this.$message({
+                    message: 'Running started',
+                    type: "success"
+                });
                 console.log(res);
                 this.$emit('runStatus', true);
                 setTimeout(() => {
@@ -457,6 +460,26 @@ export default {
         },
         checkRole(x) {
             return this.isRoleEnable(this.role, x);
+        },
+        runClick(){
+            if(localStorage.getItem('selectedIds')==null){
+               this.$message({
+                    message: this.$t('executeReview.runNeedChoose'),
+                    type: "warning"
+                });
+                return
+            }else{
+                if(localStorage.getItem('selectedIds').length<=0){
+                this.$message({
+                    message: this.$t('executeReview.runNeedChoose'),
+                    type: "warning"
+                });
+                return
+                }else{
+                    this.runDialogVisible=true
+                }
+            }
+           
         }
     }
 }

@@ -73,6 +73,7 @@ export default {
     tepName: 'TEP Name',
     review: "Review",
     uploadDialog: "Upload",
+    runNeedChoose: "Please choose at least one case"
   },
   testManagement:{
     name: "Name",

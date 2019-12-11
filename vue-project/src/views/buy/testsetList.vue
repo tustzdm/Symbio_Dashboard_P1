@@ -58,11 +58,13 @@ export default {
             productList: '',
             trIndex: '',
             tableData:'',
+            productId:'',
             releaseId: '',
             role:''
         }
     },
     created() {
+        this.productId = this.$route.query.productId;
         this.releaseId = this.$route.query.releaseId;
         this.getProductList();
     },
@@ -140,6 +142,7 @@ export default {
            return this.isRoleEnable(this.role,x);
         },
          add() {
+             alert(this.productId)
             this.$router.push({
                 path: '/addproject/index',
                 name: 'addproject',

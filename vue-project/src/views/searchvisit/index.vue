@@ -7,30 +7,35 @@
     <el-card class="caseTabel" shadow="hover" style="border:none">
         <el-table :data="dataList.slice((currentPage-1)*pageSize,currentPage*pageSize)" @selection-change="handleSelectionChange" style="width: 100%;height: 100%;">
             <el-table-column type="selection" width="50px"></el-table-column>
-            <el-table-column v-if="run" label="" width="80">
-                <i class="el-icon-loading"></i>
-            </el-table-column>
-            <el-table-column v-for="item in tableColownms" :key="item.id" :prop="item.field" :width="['id'].includes(item.field )? '100px':['status','screenshotFlag','locale','priority'].includes(item.field )? '120px':''" :sortable="['ID','Status','Priority','Case ID'].includes(item.label)" :align="item.label=='ScreenShot'?'center':'left'" :label="item.label">
-                <template slot-scope="scope">
-                    <div v-if="!['status','screenshotFlag','priority'].includes(item.field)">
-                        {{scope.row[item.field]}}
-                    </div>
-                    <span v-if="item.field=='priority'" style="border-radius:3px;padding:2px 6px;margin:10px" :class="scope.row[item.field]">
-                        {{scope.row[item.field]}}
-                    </span>
-                    <div v-if="item.field=='status'">
-                        <div style="display:flex;align-items:center">
-                            <!-- <span style="height:15px;width:15px;border-radius:50%;display:inline-block;margin-top:4px;margin-right:8px;" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></span> -->
-                            <span :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}" style="position:absolute;border-radius:5px;padding:0 3px;color:white;">{{statusArray[scope.row[item.field]]}}</span>
+            <!-- <el-table-column v-if="run" label="" width="80">
+                 <template slot-scope="scope">
+                    <i v-if="selectIds.includes(scope.row.id) " class="el-icon-loading"></i>
+                 </template>
+            </el-table-column> -->
+            <template v-for="item in tableColownms">
+                <el-table-column v-if="item.type!='hidden'" :key="item.id" :prop="item.field" :width="['id'].includes(item.field )? '100px':['status','screenshotFlag','locale','priority'].includes(item.field )? '120px':''" :sortable="['ID','Status','Priority','Case ID'].includes(item.label)" :align="item.label=='ScreenShot'?'center':'left'" :label="item.label">
+                    <template slot-scope="scope">
+                        <div v-if="!['status','screenshotFlag','priority','jobStatus'].includes(item.field)">
+                            {{scope.row[item.field]}}
                         </div>
-                    </div>
-                    <div v-if="item.field=='screenshotFlag'" align="center">
-                        <router-link :to="{ name: 'pictures', query: { status:scope.row.status, caseId:scope.row.caseId,runId:scope.row.id}}">
-                            <img  v-if="scope.row[item.field]!=0" src="../../assets/images/screenshot-icon2.png" alt="">
-                        </router-link>
-                    </div>
-                </template>
-            </el-table-column>
+                        <span v-if="item.field=='priority'" style="border-radius:3px;padding:2px 6px;margin:10px" :class="scope.row[item.field]">
+                            {{scope.row[item.field]}}
+                        </span>
+                        <div v-if="item.field=='status'">
+                            <div style="display:flex;align-items:center">
+                                <!-- <span style="height:15px;width:15px;border-radius:50%;display:inline-block;margin-top:4px;margin-right:8px;" :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}"></span> -->
+                                <span :class="{auto_pass:scope.row.status=='1',auto_block:scope.row.status=='0',auto_failed:scope.row.status=='4',auto_skip:scope.row.status=='5'}" style="position:absolute;border-radius:5px;padding:0 3px;color:white;">{{statusArray[scope.row[item.field]]}}</span>
+                            </div>
+                        </div>
+                        <div v-if="item.field=='screenshotFlag'" align="center">
+                            <router-link :to="{ name: 'pictures', query: { status:scope.row.status, caseId:scope.row.caseId,runId:scope.row.id}}">
+                                <img  v-if="scope.row[item.field]!=0" src="../../assets/images/screenshot-icon2.png" alt="">
+                            </router-link>
+                        </div>
+                         <a v-if="item.field=='jobStatus'" :href="scope.row.jobLink"  target="_Blank">{{scope.row[item.field]}}</a>
+                    </template>
+                </el-table-column>
+            </template>
             <el-table-column :label="$t('executeReview.review')" width="80" align="center">
                 <template slot-scope="scope">
                     <router-link :to="{ name: 'compare', query: {locale:scope.row.locale, runId:scope.row.id}}">
@@ -106,6 +111,9 @@ export default {
         screenHeight() {
             this.tableHeight = this.screenHeight - 80 - 30 - 40 - 52 + 'px'
             console.log(`新的tabelHeight${this.tableHeight}`)
+        },
+        selectIds(){
+            console.log(this.selectIds)
         }
     },
     methods: {
@@ -122,10 +130,9 @@ export default {
                 this.selectIds.push(this.multipleSelection[i].id);
             }
             localStorage.setItem('selectedIds',this.selectIds);
-            console.log(this.multipleSelection);
-            console.log(this.selectIds);
         },
         getTableData(val) {
+            console.log(this.multipleSelection)
             this.dataList = val.cd.data;
             this.tableColownms = val.cd.columns;
             console.log('tablecolumn');
@@ -134,9 +141,6 @@ export default {
             this.run = false;
         },
         runStatus(val) {
-            // if(this.multipleSelection.length<=0){
-            //     alert(1111)
-            // }
             this.run = true;
         }
     }

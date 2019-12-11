@@ -69,6 +69,7 @@ export default {
     tepName: '平台名称',
     review: "审核",
     uploadDialog: "文件上传",
+    runNeedChoose: "请至少选择一个项目"
   },
   testManagement:{
     name: "名称",

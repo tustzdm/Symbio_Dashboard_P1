@@ -14,14 +14,14 @@
                     <select v-if="['list','SelectList'].indexOf(item.type) >= 0" v-model="product[item.key]">
                         <option v-for="option in item.data" :value="option.code" :key="option.id">{{option.value}}</option>
                     </select>
-                    <select v-if="['productlist'].indexOf(item.type) >= 0" v-model="product.productId">
+                    <select v-if="['productlist'].indexOf(item.type) >= 0" v-model="product.productId" disabled>
                         <option v-for="item in fatherProductList" :value="item.id" :key="item.id">{{item.name}}</option>
                     </select>
-                    <select v-if="['releaselist'].indexOf(item.type) >= 0" v-model="product.releaseId">
+                    <select v-if="['releaselist'].indexOf(item.type) >= 0" v-model="product.releaseId" disabled>
                         <option v-for="item in fatherReleaseList" :value="item.id" :key="item.id">{{item.name}}</option>
                     </select>
                     <select v-if="['user','User'].indexOf(item.type) >= 0" v-model="product[tranformStr(item.dbField)]">
-                        <option :value="user.id" v-for="user in userList">{{user.fullName}}</option>
+                        <option :value="user.id" v-for="user in userList" :key="user.id">{{user.fullName}}</option>
                     </select>
                     <input type="text" name="" id="" v-if="item.type === 'calender'">
                     <p v-if="item.type === 'calender'"></p>
@@ -111,8 +111,9 @@ export default {
             }).then(res => {
 
                 console.log(res.cd);
-                this.fatherReleaseList = res.cd;
-
+                this.fatherReleaseList = res.cd.data;
+                 console.log('00000000000000');
+                console.log(this.fatherReleaseList);
             });
         },
     },

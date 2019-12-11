@@ -13,10 +13,10 @@
                     <select class="input_select" v-if="['list','SelectList'].indexOf(item.type) >= 0" v-model="product[item.key]">
                         <option v-for="option in item.data" :value="option.code" :key="option.id">{{option.value}}</option>
                     </select>
-                    <select class="input_select" v-if="['productlist'].indexOf(item.type) >= 0" v-model="product.productId">
+                    <select class="input_select" v-if="['productlist'].indexOf(item.type) >= 0" v-model="product.productId" disabled>
                         <option v-for="item in fatherProductList" :value="item.id" :key="item.id">{{item.name}}</option>
                     </select>
-                    <select class="input_select" v-if="['releaselist'].indexOf(item.type) >= 0" v-model="product.releaseId">
+                    <select class="input_select" v-if="['releaselist'].indexOf(item.type) >= 0" v-model="product.releaseId" disabled>
                         <option v-for="item in fatherReleaseList" :value="item.id" :key="item.id">{{item.name}}</option>
                     </select>
                     <select class="input_select" v-if="['user','User'].indexOf(item.type) >= 0" v-model="product[tranformStr(item.dbField)]">
@@ -71,6 +71,7 @@ export default {
         }
     },
     created() {
+        console.log(this.$route.query);
         this.pageType = this.$route.query.pageType;
         this.fatherProductId = this.$route.query.productId;
         this.fatherReleaseId = this.$route.query.releaseId;
@@ -84,7 +85,7 @@ export default {
             this.uiList = res.cd.uiInfo;
             // this.product = res.cd.data;
             this.product.productId = this.fatherProductId; //add release时带的productID   
-
+             console.log(this.fatherProductId )
             this.product.releaseId = this.fatherReleaseId; //add release时带的productID  
             this.fatherReleaseList = res.cd.releaseList;
             this.fatherProductList = res.cd.productList;
@@ -154,7 +155,7 @@ export default {
             } else if (this.pageType == "Release") {
                 queryCon = {
                     pageType: 'TestSet',
-                    productId: this.productId,
+                    productId: this.fatherProductId,
                     releaseId: this.newId
                 }
             }
@@ -173,15 +174,19 @@ export default {
                 method: "GET"
             }).then(res => {
                 console.log(res.cd);
+
                 this.userList = res.cd.userList;
                 this.uiList = res.cd.uiInfo;
                 // this.product = res.cd.data;
                 this.product.productId = this.fatherProductId; //add release时带的productID   
+                console.log('productID'+this.product.productId)
 
                 this.product.releaseId = this.fatherReleaseId; //add release时带的productID  
                 this.fatherReleaseList = res.cd.releaseList;
                 this.fatherProductList = res.cd.productList;
-            });
+            }).catch(err => {
+                    alert(err);
+                });
             // window.location.reload();//这里router跳转之后页面不刷新，暂且使用这种方式
 
         }
