@@ -321,7 +321,7 @@ public class ReleaseDao {
             return retResult;
         }
 
-        List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
+        List<String> listUserFields = BusinessUtil.getQueryUserRefFields(listSetting);
 
         String strFields = String.join(",", listFields);
         Result retReleaseResult = getReleaseMapInfoByField(strFields, productId, pageIndex, pageSize, listUserFields);

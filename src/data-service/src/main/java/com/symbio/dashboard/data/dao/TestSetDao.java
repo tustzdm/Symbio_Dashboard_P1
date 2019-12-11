@@ -205,7 +205,7 @@ public class TestSetDao {
             return retResult;
         }
 
-        List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
+        List<String> listUserFields = BusinessUtil.getQueryUserRefFields(listSetting);
 
         String strFields = String.join(",", listFields);
         Result retReleaseResult = getTestSetMapInfoByField(strFields, releaseId, pageIndex, pageSize, listUserFields);

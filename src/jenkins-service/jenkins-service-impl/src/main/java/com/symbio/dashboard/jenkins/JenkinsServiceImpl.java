@@ -14,6 +14,7 @@ import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.dao.JenkinsDao;
 import com.symbio.dashboard.dto.TEPInfoDTO;
+import com.symbio.dashboard.dto.TestRunDTO;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.model.JenkinsSvrInfo;
 import com.symbio.dashboard.model.TestExecPlatform;
@@ -303,6 +304,10 @@ public class JenkinsServiceImpl implements JenkinsService {
 
     @Override
     public Result<String> runJob(Integer userId, String locale, Integer testSetId, Integer testRunId, Integer tepId, Map<String, Object> params) {
+        return this.runJob(userId, locale, testSetId, testRunId, tepId, params, 0);
+    }
+
+    private Result<String> runJob(Integer userId, String locale, Integer testSetId, Integer testRunId, Integer tepId, Map<String, Object> params, Integer delta) {
         Result<String> retResult = new Result<>();
 
         // Step1 - Get JSI info
@@ -318,6 +323,9 @@ public class JenkinsServiceImpl implements JenkinsService {
         try {
             job = this.getJob(jsi);
             nextBuildNumber = ((JobWithDetails) job).getNextBuildNumber();
+            if (delta > 0) {
+                nextBuildNumber += delta;
+            }
 
             job = getExactJob(job);
 
@@ -351,6 +359,81 @@ public class JenkinsServiceImpl implements JenkinsService {
             log.warn("Invoke jenkinsDao.saveNewJobHistory() ERROR!!! ec = %s, em = %s" + retSaveJobInfo.getEm());
         }
         retResult.setCd("buildId = " + nextBuildNumber);
+
+        return retResult;
+    }
+
+    @Override
+    public Result<String> runJob(Integer userId, String locale, TestRunDTO testRun) {
+        Result<String> retResult = new Result<>();
+
+        Integer testSetId = testRun.getTestSetId();
+        String testRunIds = testRun.getIds();
+        Integer tepId = testRun.getTepId();
+
+        String[] arrTestRunId = testRunIds.split(",");
+        Map<String, Object> mapData = null;
+        Integer testRunId = 0;
+
+        try {
+            // Step1 - Get JSI info
+            Result<JenkinsSvrInfo> retJSI = jenkinsDao.getJSIByTepId(locale, tepId);
+            if (retJSI.hasError()) {
+                return new Result<>(retJSI);
+            }
+            JenkinsSvrInfo jsi = retJSI.getCd();
+            Job job = null;
+            Map<String, String> mapRunArgs = null;
+            Integer nextBuildNumber = 0;
+
+            job = this.getJob(jsi);
+            nextBuildNumber = ((JobWithDetails) job).getNextBuildNumber();
+            job = getExactJob(job);
+
+            // Step2 - Get job parameters
+            Result<List<JenkinsJobArgs>> retJJA = jenkinsDao.getJobArgsInfo(locale, tepId);
+            if (retJJA.hasError()) {
+                return new Result<>(retJJA);
+            }
+            List<JenkinsJobArgs> listJJA = retJJA.getCd();
+            String jobRunToken = commonDao.getConfigValueByKey(ProjectConst.JENKINS_JOB_TOKEN);
+
+            // loop
+            List<Integer> listBuildNum = new ArrayList<>();
+            for (int i = 0; i < arrTestRunId.length; i++) {
+                testRunId = Integer.parseInt(arrTestRunId[i]);
+                mapData = JenkinsJobArgsFactory.getExactJobParams(testRun.getParameters(), testRunId);
+
+                if (i > 0) { // incrementation
+                    nextBuildNumber++;
+                }
+
+                mapRunArgs = JenkinsJobArgsFactory.buildRunMapWithMap(listJJA, jobRunToken, mapData);
+
+                // Step3 - run job
+                try {
+                    this.run(job, mapRunArgs, new HashMap<>());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    log.error("runJob.run() ERROR!!! " + e.getMessage());
+                    return commonDao.getResult("300506", jsi.getJobname(), e.getMessage());
+                }
+
+                // Step4 - Get buildId
+                Result retSaveJobInfo = jenkinsDao.saveNewJobHistory(userId, locale, testSetId, testRunId, tepId, jsi, mapRunArgs, nextBuildNumber);
+                if (retSaveJobInfo.hasError()) {
+                    log.warn("Invoke jenkinsDao.saveNewJobHistory() ERROR!!! ec = %s, em = %s" + retSaveJobInfo.getEm());
+                }
+                listBuildNum.add(nextBuildNumber);
+            }
+
+            String msg = String.format("jobCount = %d, buildId = %s", listBuildNum.size(), listBuildNum.toString());
+            retResult.setCd(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("runJob.getJob() ERROR!!! " + e.getMessage());
+            return commonDao.getExceptionArgsResult("running jenkins job. Message is : " + e.getMessage());
+        }
 
         return retResult;
     }

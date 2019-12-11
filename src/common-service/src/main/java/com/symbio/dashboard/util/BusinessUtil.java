@@ -89,6 +89,8 @@ public class BusinessUtil {
       String strKeyCN = Locales.ZH_CN.getKey();
       String strKeyEN = Locales.EN_US.getKey();
 
+      Set<String> fieldSet = new TreeSet<>();
+
       for (SysListSetting item : listData) {
         mapColInfo = new HashMap<String, Object>();
 
@@ -107,8 +109,19 @@ public class BusinessUtil {
         mapColInfo.put(ListColumns.LABEL.getKey(), CommonUtil.getJSONLocaleValue(item.getLabel(), locale));
 
         mapColInfo.put(ListColumns.TYPE.getKey(), item.getType());
+
         // Change field to CamelField for UI
-        mapColInfo.put(ListColumns.FIELD.getKey(), EntityUtils.getMapFieldKey(WebUtil.getItemValue(item.getField())));
+        // BugFix: sometimes field name conflicts
+        //mapColInfo.put(ListColumns.FIELD.getKey(), EntityUtils.getMapFieldKey(WebUtil.getItemValue(item.getField())));
+        String fieldName = EntityUtils.getMapFieldKey(WebUtil.getItemValue(item.getField()));
+        if (!item.getKey().equalsIgnoreCase(fieldName)) {
+          if (fieldSet.contains(fieldName) || item.getField().contains("jenkins.")) {
+            fieldName = EntityUtils.getMapFieldKey(WebUtil.getItemValue(item.getKey()));
+          }
+        } else {
+          fieldSet.add(fieldName);
+        }
+        mapColInfo.put(ListColumns.FIELD.getKey(), fieldName);
 
         mapColInfo.put(ListColumns.ALIGN.getKey(), item.getAlign());
         mapColInfo.put(ListColumns.FORMAT.getKey(), WebUtil.getItemValue(item.getFormatter()));
@@ -125,6 +138,16 @@ public class BusinessUtil {
     }
 
     return listColInfo;
+  }
+
+  public static List<String> getUIFields(List<Map<String, Object>> listColumns) {
+    List<String> retData = new ArrayList<>();
+
+    for (Map<String, Object> item : listColumns) {
+      retData.add(item.get(ListColumns.FIELD.getKey()).toString());
+    }
+
+    return retData;
   }
 
   /**

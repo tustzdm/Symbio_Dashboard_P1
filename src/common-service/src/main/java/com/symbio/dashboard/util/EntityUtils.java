@@ -362,6 +362,16 @@ public class EntityUtils {
         return getMapKeys(entityFields.split(","));
     }
 
+
+//    public static List<Map<String, Object>> castQuerytoMap(List<Object[]> list, String fields, List<Map<String, Object>> listColumns) {
+//        String[] arrFields = fields.split(",");
+//        List<String> listKeys = getMapKeys(arrFields);
+//
+//        String strFields = String.join(",", listKeys);
+//
+//        return castQuerytoMap(list, strFields);
+//    }
+
     /**
      * 直接将字段转成Map 对象
      *

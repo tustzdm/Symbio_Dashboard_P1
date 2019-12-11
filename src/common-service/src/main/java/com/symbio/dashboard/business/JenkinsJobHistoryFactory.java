@@ -21,7 +21,7 @@ public class JenkinsJobHistoryFactory {
         data.setJsiId(jsi.getId());
         data.setJobname(jsi.getJobname());
         data.setJenkinsJobParameter(JSONUtil.mapToString(map));
-        data.setStatus(EnumDef.JENKINS_JOB_STATUS.PENDING.getCode().toString());
+        data.setStatus(EnumDef.JENKINS_JOB_STATUS.RUNNING.getCode().toString());
         data.setBuildId(buildId);
         data.setParseCount(0);
         data.setDescription("");

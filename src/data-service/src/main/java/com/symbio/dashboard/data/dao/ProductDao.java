@@ -422,7 +422,7 @@ public class ProductDao {
             return retResult;
         }
 
-        List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
+        List<String> listUserFields = BusinessUtil.getQueryUserRefFields(listSetting);
 
         String strFields = String.join(",", listFields);
         Result retProductResult = getProductMapInfoByField(userId, strFields, pageIndex, pageSize, listUserFields);

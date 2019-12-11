@@ -115,9 +115,10 @@ public class CommonDao {
 
   /**
    * 得到User参照的field
+   * move to : BusinessUtil.getQueryUserRefFields()
    * @param listSetting
    * @return
-   */
+   *
   @Deprecated
   public static List<String> getQueryUserRefFields(List<SysListSetting> listSetting) {
     List<String> dbFields = new ArrayList<>();
@@ -136,6 +137,7 @@ public class CommonDao {
 
     return dbFields;
   }
+   */
 
   /**
    * 得到Entity 相关的dbFiled信息
@@ -215,7 +217,8 @@ public class CommonDao {
                 //strFieldInfo = strFieldInfo;
                 break;
               case ResultReview:
-                strFieldInfo = "tc." + arrField[1];
+                //strFieldInfo = "tc." + arrField[1];
+                strFieldInfo = CommonUtil.getAliasTableName(listType, arrField[0]) + "." + arrField[1];
                 break;
               case ImageCompare:
                 // not support src./dest.
@@ -343,7 +346,8 @@ public class CommonDao {
 
       for (Map map : data) {
         for (String field : listUserFields) {
-          userIds.add((Integer) map.get(field));
+//          userIds.add((Integer) map.get(field));
+          userIds.add(Integer.parseInt(map.get(field).toString()));
         }
       }
 

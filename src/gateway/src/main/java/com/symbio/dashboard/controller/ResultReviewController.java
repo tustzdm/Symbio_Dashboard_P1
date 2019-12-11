@@ -2,7 +2,6 @@ package com.symbio.dashboard.controller;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.TestRunVO;
-import com.symbio.dashboard.business.JenkinsJobArgsFactory;
 import com.symbio.dashboard.constant.CommonDef;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.dto.TEPInfoDTO;
@@ -172,15 +171,21 @@ public class ResultReviewController extends BaseController {
             Result<String> resultJobRun = null;
             Map<String, Object> mapData = null;
             Integer testRunId = null;
-            String[] arrTestRunId = testRunIds.split(",");
-            for (int i = 0; i < arrTestRunId.length; i++) {
-                testRunId = Integer.parseInt(arrTestRunId[i]);
-                mapData = JenkinsJobArgsFactory.getExactJobParams(testRun.getParameters(), testRunId);
-                resultJobRun = jenkinsService.runJob(userId, locale, testRun.getTestSetId(), testRunId, tepId, mapData);
-                if (resultJobRun.hasError()) {
-                    retResult = new Result(resultJobRun);
-                }
+//            String[] arrTestRunId = testRunIds.split(",");
+//            for (int i = 0; i < arrTestRunId.length; i++) {
+//                testRunId = Integer.parseInt(arrTestRunId[i]);
+//                mapData = JenkinsJobArgsFactory.getExactJobParams(testRun.getParameters(), testRunId);
+//                resultJobRun = jenkinsService.runJob(userId, locale, testRun.getTestSetId(), testRunId, tepId, mapData);
+//                if (resultJobRun.hasError()) {
+//                    retResult = new Result(resultJobRun);
+//                }
+//            }
+
+            resultJobRun = jenkinsService.runJob(userId, locale, testRun);
+            if (resultJobRun.hasError()) {
+                retResult = new Result(resultJobRun);
             }
+            log.info(resultJobRun.getCd());
         } catch (Exception e) {
             e.printStackTrace();
         }

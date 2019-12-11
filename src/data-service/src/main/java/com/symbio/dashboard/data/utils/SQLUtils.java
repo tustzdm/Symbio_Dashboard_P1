@@ -87,19 +87,73 @@ public class SQLUtils {
         switch (page) {
             default:
                 break;
-            case TEST_RESULT:
-                sql = getResultReviewQuerySQL(queryVo, bOrderBy);
+            case EXECUTE_REVIEW:
+                sql = getResultReviewQuerySQL(queryVo);
+                break;
+//            case TEST_RESULT:
+//                sql = getResultReviewQuerySQL(queryVo);
+//                break;
             case BUGS_OVERVIEW:
                 sql = getBugListQuerySQL(queryVo, bOrderBy);
+                break;
         }
-
 
         return sql;
     }
 
-    public static String getResultReviewQuerySQL(NavigatorQueryVO queryVo, boolean bOrderBy) {
-        return "";
+    public static String getResultReviewQuerySQL(NavigatorQueryVO queryVo) {
+        if (CommonUtil.isEmpty(queryVo.getFields())) return "";
+
+        StringBuffer sb = new StringBuffer();
+        StringBuffer sbCondition = new StringBuffer();
+        String strFields = queryVo.getFields();
+        boolean bAddTableJenkinsJobHisMain = false;
+
+        if (strFields.contains("jjhm.status")) {
+            strFields = strFields.replace("jjhm.status", String.format("dicLocal.%s as 'jobStatus'", queryVo.getLocale().toLowerCase()));
+            bAddTableJenkinsJobHisMain = true;
+        }
+        if (strFields.contains("jjhm.jobpath")) {
+            strFields = strFields.replace("jjhm.jobpath", "IFNULL(jjhm.jobpath,'') as jobLink");
+            bAddTableJenkinsJobHisMain = true;
+        }
+
+        if (bAddTableJenkinsJobHisMain) {
+            sbCondition.append(" LEFT JOIN (SELECT testRunId, MAX(id) as id FROM jenkins_job_history_main")
+                    .append(" WHERE testRunId is not null GROUP BY testRunId) jjh on jjh.testRunId = tr.id")
+                    .append(" LEFT JOIN jenkins_job_history_main jjhm on jjhm.id = jjh.id");
+            if (strFields.contains("jobStatus") || strFields.contains("dicLocal.")) {
+                sbCondition.append(" LEFT JOIN dictionary_local dicLocal on dicLocal.name = 'JenkinsJobStatus' AND IFNULL(jjhm.`status`,0) = dicLocal.code AND dicLocal.validation = 1");
+            }
+        }
+
+        sb.append("SELECT ").append(strFields)
+                .append(" FROM test_run tr ")
+                .append(" INNER JOIN test_case tc ON tr.testcase_id = tc.id ");
+
+        // Add extra condition
+        if (sbCondition.toString().length() > 0) {
+            sb.append(sbCondition.toString());
+        }
+
+        // Where clause
+        sb.append(" WHERE tr.display = 1 AND tr.validation = 1");
+        if (!CommonUtil.isEmpty(queryVo.getTestSetId())) {
+            sb.append(" AND tr.testset_id = ").append(queryVo.getTestSetId());
+        }
+
+        if (strFields.contains("tc.case_id") && strFields.contains("tr.locale")) {
+            sb.append(" ORDER BY tc.case_id, tr.locale");
+        } else {
+            sb.append(" ORDER BY tr.id");
+        }
+
+        return sb.toString();
     }
+
+//    public static String getResultReviewQuerySQL(NavigatorQueryVO queryVo, boolean bOrderBy) {
+//        return "";
+//    }
 
     public static String getBugListQuerySQL(NavigatorQueryVO queryVo, boolean bOrderBy) {
         if (CommonUtil.isEmpty(queryVo.getFields())) return "";
@@ -111,7 +165,7 @@ public class SQLUtils {
 
         if (strFields.contains("bug.status")) {
             strFields = strFields.replace("bug.status", String.format("dicLocal.%s as 'status'", queryVo.getLocale().toLowerCase()));
-            sbCondition.append(" LEFT JOIN dictionary_local dicLocal on dicLocal.name = 'BugStatus' AND bug.status = dicLocal.code");
+            sbCondition.append(" LEFT JOIN dictionary_local dicLocal on dicLocal.name = 'BugStatus' AND bug.status = dicLocal.code AND dicLocal.validation = 1");
         }
         if (strFields.contains("bug.assignee")) {
             strFields = strFields.replace("bug.assignee", "us1.full_name as assignee");

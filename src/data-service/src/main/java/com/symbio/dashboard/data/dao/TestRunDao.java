@@ -1,12 +1,15 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.bean.NavigatorQueryVO;
 import com.symbio.dashboard.bean.TestRunVO;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.repository.ScreenShotRep;
 import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.TestRunRep;
+import com.symbio.dashboard.data.utils.SQLUtils;
 import com.symbio.dashboard.dto.TestRunUiDTO;
+import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.ListDataType;
 import com.symbio.dashboard.enums.SystemListSetting;
 import com.symbio.dashboard.model.SysListSetting;
@@ -59,19 +62,25 @@ public class TestRunDao {
         Result retResult = new Result(testRunUiDTO);
 
         List<SysListSetting> listSetting = sysListSettingRep.getEntityInfoNonUi(SystemListSetting.ResultReview.toString());
+
+        List<Map<String, Object>> listColumnMapInfo = null;
         if (CommonUtil.isEmpty(listSetting)) {
             return retResult;
         } else {
-            testRunUiDTO.setColumns(BusinessUtil.getListColumnInfo(locale, listSetting));
+            listColumnMapInfo = BusinessUtil.getListColumnInfo(locale, listSetting);
+            testRunUiDTO.setColumns(listColumnMapInfo);
         }
 
-        List<String> listFields = CommonDao.getQueryFieldsEx(listSetting);
+        List<String> listUIFields = BusinessUtil.getUIFields(listColumnMapInfo);
+
+        //List<String> listFields = CommonDao.getQueryFieldsEx(listSetting);
+        List<String> listFields = CommonDao.getQueryFields(SystemListSetting.ResultReview, listSetting);
         if (CommonUtil.isEmpty(listFields)) {
             log.debug("There is no field to query");
             return retResult;
         }
 
-        List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
+        List<String> listUserFields = BusinessUtil.getQueryUserRefFields(listSetting);
 
         // Get Menu role
         Integer nRole = commonDao.getUserMenuRole(testRun.getUserId());
@@ -81,7 +90,12 @@ public class TestRunDao {
         getData(testRunUiDTO, testRun);
 
         String strFields = String.join(",", listFields);
-        Result retTestRunResult = getTestRunMapInfoByField(testRunUiDTO.getTestSetId(), strFields, testRun.getPageIndex(), testRun.getPageSize(), listUserFields);
+
+        // Create query condition
+        NavigatorQueryVO queryVo = new NavigatorQueryVO(locale, strFields, testRun.getPageIndex(), testRun.getPageSize());
+        queryVo.setTestSetId(testRunUiDTO.getTestSetId());
+
+        Result retTestRunResult = getTestRunMapInfoByField(queryVo, listUserFields, listUIFields);
         if (retTestRunResult.hasError()) {
             retResult = retTestRunResult;
         } else {
@@ -133,7 +147,9 @@ public class TestRunDao {
         return retList;
     }
 
-    private Result getTestRunMapInfoByField(Integer testSetId, String strFields, Integer pageIndex, Integer pageSize, List<String> listUserFields) {
+    private Result getTestRunMapInfoByField(NavigatorQueryVO queryVo, List<String> listUserFields, List<String> listUIFields) {
+        String strFields = queryVo.getFields();
+        Integer testSetId = queryVo.getTestSetId();
 
         log.debug("strField = " + strFields);
         Result retResult;
@@ -142,26 +158,15 @@ public class TestRunDao {
             TestRunUiDTO testRunUiDTO = new TestRunUiDTO();
             List<Map<String, Object>> listTestRun;
 
-            String sql = String.format("SELECT %s FROM test_run tr " +
-                    " JOIN test_case tc ON tr.testcase_id = tc.id " +
-                    " WHERE tr.testset_id = %d AND tr.display = 1 AND tr.validation = 1", strFields, testSetId);
-
-            if (strFields.contains("tc.case_id") && strFields.contains("tr.locale")) {
-                sql += " ORDER BY tc.case_id, tr.locale";
-            } else {
-                sql += " ORDER BY tr.id";
-            }
-
-            if (pageIndex != null && pageSize != null) {
-                sql += String.format(" LIMIT %d,%d", pageIndex, pageSize);
-            }
+            String sql = SQLUtils.buildSql(EnumDef.DASHBOARD_PAGE.EXECUTE_REVIEW, queryVo);
 
             List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
             ListDataType dataType = ListDataType.Map;
 
             if (dataType == ListDataType.Map) {
-                listTestRun = EntityUtils.castQuerytoMap(listResult, strFields);
-                testRunUiDTO.setFields(CommonUtil.getListByMergeString(strFields));
+                listTestRun = EntityUtils.castQuerytoMap(listResult, String.join(",", listUIFields));
+                //testRunUiDTO.setFields(CommonUtil.getListByMergeString(strFields));
+                testRunUiDTO.setFields(listUIFields);
                 testRunUiDTO.setDataType(ListDataType.Map.getDataType());
 
                 if (CommonUtil.isEmpty(listUserFields)) {

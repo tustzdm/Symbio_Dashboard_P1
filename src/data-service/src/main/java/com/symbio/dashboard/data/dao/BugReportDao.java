@@ -315,7 +315,7 @@ public class BugReportDao {
         }
 
         // Step3: check user field
-        List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
+        List<String> listUserFields = BusinessUtil.getQueryUserRefFields(listSetting);
         bugReportUiDTO.setRole(7);
         bugReportUiDTO.setLocale(locale);
 
@@ -454,7 +454,7 @@ public class BugReportDao {
             return retResult;
         }
 
-        List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
+        List<String> listUserFields = BusinessUtil.getQueryUserRefFields(listSetting);
         testRunUiDTO.setRole(7);
         testRunUiDTO.setLocale(testRun.getLocale());
         getData(testRunUiDTO, testRun);

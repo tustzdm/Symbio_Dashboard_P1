@@ -23,7 +23,8 @@ public enum DictionaryType {
   SCREEN_SHOT_STATUS_LOCALE("ScreenShotStatus"),
   TEST_RESULT_STATUS_LOCALE("TestResultStatus"),
   TEST_CASE_TYPE_LOCALE("TestCaseTypeLocale"),
-  BUG_STATUS_LOCALE("BugStatus");
+  BUG_STATUS_LOCALE("BugStatus"),
+  JENKINS_JOB_STATUS_LOCALE("JenkinsJobStatus");
 
   private DictionaryType(String type){
     this.type = type;

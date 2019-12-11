@@ -97,7 +97,7 @@ public class TestCaseDao {
                 dictDao.getDicMapDataByTypeLocale(DictionaryType.TEST_CASE_TYPE_LOCALE.getType(), locale);
         retProdDTO.setListCaseType(listStatus);
 
-        List<String> listUserFields = CommonDao.getQueryUserRefFields(listSetting);
+        List<String> listUserFields = BusinessUtil.getQueryUserRefFields(listSetting);
 
         String strFields = String.join(",", listFields);
         Result retTestCaseResult = getTestCaseMapInfoByField(strFields, testSetId, pageIndex, pageSize, listUserFields);

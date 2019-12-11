@@ -167,6 +167,10 @@ public class CommonUtil {
         switch (listType) {
             default:
                 break;
+            case ResultReview:
+                retFieldName = table.replace("test_case", "tc")
+                        .replace("jenkins", "jjhm");
+                break;
             case BugList: // Equals to EnumDef.DASHBOARD_PAGE.BUGS_OVERVIEW
                 retFieldName = table.replace("test_set", "ts")
                         .replace("product", "prod")
