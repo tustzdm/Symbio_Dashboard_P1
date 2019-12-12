@@ -62,9 +62,10 @@ public class JenkinsJobHistoryTask {
      * Ref: https://www.cnblogs.com/zy-l/p/9178704.html
      */
     @Async
-    //@Scheduled(cron = "0 0 0/1 * * ? ")
-    @Scheduled(cron = "0 0 0 0/1 * ? ")
-    //@Scheduled(cron = "*/5 * * * * ? ")
+//    @Scheduled(cron = "0 0 0/1 * * ? ")
+//    @Scheduled(cron = "0 0 0 0/1 * ? ")
+//    @Scheduled(cron = "0 */2 * * * ? ")
+    @Scheduled(cron = "0/10 * * * * ? ")
     public void checkJenkinsJobStatus() {
         String funcName = "JenkinsJobHistoryTask.checkJenkinsJobStatus()";
 
@@ -139,8 +140,6 @@ public class JenkinsJobHistoryTask {
                         }
                     }
                 }
-
-
             }
 
             log.info("JenkinsJobHistoryTask.checkJenkinsJobStatus() Exit");

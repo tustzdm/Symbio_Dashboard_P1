@@ -185,7 +185,7 @@ public class JenkinsServiceImpl implements JenkinsService {
         }
 
         try {
-            String strResult = "";
+            String strResult = EnumDef.JENKINS_JOB_STATUS.JOB_NOT_FOUND.getValue();
             JobWithDetails job = server.getJob(jobName);
             Build build = job.getBuildByNumber(buildId);
 

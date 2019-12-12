@@ -46,7 +46,7 @@
         </el-table>
     </el-card>
     <div class="fanye" style="margin:15px 0">
-        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="dataList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin-bottom:30px" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
+        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="totalCount" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin-bottom:30px" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
     </div>
     <div style="width:100%;height:80px"></div>
     <!-- tabel和翻页要写到一个div里然后和manage-top flex布局 -->
@@ -67,6 +67,7 @@ export default {
             tableHeight: '',
             screenHeight: '',
             dataList: [],
+            totalCount: 0,
             pageSize: 20,
             currentPage: 1,
             tableColownms: {},
@@ -135,6 +136,7 @@ export default {
             console.log(this.multipleSelection)
             this.dataList = val.cd.data;
             this.tableColownms = val.cd.columns;
+            this.totalCount = val.cd.totalRecord;
             console.log('tablecolumn');
             console.log(this.tableColownms);
             console.log(this.dataList);

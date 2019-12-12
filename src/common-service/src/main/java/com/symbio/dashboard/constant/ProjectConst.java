@@ -23,6 +23,7 @@ public class ProjectConst {
     public static final String BAR_Y_CATEGORY_STACK_CHART = "/json/BarYCategoryStackChart.json";
 
     // Project Config Key. Refer to Table [project_config]
+    public static final String JENKINS_JOB_ACCESS_LINK = "JenkinsServer.jobLink";
     public static final String URL = "JenkinsServer.url";
     public static final String JENKINS_PORT = "JenkinsServer.port";
     public static final String USERNAME = "JenkinsServer.username";
@@ -40,6 +41,7 @@ public class ProjectConst {
     public static final String JENKINS_AUTOMATION_COMPRESS_FILE_HAS_LOCALE = "Jenkins.Automation.CompressFile.HasLocale";
     public static final String JENKINS_AUTOMATION_PARSER_LOCALE_DEFAULT = "Jenkins.Automation.ParseLocale.Default";
     public static final String JENKINS_AUTOMATION_REPORT_HAS_TESTRUN_ID = "Jenkins.Automation.CompressFile.HasTestRunId";
+    public static final String JENKINS_CRONJOB_MAX_PARSER_COUNT = "Jenkins.CornJob.MaxParserCount";
 
     // TEP
     public static final String TEP_SPERATED_PRODUCT = "TEP_SeparatedByProduct";

@@ -279,7 +279,15 @@ public class JenkinsDao {
     }
 
     public List<JenkinsJobHistoryMain> getJenkinsJobHistoryCronList() {
-        List<JenkinsJobHistoryMain> listData = jjhMainRep.getUpdateStatusCronList();
+        Integer nParseCount = 99;
+
+        try {
+            String nValue = commonDao.getConfigValueByKey(ProjectConst.JENKINS_CRONJOB_MAX_PARSER_COUNT);
+            nParseCount = Integer.parseInt(nValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        List<JenkinsJobHistoryMain> listData = jjhMainRep.getUpdateStatusCronList(nParseCount);
         return listData;
     }
 

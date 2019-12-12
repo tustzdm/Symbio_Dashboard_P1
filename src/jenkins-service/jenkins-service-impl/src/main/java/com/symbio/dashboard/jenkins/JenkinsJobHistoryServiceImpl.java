@@ -84,6 +84,13 @@ public class JenkinsJobHistoryServiceImpl implements JenkinsJobHistoryService {
         Result<String> retResult = new Result<>();
 
         try {
+            Integer parserCount = data.getParseCount();
+            if (CommonUtil.isEmpty(parserCount)) {
+                parserCount = 1;
+            } else {
+                parserCount++;
+            }
+            data.setParseCount(parserCount);
             data.setStatus(jobStatus.toString());
             jenkinsDao.updateJenkinsJobHistoryMain(data);
             retResult.setCd(jobStatus.getValue());

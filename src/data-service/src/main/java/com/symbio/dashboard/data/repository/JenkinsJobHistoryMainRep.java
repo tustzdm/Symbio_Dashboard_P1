@@ -14,6 +14,8 @@ public interface JenkinsJobHistoryMainRep extends JpaRepository<JenkinsJobHistor
 
     // Refer to : EnumDef.JENKINS_JOB_STATUS
     // Not 'SUCCESS', 'FAILURE', 'ABORTED'
-    @Query(value = "SELECT * FROM jenkins_job_history_main WHERE status NOT IN ('2','3','4') AND display = 1 AND parseCount < 99 ORDER BY id", nativeQuery = true)
-    List<JenkinsJobHistoryMain> getUpdateStatusCronList();
+    //@Query(value = "SELECT * FROM jenkins_job_history_main WHERE status NOT IN ('2','3','4') AND display = 1 AND parseCount < 99 ORDER BY id", nativeQuery = true)
+    // Only 1 - Running, 0 - unknown
+    @Query(value = "SELECT * FROM jenkins_job_history_main WHERE status IN ('1') AND display = 1 AND parseCount < ?1 ORDER BY id", nativeQuery = true)
+    List<JenkinsJobHistoryMain> getUpdateStatusCronList(Integer nParseCount);
 }

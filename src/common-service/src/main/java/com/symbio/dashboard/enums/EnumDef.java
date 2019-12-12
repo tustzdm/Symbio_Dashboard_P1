@@ -481,7 +481,10 @@ public class EnumDef {
 
         AUTO_SKIP(5, "Skipped"),
         WAITING(6, "waiting"),
-        ERROR(7, "error");
+        ERROR(7, "error"),
+        UNSTABLE(8, "UNSTABLE"),
+
+        JOB_NOT_FOUND(9, "Not Found");
 
         private Integer code;
         private String value;
@@ -514,6 +517,7 @@ public class EnumDef {
             case ABORTED:
             case AUTO_SKIP:
             case ERROR:
+            case UNSTABLE:
                 bRet = true;
                 break;
         }
