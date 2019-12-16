@@ -65,7 +65,7 @@ public class JenkinsJobHistoryTask {
 //    @Scheduled(cron = "0 0 0/1 * * ? ")
 //    @Scheduled(cron = "0 0 0 0/1 * ? ")
 //    @Scheduled(cron = "0 */2 * * * ? ")
-    @Scheduled(cron = "0/10 * * * * ? ")
+    @Scheduled(cron = "0 0/10 * * * ? ")
     public void checkJenkinsJobStatus() {
         String funcName = "JenkinsJobHistoryTask.checkJenkinsJobStatus()";
 

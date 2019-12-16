@@ -1,9 +1,13 @@
 package com.symbio.dashboard.util;
 
 import com.symbio.dashboard.constant.CommonDef;
+import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.dto.FilePathDTO;
+import org.json.JSONObject;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @ClassName - FileUtil
@@ -136,5 +140,39 @@ public class FileUtil {
 
     public static String getCombineHttpPath(String path, String fileName) {
         return getCombineAbsolutePath(path, fileName).replace("\\", "/");
+    }
+
+    public static Map ReadResourceJsonFile(String filePath) {
+        Map<String, Object> map = new HashMap<>();
+        try {
+            String strFileName = filePath;
+            if (!filePath.startsWith("/")) {
+                strFileName = "/" + filePath;
+            }
+            String path = FileUtil.class.getResource(strFileName).getPath();
+            File file = new File(path);
+            String content = FileUtil.readAsString(file);
+            JSONObject jsonObject = new JSONObject(content);
+            map = JSONUtil.toMap(jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(ErrorConst.getExceptionLogMsg("FileUtil.ReadResourceJsonFile() filePath = " + filePath, e));
+        }
+        return map;
+    }
+
+    private static String readAsString(File file) throws IOException {
+        BufferedReader r = new BufferedReader(new FileReader(file));
+        StringBuffer b = new StringBuffer();
+
+        while (true) {
+            int ch = r.read();
+            if (ch == -1) {
+                r.close();
+                return b.toString();
+            }
+
+            b.append((char) ch);
+        }
     }
 }

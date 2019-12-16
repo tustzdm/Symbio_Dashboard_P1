@@ -2,10 +2,9 @@ package com.symbio.dashboard.data.charts;
 
 import com.symbio.dashboard.constant.ProjectConst;
 import com.symbio.dashboard.util.JSONUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.util.FileUtil;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -20,9 +19,8 @@ import java.util.Map;
  */
 
 @Service
+@Slf4j
 public class PieChart {
-
-    private static Logger logger = LoggerFactory.getLogger(PieChart.class);
 
     public Map getPieScrollLegendChart(Integer userId, String locale, Map<String, Object> data) {
 

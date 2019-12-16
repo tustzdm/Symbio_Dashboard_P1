@@ -399,6 +399,7 @@ public class EnumDef {
 //
 //        TEST_MANAGEMENT(200, "Test Management"), // PRODUCT
 //        PRODUCT(210, "Product"),
+
 //        RELEASE(220, "Release"),
 //        TEST_SET(230, "Test Set"),
 //        TEST_CASE(240, "Test Case"),
@@ -407,6 +408,9 @@ public class EnumDef {
 //        TEST_RUN(310, "Test Run"),
 //        TEST_RESULT(320, "Test Result"),
 //        IMAGE_COMPARE(330, "Image Compare"),
+
+        PRODUCT_PIE_REFER(211, "Product Pie Referer"),
+        PRODUCT_BAR_CATEGORY(212, "Product Bar Category Stack"),
 
         BUGS_PIE(401, "Bugs Pie"),
         BUGS_BAR(402, "Bugs Bar");
@@ -1025,6 +1029,31 @@ public class EnumDef {
         private String value;
 
         STAT_LIST_FIELD(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.code);
+        }
+    }
+
+    @Getter
+    public enum CHART_PARAM_KEY implements IDictEnum {
+        TITLE(1, "title"),
+        LEGEND(2, "legend"),
+
+        SERIAL_NAME(3, "serialName"),
+        SERIAL_DATA(4, "serialData"),
+        COLOR(5, "color"),
+        SERIES(6, "series"),
+        Y_AXIS(7, "yAxis");
+
+        private Integer code;
+        private String value;
+
+        CHART_PARAM_KEY(int code, String value) {
             this.code = code;
             this.value = value;
         }

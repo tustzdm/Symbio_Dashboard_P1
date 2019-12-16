@@ -145,7 +145,8 @@ public class ProductController extends BaseController {
 
     @RequestMapping("/getProductChart")
     public Result getProductChart(@RequestParam(value = "token") String token,
-                                     @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale) {
+                                  @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                                  @RequestParam(value = "productId", required = false, defaultValue = "") Integer productId) {
         // Step1: Check user token
         Result retUserToken = getUserIdByToken(token);
         if (retUserToken.hasError()) {
@@ -153,7 +154,7 @@ public class ProductController extends BaseController {
         }
         Integer userId = (Integer) retUserToken.getCd();
 
-        return productService.getProductChart(userId, locale);
+        return productService.getProductChart(userId, locale, productId);
     }
 
     private Result getProductListBase(String token, String locale, Integer pageIndex, Integer pageSize) {

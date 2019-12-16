@@ -1,10 +1,10 @@
 package com.symbio.dashboard.util;
 
-import com.symbio.dashboard.enums.EnumDef;
-import com.symbio.dashboard.enums.Locales;
-import com.symbio.dashboard.enums.SystemListSetting;
+import com.symbio.dashboard.constant.ErrorConst;
+import com.symbio.dashboard.enums.*;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -114,6 +114,9 @@ public class CommonUtil {
         data.add(1);
         data.add(2);
         System.out.println(join(data));
+
+        String test = CommonUtil.getPageChartTitle(OpsPage.PRODUCT, ChartsType.PIE_REFER, "zh_CN");
+        System.out.println(test);
     }
 
     public static List<String> getListByMergeString(String entityFields, String statFields) {
@@ -314,4 +317,147 @@ public class CommonUtil {
 
         return retValue;
     }
+
+    public static synchronized Map<String, Object> setMapKeyValue(Map<String, Object> data, String key, Object value) {
+        Map<String, Object> retMap = data;
+        try {
+            if (retMap == null || retMap.isEmpty()) {
+                return retMap;
+            }
+
+            if (key.contains(".")) {
+                int nFirstIdx = key.indexOf(".");
+                String firstKey = key.substring(0, nFirstIdx);
+                String newKey = key.substring(nFirstIdx + 1);
+
+                Object objData = data.get(firstKey);
+                if (objData instanceof Map) {
+                    Map<String, Object> mapSubData = (Map<String, Object>) objData;
+                    mapSubData = setMapKeyValue(mapSubData, newKey, value);
+                    data.put(firstKey, mapSubData);
+                }
+            } else if (data.containsKey(key)) {
+                data.put(key, value);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return retMap;
+    }
+
+    public static synchronized Object getRecursiveKeyValue(Map<String, Object> data, String key) {
+        Object retObj = null;
+        try {
+            if (data == null || data.isEmpty()) {
+                return retObj;
+            }
+
+            if (key.contains(".")) {
+                int nFirstIdx = key.indexOf(".");
+                String firstKey = key.substring(0, nFirstIdx);
+                String newKey = key.substring(nFirstIdx + 1);
+
+                Object objData = data.get(firstKey);
+                if (objData instanceof Map) {
+                    retObj = getRecursiveKeyValue((Map<String, Object>) objData, newKey);
+                }
+            } else if (data.containsKey(key)) {
+                retObj = data.get(key);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return retObj;
+    }
+
+    public static String getPageChartTitle(OpsPage page, ChartsType chart, String locale) {
+        String key = String.format("%s.%s.title.%s", page.getChartPrefix(), chart.getValue(), locale);
+        return WebUtil.getItemValue(getPageChartKeyValue(key));
+    }
+
+    public static Object getPageChartKeyValue(String key) {
+        Map<String, Object> mapChartResource = null;
+        if (mapChartResource == null) {
+            mapChartResource = FileUtil.ReadResourceJsonFile("/chart_resource.json");
+        }
+
+        Object retObj;
+        if (CommonUtil.isEmpty(mapChartResource)) {
+            System.out.println(ErrorConst.getWarningLogMsg("CommonUtil.getPageChartKeyValue()", "Could not find chart resource."));
+            return "";
+        } else {
+            retObj = getRecursiveKeyValue(mapChartResource, key);
+        }
+
+        return retObj;
+    }
+
+    public static List<String> getListString(List<Object> data) {
+        List<String> listData = new ArrayList<>();
+
+        try {
+            for (Object obj : data) {
+                listData.add(obj.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return listData;
+    }
+
+    public static List<Integer> getListInteger(List<Object> data) {
+        List<Integer> listData = new ArrayList<>();
+
+        try {
+            for (Object obj : data) {
+                listData.add(Integer.parseInt(obj.toString()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return listData;
+    }
+
+    public static String[] convertToStringArray(List<Object> data) {
+        String[] retArray = {};
+        List<String> listData = getListString(data);
+        if (!isEmpty(listData)) {
+            retArray = listData.toArray(new String[listData.size()]);
+        }
+        return retArray;
+    }
+
+    public static Integer[] convertToIntArray(List<Object> data) {
+        Integer[] retArray = {};
+        List<Integer> listData = getListInteger(data);
+        if (!isEmpty(listData)) {
+            retArray = listData.toArray(new Integer[listData.size()]);
+        }
+        return retArray;
+    }
+
+    public static <T> T[] convertToArray(Class<T> type, List<Object> data) {
+        if (isEmpty(data)) {
+            return null;
+        }
+
+        //T[] retArray = (T[]) new Object[data.size()];
+        T[] retArray = (T[]) Array.newInstance(type, data.size());
+
+        try {
+            List<T> newData = new ArrayList<T>();
+            for (Object item : data) {
+                newData.add((T) item);
+            }
+            newData.toArray(retArray);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return retArray;
+    }
+
 }

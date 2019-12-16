@@ -1,15 +1,18 @@
 package com.symbio.dashboard.business;
 
+import com.symbio.dashboard.enums.ChartsType;
 import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.Locales;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.JSONUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 public class ChartFactory {
 
     public Map<String, Object> getChartMapData(String locale, EnumDef.CHARTS chart, Object data) {
@@ -158,6 +161,47 @@ public class ChartFactory {
                         mapData = new HashMap<>();
 
                         mapData.put("name", strPriority);
+                        mapData.put("value", nCount);
+                        listSerialData.add(mapData);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return listSerialData;
+    }
+
+    /**
+     * Extend of getSerialData()
+     *
+     * @param data
+     * @return
+     */
+    public static List<Map<String, Object>> getSerialData(Map<String, List<Object>> data, String fields) {
+        List<Map<String, Object>> listSerialData = new ArrayList<>();
+
+        try {
+            String[] arrFields = fields.split(",");
+            if (arrFields == null || arrFields.length != 2) {
+                log.error("ERROR!!! Field's count should be 2. fields == " + fields);
+                return listSerialData;
+            }
+
+            List<Object> listGroupName = data.get(arrFields[0]);
+            if (!CommonUtil.isEmpty(listGroupName) && listGroupName.size() > 0) {
+                List<Object> listObjCount = data.get(arrFields[1]);
+                if (!CommonUtil.isEmpty(listObjCount) && listObjCount.size() == listGroupName.size()) {
+                    String strLabel = "";
+                    Integer nCount = 0;
+                    Map<String, Object> mapData = new HashMap<>();
+                    for (int i = 0; i < listGroupName.size(); i++) {
+                        strLabel = listGroupName.get(i).toString();
+                        nCount = Integer.parseInt(listObjCount.get(i).toString());
+                        mapData = new HashMap<>();
+
+                        mapData.put("name", strLabel);
                         mapData.put("value", nCount);
                         listSerialData.add(mapData);
                     }
@@ -323,7 +367,7 @@ public class ChartFactory {
 
     }
 
-    private Object buildSeries(EnumDef.CHARTS chart, Object data) {
+    public static Object buildSeries(EnumDef.CHARTS chart, Object data) {
         Object retObject = null;
 
         try {
@@ -347,6 +391,10 @@ public class ChartFactory {
                     }
 
                     retObject = listSimpleBar;
+                    break;
+                case PRODUCT_BAR_CATEGORY:
+                    Map<String, Object> dataParams = (Map<String, Object>) data;
+                    retObject = buildSeriesItem(ChartsType.BAR_CATEGORY, dataParams);
                     break;
             }
         } catch (Exception e) {
@@ -429,6 +477,44 @@ public class ChartFactory {
         }
         return retData;
 
+    }
+
+    public static Map<String, Object> buildSeriesItem(ChartsType chart, Map<String, Object> data) {
+        Map<String, Object> mapData = new HashMap<>();
+
+        try {
+            switch (chart) {
+                default:
+                    break;
+                case BAR_CATEGORY:
+                    String locale = data.get("locale").toString();
+                    String title = data.get("title").toString();
+                    Integer[] arrValue = (Integer[]) data.get("data");
+
+                    String total;
+                    if (Locales.EN_US.toString().equals(locale)) {
+                        total = "Total";
+                    } else {
+                        total = "总量";
+                    }
+
+                    Map<String, Object> mapLabel = new HashMap<>();
+                    Map<String, Object> mapNormal = new HashMap<>();
+                    mapNormal.put("show", true);
+                    mapNormal.put("position", "insideRight");
+                    mapLabel.put("normal", mapNormal);
+
+                    mapData.put("name", title);
+                    mapData.put("type", "bar");
+                    mapData.put("stack", total);
+                    mapData.put("label", mapLabel);
+                    mapData.put("data", arrValue);
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return mapData;
     }
 
     public static void main(String[] args) throws Exception {

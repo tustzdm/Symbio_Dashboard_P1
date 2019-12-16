@@ -4,12 +4,14 @@ import com.symbio.dashboard.Result;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.repository.ProjectConfigRep;
 import com.symbio.dashboard.data.repository.ResultMessageRep;
+import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.entity.Message;
 import com.symbio.dashboard.enums.*;
 import com.symbio.dashboard.model.*;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
+import com.symbio.dashboard.util.EntityUtils;
 import com.symbio.dashboard.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,9 @@ public class CommonDao {
   private ResultMessageRep messageRep;
   @Autowired
   private ProjectConfigRep projectConfigRep;
+
+  @Autowired
+  private SysListSettingRep sysListSettingRep;
 
   public CommonDao() {
   }
@@ -114,30 +119,49 @@ public class CommonDao {
   }
 
   /**
-   * 得到User参照的field
-   * move to : BusinessUtil.getQueryUserRefFields()
-   * @param listSetting
-   * @return
+   * 得到User参照的field move to : BusinessUtil.getQueryUserRefFields()
    *
-  @Deprecated
-  public static List<String> getQueryUserRefFields(List<SysListSetting> listSetting) {
-    List<String> dbFields = new ArrayList<>();
-
-    try {
-      String strFieldType = null;
-      for (SysListSetting item : listSetting) {
-        strFieldType = item.getType().trim();
-        if (ColumnType.User.getCode().equals(strFieldType)) {
-          dbFields.add(CommonUtil.getCamelField(item.getField()));
-        }
-      }
-    }catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    return dbFields;
-  }
+   * @param
+   * @return @Deprecated public static List<String> getQueryUserRefFields(List<SysListSetting>
+   *     listSetting) { List<String> dbFields = new ArrayList<>();
+   *     <p>try { String strFieldType = null; for (SysListSetting item : listSetting) { strFieldType
+   *     = item.getType().trim(); if (ColumnType.User.getCode().equals(strFieldType)) {
+   *     dbFields.add(CommonUtil.getCamelField(item.getField())); } } }catch (Exception e) {
+   *     e.printStackTrace(); }
+   *     <p>return dbFields; }
    */
+
+
+  /**
+   * Get List Entity field info for query
+   *
+   * @param page
+   * @return
+   */
+  public List<SysListSetting> getSystemSettingEntityInfo(SystemListSetting page) {
+    List<SysListSetting> listSetting = sysListSettingRep.getEntityInfo(page.toString());
+    if (CommonUtil.isEmpty(listSetting)) {
+      listSetting = new ArrayList<>();
+    }
+    return listSetting;
+  }
+
+  /**
+   * Get List column info
+   *
+   * @param page
+   * @return
+   */
+  public Result<List<SysListSetting>> getSystemSettingColumnsInfo(SystemListSetting page) {
+    Result<List<SysListSetting>> retResult = new Result<>();
+    List<SysListSetting> listColumns = sysListSettingRep.getListColumnsInfo(page.toString());
+    if (CommonUtil.isEmpty(listColumns)) {
+      return new Result("000121", "List columns info is empty. page is :" + page.toString());
+    } else {
+      retResult.setCd(listColumns);
+    }
+    return retResult;
+  }
 
   /**
    * 得到Entity 相关的dbFiled信息
@@ -322,6 +346,23 @@ public class CommonDao {
 
     log.trace("CommonDao - getDescField() Exit");
     return retResult;
+  }
+
+  public Result executeSqlClause(String sql, String fields) {
+    String funcName = "CommonDao.executeSqlClause()";
+
+    List<Map<String, Object>> mapData = new ArrayList<>();
+    try {
+      List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
+      mapData = EntityUtils.castQuerytoMap(listResult, fields);
+    } catch (Exception e) {
+      e.printStackTrace();
+      log.error("sql = {}, fields = {}", sql, fields);
+      log.error(ErrorConst.getExceptionLogMsg(funcName, e));
+      return ErrorConst.getExceptionResult(funcName, e);
+    }
+
+    return new Result(mapData);
   }
 
   /**

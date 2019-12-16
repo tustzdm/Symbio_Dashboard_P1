@@ -1,23 +1,24 @@
 package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.bean.NavigatorQueryVO;
+import com.symbio.dashboard.business.ChartFactory;
 import com.symbio.dashboard.business.CommonListDTOFactory;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.repository.ProductRep;
 import com.symbio.dashboard.data.repository.SysListSettingRep;
 import com.symbio.dashboard.data.repository.UiInfoRep;
 import com.symbio.dashboard.data.repository.UserRep;
+import com.symbio.dashboard.data.utils.SQLUtils;
 import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.dto.ProductUiDTO;
-import com.symbio.dashboard.enums.EnumDef;
-import com.symbio.dashboard.enums.ListDataType;
-import com.symbio.dashboard.enums.SystemListSetting;
-import com.symbio.dashboard.enums.UIInfoPage;
+import com.symbio.dashboard.enums.*;
 import com.symbio.dashboard.model.*;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.EntityUtils;
 import com.symbio.dashboard.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ import java.util.Map;
  */
 @SuppressWarnings("unchecked")
 @Repository
+@Slf4j
 public class ProductDao {
 
     private static Logger logger = LoggerFactory.getLogger(ProductDao.class);
@@ -120,48 +122,48 @@ public class ProductDao {
 
         return resultMap;
     }
-
-    public List<Product> getProductList() {
-        Query query;
-        StringBuilder sb = new StringBuilder();
-
-        List<Object[]> products;
-        List<Product> productList = new ArrayList<>();
-        List<SysListSetting> sysList;
-        List<String> dbFields = new ArrayList<>();
-
-        try {
-            sb.append("select ");
-
-            sysList = sysListSettingRep.getDbFieldsInProduct();
-
-            if (sysList != null && sysList.size() > 0) {
-
-                dbFields.add("id");
-                for (int i = 0; i < sysList.size(); i++) {
-                    dbFields.add(sysList.get(i).getField());
-                }
-
-                for (String s : dbFields) {
-                    sb.append(s).append(",");
-                }
-                if (sb.length() > 0) {
-                    sb.deleteCharAt(sb.length() - 1);
-                }
-                sb.append(" from product where 1=1");
-            }
-
-            query = entityManager.createNativeQuery(sb.toString());
-            products = query.getResultList();
-
-            productList = EntityUtils.castModel(products, Product.class, String.join(",", dbFields));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return productList;
-    }
+//
+//    public List<Product> getProductList() {
+//        Query query;
+//        StringBuilder sb = new StringBuilder();
+//
+//        List<Object[]> products;
+//        List<Product> productList = new ArrayList<>();
+//        List<SysListSetting> sysList;
+//        List<String> dbFields = new ArrayList<>();
+//
+//        try {
+//            sb.append("select ");
+//
+//            sysList = sysListSettingRep.getDbFieldsInProduct();
+//
+//            if (sysList != null && sysList.size() > 0) {
+//
+//                dbFields.add("id");
+//                for (int i = 0; i < sysList.size(); i++) {
+//                    dbFields.add(sysList.get(i).getField());
+//                }
+//
+//                for (String s : dbFields) {
+//                    sb.append(s).append(",");
+//                }
+//                if (sb.length() > 0) {
+//                    sb.deleteCharAt(sb.length() - 1);
+//                }
+//                sb.append(" from product where 1=1");
+//            }
+//
+//            query = entityManager.createNativeQuery(sb.toString());
+//            products = query.getResultList();
+//
+//            productList = EntityUtils.castModel(products, Product.class, String.join(",", dbFields));
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return productList;
+//    }
 
     public List<Map<String, Object>> getProductUsers(List<Integer> productIds, List<String> columns) {
 
@@ -389,8 +391,8 @@ public class ProductDao {
      * @param pageSize
      * @return
      */
-    public Result getProductList2(Integer userId, Integer role, String locale, Integer pageIndex, Integer pageSize) {
-        logger.trace("ProductDao.getProductList2() Enter.");
+    public Result getProductList(Integer userId, Integer role, String locale, Integer pageIndex, Integer pageSize) {
+        logger.trace("ProductDao.getProductList() Enter.");
         logger.trace(String.format("Args: locale = %s, pageIndex = %d, pageSize = %d", locale, pageIndex, pageSize));
 
         CommonListDTO retProdDTO =
@@ -438,7 +440,7 @@ public class ProductDao {
             retResult = new Result(retProdDTO);
         }
 
-        logger.trace("ProductDao.getProductList2() Exit");
+        logger.trace("ProductDao.getProductList() Exit");
         return retResult;
     }
 
@@ -627,4 +629,149 @@ public class ProductDao {
         }
         return retList;
     }
+
+    /**
+     * Get report data for Product Test Management
+     *
+     * @return
+     */
+    public Result getPieDataFormatter(Integer userId, String locale, Integer productId) {
+        Result<Map<String, Object>> retResult = new Result<>();
+        String funcName = "ProductDao.getPieDataFormatter()";
+
+        Map<String, Object> data = new HashMap<>();
+        List<Object> listName = null;
+
+        try {
+            // Step1: query
+            String strFields = "name,count";
+            NavigatorQueryVO queryVO = new NavigatorQueryVO(locale, strFields, productId, null, null);
+            String sql = SQLUtils.buildSql(EnumDef.CHARTS.PRODUCT_PIE_REFER, queryVO);
+
+            Result<List<Map<String, Object>>> resultQuery = commonDao.executeSqlClause(sql, strFields);
+            if (resultQuery.hasError()) {
+                return resultQuery;
+            }
+
+            List<Map<String, Object>> listData = resultQuery.getCd();
+            Map<String, List<Object>> mapData = EntityUtils.toChartData(listData, strFields);
+
+            // Step2: set chart data
+            listName = mapData.get("name");
+            data.put(EnumDef.CHART_PARAM_KEY.LEGEND.getValue(), CommonUtil.convertToStringArray(listName));
+
+            List<Map<String, Object>> listSerialData = ChartFactory.getSerialData(mapData, strFields);
+            data.put(EnumDef.CHART_PARAM_KEY.SERIAL_DATA.getValue(), listSerialData);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(ErrorConst.getExceptionLogMsg(funcName, e));
+            return ErrorConst.getInvokingExceptionResult(funcName, e);
+        }
+
+        // Step3: other setting
+        String title = CommonUtil.getPageChartTitle(OpsPage.PRODUCT, ChartsType.PIE_REFER, locale);
+        data.put(EnumDef.CHART_PARAM_KEY.TITLE.getValue(), title);
+        data.put(EnumDef.CHART_PARAM_KEY.SERIAL_NAME.getValue(), title);
+
+        retResult.setCd(data);
+
+        return retResult;
+    }
+
+    /**
+     * Get Bar Category Stack report data for Product Test Management
+     *
+     * @return
+     */
+    public Result getBarCategoryStack(Integer userId, String locale, Integer productId) {
+        Result<Map<String, Object>> retResult = new Result<>();
+        String funcName = "ProductDao.getBarCategoryStack()";
+
+        log.debug("userId = {}, productId = {}", userId, productId);
+
+        Map<String, Object> data = new HashMap<>();
+        List<Map<String, Object>> listQueryData = null;
+
+        try {
+            // Step1: query
+            String strFields = "title,passed,failed";
+            NavigatorQueryVO queryVO = new NavigatorQueryVO(locale, strFields, null, null, null);
+            String sql = SQLUtils.buildSql(EnumDef.CHARTS.PRODUCT_BAR_CATEGORY, queryVO);
+
+            Result<List<Map<String, Object>>> resultQuery = commonDao.executeSqlClause(sql, strFields);
+            if (resultQuery.hasError()) {
+                return resultQuery;
+            }
+            listQueryData = resultQuery.getCd();
+            Map<String, List<Object>> mapData = EntityUtils.toChartData(listQueryData, strFields);
+
+            // Series
+            List<Map<String, Object>> listMap = getSeriesBody(locale, mapData, "passed,failed");
+            data.put(EnumDef.CHART_PARAM_KEY.SERIES.getValue(), listMap);
+
+            // Step3: other setting
+            String title = CommonUtil.getPageChartTitle(OpsPage.PRODUCT, ChartsType.BAR_CATEGORY, locale);
+            data.put(EnumDef.CHART_PARAM_KEY.TITLE.getValue(), title);
+
+            // data.put(EnumDef.CHART_PARAM_KEY.COLOR.getValue(), "");
+            if (!Locales.EN_US.toString().equals(locale)) {
+                String key = String.format("%s.%s.category.%s", OpsPage.PRODUCT.getChartPrefix(), ChartsType.BAR_CATEGORY.getValue(), locale);
+                data.put(EnumDef.CHART_PARAM_KEY.LEGEND.getValue(), CommonUtil.getPageChartKeyValue(key));
+
+                // Not for Week group
+                //key = String.format("%s.%s.yAxis.%s", OpsPage.PRODUCT.getChartPrefix(), ChartsType.BAR_CATEGORY.getValue(), locale);
+                //data.put(EnumDef.CHART_PARAM_KEY.Y_AXIS.getValue(), CommonUtil.getPageChartKeyValue(key));
+            }
+
+            // Set Y title
+            String[] arrTitle = null;
+            if (!CommonUtil.isEmpty(listQueryData)) {
+                arrTitle = CommonUtil.convertToStringArray(mapData.get("title"));
+
+                String[] testTitle2 = CommonUtil.convertToArray(String.class, mapData.get("title"));
+                System.out.println(testTitle2);
+            }
+            data.put(EnumDef.CHART_PARAM_KEY.Y_AXIS.getValue(), arrTitle);
+
+            retResult.setCd(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(ErrorConst.getExceptionLogMsg(funcName, e));
+            return ErrorConst.getInvokingExceptionResult(funcName, e);
+        }
+
+
+        return retResult;
+    }
+
+    private List<Map<String, Object>> getSeriesBody(String locale, Map<String, List<Object>> mapData, String strFields) {
+        List<Map<String, Object>> retList = new ArrayList<>();
+
+        try {
+            String key = String.format("%s.%s.category.%s", OpsPage.PRODUCT.getChartPrefix(), ChartsType.BAR_CATEGORY.getValue(), locale);
+            List<String> listTitle = (List<String>) CommonUtil.getPageChartKeyValue(key);
+            String[] arrTitle = listTitle.toArray(new String[listTitle.size()]);
+            String[] arrFields = strFields.split(",");
+
+            Map<String, Object> dataParams = new HashMap<>();
+            Map<String, Object> barItem = null;
+            for (int i = 0; i < arrFields.length; i++) {
+                dataParams = new HashMap<>();
+                dataParams.put("locale", locale);
+                dataParams.put("title", arrTitle[i]);
+
+//                List<Object> listValue = mapData.get(arrFields[i]);
+//                Integer[] arrayValue = ;
+                dataParams.put("data", CommonUtil.convertToIntArray(mapData.get(arrFields[i])));
+                barItem = (Map<String, Object>) ChartFactory.buildSeries(EnumDef.CHARTS.PRODUCT_BAR_CATEGORY, dataParams);
+                if (barItem != null) {
+                    retList.add(barItem);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return retList;
+    }
+
 }

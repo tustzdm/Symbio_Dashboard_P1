@@ -1,23 +1,27 @@
 package com.symbio.dashboard.service;
 
 import com.symbio.dashboard.Result;
+import com.symbio.dashboard.business.CommonListDTOFactory;
 import com.symbio.dashboard.constant.ErrorConst;
 import com.symbio.dashboard.data.charts.BarChart;
+import com.symbio.dashboard.data.charts.ChartGenerate;
+import com.symbio.dashboard.data.charts.ChartProvider;
 import com.symbio.dashboard.data.charts.PieChart;
+import com.symbio.dashboard.data.charts.impl.ChartProviderFactory;
 import com.symbio.dashboard.data.dao.CommonDao;
 import com.symbio.dashboard.data.dao.IssueDao;
 import com.symbio.dashboard.data.dao.ProductDao;
 import com.symbio.dashboard.data.dao.UserDao;
 import com.symbio.dashboard.data.repository.ProductRep;
-import com.symbio.dashboard.enums.EntityDisplay;
-import com.symbio.dashboard.enums.Locales;
+import com.symbio.dashboard.dto.CommonListDTO;
+import com.symbio.dashboard.enums.*;
 import com.symbio.dashboard.model.Product;
+import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.User;
 import com.symbio.dashboard.util.BusinessUtil;
 import com.symbio.dashboard.util.CommonUtil;
 import com.symbio.dashboard.util.StringUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +33,10 @@ import java.util.*;
  * @Date - 2019/7/17 16:52
  * @Version 1.0
  */
-
+@Slf4j
 @Service
 @SuppressWarnings("unchecked")
 public class ProductServiceImpl implements ProductService {
-
-    private static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Autowired
     private CommonDao commonDao;
@@ -93,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
     public Result updateProduct(Product productInfo) {
         String funcName = "ProductServiceImpl.updateProduct()";
 
-        logger.trace(funcName + " Enter");
+        log.trace(funcName + " Enter");
 
         Result result = null;
         String strMsg = null;
@@ -149,7 +151,7 @@ public class ProductServiceImpl implements ProductService {
                 if (bAddNewProduct) {
                     Result retCloneIssueInfo = issueDao.AddNewProductIssueCategory(product.getId());
                     if (!retCloneIssueInfo.isSuccess()) {
-                        logger.error(ErrorConst.getErrorLogMsg(funcName + " - AddNewProductIssueCategory", retCloneIssueInfo));
+                        log.error(ErrorConst.getErrorLogMsg(funcName + " - AddNewProductIssueCategory", retCloneIssueInfo));
                     }
                 }
 
@@ -169,7 +171,7 @@ public class ProductServiceImpl implements ProductService {
             return new Result("000002", strMsg + " Exception! " + e.getMessage());
         }
 
-        logger.trace("ProductServiceImpl.updateProduct() Exit");
+        log.trace("ProductServiceImpl.updateProduct() Exit");
         return result;
     }
 
@@ -212,20 +214,81 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Result getProductPageList(Integer userId, String locale, Integer pageIndex, Integer pageSize) {
 
-        Result retResult = productDao.getProductList2(userId, null, locale, pageIndex, pageSize);
-        if(retResult.hasError()) {
-            logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+//        Result retResult = productDao.getProductList(userId, null, locale, pageIndex, pageSize);
+//        if(retResult.hasError()) {
+//            log.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+//        }
+//        return retResult;
+
+        String funcName = "ProductServiceImpl.getProductPageList()";
+
+        log.trace(funcName + " Enter.");
+        log.trace(String.format("Args: locale = %s, pageIndex = %d, pageSize = %d", locale, pageIndex, pageSize));
+
+        CommonListDTO retProdDTO = CommonListDTOFactory.createNewCommonListDTO(locale, pageIndex, pageSize);
+        Result retResult = new Result(retProdDTO);
+
+        // Get Menu role
+        Integer role = commonDao.getUserMenuRole(userId);
+        retProdDTO.setRole(role);
+
+        // Get fields info
+        List<SysListSetting> listSetting = commonDao.getSystemSettingEntityInfo(SystemListSetting.Product);
+        if (CommonUtil.isEmpty(listSetting)) {
+            return retResult;
         }
+
+        // Get Columns Info
+        Result<List<SysListSetting>> resultListColInfo = commonDao.getSystemSettingColumnsInfo(SystemListSetting.Product);
+        if (resultListColInfo.hasError()) {
+            return resultListColInfo;
+        } else {
+            List<SysListSetting> listColumns = resultListColInfo.getCd();
+            retProdDTO.setColumns(BusinessUtil.getListColumnInfo(role, locale, listColumns));
+        }
+
+        // Get field detail info
+        List<String> listFields = CommonDao.getQueryFields(listSetting);
+        if (CommonUtil.isEmpty(listFields)) {
+            log.debug("There is no field to query");
+            return retResult;
+        }
+        List<String> listUserFields = BusinessUtil.getQueryUserRefFields(listSetting);
+
+        String strFields = String.join(",", listFields);
+        Result retProductResult = productDao.getProductMapInfoByField(userId, strFields, pageIndex, pageSize, listUserFields);
+        if (retProductResult.hasError()) {
+            retResult = retProductResult;
+        } else {
+            CommonListDTO retProduct = (CommonListDTO) retProductResult.getCd();
+            retProdDTO.setTotalRecord(retProduct.getTotalRecord());
+            retProdDTO.setFields(retProduct.getFields());
+            retProdDTO.setDataType(retProduct.getDataType());
+            retProdDTO.setData(BusinessUtil.AppendOperation(EnumDef.OPERATION_TYPE.PRODUCT, role, retProduct.getData()));
+            retProdDTO.setRole(role);
+            retResult = new Result(retProdDTO);
+        }
+
+        // Get chart data
+//        Result resultChartData = productDao.getChartData();
+//        if (resultChartData.hasError()) {
+//            return resultChartData;
+//        } else {
+//            List<Map<String, Object>> listChartData = (List<Map<String, Object>>) resultChartData.getCd();
+//            retProdDTO.setChartData(listChartData);
+//        }
+
+        log.trace(funcName + " Exit");
         return retResult;
     }
 
     @Override
     public Result getNavigationList(Integer userId, String locale, Integer total){
-        logger.trace("ProductServiceImpl.getNavitionList Enter. total = %d", total);
+        log.trace("ProductServiceImpl.getNavitionList Enter. total = %d", total);
 
         Result retResult = productDao.getNavigationList(userId, locale, total);
         if(retResult.hasError()) {
-            logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+            log.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
         }
         return retResult;
     }
@@ -234,31 +297,53 @@ public class ProductServiceImpl implements ProductService {
     public Result getProductUiInfo(Integer userId, String locale, Integer uiInfo, Integer id) {
         Result retResult = productDao.getProductUiInfo(userId, locale, uiInfo, id);
         if (retResult.hasError()) {
-            logger.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
+            log.info(String.format("ec:%s, em:%s", retResult.getEc(), retResult.getEm()));
         }
         return retResult;
     }
 
     @Override
-    public Result getProductChart(Integer userId, String locale) {
+    public Result getProductChart(Integer userId, String locale, Integer productId) {
+        String funcName = "ProductServiceImpl.getProductChart()";
+        log.trace(funcName + " Enter.");
+        log.debug("userId = {}, locale = {}, productId = {}", userId, locale, productId);
 
-        Map<String, Object> map = new HashMap<>();
-        List charts = new ArrayList();
+        List<Map<String, Object>> listChartData = new ArrayList();
         try {
+            // Pie Chart
+            Map<String, Object> mapPie = new HashMap<>();
+            Result<Map<String, Object>> resultChartData = productDao.getPieDataFormatter(userId, locale, productId);
+            if (resultChartData.hasError()) {
+                return resultChartData;
+            } else {
+                mapPie = resultChartData.getCd();
+            }
 
-            Map data = pieChart.setChartData(); //service.getReportData();
-            Map data2 = barChart.setChartData(); //service.getReportData();
-            Map pieMap = pieChart.getPieScrollLegendChart(userId, locale, data);
-            Map barMap = barChart.getBarCategoryStackChart(userId, locale, data2);
-            charts.add(pieMap);
-            charts.add(barMap);
-            map.put("charts", charts);
+            // Abstract Factory
+            ChartProvider chartProvider = new ChartProviderFactory();
+            ChartGenerate chartGenerate = chartProvider.produce(ChartsType.PIE_REFER);
+            Map<String, Object> mapData = chartGenerate.getChartMapData(mapPie);
+            listChartData.add(mapData);
+
+            // Bar Category Stack
+            Map<String, Object> mapBar = new HashMap<>();
+            resultChartData = productDao.getBarCategoryStack(userId, locale, productId);
+            if (resultChartData.hasError()) {
+                return resultChartData;
+            } else {
+                mapBar = resultChartData.getCd();
+            }
+            chartGenerate = chartProvider.produce(ChartsType.BAR_CATEGORY);
+            mapData = chartGenerate.getChartMapData(mapBar);
+            listChartData.add(mapData);
 
         } catch (Exception e) {
             e.printStackTrace();
             return new Result("000120", "Chart");
         }
-        return new Result(map);
+
+        log.trace(funcName + " Exit.");
+        return new Result(listChartData);
     }
 
 }

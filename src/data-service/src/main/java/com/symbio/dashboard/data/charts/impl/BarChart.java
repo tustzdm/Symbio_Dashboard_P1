@@ -1,0 +1,43 @@
+package com.symbio.dashboard.data.charts.impl;
+
+import com.symbio.dashboard.data.charts.ChartGenerate;
+import com.symbio.dashboard.enums.ChartsType;
+import com.symbio.dashboard.enums.EnumDef;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public abstract class BarChart extends ChartsFactory implements ChartGenerate {
+
+    abstract Map<String, Object> setChartColor(String[] color);
+
+    public BarChart(ChartsType chartType) {
+        super(chartType);
+    }
+
+    protected String getChartKey() {
+        return getChartType().getValue();
+    }
+
+    @Override
+    public Map<String, Object> getChartMapData(Map<String, Object> data) {
+
+        Map<String, Object> mapData = new HashMap<>();
+
+        if (data.containsKey(EnumDef.CHART_PARAM_KEY.TITLE.getValue())) {
+            setChartTitle(data.get(EnumDef.CHART_PARAM_KEY.TITLE.getValue()).toString());
+        }
+
+        if (data.containsKey(EnumDef.CHART_PARAM_KEY.COLOR.getValue())) {
+            setChartColor((String[]) data.get(EnumDef.CHART_PARAM_KEY.COLOR.getValue()));
+        }
+
+        setChartData(data);
+
+        mapData.put("data", getMapData());
+        mapData.put("key", getChartKey());
+
+        return mapData;
+    }
+
+}

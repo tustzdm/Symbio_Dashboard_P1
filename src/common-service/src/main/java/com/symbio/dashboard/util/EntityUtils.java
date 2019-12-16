@@ -554,6 +554,13 @@ public class EntityUtils {
         return map;
     }
 
+    /**
+     * Get List<Object> for each column
+     *
+     * @param listData
+     * @param fields
+     * @return
+     */
     public static Map<String, List<Object>> toChartData(List<Map<String, Object>> listData, String fields) {
         Map<String, List<Object>> mapData = new HashMap<>();
 

@@ -53,6 +53,12 @@ public class SQLUtils {
             case BUGS_BAR:
                 sql = getBugChartBarSQL(queryVo);
                 break;
+            case PRODUCT_PIE_REFER:
+                sql = getProductNameCountSQL(queryVo);
+                break;
+            case PRODUCT_BAR_CATEGORY:
+                sql = getProductTitlePassFailSQL(queryVo);
+                break;
         }
 
         return sql;
@@ -305,6 +311,61 @@ public class SQLUtils {
             sb.append(" AND ts.id = ").append(tsId);
         }
         sb.append(" GROUP BY priority, status");
+
+        return sb.toString();
+    }
+
+    private static String getProductNameCountSQL(NavigatorQueryVO queryVo) {
+        StringBuffer sb = new StringBuffer();
+
+        String strFields = "prod.name, count(*) as count";
+        String groupBy = "";
+        String condition = "1=1";
+        if (!CommonUtil.isEmpty(queryVo.getTestSetId())) {
+            strFields = "ts.name, count(*) as count";
+            condition = "ts.id = " + queryVo.getTestSetId();
+            groupBy = "ts.name";
+        } else if (!CommonUtil.isEmpty(queryVo.getReleaseId())) {
+            strFields = "rel.name, count(*) as count";
+            condition = "rel.id = " + queryVo.getReleaseId();
+            groupBy = "rel.name";
+            //} else if (CommonUtil.isEmpty(queryVo.getProductId())) {
+        } else {
+            strFields = "prod.name, count(*) as count";
+            groupBy = "prod.name";
+        }
+
+        sb.append("SELECT ").append(strFields).append(" FROM test_run tr")
+                .append(" INNER JOIN test_set ts on ts.id = tr.testset_id")
+                .append(" INNER JOIN `release` rel on rel.id = ts.release_id")
+                .append(" INNER JOIN product prod on prod.id = rel.product_id")
+                .append(" WHERE ").append(condition)
+                .append(" GROUP BY ").append(groupBy)
+                .append(" ORDER BY count DESC");
+
+        return sb.toString();
+    }
+
+    private static String getProductTitlePassFailSQL(NavigatorQueryVO queryVo) {
+        StringBuffer sb = new StringBuffer();
+
+        String strFields = "DATE_FORMAT(tr.update_time, '%m') as title,";
+        String condition = "1=1";
+        if (!CommonUtil.isEmpty(queryVo.getTestSetId())) {
+            condition = "ts.id = " + queryVo.getTestSetId();
+        } else if (!CommonUtil.isEmpty(queryVo.getReleaseId())) {
+            condition = "rel.id = " + queryVo.getReleaseId();
+        } else if (!CommonUtil.isEmpty(queryVo.getProductId())) {
+            condition = "prod.id = " + queryVo.getReleaseId();
+        }
+        strFields += "count(if(tr.status=1,true,null)) as Passed,count(if(tr.status=4,true,null)) as Failed";
+
+        sb.append("SELECT ").append(strFields).append(" FROM test_run tr")
+                .append(" INNER JOIN test_set ts on ts.id = tr.testset_id")
+                .append(" INNER JOIN `release` rel on rel.id = ts.release_id")
+                .append(" INNER JOIN product prod on prod.id = rel.product_id")
+                .append(" WHERE ").append(condition)
+                .append(" GROUP BY title");
 
         return sb.toString();
     }

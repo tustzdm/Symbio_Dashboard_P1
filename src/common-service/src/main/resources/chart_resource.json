@@ -1,0 +1,44 @@
+{
+  "testmgmt": {
+    "product": {
+      "PieRefer": {
+        "title": {
+          "en_US": "Product Workload",
+          "zh_CN": "产品分布"
+        }
+      },
+      "BarCategoryStack": {
+        "title": {
+          "en_US": "Monthly Test Cases",
+          "zh_CN": "每月测试用例完成量"
+        },
+        "category": {
+          "en_US": [
+            "Passed",
+            "Failed"
+          ],
+          "zh_CN": [
+            "已完成",
+            "失败"
+          ]
+        },
+        "yAxis": {
+          "en_US": [
+            "Mo",
+            "Tu",
+            "We",
+            "Th",
+            "Fr"
+          ],
+          "zh_CN": [
+            "周一",
+            "周二",
+            "周三",
+            "周四",
+            "周五"
+          ]
+        }
+      }
+    }
+  }
+}

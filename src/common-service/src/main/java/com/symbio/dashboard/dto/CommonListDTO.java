@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 本类作为 List 数据的实体类
@@ -27,6 +28,8 @@ public class CommonListDTO implements Serializable {
   private List columns;
   private List<String> fields;
   private List data;
+
+  private List<Map<String, Object>> chartData;
 
   public CommonListDTO(String locale, Integer pageIndex, Integer pageSize){
     this.locale = locale;
