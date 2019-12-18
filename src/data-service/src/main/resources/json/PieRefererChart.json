@@ -18,7 +18,7 @@
     "type": "pie",
     "radius" : "55%",
     "center": [
-      "50%",
+      "65%",
       "60%"
     ],
     "itemStyle": {

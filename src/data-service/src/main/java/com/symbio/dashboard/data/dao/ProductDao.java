@@ -635,7 +635,7 @@ public class ProductDao {
      *
      * @return
      */
-    public Result getPieDataFormatter(Integer userId, String locale, Integer productId) {
+    public Result getPieDataFormatter(Integer userId, String locale, Integer productId, Integer releaseId, Integer testSetId) {
         Result<Map<String, Object>> retResult = new Result<>();
         String funcName = "ProductDao.getPieDataFormatter()";
 
@@ -645,7 +645,7 @@ public class ProductDao {
         try {
             // Step1: query
             String strFields = "name,count";
-            NavigatorQueryVO queryVO = new NavigatorQueryVO(locale, strFields, productId, null, null);
+            NavigatorQueryVO queryVO = new NavigatorQueryVO(locale, strFields, productId, releaseId, testSetId);
             String sql = SQLUtils.buildSql(EnumDef.CHARTS.PRODUCT_PIE_REFER, queryVO);
 
             Result<List<Map<String, Object>>> resultQuery = commonDao.executeSqlClause(sql, strFields);
@@ -683,7 +683,7 @@ public class ProductDao {
      *
      * @return
      */
-    public Result getBarCategoryStack(Integer userId, String locale, Integer productId) {
+    public Result getBarCategoryStack(Integer userId, String locale, Integer productId, Integer releaseId, Integer testSetId) {
         Result<Map<String, Object>> retResult = new Result<>();
         String funcName = "ProductDao.getBarCategoryStack()";
 
@@ -695,7 +695,7 @@ public class ProductDao {
         try {
             // Step1: query
             String strFields = "title,passed,failed";
-            NavigatorQueryVO queryVO = new NavigatorQueryVO(locale, strFields, null, null, null);
+            NavigatorQueryVO queryVO = new NavigatorQueryVO(locale, strFields, productId, releaseId, testSetId);
             String sql = SQLUtils.buildSql(EnumDef.CHARTS.PRODUCT_BAR_CATEGORY, queryVO);
 
             Result<List<Map<String, Object>>> resultQuery = commonDao.executeSqlClause(sql, strFields);

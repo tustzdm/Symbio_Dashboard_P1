@@ -27,6 +27,6 @@ public interface ProductService {
 
     Result getProductUiInfo(Integer userId, String locale, Integer uiInfo, Integer id);
 
-    Result getProductChart(Integer userId, String locale, Integer productId);
+    Result getProductChart(Integer userId, String locale, Integer productId, Integer releaseId, Integer testSetId);
 
 }

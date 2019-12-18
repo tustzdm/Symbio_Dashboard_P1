@@ -303,7 +303,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Result getProductChart(Integer userId, String locale, Integer productId) {
+    public Result getProductChart(Integer userId, String locale, Integer productId, Integer releaseId, Integer testSetId) {
         String funcName = "ProductServiceImpl.getProductChart()";
         log.trace(funcName + " Enter.");
         log.debug("userId = {}, locale = {}, productId = {}", userId, locale, productId);
@@ -312,7 +312,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             // Pie Chart
             Map<String, Object> mapPie = new HashMap<>();
-            Result<Map<String, Object>> resultChartData = productDao.getPieDataFormatter(userId, locale, productId);
+            Result<Map<String, Object>> resultChartData = productDao.getPieDataFormatter(userId, locale, productId, releaseId, testSetId);
             if (resultChartData.hasError()) {
                 return resultChartData;
             } else {
@@ -327,7 +327,7 @@ public class ProductServiceImpl implements ProductService {
 
             // Bar Category Stack
             Map<String, Object> mapBar = new HashMap<>();
-            resultChartData = productDao.getBarCategoryStack(userId, locale, productId);
+            resultChartData = productDao.getBarCategoryStack(userId, locale, productId, releaseId, testSetId);
             if (resultChartData.hasError()) {
                 return resultChartData;
             } else {
