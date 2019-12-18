@@ -81,11 +81,11 @@ public class ProductServiceImpl implements ProductService {
         try {
             product = productRep.getById(id);
             if (product == null || "".equals(product)) {
-                return new Result("000120", "Product Info");
+                return commonDao.getResult("000120", "Product Info");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("200102", "Product Info");
+            return commonDao.getResult("200102", "Product Info");
         }
 
         return new Result(product);
@@ -339,7 +339,7 @@ public class ProductServiceImpl implements ProductService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("000120", "Chart");
+            return commonDao.getResultArgs(locale, "000120", "Chart");
         }
 
         log.trace(funcName + " Exit.");

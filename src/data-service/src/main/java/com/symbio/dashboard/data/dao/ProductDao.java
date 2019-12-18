@@ -466,7 +466,7 @@ public class ProductDao {
                 }
 
                 if (CommonUtil.isEmpty(listProduct)) {
-                    return new Result("000120", "Product Navigation");
+                    return commonDao.getResultArgs(locale, "000120", "Product Navigation");
                 }
                 retResult = commonDao.getRoleAndListResult(userId, listProduct);
             } else {
@@ -478,7 +478,7 @@ public class ProductDao {
                 // Fetch db
                 List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
                 if (CommonUtil.isEmpty(listResult)) {
-                    return new Result("000120", "Product Navigation");
+                    return commonDao.getResultArgs(locale, "000120", "Product Navigation");
                 }
                 // Change to Map
                 List<Map<String, Object>> listProduct = EntityUtils.castMap(listResult, Product.class, strFields);
@@ -516,7 +516,7 @@ public class ProductDao {
             // Fetch db
             List<Object[]> listResult = entityManager.createNativeQuery(sql).getResultList();
             if (CommonUtil.isEmpty(listResult)) {
-                return new Result("000120", "Product Navigation");
+                return commonDao.getResultArgs(locale, "000120", "Product Navigation");
             }
             // Change to Map
             List<Map<String, Object>> listProduct = EntityUtils.castMap(listResult, Product.class, strFields);
@@ -716,7 +716,8 @@ public class ProductDao {
             // data.put(EnumDef.CHART_PARAM_KEY.COLOR.getValue(), "");
             if (!Locales.EN_US.toString().equals(locale)) {
                 String key = String.format("%s.%s.category.%s", OpsPage.PRODUCT.getChartPrefix(), ChartsType.BAR_CATEGORY.getValue(), locale);
-                data.put(EnumDef.CHART_PARAM_KEY.LEGEND.getValue(), CommonUtil.getPageChartKeyValue(key));
+                String[] arrTitle = CommonUtil.convertToStringArray((List<Object>) CommonUtil.getPageChartKeyValue(key));
+                data.put(EnumDef.CHART_PARAM_KEY.LEGEND.getValue(), arrTitle);
 
                 // Not for Week group
                 //key = String.format("%s.%s.yAxis.%s", OpsPage.PRODUCT.getChartPrefix(), ChartsType.BAR_CATEGORY.getValue(), locale);

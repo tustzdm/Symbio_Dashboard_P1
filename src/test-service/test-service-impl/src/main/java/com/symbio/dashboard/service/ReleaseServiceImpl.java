@@ -90,11 +90,11 @@ public class ReleaseServiceImpl implements ReleaseService {
         try {
             release = releaseRep.getById(id);
             if (release == null || "".equals(release)) {
-                return new Result("000120", "Release Info is empty");
+                return commonDao.getResult("000120", "Release Info is empty");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("200102", "Get Release Info Failed");
+            return commonDao.getResult("200102", "Get Release Info Failed");
         }
         return new Result(release);
     }
@@ -215,7 +215,7 @@ public class ReleaseServiceImpl implements ReleaseService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("000120", "Chart");
+            return commonDao.getResultArgs(locale, "000120", "Chart");
         }
         return new Result(map);
     }

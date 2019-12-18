@@ -78,11 +78,11 @@ public class TestSetServiceImpl implements TestSetService {
         try {
             testSet = testSetRep.getById(id);
             if (testSet == null || "".equals(testSet)) {
-                return new Result("000120", "TestSet Info is empty");
+                return commonDao.getResult("000120", "TestSet Info is empty");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("200102", "Get TestSet Info Failed");
+            return commonDao.getResult("200102", "Get TestSet Info Failed");
         }
         return new Result(testSet);
     }
@@ -196,7 +196,7 @@ public class TestSetServiceImpl implements TestSetService {
     @Override
     public Result getNavigationList(Integer userId, String locale, Integer releaseId, Integer total){
         if(BusinessUtil.isIdEmpty(releaseId)) {
-            return commonDao.getResult("000101", "Product Id");
+            return commonDao.getResultArgs(locale, "000101", "Product Id");
         }
 
         return testsetDao.getNavigationList(userId, locale, releaseId, total);
@@ -218,7 +218,7 @@ public class TestSetServiceImpl implements TestSetService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result("000120", "Chart");
+            return commonDao.getResultArgs(locale, "000120", "Chart");
         }
         return new Result(map);
     }
