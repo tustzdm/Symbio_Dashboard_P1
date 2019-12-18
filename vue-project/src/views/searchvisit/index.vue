@@ -13,7 +13,7 @@
                  </template>
             </el-table-column> -->
             <template v-for="item in tableColownms">
-                <el-table-column v-if="item.type!='hidden'" :key="item.id" :prop="item.field" :width="['id'].includes(item.field )? '100px':['status','screenshotFlag','locale','priority','jobStatus'].includes(item.field )? '120px':''" :sortable="['ID','Status','Priority','Case ID'].includes(item.label)" :align="item.label=='ScreenShot'?'center':'left'" :label="item.label">
+                <el-table-column v-if="item.type!='hidden'" :key="item.id" :prop="item.field" :width="['id'].includes(item.field )? '100px':['status','screenshotFlag','locale','priority','jobStatus'].includes(item.field )? '120px':''" :sortable="['id','status','priority'].includes(item.field)" :align="item.label=='ScreenShot'?'center':'left'" :label="item.label">
                     <template slot-scope="scope">
                         <div v-if="!['status','screenshotFlag','priority','jobStatus'].includes(item.field)">
                             {{scope.row[item.field]}}

@@ -80,8 +80,8 @@ import testsetList from './testsetList'
 export default {
     data() {
         return {
-            pie: getPie(),
-            rect: getRect(),
+            pie: {},
+            rect: {},
             productId: '',
             releaseId: '',
             testsetId: '',
@@ -125,6 +125,14 @@ export default {
             console.log(this.dataList)
             this.tableColownms = res.cd.columns;
             console.log(this.tableColownms)
+        });
+
+        this.$axios({
+            method: "get",
+            url: `/testmgmt/getProductChart?token=${localStorage.getItem('token')}&locale=${this.lang}&testsetId=${this.testsetId}`
+        }).then(res => {
+            this.pie = res.data.cd[0].data;
+            this.rect = res.data.cd[1].data;
         });
     },
     methods: {

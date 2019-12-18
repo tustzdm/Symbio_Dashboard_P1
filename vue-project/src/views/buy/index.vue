@@ -8,7 +8,7 @@
             <chart :options="rect" class="panel" />
 
         </div>
-        
+
         <productList ref="listChild"></productList>
     </el-col>
 </el-row>
@@ -22,35 +22,38 @@ import 'echarts/lib/component/legend'
 import 'echarts/lib/component/dataset'
 import getPie from './pie'
 import getRect from './rect'
-import {
-    getTestManager,
-    getProjectInfo
-} from '@/api/index'
 import storage from '@/utils/storage'
 import productList from './productList'
 export default {
     data() {
         return {
-            pie: getPie(),
-            rect: getRect(),
-            role:''
+            pie: {},
+            rect: {},
+            role: '',
+            lang:''
         }
     },
     components: {
         productList,
         chart: ECharts
     },
+    created() {
+        this.lang = this.$store.state.app.language=='zh'? 'zh_CN':'en_US';
+        this.$axios({
+            method: "get",
+            url: `/testmgmt/getProductChart?token=${localStorage.getItem('token')}&locale=${this.lang}`
+        }).then(res => {
+            this.pie = res.data.cd[0].data;
+            this.rect = res.data.cd[1].data;
+        });
+    },
     mounted() {
         // document.getElementsByClassName('echarts')[0].style.width = document.body.clientWidth * (11 / 27) + 'px';
         // document.getElementsByClassName('echarts')[1].style.width = document.body.clientWidth * (11 / 27) + 'px';)
 
-        // i18n
-        this.pie.title.text = this.$t('chart.productWorkload');
-        this.rect.title.text = this.$t('chart.dailyTestCases');
-
-        this.rect.legend.data =  [this.$t('terms.pass'), this.$t('terms.failed')];
-        this.rect.series[0].name =  this.$t('terms.pass');
-        this.rect.series[1].name =  this.$t('terms.failed');
+        // this.rect.legend.data = [this.$t('terms.pass'), this.$t('terms.failed')];
+        // this.rect.series[0].name = this.$t('terms.pass');
+        // this.rect.series[1].name = this.$t('terms.failed');
     },
     methods: {
         initProjet() {
@@ -72,12 +75,14 @@ export default {
 </script>
 
 <style lang="stylus">
-.infoCon {//没有设置scoped所以全局有效，但是给外层加了infoCon所以只是class为infoCon下面的才会生效
+.infoCon {
+
+    //没有设置scoped所以全局有效，但是给外层加了infoCon所以只是class为infoCon下面的才会生效
     .manage-charts {
         width: 100%;
         display: flex;
         justify-content: space-between;
-        margin-bottom:20px;
+        margin-bottom: 20px;
     }
 
     .panel {

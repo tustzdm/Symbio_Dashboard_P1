@@ -9,7 +9,7 @@
                 </el-button>
             </el-card>
         </div>
-        <!-- <el-table :data="tableData"> -->
+        <!-- <el-table :data="productList"> -->
         <el-table :data="productList" align="center">
             <p>{{productList}}</p>
             <el-table-column prop="name" align="center" :label="$t('testManagement.name')" :width="0.5*tabelWidth">
@@ -40,7 +40,7 @@
     </el-card>
 
     <div class="fanye" style="padding-bottom:100px">
-        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="tableData.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin: 10px 0" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
+        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="productList.length" :page-sizes="[20, 30, 40, 50, 100, 500]" :page-size="pageSize" style="text-align:center;margin: 10px 0" @current-change="currentChange" @size-change="sizeChange"></el-pagination>
     </div>
 </div>
 </template>
@@ -57,7 +57,6 @@ export default {
             currentPage: 1,
             productList: '',
             trIndex: '',
-            tableData: '',
             productId: '',
             role:'',
         }
