@@ -30,8 +30,10 @@ public class NavigatorQueryVO implements java.io.Serializable {
     public NavigatorQueryVO(String locale, String fields, Integer pageIndex, Integer pageSize) {
         this.locale = locale == null ? "en_US" : locale;
         this.fields = fields;
-        this.pageIndex = pageIndex == null ? 0 : pageIndex;
-        this.pageSize = pageSize == null ? 20 : pageSize;
+        //this.pageIndex = pageIndex == null ? 0 : pageIndex;
+        //this.pageSize = pageSize == null ? 20 : pageSize;
+        this.pageIndex = pageIndex;
+        this.pageSize = pageSize;
         this.productId = null;
         this.releaseId = null;
         this.testSetId = null;
@@ -54,8 +56,10 @@ public class NavigatorQueryVO implements java.io.Serializable {
 
         Integer pageIndex = query.getPageIndex();
         Integer pageSize = query.getPageSize();
-        this.pageIndex = pageIndex == null ? 0 : pageIndex;
-        this.pageSize = pageSize == null ? 20 : pageSize;
+        //this.pageIndex = pageIndex == null ? 0 : pageIndex;
+        //this.pageSize = pageSize == null ? 20 : pageSize;
+        this.pageIndex = pageIndex;
+        this.pageSize = pageSize;
     }
 
 }

@@ -24,7 +24,11 @@
       "BarCategoryStack": {
         "title": {
           "en_US": "Monthly Test Cases",
-          "zh_CN": "每月测试用例完成量"
+          "zh_CN": "每月测试用例完成量",
+          "testcase": {
+            "en_US": "Test Cases",
+            "zh_CN": "测试用例完成情况"
+          }
         },
         "category": {
           "en_US": [

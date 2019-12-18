@@ -690,6 +690,16 @@ public class ProductDao {
         return WebUtil.getItemValue(CommonUtil.getPageChartKeyValue(key));
     }
 
+    private String getTestMgmtBarTitle(String locale, Integer productId, Integer releaseId, Integer testSetId) {
+        String category = "";
+        if (!CommonUtil.isEmpty(testSetId)) {
+            category = "testcase.";
+        }
+
+        String key = String.format("%s.%s.title.%s%s", OpsPage.PRODUCT.getChartPrefix(), ChartsType.BAR_CATEGORY.getValue(), category, locale);
+        return WebUtil.getItemValue(CommonUtil.getPageChartKeyValue(key));
+    }
+
     /**
      * Get Bar Category Stack report data for Product Test Management
      *
@@ -722,7 +732,7 @@ public class ProductDao {
             data.put(EnumDef.CHART_PARAM_KEY.SERIES.getValue(), listMap);
 
             // Step3: other setting
-            String title = CommonUtil.getPageChartTitle(OpsPage.PRODUCT, ChartsType.BAR_CATEGORY, locale);
+            String title = getTestMgmtBarTitle(locale, productId, releaseId, testSetId);
             data.put(EnumDef.CHART_PARAM_KEY.TITLE.getValue(), title);
 
             // data.put(EnumDef.CHART_PARAM_KEY.COLOR.getValue(), "");
@@ -737,7 +747,7 @@ public class ProductDao {
             }
 
             // Set Y title
-            String[] arrTitle = null;
+            String[] arrTitle = new String[]{};
             if (!CommonUtil.isEmpty(listQueryData)) {
                 arrTitle = CommonUtil.convertToStringArray(mapData.get("title"));
 

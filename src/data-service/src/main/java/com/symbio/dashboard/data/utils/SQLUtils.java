@@ -319,12 +319,16 @@ public class SQLUtils {
         StringBuffer sb = new StringBuffer();
 
         String strFields = "prod.name, count(*) as count";
-        String groupBy = "";
+        String groupBy = "prod.name";
         String condition = "1=1";
 
         if (CommonUtil.isEmpty(queryVo.getProductId()) && CommonUtil.isEmpty(queryVo.getReleaseId()) && CommonUtil.isEmpty(queryVo.getTestSetId())) {
             strFields = "prod.name, count(*) as count";
             groupBy = "prod.name";
+        } else if (!CommonUtil.isEmpty(queryVo.getTestSetId())) {
+            strFields = "tc.case_id as name, count(tc.id) as count";
+            groupBy = "name";
+            condition = "ts.id = " + queryVo.getTestSetId();
         } else if (!CommonUtil.isEmpty(queryVo.getReleaseId())) {
             strFields = "ts.name, count(*) as count";
             condition = "rel.id = " + queryVo.getReleaseId();
@@ -339,6 +343,7 @@ public class SQLUtils {
                 .append(" INNER JOIN test_set ts on ts.id = tr.testset_id")
                 .append(" INNER JOIN `release` rel on rel.id = ts.release_id")
                 .append(" INNER JOIN product prod on prod.id = rel.product_id")
+                .append(" INNER JOIN test_case tc on tc.id = tr.testcase_id")
                 .append(" WHERE ").append(condition)
                 .append(" GROUP BY ").append(groupBy)
                 .append(" ORDER BY count DESC");
@@ -360,6 +365,8 @@ public class SQLUtils {
         } else if (!CommonUtil.isEmpty(queryVo.getReleaseId())) {
             condition = "rel.id = " + queryVo.getReleaseId();
         } else if (!CommonUtil.isEmpty(queryVo.getTestSetId())) {
+            strFields = "tc.case_id as title,";
+            //"tr.locale as title,";
             condition = "ts.id = " + queryVo.getTestSetId();
         }
 
@@ -369,6 +376,7 @@ public class SQLUtils {
                 .append(" INNER JOIN test_set ts on ts.id = tr.testset_id")
                 .append(" INNER JOIN `release` rel on rel.id = ts.release_id")
                 .append(" INNER JOIN product prod on prod.id = rel.product_id")
+                .append(" INNER JOIN test_case tc on tc.id = tr.testcase_id")
                 .append(" WHERE ").append(condition)
                 .append(" GROUP BY title");
 
