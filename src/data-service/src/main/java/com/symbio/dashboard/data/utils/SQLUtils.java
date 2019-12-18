@@ -321,18 +321,18 @@ public class SQLUtils {
         String strFields = "prod.name, count(*) as count";
         String groupBy = "";
         String condition = "1=1";
-        if (!CommonUtil.isEmpty(queryVo.getTestSetId())) {
-            strFields = "ts.name, count(*) as count";
-            condition = "ts.id = " + queryVo.getTestSetId();
-            groupBy = "ts.name";
-        } else if (!CommonUtil.isEmpty(queryVo.getReleaseId())) {
-            strFields = "rel.name, count(*) as count";
-            condition = "rel.id = " + queryVo.getReleaseId();
-            groupBy = "rel.name";
-            //} else if (CommonUtil.isEmpty(queryVo.getProductId())) {
-        } else {
+
+        if (CommonUtil.isEmpty(queryVo.getProductId()) && CommonUtil.isEmpty(queryVo.getReleaseId()) && CommonUtil.isEmpty(queryVo.getTestSetId())) {
             strFields = "prod.name, count(*) as count";
             groupBy = "prod.name";
+        } else if (!CommonUtil.isEmpty(queryVo.getReleaseId())) {
+            strFields = "ts.name, count(*) as count";
+            condition = "rel.id = " + queryVo.getReleaseId();
+            groupBy = "ts.name";
+        } else if (!CommonUtil.isEmpty(queryVo.getProductId())) {
+            strFields = "rel.name, count(*) as count";
+            condition = "prod.id = " + queryVo.getProductId();
+            groupBy = "rel.name";
         }
 
         sb.append("SELECT ").append(strFields).append(" FROM test_run tr")
@@ -351,13 +351,18 @@ public class SQLUtils {
 
         String strFields = "DATE_FORMAT(tr.update_time, '%m') as title,";
         String condition = "1=1";
-        if (!CommonUtil.isEmpty(queryVo.getTestSetId())) {
-            condition = "ts.id = " + queryVo.getTestSetId();
-        } else if (!CommonUtil.isEmpty(queryVo.getReleaseId())) {
-            condition = "rel.id = " + queryVo.getReleaseId();
+
+        if (CommonUtil.isEmpty(queryVo.getProductId()) && CommonUtil.isEmpty(queryVo.getReleaseId()) && CommonUtil.isEmpty(queryVo.getTestSetId())) {
+            strFields = "DATE_FORMAT(tr.update_time, '%m') as title,";
+            condition = "1=1";
         } else if (!CommonUtil.isEmpty(queryVo.getProductId())) {
             condition = "prod.id = " + queryVo.getReleaseId();
+        } else if (!CommonUtil.isEmpty(queryVo.getReleaseId())) {
+            condition = "rel.id = " + queryVo.getReleaseId();
+        } else if (!CommonUtil.isEmpty(queryVo.getTestSetId())) {
+            condition = "ts.id = " + queryVo.getTestSetId();
         }
+
         strFields += "count(if(tr.status=1,true,null)) as Passed,count(if(tr.status=4,true,null)) as Failed";
 
         sb.append("SELECT ").append(strFields).append(" FROM test_run tr")

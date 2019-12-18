@@ -54,6 +54,8 @@ public class BarCategoryStack extends BarChart {
             String[] arrYAxisData = (String[]) data.get(EnumDef.CHART_PARAM_KEY.Y_AXIS.getValue());
             if (!CommonUtil.isEmpty(arrYAxisData)) {
                 mapData = CommonUtil.setMapKeyValue(mapData, "yAxis.data", arrYAxisData);
+            } else {
+                mapData = CommonUtil.setMapKeyValue(mapData, "yAxis.data", new String[]{});
             }
         }
 

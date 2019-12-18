@@ -14,10 +14,7 @@ import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.dto.ProductUiDTO;
 import com.symbio.dashboard.enums.*;
 import com.symbio.dashboard.model.*;
-import com.symbio.dashboard.util.BusinessUtil;
-import com.symbio.dashboard.util.CommonUtil;
-import com.symbio.dashboard.util.EntityUtils;
-import com.symbio.dashboard.util.StringUtil;
+import com.symbio.dashboard.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -669,13 +666,28 @@ public class ProductDao {
         }
 
         // Step3: other setting
-        String title = CommonUtil.getPageChartTitle(OpsPage.PRODUCT, ChartsType.PIE_REFER, locale);
+        String title = getTestMgmtPieTitle(locale, productId, releaseId, testSetId);
         data.put(EnumDef.CHART_PARAM_KEY.TITLE.getValue(), title);
         data.put(EnumDef.CHART_PARAM_KEY.SERIAL_NAME.getValue(), title);
 
         retResult.setCd(data);
 
         return retResult;
+    }
+
+    private String getTestMgmtPieTitle(String locale, Integer productId, Integer releaseId, Integer testSetId) {
+        // CommonUtil.getPageChartTitle(OpsPage.PRODUCT, ChartsType.PIE_REFER, locale);
+        String category = "product";
+        if (!CommonUtil.isEmpty(productId)) {
+            category = "release";
+        } else if (!CommonUtil.isEmpty(releaseId)) {
+            category = "testset";
+        } else if (!CommonUtil.isEmpty(testSetId)) {
+            category = "testcase";
+        }
+
+        String key = String.format("%s.%s.title.%s.%s", OpsPage.PRODUCT.getChartPrefix(), ChartsType.PIE_REFER.getValue(), category, locale);
+        return WebUtil.getItemValue(CommonUtil.getPageChartKeyValue(key));
     }
 
     /**
@@ -761,8 +773,6 @@ public class ProductDao {
                 dataParams.put("locale", locale);
                 dataParams.put("title", arrTitle[i]);
 
-//                List<Object> listValue = mapData.get(arrFields[i]);
-//                Integer[] arrayValue = ;
                 dataParams.put("data", CommonUtil.convertToIntArray(mapData.get(arrFields[i])));
                 barItem = (Map<String, Object>) ChartFactory.buildSeries(EnumDef.CHARTS.PRODUCT_BAR_CATEGORY, dataParams);
                 if (barItem != null) {

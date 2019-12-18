@@ -31,13 +31,7 @@
   },
   "yAxis": {
     "type": "category",
-    "data": [
-      "Mo",
-      "Tu",
-      "We",
-      "Th",
-      "Fr"
-    ]
+    "data": []
   },
   "series": [
     {

@@ -15,8 +15,12 @@ public class CommonListDTOFactory {
         CommonListDTO dtoCommonList = new CommonListDTO();
 
         dtoCommonList.setLocale(locale == null ? Locales.EN_US.toString() : locale);
-        dtoCommonList.setPageIndex(pageIndex == null ? 0 : pageIndex);
-        dtoCommonList.setPageSize(pageSize == null ? 20 : pageIndex);
+
+        //dtoCommonList.setPageIndex(pageIndex == null ? 0 : pageIndex);
+        //dtoCommonList.setPageSize(pageSize == null ? 20 : pageIndex);
+        // Get all records for UI
+        dtoCommonList.setPageIndex(pageIndex);
+        dtoCommonList.setPageSize(pageSize);
 
         return dtoCommonList;
     }

@@ -3,8 +3,22 @@
     "product": {
       "PieRefer": {
         "title": {
-          "en_US": "Product Workload",
-          "zh_CN": "产品分布"
+          "product": {
+            "en_US": "Product Workload",
+            "zh_CN": "产品分布"
+          },
+          "release": {
+            "en_US": "Release Workload",
+            "zh_CN": "版本分布"
+          },
+          "testset": {
+            "en_US": "TestSet Workload",
+            "zh_CN": "测试集分布"
+          },
+          "testcase": {
+            "en_US": "TestCase Workload",
+            "zh_CN": "测试用例分布"
+          }
         }
       },
       "BarCategoryStack": {
