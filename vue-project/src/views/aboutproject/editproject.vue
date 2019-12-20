@@ -112,7 +112,7 @@ export default {
 
                 console.log(res.cd);
                 this.fatherReleaseList = res.cd.data;
-                 console.log('00000000000000');
+                console.log('00000000000000');
                 console.log(this.fatherReleaseList);
             });
         },
