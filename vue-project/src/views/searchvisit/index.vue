@@ -77,7 +77,7 @@ export default {
             selectIds: [],
             page: 'executeReview',
             ifSort: false,
-             showed_data:[]
+            showed_data: []
         }
     },
     components: {
@@ -109,7 +109,7 @@ export default {
         // }
         // this.tableHeight =
         // document.getElementsByClassName('main')[0].offsetHeight - 30 - 92 + 'px';
-        this.showed_data = this.dataList.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize);
+        this.showed_data = this.dataList.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
     },
     // computed:{
     //     showed_data: function(){
@@ -124,8 +124,8 @@ export default {
         selectIds() {
             console.log(this.selectIds)
         },
-        dataList(){
-            this.showed_data = this.dataList.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize);
+        dataList() {
+            this.showed_data = this.dataList.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
         },
         // currentPage(){
 
@@ -135,12 +135,12 @@ export default {
         currentChange(currentPage) {
             this.currentPage = currentPage;
             console.log(this.dataList);
-            this.showed_data = this.dataList.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize);
+            this.showed_data = this.dataList.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
             console.log(this.showed_data)
         },
         sizeChange(size) {
             this.pageSize = size;
-            this.showed_data = this.dataList.slice((this.currentPage-1)*this.pageSize,this.currentPage*this.pageSize);
+            this.showed_data = this.dataList.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
@@ -163,44 +163,98 @@ export default {
         runStatus(val) {
             this.run = true;
         },
-        sort(obj1, obj2) {
-            let val1 = obj1.status;
-            let val2 = obj2.status;
-            return val1 - val2
-        },
+        // sort(obj1, obj2) {
+        //     let val1 = obj1.status;
+        //     let val2 = obj2.status;
+        //     return val1 - val2
+        // },
         my_desc_sort(a, b) {
-            if (a.id > b.id) {
+            if (a[colum][prop] > b[column.prop]) {
                 return -1
-            } else if (a.id < b.id) {
+            } else if (a[column.prop] < b[column.prop]) {
                 return 1
             } else {
                 return 0
             }
         },
         my_asc_sort(a, b) {
-            if (a.id > b.id) {
+            if (a[column.prop] > b[column.prop]) {
                 return 1
-            } else if (a.id < b.id) {
+            } else if (a[column.prop] < b[column.prop]) {
                 return -1
             } else {
                 return 0
             }
         },
+
+        sortFun: function (attr, rev) {
+            //第二个参数没有传递 默认升序排列
+            if (rev == undefined) {
+                rev = 1;
+            } else {
+                rev = (rev) ? 1 : -1;
+            }
+
+            return function (a, b) {
+                a = a[attr];
+                b = b[attr];
+                if (a < b) {
+                    return rev * -1;
+                }
+                if (a > b) {
+                    return rev * 1;
+                }
+                return 0;
+            }
+        },
         sort_change(column) {
             console.log('sSSSSSirt')
+            console.log(column)
             this.currentPage = 1 // return to the first page after sorting
             console.log(this.currentPage)
             if (column.prop === 'id') {
+                // if (column.order === 'descending') {
+                this.sortFun(column.prop, column.order === 'descending')
+                // this.dataList = this.dataList.sort(
+                //     function (a, b) {
+                //     console.log(a);
+                //     console.log('column.prop ==' + column.prop);
+                //     console.log(a["id"]);
+                //     if (a[column.prop] > b[column.prop]) {
+                //         return -1;
+                //     }
+                //     if (a[column.prop] < b[column.prop]) {
+                //         return 1;
+                //     }
+                //     // a 必须等于 b
+                //     return 0;
+                // }
+                // )
+                console.log(this.dataList);
+                // } else if (column.order === 'ascending') {
+                //     this.dataList = this.dataList.sort(function (a, b) {
+                //         if (a[column.prop] > b[column.prop]) {
+                //             return 1;
+                //         }
+                //         if (a[column.prop] < b[column.prop]) {
+                //             return -1;
+                //         }
+                //         // a 必须等于 b
+                //         return 0;
+                //     })
+                // }
+            } else if (column.prop === 'status') {
                 if (column.order === 'descending') {
                     this.dataList = this.dataList.sort(this.my_desc_sort)
                     console.log(this.dataList);
                 } else if (column.order === 'ascending') {
                     this.dataList = this.dataList.sort(this.my_asc_sort)
                 }
-            } else if (column.prop === 'col_2') {
-                // ... ...
             }
-            this.showed_data = this.dataList.slice(0, this.page_size) // show only one page
+            console.log('ssssss' + this.pageSize)
+            this.showed_data = this.dataList.slice(0, this.pageSize) // show only one page
+            console.log('Finished')
+            console.log(this.showed_data)
         }
     }
 }
