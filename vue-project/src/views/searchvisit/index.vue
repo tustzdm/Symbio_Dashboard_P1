@@ -163,11 +163,7 @@ export default {
         runStatus(val) {
             this.run = true;
         },
-        // sort(obj1, obj2) {
-        //     let val1 = obj1.status;
-        //     let val2 = obj2.status;
-        //     return val1 - val2
-        // },
+
         my_desc_sort(a, b) {
             if (a[colum][prop] > b[column.prop]) {
                 return -1
@@ -213,43 +209,14 @@ export default {
             this.currentPage = 1 // return to the first page after sorting
             console.log(this.currentPage)
             if (column.prop === 'id') {
-                // if (column.order === 'descending') {
-                this.sortFun(column.prop, column.order === 'descending')
-                // this.dataList = this.dataList.sort(
-                //     function (a, b) {
-                //     console.log(a);
-                //     console.log('column.prop ==' + column.prop);
-                //     console.log(a["id"]);
-                //     if (a[column.prop] > b[column.prop]) {
-                //         return -1;
-                //     }
-                //     if (a[column.prop] < b[column.prop]) {
-                //         return 1;
-                //     }
-                //     // a 必须等于 b
-                //     return 0;
-                // }
-                // )
+                this.dataList = this.dataList.sort(this.sortFun(column.prop, column.order === 'ascending'));
                 console.log(this.dataList);
-                // } else if (column.order === 'ascending') {
-                //     this.dataList = this.dataList.sort(function (a, b) {
-                //         if (a[column.prop] > b[column.prop]) {
-                //             return 1;
-                //         }
-                //         if (a[column.prop] < b[column.prop]) {
-                //             return -1;
-                //         }
-                //         // a 必须等于 b
-                //         return 0;
-                //     })
-                // }
             } else if (column.prop === 'status') {
-                if (column.order === 'descending') {
-                    this.dataList = this.dataList.sort(this.my_desc_sort)
-                    console.log(this.dataList);
-                } else if (column.order === 'ascending') {
-                    this.dataList = this.dataList.sort(this.my_asc_sort)
-                }
+                this.dataList = this.dataList.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                console.log(this.dataList);
+            }else if (column.prop === 'priority') {
+                this.dataList = this.dataList.sort(this.sortFun(column.prop, column.order === 'ascending'));
+                console.log(this.dataList);
             }
             console.log('ssssss' + this.pageSize)
             this.showed_data = this.dataList.slice(0, this.pageSize) // show only one page
