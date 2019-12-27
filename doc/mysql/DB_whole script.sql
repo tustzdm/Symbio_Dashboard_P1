@@ -1146,8 +1146,8 @@ CREATE TABLE `group_info` (
   `validation` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'Valid or not. 0-invalid，1-valid',
   `createTime` datetime DEFAULT NULL COMMENT 'Create time',
   `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_group_companyId_name` (`companyId`, `name`)
+  PRIMARY KEY (`id`)
+  UNIQUE KEY `unique_group_name_type_productId` (`name`, `groupType`, `companyId`, `productId`),
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 INSERT INTO `group_info` VALUES ('1', 'Admin', '1', '0', '0', '0', null, '1', '2019-09-12 19:48:00', '2019-09-12 17:20:00');
@@ -1195,6 +1195,7 @@ CREATE TABLE `user_group_role` (
   `userId` int(10) unsigned NOT NULL COMMENT 'user id',
   `groupId` int(10) unsigned NOT NULL COMMENT 'group Id',
   `roleId` int(10) unsigned NOT NULL COMMENT 'role Id',
+  `validation` int(10) unsigned NOT NULL DEFAULT '1' COMMENT 'valid or not. 0-invalid, 1-valid',
   `createTime` datetime DEFAULT NULL COMMENT 'Create time',
   `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Update time',
   PRIMARY KEY (`id`)

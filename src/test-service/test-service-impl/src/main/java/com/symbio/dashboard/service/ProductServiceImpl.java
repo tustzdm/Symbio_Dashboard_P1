@@ -15,6 +15,7 @@ import com.symbio.dashboard.data.dao.UserDao;
 import com.symbio.dashboard.data.repository.ProductRep;
 import com.symbio.dashboard.dto.CommonListDTO;
 import com.symbio.dashboard.enums.*;
+import com.symbio.dashboard.model.Group;
 import com.symbio.dashboard.model.Product;
 import com.symbio.dashboard.model.SysListSetting;
 import com.symbio.dashboard.model.User;
@@ -154,6 +155,15 @@ public class ProductServiceImpl implements ProductService {
                         log.error(ErrorConst.getErrorLogMsg(funcName + " - AddNewProductIssueCategory", retCloneIssueInfo));
                     }
                 }
+
+                Result<Group> retCheckGroupInfo = productDao.checkProductGroupInfo(product.getId());
+                if (retCheckGroupInfo.hasError()) {
+                    log.warn(ErrorConst.getWarningLogMsg(funcName, retCheckGroupInfo));
+                }
+
+                // Save uer group role info
+                Group groupInfo = retCheckGroupInfo.getCd();
+                System.out.println("Unique Product Group id: " + groupInfo.getId());
 
                 Map<String, Integer> map = new HashMap<>();
                 map.put("id", product.getId());

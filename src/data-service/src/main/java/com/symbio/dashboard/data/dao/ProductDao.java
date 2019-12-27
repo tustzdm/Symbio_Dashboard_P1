@@ -2,6 +2,7 @@ package com.symbio.dashboard.data.dao;
 
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.bean.NavigatorQueryVO;
+import com.symbio.dashboard.business.AuthorityFactory;
 import com.symbio.dashboard.business.ChartFactory;
 import com.symbio.dashboard.business.CommonListDTOFactory;
 import com.symbio.dashboard.constant.ErrorConst;
@@ -59,6 +60,8 @@ public class ProductDao {
     private UserDao userDao;
     @Autowired
     private SysListSettingRep sysListSettingRep;
+    @Autowired
+    private AuthorityDao authDao;
 
     public Map<String, Object> getFormatProductList() {
         Query query;
@@ -793,6 +796,26 @@ public class ProductDao {
             e.printStackTrace();
         }
         return retList;
+    }
+
+    public Result<Group> checkProductGroupInfo(Integer productId) {
+        Result<Group> retResult = new Result();
+        String funcName = "ProductDao.checkProductGroupInfo()";
+
+        try {
+            Group groupInfo = authDao.getProductGroupInfo(productId);
+            if (CommonUtil.isEmpty(groupInfo)) {
+                groupInfo = AuthorityFactory.createProductGroup(null, productId);
+                authDao.saveGroupInfo(groupInfo);
+            }
+            retResult.setCd(groupInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.warn(ErrorConst.getWarningLogMsg(funcName, e.getMessage()));
+            return ErrorConst.getExceptionResult(funcName, e);
+        }
+
+        return retResult;
     }
 
 }

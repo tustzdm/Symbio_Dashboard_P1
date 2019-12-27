@@ -12,6 +12,22 @@ public interface FunctionInfoRep extends JpaRepository<FunctionInfo, Integer> {
 
     FunctionInfo getById(Integer id);
 
+    @Query(value = "SELECT IFNULL(sum(fi.fValue),0) as fValue FROM role_menu_function rmf" +
+            " INNER JOIN role_setting rs ON rs.id = rmf.roleId AND rs.validation = 1" +
+            " INNER JOIN menu ON menu.id = rmf.menuId AND menu.validation = 1" +
+            " INNER JOIN function_info fi ON fi.id = rmf.functionId and fi.validation = 1" +
+            " WHERE rmf.roleId = ?1" +
+            " AND menu.id = ?2", nativeQuery = true)
+    Integer getFunctionTotalValue(Integer roleId, Integer menuId);
+
+    @Query(value = "SELECT fi.* FROM role_menu_function rmf" +
+            " INNER JOIN role_setting rs ON rs.id = rmf.roleId AND rs.validation = 1" +
+            " INNER JOIN menu ON menu.id = rmf.menuId AND menu.validation = 1" +
+            " INNER JOIN function_info fi ON fi.id = rmf.functionId and fi.validation = 1" +
+            " WHERE rmf.roleId = ?1" +
+            " AND menu.id = ?2", nativeQuery = true)
+    List<FunctionInfo> getFunctionListByRoleMenu(Integer roleId, Integer menuId);
+
     @Query(value = "SELECT fi.* FROM role_menu_function rmf" +
             " INNER JOIN menu ON menu.id = rmf.menuId AND menu.validation = 1" +
             " INNER JOIN function_info fi ON fi.id = rmf.functionId and fi.validation = 1" +
@@ -58,5 +74,8 @@ public interface FunctionInfoRep extends JpaRepository<FunctionInfo, Integer> {
             " WHERE menu.name = ?2" +
             " AND fi.name = ?3", nativeQuery = true)
     List<FunctionInfo> getFunctionByUserIdMenuFunctionName(Integer userId, String menuName, String funcName);
+
+    @Query(value = "SELECT * FROM function_info WHERE validation = 1 ORDER BY id", nativeQuery = true)
+    List<FunctionInfo> getFunctionList();
 
 }

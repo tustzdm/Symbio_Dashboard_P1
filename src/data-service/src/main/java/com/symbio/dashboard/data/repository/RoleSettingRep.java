@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface RoleSettingRep extends JpaRepository<RoleSetting, Integer> {
 
@@ -27,5 +29,9 @@ public interface RoleSettingRep extends JpaRepository<RoleSetting, Integer> {
             " ORDER BY gi.isSysGroup DESC, priority" +
             " LIMIT 0,1", nativeQuery = true)
     Integer getRoleIdByUserId(Integer userId);
+
+
+    @Query(value = "SELECT * FROM role_setting WHERE validation = 1 ORDER BY priority", nativeQuery = true)
+    List<RoleSetting> getList();
 
 }

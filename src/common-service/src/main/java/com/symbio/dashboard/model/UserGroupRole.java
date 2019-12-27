@@ -34,6 +34,9 @@ public class UserGroupRole implements Serializable {
     @Column(name = "roleId", nullable = false)
     private Integer roleId;
 
+    @Column(name = "validation", nullable = false)
+    private Integer validation;
+
     @Column(name = "createTime")
     private Date createTime;
 

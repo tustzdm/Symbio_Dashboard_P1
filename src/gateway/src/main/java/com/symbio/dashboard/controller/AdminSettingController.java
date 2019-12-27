@@ -3,20 +3,19 @@ package com.symbio.dashboard.controller;
 import com.symbio.dashboard.Result;
 import com.symbio.dashboard.common.CommonAuthService;
 import com.symbio.dashboard.setting.service.CommonServiceImpl;
+import com.symbio.dashboard.setting.service.SettingService;
 import com.symbio.dashboard.setting.service.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @ClassName - AdminSettingController
- * @Description - 控制器
- * @Date - 2019/7/16
- * @Version 1.0
+ * @ClassName - AdminSettingController @Description - 控制器 @Date - 2019/7/16 @Version 1.0
  */
 @RequestMapping("/setting")
 @RestController
@@ -34,9 +33,12 @@ public class AdminSettingController extends BaseController {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    private SettingService settingService;
+
     @RequestMapping("/getDictionary")
-    public Result getDictionary(@RequestParam(value = "token") String token,
-                                @RequestParam(value = "type") String type) {
+    public Result getDictionary(
+            @RequestParam(value = "token") String token, @RequestParam(value = "type") String type) {
         // Step1: Check user token
         Result retUserToken = getUserIdByToken(token);
         if (retUserToken.hasError()) {
@@ -48,8 +50,8 @@ public class AdminSettingController extends BaseController {
     }
 
     @RequestMapping("/getUiInfoPage")
-    public Result getUiInfoList(@RequestParam(value = "token") String token,
-                                @RequestParam(value = "type") String type) {
+    public Result getUiInfoList(
+            @RequestParam(value = "token") String token, @RequestParam(value = "type") String type) {
         Result result;
         try {
             // Step1: Check user token
@@ -77,9 +79,10 @@ public class AdminSettingController extends BaseController {
     }
 
     @RequestMapping("/getDBFields")
-    public Result getDBFields(@RequestParam(value = "token") String token,
-                              @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
-                              @RequestParam(value = "table") String table) {
+    public Result getDBFields(
+            @RequestParam(value = "token") String token,
+            @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+            @RequestParam(value = "table") String table) {
         Result result;
         try {
             // Step1: Check user token
@@ -91,7 +94,7 @@ public class AdminSettingController extends BaseController {
 
             result = commonService.getUserDefinedFields(locale, table);
             if (result.hasError()) {
-               logger.error(String.format("ec:%s, em:%s",result.getEc(),result.getEm()));
+                logger.error(String.format("ec:%s, em:%s", result.getEc(), result.getEm()));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,16 +105,16 @@ public class AdminSettingController extends BaseController {
     }
 
     /**
-     *
      * @param token
      * @param locale
      * @param status
      * @return
      */
     @RequestMapping("/getUserList")
-    public Result getUserList(@RequestParam(value = "token") String token,
-                              @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
-                              @RequestParam(value = "status", required = false, defaultValue = "1") Integer status) {
+    public Result getUserList(
+            @RequestParam(value = "token") String token,
+            @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+            @RequestParam(value = "status", required = false, defaultValue = "1") Integer status) {
         Result result;
         try {
             // Step1: Check user token
@@ -132,4 +135,27 @@ public class AdminSettingController extends BaseController {
         return result;
     }
 
+    @GetMapping("/getRole")
+    public Result getRole(@RequestParam(value = "token") String token,
+                          @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale) {
+        Result result = null;
+
+        try {
+            // Step1: Check user token
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
+            result = settingService.getRoleInfo(locale, userId);
+            if (result.hasError()) {
+                return result;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return getResult("000120", "role info list");
+        }
+        return result;
+    }
 }
