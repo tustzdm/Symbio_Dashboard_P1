@@ -4,6 +4,7 @@ import com.symbio.dashboard.enums.EnumDef;
 import com.symbio.dashboard.enums.GroupType;
 import com.symbio.dashboard.enums.RoleType;
 import com.symbio.dashboard.model.Group;
+import com.symbio.dashboard.model.RoleMenuFunction;
 import com.symbio.dashboard.util.CommonUtil;
 
 import java.util.Date;
@@ -53,6 +54,17 @@ public class AuthorityFactory {
         groupInfo.setCreateTime(new Date());
 
         return groupInfo;
+    }
+
+    public static RoleMenuFunction createUserMenuFunction(Integer roleId, Integer menuId, Integer funcId) {
+        RoleMenuFunction dataInfo = new RoleMenuFunction();
+
+        dataInfo.setRoleId(roleId);
+        dataInfo.setMenuId(menuId);
+        dataInfo.setFunctionId(funcId);
+        dataInfo.setCreateTime(new Date());
+
+        return dataInfo;
     }
 
 }

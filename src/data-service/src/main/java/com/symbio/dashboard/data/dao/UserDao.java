@@ -89,7 +89,7 @@ public class UserDao {
    */
 
   public Result<User> getById(Integer id) {
-    Result<User> retUserInfo = new Result<>();
+    Result<User> retUserInfo = new Result<User>();
     String funcName = "UserDao.getUserById()";
 
     User tr = getUserById(id);

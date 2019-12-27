@@ -26,7 +26,7 @@ public interface FunctionInfoRep extends JpaRepository<FunctionInfo, Integer> {
             " INNER JOIN function_info fi ON fi.id = rmf.functionId and fi.validation = 1" +
             " WHERE rmf.roleId = ?1" +
             " AND menu.id = ?2", nativeQuery = true)
-    List<FunctionInfo> getFunctionListByRoleMenu(Integer roleId, Integer menuId);
+    List<FunctionInfo> getFunctionListBySetting(Integer roleId, Integer menuId);
 
     @Query(value = "SELECT fi.* FROM role_menu_function rmf" +
             " INNER JOIN menu ON menu.id = rmf.menuId AND menu.validation = 1" +
@@ -77,5 +77,8 @@ public interface FunctionInfoRep extends JpaRepository<FunctionInfo, Integer> {
 
     @Query(value = "SELECT * FROM function_info WHERE validation = 1 ORDER BY id", nativeQuery = true)
     List<FunctionInfo> getFunctionList();
+
+    @Query(value = "SELECT * FROM function_info WHERE (fvalue & ?1 > 0) AND validation = 1 ORDER BY id", nativeQuery = true)
+    List<FunctionInfo> getFunctionListByAccumulativeValue(Integer value);
 
 }
