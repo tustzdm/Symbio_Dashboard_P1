@@ -156,6 +156,32 @@ public class AdminSettingController extends BaseController {
         return result;
     }
 
+    @GetMapping("/getRoleDetailInfo")
+    public Result getRoleInfo(@RequestParam(value = "token") String token,
+                              @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,
+                              @RequestParam(value = "roleId") Integer roleId,
+                              @RequestParam(value = "menuId") Integer menuId) {
+        Result result = null;
+
+        try {
+            // Step1: Check user token
+            Result retUserToken = getUserIdByToken(token);
+            if (retUserToken.hasError()) {
+                return retUserToken;
+            }
+            Integer userId = (Integer) retUserToken.getCd();
+
+            result = settingService.getRoleDetailInfo(locale, userId, roleId, menuId);
+            if (result.hasError()) {
+                return result;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return getResult("000120", "role detail info");
+        }
+        return result;
+    }
+
     @PostMapping("/saveRole")
     public Result saveRole(@RequestParam(value = "token") String token,
                            @RequestParam(value = "locale", required = false, defaultValue = "en_US") String locale,

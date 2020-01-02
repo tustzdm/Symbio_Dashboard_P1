@@ -75,6 +75,21 @@ public class AuthorityDao {
         return retMenuInfo;
     }
 
+    public Result<RoleSetting> checkRoleInfo(String locale, Integer roleId) {
+        Result<RoleSetting> retRoleInfo = new Result<>();
+        String funcName = "AuthorityDao.checkRoleInfo()";
+
+        RoleSetting roleInfo = roleSettingRep.getById(roleId);
+        if (CommonUtil.isEmpty(roleInfo)) {
+            log.error(ErrorConst.getWarningLogMsg(funcName, "Could not find role_setting record by Id: " + roleId));
+            return new Result("000016", String.format("Could not find relative data in table [%s]. id = [%d]", "role_setting", roleId));
+        } else {
+            retRoleInfo.setCd(roleInfo);
+        }
+
+        return retRoleInfo;
+    }
+
     public RoleMenuFunction saveRoleMenuFunction(RoleMenuFunction data) {
         return roleMenuFuncRep.saveAndFlush(data);
     }

@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.symbio.dashboard.business.SettingFactory.getFunctionListMap;
 
@@ -49,7 +51,8 @@ public class SettingServiceImpl implements SettingService {
 
         RoleSettingDTO roleSettingDTO = new RoleSettingDTO();
         List<RoleSetting> listRole = authDao.getRoleList();
-        roleSettingDTO.setRoleList(SettingFactory.getRoleSettingListMap(listRole));
+        List<Map<String, Object>> listRoleMap = SettingFactory.getRoleSettingListMap(listRole);
+        roleSettingDTO.setRoleList(listRoleMap);
 
         List<Menu> listMenu = authDao.getMenuList();
         roleSettingDTO.setMenuList(SettingFactory.getMenuListMap(listMenu));
@@ -125,6 +128,30 @@ public class SettingServiceImpl implements SettingService {
             return ErrorConst.getExceptionResult(funcName, e);
         }
         log.debug(funcName + " Exit");
+        return retResult;
+    }
+
+    @Override
+    public Result<Map<String, Object>> getRoleDetailInfo(String locale, Integer userId, Integer roleId, Integer menuId) {
+        Result<Map<String, Object>> retResult = new Result<>();
+
+        Result resultMenu = authDao.checkMenuInfo(locale, menuId);
+        if (resultMenu.hasError()) {
+            return resultMenu;
+        }
+
+        Result<RoleSetting> resultRole = authDao.checkRoleInfo(locale, roleId);
+        if (resultRole.hasError()) {
+            return new Result(resultRole);
+        }
+
+        Integer currentFuncValue = authDao.getFunctionValueByRoleMenu(roleId, menuId);
+        Map<String, Object> mapData = new HashMap<>();
+        mapData.put("roleId", roleId);
+        mapData.put("menuId", menuId);
+        mapData.put("value", currentFuncValue);
+        retResult.setCd(mapData);
+
         return retResult;
     }
 

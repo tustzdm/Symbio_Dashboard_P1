@@ -10,4 +10,6 @@ public interface SettingService {
 
     Result saveRoleInfo(String locale, Integer userId, Integer roleId, Integer menuId, Integer value);
 
+    Result getRoleDetailInfo(String locale, Integer userId, Integer roleId, Integer menuId);
+
 }
