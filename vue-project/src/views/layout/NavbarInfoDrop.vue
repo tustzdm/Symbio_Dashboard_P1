@@ -8,6 +8,7 @@
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item v-if="this.user!='15340193294'" command="forms">{{$t('sidebarDropDown.form')}}</el-dropdown-item>
         <el-dropdown-item v-if="this.user!='15340193294'" command="EditPages">{{$t('sidebarDropDown.pageElement')}}</el-dropdown-item>
+        <el-dropdown-item v-if="this.user!='15340193294'" command="settings">{{$t('sidebarDropDown.settings')}}</el-dropdown-item>
         <el-dropdown-item command="logout">{{$t('sidebarDropDown.logout')}}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
@@ -46,6 +47,8 @@ export default {
           break
         case 'EditPages':
           this.editPages()
+        case 'settings':
+          this.settings()  
           break  
       }
     },
@@ -61,6 +64,9 @@ export default {
     },
     editPages() {
       this.$router.push({ path: '/editPages' })
+    },
+    settings(){
+      this.$router.push({ path: '/settings' })
     }
   }
 }

@@ -254,6 +254,13 @@ export const constantRouterMap = [
         ],
         
     },
+    {
+        path: "/settings",
+        component: _import("setting/setting"),
+        meta:{
+            requireAuth:true
+        }
+    },
     { path: "*", redirect: "/404", hidden: true }
 ];
 export const router = new VueRouter({

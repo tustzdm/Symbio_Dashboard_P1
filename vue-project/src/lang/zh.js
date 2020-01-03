@@ -46,7 +46,8 @@ export default {
     profile: "个人中心",
     logout: "退出登录",
     form: "表单样式",
-    pageElement:"页面元素"
+    pageElement:"页面元素",
+    settings: "页面设置"
   },
   navBar:{
     qualityOverview: "项目概况",

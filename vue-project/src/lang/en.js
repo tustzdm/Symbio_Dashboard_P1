@@ -50,7 +50,8 @@ export default {
     lock: "Lock",
     logout: "Logout",
     form: "Form",
-    pageElement:"Page Element"
+    pageElement:"Page Element",
+    settings: "Settings"
   },
   navBar:{
     qualityOverview: "Quality Overview",

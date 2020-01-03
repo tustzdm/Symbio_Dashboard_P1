@@ -160,29 +160,6 @@ export default {
             console.log(this.dataList);
             this.run = false;
         },
-        runStatus(val) {
-            this.run = true;
-        },
-
-        my_desc_sort(a, b) {
-            if (a[colum][prop] > b[column.prop]) {
-                return -1
-            } else if (a[column.prop] < b[column.prop]) {
-                return 1
-            } else {
-                return 0
-            }
-        },
-        my_asc_sort(a, b) {
-            if (a[column.prop] > b[column.prop]) {
-                return 1
-            } else if (a[column.prop] < b[column.prop]) {
-                return -1
-            } else {
-                return 0
-            }
-        },
-
         sortFun: function (attr, rev) {
             //第二个参数没有传递 默认升序排列
             if (rev == undefined) {
