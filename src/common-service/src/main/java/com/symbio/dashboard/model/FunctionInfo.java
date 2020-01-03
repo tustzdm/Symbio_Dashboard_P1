@@ -28,7 +28,7 @@ public class FunctionInfo implements Serializable {
     private String name;
 
     @Column(name = "fvalue", nullable = false)
-    private String fvalue;
+    private Integer fvalue;
 
     @Column(name = "description")
     private String description;
