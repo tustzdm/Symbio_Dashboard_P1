@@ -256,10 +256,14 @@ export const constantRouterMap = [
     },
     {
         path: "/settings",
-        component: _import("setting/setting"),
+        component: Layout,
+        redirect: "/setting",
         meta:{
             requireAuth:true
-        }
+        },
+        children:[
+            {path: "/setting",component: _import("setting/setting"),name:"settings"}
+        ]
     },
     { path: "*", redirect: "/404", hidden: true }
 ];

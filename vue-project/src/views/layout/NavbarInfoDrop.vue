@@ -47,6 +47,7 @@ export default {
           break
         case 'EditPages':
           this.editPages()
+          break
         case 'settings':
           this.settings()  
           break  
