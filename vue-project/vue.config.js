@@ -1,6 +1,7 @@
 // https://cli.vuejs.org/1
 
 const path = require("path");
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 function resolve(dir) {
     return path.join(__dirname, dir);
@@ -17,6 +18,7 @@ module.exports = {
     configureWebpack: () => {
         if (process.env.NODE_ENV === "production") {
             // 为生产环境修改配置...
+            config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true;
         } else {
             // 为开发环境修改配置...
         }
