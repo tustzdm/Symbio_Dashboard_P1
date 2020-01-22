@@ -19,14 +19,14 @@
             <el-form-item label="DbField:" prop="">
                 <el-col :span="16">
                     <select v-model="form.dbField">
-                        <option v-for="item in dbfieldList">{{item.code}}</option>
+                        <option v-for="item in dbfieldList" :key="item.code">{{item.code}}</option>
                     </select>
                 </el-col>
             </el-form-item>
             <el-form-item label="Type:" prop="type">
                 <el-col :span="16">
                     <select v-model="form.type" name="" id="">
-                        <option v-for="item in typeList">{{item.value}}</option>
+                        <option v-for="item in typeList" :key="item.value">{{item.value}}</option>
                     </select>
                 </el-col>
             </el-form-item>
@@ -124,19 +124,19 @@ export default {
         }
     },
     created() {
-        console.log(this.$route.params)
+        this.selfLog(this.$route.params)
         this.form.page = this.$route.params.page;
         this.Fetch("/setting/getDictionary?token=${localStorage.getItem('token')}&type=HtmlType", {
             method: "GET"
         }).then(res => {
-            console.log(res);
+            this.selfLog(res);
             this.typeList = res.cd;
         });
         let url = `setting/getDBFields?table=${this.form.page.toLowerCase()}&token=${localStorage.getItem('token')}`; //这里取的是page的value值，实际上应该去code，先用value转小写，后面还需要把空格也删了
         this.Fetch(url, {
             method: "GET"
         }).then(res => {
-            console.log(res);
+            this.selfLog(res);
             this.dbfieldList = res.cd;
         });
     },
@@ -166,11 +166,11 @@ export default {
         submit() {
             var formData = this.form;
             // var formData = JSON.stringify(this.form);
-            console.log(formData);
+            this.selfLog(formData);
             this.$axios.post(`/ui/updateUiElement?token=${localStorage.getItem('token')}&page=${this.form.page}`, formData).then(res => {
                 // success callback
-                console.log(formData);
-                console.log(res.data);
+                this.selfLog(formData);
+                this.selfLog(res.data);
                 var ec = res.data.ec;
                 //debugger;
                 if (ec != '0') {

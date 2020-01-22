@@ -228,11 +228,11 @@ export default {
         // this.Fetch(`/result/getTEPInfo?token=${this.token}&testSetId=1`, {
         //     method: "GET"
         // }).then(res => {
-        //     console.log(11111)
-        //     console.log(res);
-        //     console.log(22222)
+        //     this.selfLog(11111)
+        //     this.selfLog(res);
+        //     this.selfLog(22222)
         //     this.tepnameList = res.cd.nameList;
-        //     console.log(this.tepnameList);
+        //     this.selfLog(this.tepnameList);
         //     this.testSelectList = res.cd.data;
         //     for (const iterator of this.testSelectList) {
         //         this.tepParameters[iterator.name] = iterator.defaultValue
@@ -242,11 +242,11 @@ export default {
                 method: "get",
                 url: `/result/getTEPInfo?token=${this.token}&testSetId=1`
             }).then(res => {
-            console.log(11111)
-            console.log(res);
-            console.log(22222)
+            this.selfLog(11111)
+            this.selfLog(res);
+            this.selfLog(22222)
             this.tepnameList = res.data.cd.nameList;
-            console.log(this.tepnameList);
+            this.selfLog(this.tepnameList);
             this.testSelectList = res.data.cd.data;
             for (const iterator of this.testSelectList) {
                 this.tepParameters[iterator.name] = iterator.defaultValue
@@ -259,12 +259,12 @@ export default {
             this.Fetch(`/result/getTEPInfo?token=${this.token}&testSetId=1&tepId=${val}`, {
                 method: "GET"
             }).then(res => {
-                console.log(res);
+                this.selfLog(res);
                 this.tepnameList = res.cd.nameList;
-                console.log(this.tepnameList)
+                this.selfLog(this.tepnameList)
                 this.testSelectList = res.cd.data;
-                console.log(66666666666)
-                console.log(this.testSelectList);
+                this.selfLog(66666666666)
+                this.selfLog(this.testSelectList);
                 for (const iterator of this.testSelectList) {
                     this.tepParameters[iterator.name] = iterator.defaultValue
                 }
@@ -321,8 +321,8 @@ export default {
                     alert('Login Timeout')
                     return
                 }
-                console.log("getnav")
-                console.log(res);
+                this.selfLog("getnav")
+                this.selfLog(res);
                 this.role = res.data.cd.role;
                 this.productId = res.data.cd.productId;
                 this.releaseId = res.data.cd.releaseId;
@@ -347,7 +347,7 @@ export default {
                 }
                 this.tableColumn = res.data.cd.columns;
                 this.tableData = res.data.cd.data;
-                console.log(this.tableData);
+                this.selfLog(this.tableData);
                 this.$emit('getTableData', res.data);
             }).catch(err => {
                 alert(err);
@@ -363,8 +363,8 @@ export default {
             //         "locale": this.lang
             //     }
             // }).then(res => {
-            //     console.log("getnav")
-            //     console.log(res);
+            //     this.selfLog("getnav")
+            //     this.selfLog(res);
             //     this.role = res.cd.role;
             //     this.productId = res.cd.productId;
             //     this.releaseId = res.cd.releaseId;
@@ -389,7 +389,7 @@ export default {
             //     }
             //     this.tableColumn = res.cd.columns;
             //     this.tableData = res.cd.data;
-            //     console.log(this.tableData);
+            //     this.selfLog(this.tableData);
             //     this.$emit('getTableData', res);
             // }).catch(err => {
             //     alert(err);
@@ -401,15 +401,15 @@ export default {
             this.$refs.upload.submit();
         },
         handleRemove(file, fileList) {
-            console.log(file, fileList);
+            this.selfLog(file, fileList);
         },
         handlePreview(file) {
-            console.log(file);
+            this.selfLog(file);
         },
         uploadSuccess(res) {
             this.centerDialogVisible = false;
-            console.log('asdfasdfasdfasdfasdf')
-            console.log(res)
+            this.selfLog('asdfasdfasdfasdfasdf')
+            this.selfLog(res)
             if (res.ec == 0) {
                 this.$message({
                     message: 'Import Success',
@@ -425,8 +425,8 @@ export default {
             this.getNavgationList();
         },
         // checkrun() {
-        //     console.log('2222222222123123123123')
-        //     console.log(this.fatherSelectList);
+        //     this.selfLog('2222222222123123123123')
+        //     this.selfLog(this.fatherSelectList);
         //     if (this.fatherSelectList.length == 0) {
         //         alert('Select one option at least');
         //         return;
@@ -451,7 +451,7 @@ export default {
                     message: 'Running started',
                     type: "success"
                 });
-                console.log(res);
+                this.selfLog(res);
                 this.$emit('runStatus', true);
                 setTimeout(() => {
                     this.$emit('getTableData', res);

@@ -64,17 +64,17 @@ export default {
             method: "GET"
         }).then(res => {
 
-            console.log('starting.....');
-            console.log(res.cd);
+            this.selfLog('starting.....');
+            this.selfLog(res.cd);
 
             this.userList = res.cd.userList;
-            console.log(this.userList);
+            this.selfLog(this.userList);
 
             this.uiList = res.cd.uiInfo;
-            console.log(this.uiList);
+            this.selfLog(this.uiList);
 
             this.product = res.cd.data;
-            console.log(this.product);
+            this.selfLog(this.product);
 
             this.fatherReleaseList = res.cd.releaseList;
             this.fatherProductList = res.cd.productList;
@@ -84,19 +84,19 @@ export default {
         // this.Fetch(`/ui/getUiInfoList?token=${localStorage.getItem('token')}&page=product`, {
         //     method: "GET"
         // }).then(res => {
-        //     console.log(res.cd);
+        //     this.selfLog(res.cd);
         //     this.uiList = res.cd;
         // });
         // this.Fetch(`/setting/getDictionary?token=${localStorage.getItem('token')}&type=ProductStatus`, {
         //     method: "GET"
         // }).then(res => {
-        //     console.log(res.cd);
+        //     this.selfLog(res.cd);
         //     this.statusList = res.cd;
         // });
         // this.Fetch(`/setting/getUserList?token=${localStorage.getItem('token')}`, {
         //     method: "GET"
         // }).then(res => {
-        //     console.log(res.cd.cd);
+        //     this.selfLog(res.cd.cd);
         //     this.userList = res.cd.cd;
         // for(let fullName in this.userList){
         //     this.userList[fullName].id =this.userList.id;
@@ -110,10 +110,10 @@ export default {
                 method: "GET"
             }).then(res => {
 
-                console.log(res.cd);
+                this.selfLog(res.cd);
                 this.fatherReleaseList = res.cd.data;
-                console.log('00000000000000');
-                console.log(this.fatherReleaseList);
+                this.selfLog('00000000000000');
+                this.selfLog(this.fatherReleaseList);
             });
         },
     },
@@ -121,8 +121,8 @@ export default {
         onSubmit() {
             this.$axios.post(`/testmgmt/update${this.editPageType}?token=${localStorage.getItem('token')}`, this.product).then(res => {
                 // success callback
-                console.log(this.product);
-                console.log(res.data);
+                this.selfLog(this.product);
+                this.selfLog(res.data);
                 var ec = res.data.ec;
                 //debugger;
                 if (ec != '0') {

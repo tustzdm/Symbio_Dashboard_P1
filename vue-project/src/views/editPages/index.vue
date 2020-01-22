@@ -3,7 +3,7 @@
     <div class="top" style="margin:25px 0">
         <span style="padding-left:80px;font-family:Poppins;">Choose Page:</span>
         <select v-model="page" id="" style="margin-left:20px;height:30px">
-            <option v-for="item in pageList" :value="item.code">{{item.value}}</option>
+            <option v-for="item in pageList" :value="item.code" :key="item.value">{{item.value}}</option>
         </select>
         <el-button @click="addRouter"  style="float:right;margin-right:10%;padding:none;color:white;background-color:#7a85a1;width:150px;border:none">
            <span style="font-family:Poppins;font-weight:bold;"> + Add Element</span>
@@ -12,14 +12,14 @@
     <table class="common-table" style="width:100%">
         <thead class="tableHead">
             <tr>
-                <th v-for="item in tableHead">
+                <th v-for="item in tableHead" :key="item">
                     {{item}}
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr class="tableBody" v-for="items in tableData">
-                <td v-for="(item,index) in items" v-if="['page','label','dispStatus','version','validation','display'].indexOf(index) === -1">
+            <tr class="tableBody" v-for="items in tableData" :key="items.id">
+                <td v-for="(item,index) in items" v-show="['page','label','dispStatus','version','validation','display'].indexOf(index) === -1" :key="index">
                     <p v-if="['isRequired', 'isDisable'].indexOf(index) == -1">{{item}}</p>
                     <!-- <el-switch key="dsfg" :model="item" v-if="['isRequired', 'isDisable'].indexOf(index) != -1" disabled active-color="#13ce66" inactive-color="gray" active-value='1' inactive-value='0'>
                     </el-switch>  -->
@@ -74,12 +74,12 @@ export default {
         // this.$axios.get("http://127.0.0.1:8100/menu/getProductUIInfoList")
         //     .then((data) => {
         //       alert(12)
-        //         console.log(data)
+        //         this.selfLog(data)
         //     })
     },
     watch: {
         page: function (val) {
-            console.log(val);
+            this.selfLog(val);
             //get the page UIUIInfoList
             this.getTableData();
         },
@@ -90,7 +90,7 @@ export default {
             this.Fetch(`/ui/getUiInfoList?token=${localStorage.getItem('token')}&page=${this.page}`, {
                 method: "GET"
             }).then(data => {
-                console.log(data.cd);
+                this.selfLog(data.cd);
                 this.tableData = data.cd;
             });
         },
@@ -140,14 +140,14 @@ export default {
             }).then(() => {
                 this.$axios.post(`/ui/removeUiElement?token=${localStorage.getItem('token')}&id=${this.tableData[this.trIndex].id}`).then(res => {
                     // success callback
-                    console.log(res);
+                    this.selfLog(res);
                     var ec = res.data.ec;
                     if (ec != '0') {
                         alert(res.dat.ec + ", " + res.data.em); //弹出错误
                     } else {
                         this.$message.success("Delete Sucess！");
                         this.getTableData();
-                        console.log(this.tableData);
+                        this.selfLog(this.tableData);
                     }
                 }).catch(err => {
                     alert(err);

@@ -55,7 +55,7 @@ let Fetch = (url, option = {}) => {
         resolve(response);
       })
       .catch(error => {
-        console.log('err', error);
+        this.selfLog('err', error);
         Fetch.otherError && Fetch.otherError(error.message);
       });
   });

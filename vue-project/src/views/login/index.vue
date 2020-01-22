@@ -147,7 +147,7 @@ export default {
                       offset:380
                     });
                 } else {
-                  console.log(res);
+                  this.selfLog(res);
                     const token = res.data.cd.token;
                     localStorage.setItem('token',token);
                     localStorage.setItem('username',this.ruleForm.username);

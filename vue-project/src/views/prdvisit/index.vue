@@ -104,15 +104,15 @@ export default {
     created(){
         this.token = localStorage.getItem('token');
         this.$axios.get(`/bug/getPieData?token=${this.token}`).then(res => {
-            console.log(8888888888888888);
-            console.log(res);
+            this.selfLog(8888888888888888);
+            this.selfLog(res);
             this.pie = res.data.cd;
-            console.log(8888888888888888);     
+            this.selfLog(8888888888888888);     
         }).catch(err => {
             alert(err);
         });
         this.$axios.get(`/bug/getBarData?token=${this.token}`).then(res => {
-            console.log(res);
+            this.selfLog(res);
             this.bar = res.data.cd;
         }).catch(err => {
             alert(err);

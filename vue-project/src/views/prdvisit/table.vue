@@ -34,21 +34,21 @@ export default {
         this.lang = this.$store.state.app.language=='zh'? 'zh_CN':'en_US';
         this.token = localStorage.getItem('token');
         this.$axios.get(`/bug/getList?token=${this.token}&locale=${this.lang}`).then(res => {
-            console.log(3333333333333)
-            console.log(res);
+            this.selfLog(3333333333333)
+            this.selfLog(res);
             this.tableColownms=res.data.cd.columns; 
             this.tableData = res.data.cd.data;          
-            console.log(3333333333333)
+            this.selfLog(3333333333333)
         }).catch(err => {
-            console.log(err);
+            this.selfLog(err);
         });
         
         // this.Fetch(`/bug/getList?token=${this.token}`, {
         //     method: "GET"
         // }).then(res => {
-        //     console.log(2222222222222)
-        //     console.log(res);
-        //     console.log(3333333333333)
+        //     this.selfLog(2222222222222)
+        //     this.selfLog(res);
+        //     this.selfLog(3333333333333)
         // }).catch(err => {
         //     alert(err);
         // });

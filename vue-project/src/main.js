@@ -11,11 +11,13 @@ import { asyncRouterMap } from "@/router/meunsRouterMap";
 import store from "@/store";
 import i18n from "@/lang";
 import Fetch from './utils/fetch';
-import isRoleEnable from './utils/role'
+import isRoleEnable from './utils/role';
+import selfLog from './utils/selfLog';
 import "./main.css";
 Vue.prototype.Fetch = Fetch;
 Vue.prototype.$axios = axios;
 Vue.prototype.isRoleEnable = isRoleEnable;
+Vue.prototype.selfLog = selfLog;
 axios.defaults.baseURL = '/api';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 

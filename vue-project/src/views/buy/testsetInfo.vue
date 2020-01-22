@@ -120,11 +120,11 @@ export default {
         this.Fetch(`/testmgmt/getTestCaseList?token=${localStorage.getItem('token')}&locale=${this.lang}&testSetId=${this.testsetId}`, {
             method: "GET",
         }).then(res => {
-            console.log(res);
+            this.selfLog(res);
             this.dataList = res.cd.data;
-            console.log(this.dataList)
+            this.selfLog(this.dataList)
             this.tableColownms = res.cd.columns;
-            console.log(this.tableColownms)
+            this.selfLog(this.tableColownms)
         });
 
         this.$axios({
@@ -158,9 +158,9 @@ export default {
                 method: "GET",
             }).then(res => {
                 this.dataList = res.cd.data;
-                console.log(this.dataList)
+                this.selfLog(this.dataList)
                 this.tableColownms = res.cd.columns;
-                console.log(this.tableColownms)
+                this.selfLog(this.tableColownms)
             });
         },
 
@@ -169,15 +169,15 @@ export default {
             this.$refs.upload.submit();
         },
         handleRemove(file, fileList) {
-            console.log(file, fileList);
+            this.selfLog(file, fileList);
         },
         handlePreview(file) {
-            console.log(file);
+            this.selfLog(file);
         },
         uploadSuccess(res) {
-            console.log(res);
+            this.selfLog(res);
             this.centerDialogVisible = false;
-            console.log(res)
+            this.selfLog(res)
             if (res.ec == 0) {
                 this.$message({
                     message: 'Import Success',

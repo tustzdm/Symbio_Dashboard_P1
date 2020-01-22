@@ -7,7 +7,7 @@
           class="edit-pie-item"
           v-for="item in tableHeader"
           @click="selected=item"
-          :class="item == selected? 'edit-pie-select':''"
+          :class="item == selected? 'edit-pie-select':''" :key="item"
         >{{item}}</p>
       </div>
       <div class="edit-pie-buttons">

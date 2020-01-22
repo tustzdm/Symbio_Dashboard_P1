@@ -130,7 +130,7 @@ export default {
         this.Fetch(`/result/getTestResultInfo?token=${localStorage.getItem('token')}&testRunId=${this.runId}`, {
             method: "GET"
         }).then(res => {
-            console.log(res);
+            this.selfLog(res);
             this.screenshotList = res.cd.listScreenShots;
             this.testcase = res.cd.testCase;
             this.testrun = res.cd.testRun
@@ -150,7 +150,7 @@ export default {
                 //     "testSetId": 4
                 // }
             }).then(res => {
-                console.log(res)
+                this.selfLog(res)
                 this.screenshotList = res.cd.data;
             }).catch(err => {
                 alert(err);
@@ -178,7 +178,7 @@ export default {
             this.Fetch(`/result/updateTestResultInfo?token=${localStorage.getItem('token')}&testRunId=${this.runId}&autoStatus=${this.status}&qaStatus=${this.qaStatus}`, {
                 method: "POST"
             }).then(res => {
-                console.log(res)
+                this.selfLog(res)
             }).catch(err => {
                 alert(err);
             });

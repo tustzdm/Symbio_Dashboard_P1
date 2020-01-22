@@ -19,19 +19,16 @@ module.exports = {
         if (process.env.NODE_ENV === "production") {
             // 为生产环境修改配置...
             return {
-                optimization:{
-                    minimizer: [
-                    new TerserPlugin({
-                        sourceMap:false,
-                        terserOptions:{
-                          compress:{
-                            drop_console : true
-                          }
+                optimization: {
+                    minimizer: [new TerserPlugin({
+                        terserOptions: {
+                            compress: {
+                                drop_console: true
+                            }
                         }
-                    })
-                  ]
-                }
-              }
+                    })]
+                },
+            }
             // config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true;
         } else {
             // 为开发环境修改配置...

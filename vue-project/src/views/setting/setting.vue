@@ -56,8 +56,8 @@ export default {
             method: "get",
             url: `/setting/getRole?token=${this.token}`
         }).then(res => {
-            console.log(11111)
-            console.log(res);
+            this.selfLog(11111)
+            this.selfLog(res);
             const data = res.data;
             this.roleList = res.data.cd.roleList;
             this.pageList = res.data.cd.menuList;
@@ -81,11 +81,11 @@ export default {
                     method: "get",
                     url: `/setting/getRoleDetailInfo?token=${this.token}&menuId=${this.page}&roleId=${this.role}`
                 }).then(res => {
-                    console.log(8888888)
-                    console.log(res)
+                    this.selfLog(8888888)
+                    this.selfLog(res)
                     let value = res.data.cd.value;
                     alert(value)
-                    console.log(this.functions)
+                    this.selfLog(this.functions)
                     let fns = [64, 32, 16, 8, 4, 2, 1];
                     for (let i = 0; i < fns.length; i++) {
                         if (value & fns[i] > 0) {
@@ -93,7 +93,7 @@ export default {
                              this.functions.push(fns[i])
                         }
                     }
-                    console.log(this.functions)
+                    this.selfLog(this.functions)
                 });
         },
         role: function () {
@@ -105,8 +105,8 @@ export default {
                 method: "get",
                 url: `/setting/getRoleDetailInfo?token=${this.token}&menuId=${this.page}&roleId=${this.role}`
             }).then(res => {
-                console.log(8888888)
-                console.log(res)
+                this.selfLog(8888888)
+                this.selfLog(res)
                 let value = res.data.cd.value;
                 let fns = [64, 32, 16, 8, 4, 2, 1];
                 for (let i = 0; i < fns.length; i++) {
@@ -123,8 +123,8 @@ export default {
                 method: "post",
                 url: `/setting/saveRole?token=${this.token}&menuId=${this.page}&value=${this.sumFunctions}&roleId=${this.role}`
             }).then(res => {
-                console.log(11111)
-                console.log(res);
+                this.selfLog(11111)
+                this.selfLog(res);
             });
         },
         onCancel() {

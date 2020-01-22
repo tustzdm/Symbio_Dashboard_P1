@@ -17,7 +17,7 @@
             <el-form-item label="DbField:" prop="">
                 <el-col :span="16">
                     <select v-model="form.dbField">
-                        <option v-for="item in dbfieldList">{{item.code}}</option>
+                        <option v-for="item in dbfieldList" :key="item.code">{{item.code}}</option>
                     </select>
                 </el-col>
             </el-form-item>
@@ -105,17 +105,17 @@ export default {
     },
     created() {
         this.form = this.$route.params.tr;
-        console.log(this.form);
+        this.selfLog(this.form);
         this.Fetch("/setting/getDictionary?token=${localStorage.getItem('token')}&type=HtmlType", {
             method: "GET"
         }).then(res => {
-            console.log(res);
+            this.selfLog(res);
             this.typeList = res.cd;
         });
         this.Fetch(`setting/getDBFields?table=${this.form.page.toLowerCase()}&token=${localStorage.getItem('token')}`, {
             method: "GET"
         }).then(res => {
-            console.log(res);
+            this.selfLog(res);
             this.dbfieldList = res.cd;
         });
     },
@@ -147,13 +147,13 @@ export default {
             // this.Fetch('/ui/updateUiElement?token=${localStorage.getItem('token')}&page=product', {
             //     formData
             // }).then(res => {
-            //     console.log(res);
+            //     this.selfLog(res);
             // });
             // axios
             this.$axios.post(`/ui/updateUiElement?token=${localStorage.getItem('token')}&page=${this.form.page.toLowerCase()}`, formData).then(res => {
                 // success callback
-                console.log(formData);
-                console.log(res);
+                this.selfLog(formData);
+                this.selfLog(res);
 
                 var ec = res.data.ec;
                 if (ec != '0') {

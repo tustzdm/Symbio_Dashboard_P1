@@ -152,14 +152,14 @@ export default {
         reportInfo:Object
     },
     created() {
-        console.log(123);
-        console.log(this.reportInfo);
-        console.log(456);
-        console.log(this.runId);
+        this.selfLog(123);
+        this.selfLog(this.reportInfo);
+        this.selfLog(456);
+        this.selfLog(this.runId);
         this.Fetch(`/result/getBugInfo?token=${localStorage.getItem('token')}&id=0&testResultId=1&screenshotId=1300`, {
             method: "GET",
         }).then(res => {
-            console.log(res);
+            this.selfLog(res);
             this.stepFormList1 = res.cd.uiInfo.Step1;
             this.stepFormList2 = res.cd.uiInfo.Step2;
             this.userList = res.cd.userList;
@@ -260,7 +260,7 @@ export default {
                         x,
                         y
                     } = ele;
-                    console.log(ele)
+                    this.selfLog(ele)
                     context.moveTo(x, y)
                     theCanvas.onmousemove = (e) => {
                         if (isAllowDrawLine) {
@@ -281,7 +281,7 @@ export default {
                         x,
                         y
                     } = ele;
-                    console.log(ele)
+                    this.selfLog(ele)
                     this.setHistory();
                 }
                 return
@@ -290,11 +290,11 @@ export default {
         setLineWidth(v) {
             let theCanvas = document.querySelector('#theCanvas');
             let context = theCanvas.getContext('2d');
-            console.log(1111)
+            this.selfLog(1111)
             context.beginPath();
-            console.log(2222);
+            this.selfLog(2222);
             this.lineWidth = v;
-            console.log(context.lineWidth);
+            this.selfLog(context.lineWidth);
         },
         drawRect() {
             let theCanvas = document.querySelector('#theCanvas');
@@ -309,8 +309,8 @@ export default {
                 let ele = this.windowToCanvas(theCanvas, e.clientX, e.clientY)
                 x = ele.x;
                 y = ele.y;
-                console.log(x)
-                console.log(y)
+                this.selfLog(x)
+                this.selfLog(y)
             }
             theCanvas.onmouseup = (e) => {
                 if (this.action != 'rect') {
@@ -319,12 +319,12 @@ export default {
                 let ele = this.windowToCanvas(theCanvas, e.clientX, e.clientY)
                 w = ele.x - x;
                 h = ele.y - y;
-                console.log(w)
-                console.log(h)
+                this.selfLog(w)
+                this.selfLog(h)
                 context.rect(x, y, w, h);
                 context.stroke();
                 this.setHistory();
-                console.log(234234234234121231234)
+                this.selfLog(234234234234121231234)
             }
         },
         drawText() {
@@ -359,15 +359,15 @@ export default {
             
             this.reortForm['filePath'] = saveImg;
             this.reortForm.screenShotId= this.screenShotId;
-            console.log(this.reortForm);
+            this.selfLog(this.reortForm);
 
             this.$emit('reportForm',this.reortForm)
-            console.log(666666666666)
+            this.selfLog(666666666666)
             // this.Fetch(`/result/saveBugInfo?token=${localStorage.getItem('token')}`, {
             //     method: "POST",
             //     body: this.reortForm
             // }).then(res => {
-            //     console.log(res)
+            //     this.selfLog(res)
             // }).catch(err => {
             //     alert(err);
             // });
@@ -377,22 +377,22 @@ export default {
             let context = theCanvas.getContext('2d');
             this.step++;
             this.canvasHistory.push(context.getImageData(0, 0, theCanvas.width, theCanvas.height));
-            console.log(this.step);
-            console.log(this.canvasHistory)
+            this.selfLog(this.step);
+            this.selfLog(this.canvasHistory)
         },
         prevStep() {
             if (this.step <= 0) {
-                console.log('this is the first step!!!')
+                this.selfLog('this is the first step!!!')
                 return
             }
             let theCanvas = document.querySelector('#theCanvas');
             let context = theCanvas.getContext('2d');
-            console.log(this.canvasHistory);
+            this.selfLog(this.canvasHistory);
             this.step--
             context.putImageData(this.canvasHistory[this.step], 0, 0);
             this.canvasHistory.pop();
-            console.log(this.step);
-            console.log(this.canvasHistory)
+            this.selfLog(this.step);
+            this.selfLog(this.canvasHistory)
         },
     }
 }

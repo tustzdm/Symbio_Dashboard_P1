@@ -86,10 +86,10 @@ export default {
             this.Fetch(`/testmgmt/getReleaseList?token=${localStorage.getItem('token')}&productId=${this.productId}`, {
                 method: "GET"
             }).then(res => {
-                console.log(res);
+                this.selfLog(res);
                 this.role = res.cd.role;
                 this.productList = res.cd.data;
-                console.log(this.productList);
+                this.selfLog(this.productList);
             });
         },
         returnTrIndex() {
@@ -113,7 +113,7 @@ export default {
         },
         deleteTr() {
             this.returnTrIndex();
-            console.log(this.productList[this.trIndex]);
+            this.selfLog(this.productList[this.trIndex]);
             this.$confirm('Confirm to delete?', {
                 confirmButtonText: 'Confirm',
                 cancelButtonText: 'Cancel',
@@ -121,14 +121,14 @@ export default {
             }).then(() => {
                 this.$axios.post(`/testmgmt/removeRelease?token=${localStorage.getItem('token')}&id=${this.productList[this.trIndex].id}`).then(res => {
                     // success callback
-                    console.log(res);
+                    this.selfLog(res);
                     var ec = res.data.ec;
                     if (ec != '0') {
                         alert(res.dat.ec + ", " + res.data.em); //弹出错误
                     } else {
                         this.$message.success("Delete Sucess！");
                         this.getProductList();
-                        console.log(this.productList);
+                        this.selfLog(this.productList);
                     }
                 }).catch(err => {
                     alert(err);

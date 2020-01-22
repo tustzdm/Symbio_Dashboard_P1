@@ -88,7 +88,7 @@ export default {
         //     "productId": 1,
         //     "releaseId": 108}}).then(res => {
         //           // success callback
-        //           console.log(res);
+        //           this.selfLog(res);
         //           var ec = res.data.ec;
         //           //debugger;
         //           if (ec != '0') {
@@ -119,10 +119,10 @@ export default {
     watch: {
         // screenHeight() {
         //     this.tableHeight = this.screenHeight - 80 - 30 - 40 - 52 + 'px'
-        //     console.log(`新的tabelHeight${this.tableHeight}`)
+        //     this.selfLog(`新的tabelHeight${this.tableHeight}`)
         // },
         selectIds() {
-            console.log(this.selectIds)
+            this.selfLog(this.selectIds)
         },
         dataList() {
             this.showed_data = this.dataList.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
@@ -134,9 +134,9 @@ export default {
     methods: {
         currentChange(currentPage) {
             this.currentPage = currentPage;
-            console.log(this.dataList);
+            this.selfLog(this.dataList);
             this.showed_data = this.dataList.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
-            console.log(this.showed_data)
+            this.selfLog(this.showed_data)
         },
         sizeChange(size) {
             this.pageSize = size;
@@ -151,13 +151,13 @@ export default {
             localStorage.setItem('selectedIds', this.selectIds);
         },
         getTableData(val) {
-            console.log(this.multipleSelection)
+            this.selfLog(this.multipleSelection)
             this.dataList = val.cd.data;
             this.tableColownms = val.cd.columns;
             this.totalCount = val.cd.totalRecord;
-            console.log('tablecolumn');
-            console.log(this.tableColownms);
-            console.log(this.dataList);
+            this.selfLog('tablecolumn');
+            this.selfLog(this.tableColownms);
+            this.selfLog(this.dataList);
             this.run = false;
         },
         sortFun: function (attr, rev) {
@@ -181,24 +181,24 @@ export default {
             }
         },
         sort_change(column) {
-            console.log('sSSSSSirt')
-            console.log(column)
+            this.selfLog('sSSSSSirt')
+            this.selfLog(column)
             this.currentPage = 1 // return to the first page after sorting
-            console.log(this.currentPage)
+            this.selfLog(this.currentPage)
             if (column.prop === 'id') {
                 this.dataList = this.dataList.sort(this.sortFun(column.prop, column.order === 'ascending'));
-                console.log(this.dataList);
+                this.selfLog(this.dataList);
             } else if (column.prop === 'status') {
                 this.dataList = this.dataList.sort(this.sortFun(column.prop, column.order === 'ascending'));
-                console.log(this.dataList);
+                this.selfLog(this.dataList);
             }else if (column.prop === 'priority') {
                 this.dataList = this.dataList.sort(this.sortFun(column.prop, column.order === 'ascending'));
-                console.log(this.dataList);
+                this.selfLog(this.dataList);
             }
-            console.log('ssssss' + this.pageSize)
+            this.selfLog('ssssss' + this.pageSize)
             this.showed_data = this.dataList.slice(0, this.pageSize) // show only one page
-            console.log('Finished')
-            console.log(this.showed_data)
+            this.selfLog('Finished')
+            this.selfLog(this.showed_data)
         }
     }
 }

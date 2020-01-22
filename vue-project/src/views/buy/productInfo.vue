@@ -53,8 +53,8 @@ export default {
         });
     },
     mounted() {
-        console.log(1111111111)
-        console.log(this.$refs.listChild);
+        this.selfLog(1111111111)
+        this.selfLog(this.$refs.listChild);
         // i18n
         // this.pie.title.text = this.$t('chart.productWorkload');
         // this.rect.title.text = this.$t('chart.dailyTestCases');

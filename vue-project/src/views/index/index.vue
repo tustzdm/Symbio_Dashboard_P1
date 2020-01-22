@@ -107,7 +107,7 @@ export default {
     this.stackedArea.legend.data = [this.$t('terms.testRunExecuted'), this.$t('terms.bugReported')];
     this.stackedArea.series[0].name = this.$t('terms.bugReported');
     this.stackedArea.series[1].name = this.$t('terms.testRunExecuted');
-    console.log(this.stackedArea.series[0].name);
+    this.selfLog(this.stackedArea.series[0].name);
 
     // chart4
     this.radar.title.text = this.$t('chart.passRateByProduct');

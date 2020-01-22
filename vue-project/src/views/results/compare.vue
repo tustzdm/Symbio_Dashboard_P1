@@ -183,20 +183,20 @@ export default {
         paint: paint
     },
     created() {
-        console.log(2131231231234231)
+        this.selfLog(2131231231234231)
         this.lang = this.$store.state.app.language=='zh'? 'zh_CN':'en_US';
         this.token = localStorage.getItem('token');
         this.productName = localStorage.getItem('result_productName');
         this.releaseName = localStorage.getItem('result_releaseName');
         this.testSetName = localStorage.getItem('result_testSetName');
-        console.log(22134654649687)
-        console.log(this.uploadDialogVisible);
+        this.selfLog(22134654649687)
+        this.selfLog(this.uploadDialogVisible);
         this.runId = this.$route.query.runId;
         this.locale = this.$route.query.locale;
         this.getTableData();
     },
     mounted() {
-        console.log(222222222266666666)
+        this.selfLog(222222222266666666)
     },
     computed: {},
     watch: {
@@ -218,11 +218,11 @@ export default {
                 //     "testSetId": 4
                 // }
             }).then(res => {
-                console.log(res);
+                this.selfLog(res);
                 this.tableColownms = res.cd.columns;
                 this.dataList = res.cd.data;
-                console.log(11111111)
-                console.log(this.dataList);
+                this.selfLog(11111111)
+                this.selfLog(this.dataList);
                 this.localeList = res.cd.listLocales;
 
                 this.statusList = res.cd.listStatus;
@@ -231,7 +231,7 @@ export default {
             });
         },
         nextStep() {
-            console.log(this.stepId)
+            this.selfLog(this.stepId)
             if (this.stepId == this.dataList.length) {
                 this.$message({
                     message: 'It is the last',
@@ -246,7 +246,7 @@ export default {
             }
         },
         beforeStep() {
-            console.log(this.stepId);
+            this.selfLog(this.stepId);
             if (this.stepId == 1) {
                 this.$message({
                     message: 'This is the first',
@@ -265,15 +265,15 @@ export default {
             this.$refs.upload.submit();
         },
         handleRemove(file, fileList) {
-            console.log(file, fileList);
+            this.selfLog(file, fileList);
         },
         handlePreview(file) {
-            console.log(file);
+            this.selfLog(file);
         },
         uploadSuccess(res) {
             this.centerDialogVisible = false;
-            console.log('asdfasdfasdfasdfasdf')
-            console.log(res)
+            this.selfLog('asdfasdfasdfasdfasdf')
+            this.selfLog(res)
             if (res.ec == 0) {
                 this.$message({
                     message: 'Import Success',
@@ -307,7 +307,7 @@ export default {
         imgActualSize() {
             let leftImgObj = new Image();
             leftImgObj.src = this.leftImg;
-            console.log(leftImgObj.width)
+            this.selfLog(leftImgObj.width)
             let rightImgObj = new Image();
             rightImgObj.src = this.rightImg;
             if (leftImgObj.width > leftImgObj.height) {
@@ -323,8 +323,8 @@ export default {
             this.Fetch(`/result/screenShot/getComment?token=${localStorage.getItem('token')}&screenShotId=${this.screenShotId}`, {
                 method: "GET"
             }).then((res) => {
-                console.log(2222222);
-                console.log(res);
+                this.selfLog(2222222);
+                this.selfLog(res);
                 this.comment_text = res.cd.comment; //获得comment内容赋给接受的变量
             }).catch(err => {
                 alert(err);
@@ -336,8 +336,8 @@ export default {
             this.Fetch(`/result/screenShot/comment?token=${localStorage.getItem('token')}&screenShotId=${this.screenShotId}&content=${this.comment_text}`, {
                 method: "POST"
             }).then((res) => {
-                console.log(2222222);
-                console.log(res);
+                this.selfLog(2222222);
+                this.selfLog(res);
                 this.$message({
                     message: 'Comment add successfully',
                     type: 'success',
@@ -359,7 +359,7 @@ export default {
             this.Fetch(`/result/screenShot/${this.screenShotId}?token=${localStorage.getItem('token')}&status=${status}`, {
                 method: "POST"
             }).then(res => {
-                console.log(res)
+                this.selfLog(res)
             }).catch(err => {
                 alert(err);
             });
@@ -373,8 +373,8 @@ export default {
             return;
         },
         reportForm(val) {
-            console.log(1234);
-            console.log(val);
+            this.selfLog(1234);
+            this.selfLog(val);
             this.reportInfo = val;
         },
         reportConfirm() {
@@ -382,23 +382,23 @@ export default {
                 method: "POST",
                 body: this.reportInfo
             }).then(res => {
-                console.log(this.reportInfo);
-                console.log(res);
+                this.selfLog(this.reportInfo);
+                this.selfLog(res);
             }).catch(err => {
                 alert(err);
             });
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
-            console.log(this.multipleSelection);
+            this.selfLog(this.multipleSelection);
         },
         goJira(){
             
             this.Fetch(`/result/getBugInfo?token=${localStorage.getItem('token')}&id=${this.jiraId}`, {
                 method: "GET"
             }).then(res => {
-                console.log('jijjjjjjjj')
-                console.log(res);
+                this.selfLog('jijjjjjjjj')
+                this.selfLog(res);
                 this.reportInfo=res.cd.data; 
             }).catch(err => {
                 alert(err);

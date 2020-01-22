@@ -20,7 +20,7 @@
                         <option v-for="item in fatherReleaseList" :value="item.id" :key="item.id">{{item.name}}</option>
                     </select>
                     <select class="input_select" v-if="['user','User'].indexOf(item.type) >= 0" v-model="product[tranformStr(item.dbField)]">
-                        <option :value="user.id" v-for="user in userList">{{user.fullName}}</option>
+                        <option :value="user.id" v-for="user in userList" :key="user.id">{{user.fullName}}</option>
                     </select>
                     <el-date-picker v-model="product[item.key]" v-if="item.type === 'calendar'" placeholder="Choose Date"></el-date-picker>
                     <el-input class="input_select" type="textarea" v-model="product[item.key]" :autosize="{ minRows: 4}" v-if="item.type == 'textarea'" :maxlength="JSON.parse(item.constCondition).maxLength" show-word-limit></el-input>
@@ -71,7 +71,7 @@ export default {
         }
     },
     created() {
-        console.log(this.$route.query);
+        this.selfLog(this.$route.query);
         this.pageType = this.$route.query.pageType;
         this.fatherProductId = this.$route.query.productId;
         this.fatherReleaseId = this.$route.query.releaseId;
@@ -80,12 +80,12 @@ export default {
         this.Fetch(`/testmgmt/get${this.pageType}UiInfo?token=${localStorage.getItem('token')}&locale=${this.lang}&uiInfo=1&id=`, { //将所有的数据集合到一个借口里了，uiInfod对应pageType,id对应Product或者release的值
             method: "GET"
         }).then(res => {
-            console.log(res.cd);
+            this.selfLog(res.cd);
             this.userList = res.cd.userList;
             this.uiList = res.cd.uiInfo;
             // this.product = res.cd.data;
             this.product.productId = this.fatherProductId; //add release时带的productID   
-             console.log(this.fatherProductId )
+             this.selfLog(this.fatherProductId )
             this.product.releaseId = this.fatherReleaseId; //add release时带的productID  
             this.fatherReleaseList = res.cd.releaseList;
             this.fatherProductList = res.cd.productList;
@@ -96,7 +96,7 @@ export default {
             this.Fetch(`/navigation/getReleaseList?token=${localStorage.getItem('token')}&productId=${this.product.productId}`, {
                 method: "GET"
             }).then(res => {
-                console.log(res.cd);
+                this.selfLog(res.cd);
                 this.fatherReleaseList = res.cd;
 
             });
@@ -118,8 +118,8 @@ export default {
             let url = `/testmgmt/update${this.pageType}?token=${localStorage.getItem('token')}`;
             this.$axios.post(url, this.product).then(res => {
                 // success callback
-                console.log(this.product);
-                console.log(res.data);
+                this.selfLog(this.product);
+                this.selfLog(res.data);
                 var ec = res.data.ec;
                 //debugger;
                 if (ec != '0') {
@@ -173,13 +173,13 @@ export default {
             this.Fetch(`/testmgmt/get${this.pageType}UiInfo?token=${localStorage.getItem('token')}&uiInfo=1&id=`, { //将所有的数据集合到一个借口里了，uiInfod对应pageType,id对应Product或者release的值
                 method: "GET"
             }).then(res => {
-                console.log(res.cd);
+                this.selfLog(res.cd);
 
                 this.userList = res.cd.userList;
                 this.uiList = res.cd.uiInfo;
                 // this.product = res.cd.data;
                 this.product.productId = this.fatherProductId; //add release时带的productID   
-                console.log('productID'+this.product.productId)
+                this.selfLog('productID'+this.product.productId)
 
                 this.product.releaseId = this.fatherReleaseId; //add release时带的productID  
                 this.fatherReleaseList = res.cd.releaseList;
